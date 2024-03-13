@@ -1,14 +1,11 @@
 import * as _ from "lodash";
 import { Boss, boss_tick } from "./boss";
+import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator";
 import { Vector, n, s } from "./geometry";
 import { GameMap } from "./map";
 import { GameObject } from "./object";
-import { getInt, getInts } from "./random"
-import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator";
+import { render } from "./renderer";
 
-function assertUnreachable(x: never): never {
-  throw new Error("Didn't expect to get here");
-}
 // class Game {
 //   tick(): void {
 //     for (const obj of this.objects) {
@@ -52,42 +49,6 @@ interface OutOfBounds {
 const height = 25;
 const width = 80;
 
-
-function render(map: GameMap) {
-  const buffer = [];
-  for (let j = 0; j <= height; j++) {
-    const row = [];
-
-    for (let i = 0; i < width; i++) {
-      row.push(" ");
-    }
-    buffer.push(row);
-  }
-
-  for (const obj of objs) {
-    const t = obj.type;
-    switch (t) {
-      case "wall":
-        if (map.is_at(n(obj.position), "wall") && map.is_at(s(obj.position), "wall")) {
-          buffer[obj.position.y][obj.position.x] = "|";
-        }
-        else buffer[obj.position.y][obj.position.x] = "-";
-        break;
-      case "boss":
-        buffer[obj.position.y][obj.position.x] = "*";
-        break;
-      default:
-        assertUnreachable(t);
-    }
-  }
-
-  process.stdout.moveCursor(0, 0);
-  for (let i = 0; i < height; ++i) {
-    process.stdout.write(buffer[i].join(""));
-    process.stdout.write("\n");
-  }
-  process.stdout.write("Week: XXXXXX, Life: XXXXX, Money: XXXXX");
-}
 
 
 

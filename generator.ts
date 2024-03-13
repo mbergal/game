@@ -57,7 +57,7 @@ function desiredNumOfDoors(room: Room.Room) {
 
 function noWalls(map: GameMap, xs: number[], y: number): boolean {
     for (const x of xs) {
-        if (map.is_at({ x, y: y - 1 }, "wall") || map.is_at({ x, y: y + 1 }, "wall")) {
+        if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
             return false
         }
     }
@@ -80,7 +80,7 @@ function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
     return rooms
 }
 
-function getRowRooms(map: GameMap, row: number): Room[] {
+function getRowRooms(map: GameMap, row: number): Room.Room[] {
     const rooms = []
     let currentRoom: Room = {
         position: { x: 0, y: 0 },

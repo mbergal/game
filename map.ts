@@ -37,7 +37,12 @@ export class GameMap {
         return this.cells[v.y][v.x]
     }
 
-    is_at(v: Vector, type: GameObject["type"]) {
+    isAt(v: Vector, type: GameObject["type"]) {
+        if (v.x < 0
+            || v.x >= this.width
+            || v.y < 0
+            || v.y >= this.height)
+            return false
         const objs: GameObject[] = this.cells[v.y][v.x]
         return objs != null ? _.some(objs, x => x.type == type) : false
     }
