@@ -1,0 +1,19 @@
+{
+    "grammarly.selectors": [
+        {
+            "language": "html",
+            "scheme": "file",
+            "pattern": "/home/misha/projects/resume/2024.html"
+        },
+        {
+            "language": "html",
+            "scheme": "file",
+            "pattern": "/home/misha/projects/resume/2024.html"
+        },
+        {
+            "language": "html",
+            "scheme": "file",
+            "pattern": "/home/misha/projects/resume/2024.html"
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+  
+  "dependencies": {
+  
+    
+  "@types/lodash": "^4.14.188",
+  
+    
+  "@types/node": "^18.11.9",
+  
+    
+  "lodash": "^4.17.21",
+  
+    
+  "typesgine-ascii": "^1.0.4"
+  
+  },
+  
+  "devDependencies": {
+  
+    
+  "esbuild": "0.20.1",
+  
+    
+  "ts-node": "^10.9.2",
+  
+    
+  "tsx": "^4.7.1",
+  
+    
+  "typescript": "^4.8.4"
+  
+  }
+}
