@@ -1,10 +1,9 @@
-import { Vector, n, s } from "./geometry";
+import { Vector, w, n, s, e } from "./geometry";
 import { GameMap } from "./map";
 import { GameObject } from "./object";
 import { assertUnreachable } from "./utils";
 
 export function render(map: GameMap) {
-    debugger
     const buffer = [];
     for (let y = 0; y < map.height; y++) {
         const row = [];
@@ -29,7 +28,7 @@ export function render(map: GameMap) {
 
 
     const contentBlock = document.getElementById("content")
-    contentBlock.innerText = buffer.map(x => x.join("")).join("\n")
+    contentBlock!.innerText = buffer.map(x => x.join("")).join("\n")
 
 }
 
@@ -43,7 +42,7 @@ function getRepresentation(map: GameMap, obj: GameObject): string {
             else
                 return "-";
         case "boss":
-            return "*";
+            return "+";
         default:
             assertUnreachable(t);
     }
@@ -61,6 +60,12 @@ function getWallRepresentation(map: GameMap, pos: Vector) {
     }
     else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
         return "╝"
+    }
+    else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(w(pos), "wall")) {
+        return "╢"
+    }
+    else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(e(pos), "wall")) {
+        return "╟"
     }
     else if (pos.x == 0 || pos.x == map.width - 1) {
         return "║"

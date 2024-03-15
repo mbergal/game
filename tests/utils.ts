@@ -1,0 +1,29 @@
+import _ from "lodash"
+import { GameMap } from "../map"
+import { Wall } from "../wall"
+
+function removeEmptyLines(str: string) {
+    return str.split(/\r?\n/)
+}
+
+export function loadMap(s: string): GameMap {
+    const trimmed = removeEmptyLines(s)
+        .map((x) => x.trim())
+        .filter((x) => x != "")
+    const height = trimmed.length
+    const width = _.max(trimmed.map((x) => x.length)) ?? 0
+
+    const map = new GameMap(width, height, [])
+    for (const y of _.range(trimmed.length)) {
+        for (const x of _.range(trimmed[y].length)) {
+            switch (trimmed[y][x]) {
+                case "=":
+                case "-":
+                case "|":
+                    map.add([{ type: "wall", position: { x, y }, zIndex: 0 } as Wall])
+                    break
+            }
+        }
+    }
+    return map
+}

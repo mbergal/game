@@ -1,6 +1,8 @@
 {
     "scripts": {
-        "watch": "esbuild main.ts --bundle --minify --sourcemap --outfile=out.js --target=chrome58,firefox57,safari11,edge16 --watch"
+        "watch": "esbuild main.ts --bundle --keep-names --sourcemap --outfile=out.js --target=es2020 --watch",
+        "test": "vitest"
+
     },
     "dependencies": {
         "@types/lodash": "^4.14.188",
@@ -12,6 +14,7 @@
         "esbuild": "0.20.1",
         "ts-node": "^10.9.2",
         "tsx": "^4.7.1",
-        "typescript": "^4.8.4"
+        "typescript": "^4.8.4",
+        "vitest": "^1.3.1"
     }
 }

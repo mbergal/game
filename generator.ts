@@ -49,7 +49,7 @@ function desiredNumOfDoors(room: Room.Room) {
         [6, 1, 2],
         [100, 2, 5]
     ]
-    const min_max = _.find(a, x => x[0] > room.length)
+    const min_max = _.find(a, x => x[0] > room.length)!
 
     return random.getInt(min_max[1], min_max[2])
 }
@@ -82,7 +82,7 @@ function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
 
 function getRowRooms(map: GameMap, row: number): Room.Room[] {
     const rooms = []
-    let currentRoom: Room = {
+    let currentRoom: Room.Room = {
         position: { x: 0, y: 0 },
         length: 0,
         doors: []

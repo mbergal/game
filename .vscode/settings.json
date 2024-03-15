@@ -15,5 +15,9 @@
             "scheme": "file",
             "pattern": "/home/misha/projects/resume/2024.html"
         }
-    ]
+    ],
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
