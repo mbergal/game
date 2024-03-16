@@ -1,12 +1,12 @@
-import { Vector, w, n, s, e } from "./geometry";
-import { GameMap } from "./map";
-import { GameObject } from "./object";
-import { assertUnreachable } from "./utils";
+import { Vector, w, n, s, e } from "./geometry"
+import { GameMap } from "./map"
+import { GameObject } from "./object"
+import { assertUnreachable } from "./utils"
 
 export function render(map: GameMap) {
-    const buffer = [];
+    const buffer = []
     for (let y = 0; y < map.height; y++) {
-        const row = [];
+        const row = []
 
         for (let x = 0; x < map.width; x++) {
             const objs = map.cells[y][x]
@@ -19,34 +19,30 @@ export function render(map: GameMap) {
                         row.push(getRepresentation(map, objs[0]))
                         break
                 }
-            } else
-                row.push(" ");
+            } else row.push(" ")
         }
 
-        buffer.push(row);
+        buffer.push(row)
     }
 
-
     const contentBlock = document.getElementById("content")
-    contentBlock!.innerText = buffer.map(x => x.join("")).join("\n")
-
+    contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
 function getRepresentation(map: GameMap, obj: GameObject): string {
-    const t = obj.type;
+    const t = obj.type
     switch (t) {
         case "wall":
             if (map.isAt(n(obj.position), "wall") && map.isAt(s(obj.position), "wall")) {
-                return "|";
-            }
-            else
-                return "-";
+                return "|"
+            } else return "-"
         case "boss":
-            return "+";
+            return "+"
+        case "footprint":
+            return "■"
         default:
-            assertUnreachable(t);
+            assertUnreachable(t)
     }
-
 }
 
 function getWallRepresentation(map: GameMap, pos: Vector) {
@@ -54,35 +50,30 @@ function getWallRepresentation(map: GameMap, pos: Vector) {
         return "╔"
     } else if (pos.x == 0 && pos.y == map.height - 1) {
         return "╚"
-    }
-    else if (pos.x == map.width - 1 && pos.y == 0) {
+    } else if (pos.x == map.width - 1 && pos.y == 0) {
         return "╗"
-    }
-    else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
+    } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
         return "╝"
-    }
-    else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(w(pos), "wall")) {
+    } else if (
+        pos.x == map.width - 1 &&
+        pos.y != 0 &&
+        pos.y != map.height - 1 &&
+        map.isAt(w(pos), "wall")
+    ) {
         return "╢"
-    }
-    else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(e(pos), "wall")) {
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(e(pos), "wall")) {
         return "╟"
-    }
-    else if (pos.x == 0 || pos.x == map.width - 1) {
+    } else if (pos.x == 0 || pos.x == map.width - 1) {
         return "║"
-    }
-    else if (pos.y == 0 || pos.y == map.height - 1) {
+    } else if (pos.y == 0 || pos.y == map.height - 1) {
         return "═"
-    }
-    else if (map.isAt(n(pos), "wall") && map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(n(pos), "wall") && map.isAt(s(pos), "wall")) {
         return "│"
-    }
-    else if (map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(s(pos), "wall")) {
         return "┬"
-    }
-    else if (map.isAt(n(pos), "wall")) {
+    } else if (map.isAt(n(pos), "wall")) {
         return "┴"
-    }
-    else {
+    } else {
         return "─"
     }
 }

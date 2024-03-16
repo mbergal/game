@@ -1,11 +1,14 @@
 import * as _ from "lodash"
-import { Boss, boss_tick } from "./boss"
+import * as Boss from "./boss"
+import * as Footprint from "./footprint"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector, n, s } from "./geometry"
 import { GameMap } from "./map"
 import { GameObject } from "./object"
 import { render } from "./renderer"
+import { assertUnreachable } from "./utils"
 
+const TICK_INTERVAL = 50
 // class Game {
 //   tick(): void {
 //     for (const obj of this.objects) {
@@ -44,13 +47,13 @@ const height = 25
 const width = 80
 
 export function main() {
-    const boss: Boss = {
+    const boss: Boss.Boss = {
         position: {
             x: 0,
             y: 0,
         },
         type: "boss",
-        zIndex: 1,
+        zIndex: 10,
         state: { type: "stopped", previous_direction: null },
         // tick: (objs: GameObject[]) => boss_move(),
     }
@@ -99,7 +102,7 @@ export function main() {
 
     const room_doors = generateRoomDoors(map)
     map.add([boss])
-    window.setInterval(() => process_tick(map), 500)
+    window.setInterval(() => process_tick(map), TICK_INTERVAL)
 
     window.addEventListener("keydown", (event) => {
         switch (event.key) {
@@ -144,9 +147,14 @@ function process_tick(map: GameMap) {
 function tick(obj: GameObject, map: GameMap) {
     switch (obj.type) {
         case "boss":
-            boss_tick(obj, map)
+            Boss.tick(obj, map)
         case "wall":
             break
+        case "footprint":
+            Footprint.tick(obj, map)
+            break
+        default:
+            assertUnreachable(obj)
     }
 }
 

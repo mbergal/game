@@ -6076,6 +6076,30 @@
   __name(choice, "choice");
 
   // boss.ts
+  var BOSS_WEIGHTS = {
+    turn: {
+      visited: 0.2,
+      notVisited: 1
+    },
+    straight: {
+      visited: 0.2,
+      notVisited: 3
+    },
+    back: 1,
+    jump: 5
+  };
+  BOSS_WEIGHTS = {
+    turn: {
+      visited: 1e-6,
+      notVisited: 1
+    },
+    straight: {
+      visited: 1e-7,
+      notVisited: 3
+    },
+    back: 1e-7,
+    jump: 5
+  };
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -6098,31 +6122,52 @@
     return result;
   }
   __name(possibleMoves, "possibleMoves");
-  function boss_tick(obj, map) {
+  function move(obj, new_pos, new_direction, map) {
+    obj.state = { type: "moving", direction: new_direction, tact: 0 };
+    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 }]);
+    map.move(obj, new_pos);
+  }
+  __name(move, "move");
+  function tick(obj, map) {
     switch (obj.state.type) {
       case "instructing":
         break;
       case "moving":
         const moves = possibleMoves(obj.position, obj.state.direction, map);
         if (moves.turn || moves.straight) {
+          const move_types = [
+            moves.turn ? "turn" : null,
+            moves.straight ? "straight" : null
+          ];
+          const move_weights = [
+            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
+            moves.straight ? map.isAt(moveBy(obj.position, obj.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+          ];
+          if (moves.turn) {
+            console.log(JSON.stringify({ move_types, move_weights }));
+            debugger;
+          }
           const move_choice = choice(
-            import_lodash.default.compact([moves.turn ? "turn" : null, moves.straight ? "straight" : null]),
-            import_lodash.default.compact([moves.turn ? 1 : null, moves.straight ? 2 : null])
+            import_lodash.default.compact(move_types),
+            import_lodash.default.compact(move_weights)
           );
           switch (move_choice) {
             case "turn":
-              const chosen = choice(moves.turn.directions);
+              const weights = moves.turn.directions.map(
+                (x) => map.isAt(moveBy(obj.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+              );
+              const chosen = choice(moves.turn.directions, weights);
               obj.state.direction = chosen;
             case "straight":
               const new_pos = moveBy(obj.position, obj.state.direction);
-              map.move(obj, new_pos);
+              move(obj, new_pos, obj.state.direction, map);
           }
           return;
         }
         if (moves.back || moves.jump) {
           const move_choice = choice(
             import_lodash.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash.default.compact([moves.back ? 1 : null, moves.jump ? 2 : null])
+            import_lodash.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
           );
           switch (move_choice) {
             case "back":
@@ -6141,15 +6186,12 @@
           tact: obj.state.tact + 1
         };
         if (obj.state.tact > 4) {
-          map.move(
+          move(
             obj,
-            moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction)
+            moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
+            obj.state.direction,
+            map
           );
-          obj.state = {
-            type: "moving",
-            direction: obj.state.direction,
-            tact: 0
-          };
         }
         break;
       case "stopped": {
@@ -6160,7 +6202,7 @@
       }
     }
   }
-  __name(boss_tick, "boss_tick");
+  __name(tick, "tick");
   function choose_direction(pos, least_preferred, map) {
     const forks = map.possibleDirections(pos, "wall");
     const b = forks.filter((x) => x[0] != least_preferred);
@@ -6172,6 +6214,17 @@
     }
   }
   __name(choose_direction, "choose_direction");
+
+  // footprint.ts
+  var LIFETIME = 1e3;
+  function tick2(obj, map) {
+    if (obj.tact > LIFETIME) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+  }
+  __name(tick2, "tick");
 
   // generator.ts
   var import_lodash2 = __toESM(require_lodash());
@@ -6447,6 +6500,8 @@
           return "-";
       case "boss":
         return "+";
+      case "footprint":
+        return "\u25A0";
       default:
         assertUnreachable(t);
     }
@@ -6482,6 +6537,7 @@
   __name(getWallRepresentation, "getWallRepresentation");
 
   // main.ts
+  var TICK_INTERVAL = 50;
   var height = 25;
   var width = 80;
   function main() {
@@ -6491,7 +6547,7 @@
         y: 0
       },
       type: "boss",
-      zIndex: 1,
+      zIndex: 10,
       state: { type: "stopped", previous_direction: null }
       // tick: (objs: GameObject[]) => boss_move(),
     };
@@ -6526,7 +6582,7 @@
     map.add(room_walls);
     const room_doors = generateRoomDoors(map);
     map.add([boss]);
-    window.setInterval(() => process_tick(map), 500);
+    window.setInterval(() => process_tick(map), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
         case "s":
@@ -6560,20 +6616,25 @@
   __name(load, "load");
   function process_tick(map) {
     for (const obj of map.objects) {
-      tick(obj, map);
+      tick3(obj, map);
     }
     render(map);
   }
   __name(process_tick, "process_tick");
-  function tick(obj, map) {
+  function tick3(obj, map) {
     switch (obj.type) {
       case "boss":
-        boss_tick(obj, map);
+        tick(obj, map);
       case "wall":
         break;
+      case "footprint":
+        tick2(obj, map);
+        break;
+      default:
+        assertUnreachable(obj);
     }
   }
-  __name(tick, "tick");
+  __name(tick3, "tick");
   main();
 })();
 /*! Bundled license information:

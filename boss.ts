@@ -3,6 +3,7 @@ import * as Direction from "./direction"
 import { Vector, moveBy } from "./geometry"
 import { GameMap } from "./map"
 import * as random from "./random"
+import { Footprint } from "./footprint"
 
 type Stopped = { type: "stopped"; previous_direction: Direction.t | null }
 type Moving = { type: "moving"; direction: Direction.t; tact: 0 | 1 }
@@ -15,6 +16,32 @@ export interface Boss extends LiveObject {
     position: Vector
     state: BossState
     zIndex: number
+}
+
+let BOSS_WEIGHTS = {
+    turn: {
+        visited: 0.2,
+        notVisited: 1,
+    },
+    straight: {
+        visited: 0.2,
+        notVisited: 3,
+    },
+    back: 1.0,
+    jump: 5.0,
+}
+
+BOSS_WEIGHTS = {
+    turn: {
+        visited: 0.000001,
+        notVisited: 1,
+    },
+    straight: {
+        visited: 0.0000001,
+        notVisited: 3,
+    },
+    back: 0.0000001,
+    jump: 5.0,
 }
 
 export type MoveActions = {
@@ -58,33 +85,62 @@ export function possibleMoves(
     return result
 }
 
-export function boss_tick(obj: Boss, map: GameMap) {
+function move(obj: Boss, new_pos: Vector, new_direction: Direction.t, map: GameMap) {
+    obj.state = { type: "moving", direction: new_direction, tact: 0 }
+    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint])
+    map.move(obj, new_pos)
+}
+
+export function tick(obj: Boss, map: GameMap) {
     switch (obj.state.type) {
         case "instructing":
             break
         case "moving":
             const moves = possibleMoves(obj.position, obj.state.direction, map)
 
+            // First, check if we can move forward
             if (moves.turn || moves.straight) {
+                const move_types: (keyof MoveActions | null)[] = [
+                    moves.turn ? "turn" : null,
+                    moves.straight ? "straight" : null,
+                ]
+                const move_weights = [
+                    moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
+                    moves.straight
+                        ? map.isAt(moveBy(obj.position, obj.state.direction), "footprint")
+                            ? BOSS_WEIGHTS.straight.visited
+                            : BOSS_WEIGHTS.straight.notVisited
+                        : null,
+                ]
+                if (moves.turn) {
+                    console.log(JSON.stringify({ move_types, move_weights }))
+                    debugger
+                }
+
                 const move_choice = random.choice<keyof MoveActions>(
-                    _.compact([moves.turn ? "turn" : null, moves.straight ? "straight" : null]),
-                    _.compact([moves.turn ? 1 : null, moves.straight ? 2 : null])
+                    _.compact(move_types),
+                    _.compact(move_weights)
                 )
                 switch (move_choice) {
                     case "turn":
-                        const chosen = random.choice(moves.turn!.directions)
+                        const weights = moves.turn!.directions.map((x) =>
+                            map.isAt(moveBy(obj.position, x), "footprint")
+                                ? BOSS_WEIGHTS.turn.visited
+                                : BOSS_WEIGHTS.turn.notVisited
+                        )
+                        const chosen = random.choice(moves.turn!.directions, weights)
                         obj.state.direction = chosen
                     case "straight":
                         const new_pos = moveBy(obj.position, obj.state.direction)
-                        map.move(obj, new_pos)
+                        move(obj, new_pos, obj.state.direction, map)
                 }
                 return
             }
-
+            // Then check if we need to jump or have to move back
             if (moves.back || moves.jump) {
                 const move_choice = random.choice<keyof MoveActions>(
                     _.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-                    _.compact([moves.back ? 1 : null, moves.jump ? 2 : null])
+                    _.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
                 )
                 switch (move_choice) {
                     case "back":
@@ -103,15 +159,12 @@ export function boss_tick(obj: Boss, map: GameMap) {
                 tact: obj.state.tact + 1,
             }
             if (obj.state.tact > 4) {
-                map.move(
+                move(
                     obj,
-                    moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction)
+                    moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
+                    obj.state.direction,
+                    map
                 )
-                obj.state = {
-                    type: "moving",
-                    direction: obj.state.direction,
-                    tact: 0,
-                }
             }
             break
         case "stopped": {
