@@ -12,3 +12,5 @@ export function reverse(direction: t) {
             return "left"
     }
 }
+
+export const all: t[] = ["left", "right", "down", "up"]

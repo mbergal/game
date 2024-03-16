@@ -1,7 +1,7 @@
-import { Vector } from "./geometry";
+import { Vector } from "../geometry"
 
 export interface Wall {
-    type: "wall";
+    type: "wall"
     position: Vector
     zIndex: number
 }

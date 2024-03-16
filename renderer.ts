@@ -1,6 +1,6 @@
-import { Vector, w, n, s, e } from "./geometry"
+import { Vector } from "./geometry"
 import { GameMap } from "./map"
-import { GameObject } from "./object"
+import { GameObject } from "./objects/object"
 import { assertUnreachable } from "./utils"
 
 export function render(map: GameMap) {
@@ -10,16 +10,7 @@ export function render(map: GameMap) {
 
         for (let x = 0; x < map.width; x++) {
             const objs = map.cells[y][x]
-            if (objs.length) {
-                switch (objs[0].type) {
-                    case "wall":
-                        row.push(getWallRepresentation(map, { x, y }))
-                        break
-                    default:
-                        row.push(getRepresentation(map, objs[0]))
-                        break
-                }
-            } else row.push(" ")
+            row.push(getRepresentation(map, objs))
         }
 
         buffer.push(row)
@@ -29,23 +20,42 @@ export function render(map: GameMap) {
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
-function getRepresentation(map: GameMap, obj: GameObject): string {
-    const t = obj.type
-    switch (t) {
-        case "wall":
-            if (map.isAt(n(obj.position), "wall") && map.isAt(s(obj.position), "wall")) {
-                return "|"
-            } else return "-"
+function isVisible(obj: GameObject) {
+    switch (obj.type) {
         case "boss":
-            return "+"
+        case "wall":
+        case "player":
+            return true
         case "footprint":
-            return "■"
+            return false
+
         default:
-            assertUnreachable(t)
+            assertUnreachable(obj)
+    }
+    return true
+}
+function getRepresentation(map: GameMap, objs: GameObject[]): string {
+    let obj = objs.find(isVisible)
+    if (obj) {
+        const t = obj.type
+        switch (t) {
+            case "wall":
+                return getWallRepresentation(map, obj.position)
+            case "boss":
+                return "+"
+            case "footprint":
+                return "■"
+            case "player":
+                return "P"
+            default:
+                assertUnreachable(t)
+        }
+    } else {
+        return " "
     }
 }
 
-function getWallRepresentation(map: GameMap, pos: Vector) {
+function getWallRepresentation(map: GameMap, pos: Vector.t) {
     if (pos.x == 0 && pos.y == 0) {
         return "╔"
     } else if (pos.x == 0 && pos.y == map.height - 1) {
@@ -58,20 +68,25 @@ function getWallRepresentation(map: GameMap, pos: Vector) {
         pos.x == map.width - 1 &&
         pos.y != 0 &&
         pos.y != map.height - 1 &&
-        map.isAt(w(pos), "wall")
+        map.isAt(Vector.w(pos), "wall")
     ) {
         return "╢"
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(e(pos), "wall")) {
+    } else if (
+        pos.x == 0 &&
+        pos.y != 0 &&
+        pos.y != map.height - 1 &&
+        map.isAt(Vector.e(pos), "wall")
+    ) {
         return "╟"
     } else if (pos.x == 0 || pos.x == map.width - 1) {
         return "║"
     } else if (pos.y == 0 || pos.y == map.height - 1) {
         return "═"
-    } else if (map.isAt(n(pos), "wall") && map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(Vector.n(pos), "wall") && map.isAt(Vector.s(pos), "wall")) {
         return "│"
-    } else if (map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(Vector.s(pos), "wall")) {
         return "┬"
-    } else if (map.isAt(n(pos), "wall")) {
+    } else if (map.isAt(Vector.n(pos), "wall")) {
         return "┴"
     } else {
         return "─"

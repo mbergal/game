@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { GameMap } from "../map"
-import { Wall } from "../wall"
+import { Wall } from "../objects/wall"
 
 function removeEmptyLines(str: string) {
     return str.split(/\r?\n/)

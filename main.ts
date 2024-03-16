@@ -1,10 +1,12 @@
 import * as _ from "lodash"
-import * as Boss from "./boss"
-import * as Footprint from "./footprint"
+import { Command } from "./commands"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
-import { Vector, n, s } from "./geometry"
+import { Vector } from "./geometry"
 import { GameMap } from "./map"
-import { GameObject } from "./object"
+import * as Boss from "./objects/boss"
+import * as Footprint from "./objects/footprint"
+import { GameObject } from "./objects/object"
+import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils"
 
@@ -64,7 +66,7 @@ export function main() {
         .concat(vline({ x: 0, y: 0 }, height))
         .concat(vline({ x: width - 1, y: 0 }, height))
         .map(
-            (point: Vector): GameObject => ({
+            (point: Vector.t): GameObject => ({
                 position: point,
                 type: "wall",
                 zIndex: 0,
@@ -77,7 +79,7 @@ export function main() {
         .map((y: number) => hline({ x: 0, y }, width))
         .flatMap((x) => x)
         .map(
-            (point: Vector): GameObject => ({
+            (point: Vector.t): GameObject => ({
                 type: "wall",
                 position: point,
                 zIndex: 0,
@@ -91,7 +93,7 @@ export function main() {
         width,
         wallsPerRow: { min: 3, max: 7 },
     }).map(
-        (point: Vector): GameObject => ({
+        (point: Vector.t): GameObject => ({
             type: "wall",
             position: point,
             zIndex: 0,
@@ -102,6 +104,17 @@ export function main() {
 
     const room_doors = generateRoomDoors(map)
     map.add([boss])
+
+    const player: Player.Player = {
+        type: "player",
+        zIndex: 1000,
+        direction: null,
+        position: map.getRandomEmptyLocation(),
+        tact: 0,
+    }
+
+    map.add([player])
+
     window.setInterval(() => process_tick(map), TICK_INTERVAL)
 
     window.addEventListener("keydown", (event) => {
@@ -114,10 +127,44 @@ export function main() {
                 if (loaded != null) {
                     map = loaded
                 }
+            default:
+                const command = getCommand(event.key)
+                if (command != null) {
+                    processCommand(command, map)
+                }
         }
     })
 
     render(map)
+}
+
+function processCommand(command: Command, map: GameMap) {
+    for (const obj of map.objects) {
+        switch (obj.type) {
+            case "boss":
+            case "footprint":
+            case "wall":
+                break
+            case "player":
+                Player.command(obj, command, map)
+                break
+            default:
+                assertUnreachable(obj)
+        }
+    }
+}
+
+function getCommand(key: string): Command | null | undefined {
+    switch (key) {
+        case "ArrowUp":
+            return { type: "move", direction: "up" }
+        case "ArrowDown":
+            return { type: "move", direction: "down" }
+        case "ArrowLeft":
+            return { type: "move", direction: "left" }
+        case "ArrowRight":
+            return { type: "move", direction: "right" }
+    }
 }
 
 export function save(map: GameMap) {
@@ -152,6 +199,9 @@ function tick(obj: GameObject, map: GameMap) {
             break
         case "footprint":
             Footprint.tick(obj, map)
+            break
+        case "player":
+            Player.tick(obj, map)
             break
         default:
             assertUnreachable(obj)

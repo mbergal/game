@@ -1,7 +1,9 @@
 import * as _ from "lodash"
-import { Vector, AllDirections, moveBy } from "./geometry"
-import * as Direction from "./direction"
-import { GameObject, GameObjectType } from "./object"
+import { Vector, Direction, moveBy } from "./geometry"
+
+import * as random from "./random"
+import { GameObject, GameObjectType } from "./objects/object"
+import { check } from "./generator"
 
 export class GameMap {
     width: number
@@ -43,25 +45,34 @@ export class GameMap {
         }
     }
 
-    move(obj: GameObject, pos: Vector) {
+    move(obj: GameObject, pos: Vector.t) {
         this.remove([obj])
         obj.position = pos
         this.add([obj])
     }
 
-    objs_at(v: Vector): GameObject[] {
+    getRandomEmptyLocation(): Vector.t {
+        const [x, y] = check(
+            () => [random.getInt(0, this.width), random.getInt(0, this.height)],
+            ([x, y]) => this.at({ x, y }).length == 0
+        )
+
+        return { x, y }
+    }
+
+    at(v: Vector.t): GameObject[] {
         return this.cells[v.y][v.x]
     }
 
-    isAt(v: Vector, type: GameObject["type"]) {
+    isAt(v: Vector.t, type: GameObject["type"]) {
         if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
         const objs: GameObject[] = this.cells[v.y][v.x]
         return objs != null ? _.some(objs, (x) => x.type == type) : false
     }
 
-    possibleDirections(position: Vector, type: GameObjectType): Direction.t[] {
+    possibleDirections(position: Vector.t, type: GameObjectType): Direction.t[] {
         const p: Direction.t[] = []
-        for (const d of AllDirections) {
+        for (const d of Direction.all) {
             const newPos = moveBy(position, d)
             if (this.isAt(newPos, type)) p.push(d)
         }

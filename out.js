@@ -6000,23 +6000,8 @@
   // main.ts
   var _5 = __toESM(require_lodash());
 
-  // boss.ts
+  // generator.ts
   var import_lodash = __toESM(require_lodash());
-
-  // direction.ts
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
 
   // geometry.ts
   var AllDirections = ["left", "right", "down", "up"];
@@ -6075,7 +6060,263 @@
   }
   __name(choice, "choice");
 
-  // boss.ts
+  // room.ts
+  function upperDoors(room) {
+    return room.doors.filter((x) => x.y < room.position.y).length;
+  }
+  __name(upperDoors, "upperDoors");
+  function lowerDoors(room) {
+    return room.doors.filter((x) => x.y > room.position.y).length;
+  }
+  __name(lowerDoors, "lowerDoors");
+
+  // generator.ts
+  function check(t, f) {
+    while (true) {
+      const tt = t();
+      if (f(tt))
+        return tt;
+    }
+  }
+  __name(check, "check");
+  function generateRoomWalls(args) {
+    const room_walls = import_lodash.default.flatMap(
+      import_lodash.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash.default.flatMap(
+          check(
+            () => getInts(
+              0,
+              args.width,
+              getInt(args.wallsPerRow.min, args.wallsPerRow.max)
+            ),
+            (x) => proper_distance(x.concat([0, args.width]))
+          ).map((x) => vline({ x, y }, 1))
+        )
+      )
+    );
+    return room_walls;
+  }
+  __name(generateRoomWalls, "generateRoomWalls");
+  function generateRoomDoors(map) {
+    for (let row = 3; row <= map.height - 2; row += 2) {
+      const rooms = getRowRooms(map, row);
+      makeRoomDoors(map, rooms);
+      const doors = import_lodash.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      for (const door of doors) {
+        const objs = map.at(door);
+        map.remove(objs);
+      }
+    }
+  }
+  __name(generateRoomDoors, "generateRoomDoors");
+  function desiredNumOfDoors(room) {
+    const a = [
+      [3, 0, 1],
+      [6, 1, 2],
+      [100, 2, 5]
+    ];
+    const min_max = import_lodash.default.find(a, (x) => x[0] > room.length);
+    return getInt(min_max[1], min_max[2]);
+  }
+  __name(desiredNumOfDoors, "desiredNumOfDoors");
+  function noWalls(map, xs, y) {
+    for (const x of xs) {
+      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
+        return false;
+      }
+    }
+    return true;
+  }
+  __name(noWalls, "noWalls");
+  function makeRoomDoors(map, rooms) {
+    for (const room of rooms) {
+      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
+      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
+      const xx = check(
+        () => getInts(room.position.x, room.position.x + room.length, num_of_lower),
+        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
+      );
+      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
+    }
+    return rooms;
+  }
+  __name(makeRoomDoors, "makeRoomDoors");
+  function getRowRooms(map, row) {
+    const rooms = [];
+    let currentRoom = {
+      position: { x: 0, y: 0 },
+      length: 0,
+      doors: []
+    };
+    for (let x = 0; x < map.width; x++) {
+      const c = { x, y: row };
+      if (map.at(n(c)).length == 0) {
+        currentRoom.doors.push(n(c));
+      }
+      if (map.at(s(c)).length == 0) {
+        currentRoom.doors.push(s(c));
+      }
+      if (map.at({ x, y: row }).length > 0) {
+        if (currentRoom.length > 0)
+          rooms.push(currentRoom);
+        currentRoom = {
+          position: { x, y: row },
+          length: 1,
+          doors: []
+        };
+      } else {
+        currentRoom.length += 1;
+      }
+    }
+    return rooms;
+  }
+  __name(getRowRooms, "getRowRooms");
+  function proper_distance(walls) {
+    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
+    const sorted_walls = import_lodash.default.sortBy(walls);
+    const distances = import_lodash.default.chain(import_lodash.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash.default.every(
+      distances.map((x) => x[1] - x[0]),
+      (x) => x > 2
+    );
+    return result;
+  }
+  __name(proper_distance, "proper_distance");
+  function line(start, direction, size) {
+    const line_vector = [];
+    for (let i = 0; i < size; ++i) {
+      line_vector.push({
+        x: start.x + i * direction.x,
+        y: start.y + i * direction.y
+      });
+    }
+    return line_vector;
+  }
+  __name(line, "line");
+  function hline(start, size) {
+    return line(start, { x: 1, y: 0 }, size);
+  }
+  __name(hline, "hline");
+  function vline(start, size) {
+    return line(start, { x: 0, y: 1 }, size);
+  }
+  __name(vline, "vline");
+
+  // map.ts
+  var _3 = __toESM(require_lodash());
+  var _GameMap = class _GameMap {
+    constructor(width2, height2, objs) {
+      this.width = width2;
+      this.height = height2;
+      const a = _3.range(1, 21);
+      this.cells = _3.chunk(
+        _3.range(width2 * height2).map((x) => []),
+        width2
+      );
+      this.objects = [];
+      this.add(objs);
+    }
+    add(objs) {
+      this.objects = this.objects.concat(objs);
+      for (const obj of objs) {
+        const objs2 = this.cells[obj.position.y][obj.position.x];
+        objs2.push(obj);
+        this.cells[obj.position.y][obj.position.x] = _3.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+      }
+    }
+    remove(objs) {
+      this.objects = this.objects.filter((x) => _3.indexOf(objs, x) == -1);
+      for (const obj of objs) {
+        this.cells[obj.position.y][obj.position.x] = _3.pull(
+          this.cells[obj.position.y][obj.position.x],
+          obj
+        );
+      }
+    }
+    move(obj, pos) {
+      this.remove([obj]);
+      obj.position = pos;
+      this.add([obj]);
+    }
+    getRandomEmptyLocation() {
+      const [x, y] = check(
+        () => [getInt(0, this.width), getInt(0, this.height)],
+        ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
+      );
+      return { x, y };
+    }
+    at(v) {
+      return this.cells[v.y][v.x];
+    }
+    isAt(v, type) {
+      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
+        return false;
+      const objs = this.cells[v.y][v.x];
+      return objs != null ? _3.some(objs, (x) => x.type == type) : false;
+    }
+    possibleDirections(position, type) {
+      const p = [];
+      for (const d of AllDirections) {
+        const newPos = moveBy(position, d);
+        if (this.isAt(newPos, type))
+          p.push(d);
+      }
+      return p;
+    }
+    toString() {
+      let s2 = "\n";
+      for (const y of _3.range(this.height)) {
+        for (const x of _3.range(this.width))
+          s2 += repr(this.cells[y][x]);
+        s2 += "\n";
+      }
+      return s2;
+    }
+    toJson() {
+      return {
+        height: this.height,
+        width: this.width,
+        objects: this.objects
+      };
+    }
+    static fromJson(json) {
+    }
+  };
+  __name(_GameMap, "GameMap");
+  var GameMap = _GameMap;
+  function repr(objs) {
+    if (objs.length > 0) {
+      switch (objs[0].type) {
+        case "wall":
+          return "~";
+        default:
+          return ".";
+      }
+    } else {
+      return " ";
+    }
+  }
+  __name(repr, "repr");
+
+  // objects/boss.ts
+  var import_lodash2 = __toESM(require_lodash());
+
+  // direction.ts
+  function reverse(direction) {
+    switch (direction) {
+      case "down":
+        return "up";
+      case "up":
+        return "down";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
+  }
+  __name(reverse, "reverse");
+
+  // objects/boss.ts
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6103,20 +6344,20 @@
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash.default.difference(possible, [
+    const turns = import_lodash2.default.difference(possible, [
       currentDirection,
       reverse(currentDirection)
     ]);
     if (turns.length > 0) {
       result.turn = { directions: turns };
     }
-    if (import_lodash.default.includes(possible, currentDirection)) {
-      result.straight = {};
+    if (import_lodash2.default.includes(possible, currentDirection)) {
+      result.straight = { direction: currentDirection };
     }
-    if (!import_lodash.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+    if (!import_lodash2.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
       result.jump = { directions: [currentDirection] };
     }
-    if (import_lodash.default.includes(possible, reverse(currentDirection))) {
+    if (import_lodash2.default.includes(possible, reverse(currentDirection))) {
       result.back = {};
     }
     return result;
@@ -6145,11 +6386,10 @@
           ];
           if (moves.turn) {
             console.log(JSON.stringify({ move_types, move_weights }));
-            debugger;
           }
           const move_choice = choice(
-            import_lodash.default.compact(move_types),
-            import_lodash.default.compact(move_weights)
+            import_lodash2.default.compact(move_types),
+            import_lodash2.default.compact(move_weights)
           );
           switch (move_choice) {
             case "turn":
@@ -6166,8 +6406,8 @@
         }
         if (moves.back || moves.jump) {
           const move_choice = choice(
-            import_lodash.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+            import_lodash2.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash2.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
           );
           switch (move_choice) {
             case "back":
@@ -6215,7 +6455,7 @@
   }
   __name(choose_direction, "choose_direction");
 
-  // footprint.ts
+  // objects/footprint.ts
   var LIFETIME = 1e3;
   function tick2(obj, map) {
     if (obj.tact > LIFETIME) {
@@ -6226,238 +6466,17 @@
   }
   __name(tick2, "tick");
 
-  // generator.ts
-  var import_lodash2 = __toESM(require_lodash());
-
-  // room.ts
-  function upperDoors(room) {
-    return room.doors.filter((x) => x.y < room.position.y).length;
+  // objects/player.ts
+  function tick3(obj, map) {
   }
-  __name(upperDoors, "upperDoors");
-  function lowerDoors(room) {
-    return room.doors.filter((x) => x.y > room.position.y).length;
-  }
-  __name(lowerDoors, "lowerDoors");
-
-  // generator.ts
-  function check(t, f) {
-    while (true) {
-      const tt = t();
-      if (f(tt))
-        return tt;
+  __name(tick3, "tick");
+  function command(obj, command2, map) {
+    switch (command2.type) {
+      case "move":
+        break;
     }
   }
-  __name(check, "check");
-  function generateRoomWalls(args) {
-    const room_walls = import_lodash2.default.flatMap(
-      import_lodash2.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash2.default.flatMap(
-          check(
-            () => getInts(
-              0,
-              args.width,
-              getInt(args.wallsPerRow.min, args.wallsPerRow.max)
-            ),
-            (x) => proper_distance(x.concat([0, args.width]))
-          ).map((x) => vline({ x, y }, 1))
-        )
-      )
-    );
-    return room_walls;
-  }
-  __name(generateRoomWalls, "generateRoomWalls");
-  function generateRoomDoors(map) {
-    for (let row = 3; row <= map.height - 2; row += 2) {
-      const rooms = getRowRooms(map, row);
-      makeRoomDoors(map, rooms);
-      const doors = import_lodash2.default.map(rooms, (x) => x.doors).flatMap((x) => x);
-      for (const door of doors) {
-        const objs = map.objs_at(door);
-        map.remove(objs);
-      }
-    }
-  }
-  __name(generateRoomDoors, "generateRoomDoors");
-  function desiredNumOfDoors(room) {
-    const a = [
-      [3, 0, 1],
-      [6, 1, 2],
-      [100, 2, 5]
-    ];
-    const min_max = import_lodash2.default.find(a, (x) => x[0] > room.length);
-    return getInt(min_max[1], min_max[2]);
-  }
-  __name(desiredNumOfDoors, "desiredNumOfDoors");
-  function noWalls(map, xs, y) {
-    for (const x of xs) {
-      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
-        return false;
-      }
-    }
-    return true;
-  }
-  __name(noWalls, "noWalls");
-  function makeRoomDoors(map, rooms) {
-    for (const room of rooms) {
-      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
-      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
-      const xx = check(
-        () => getInts(room.position.x, room.position.x + room.length, num_of_lower),
-        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
-      );
-      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
-    }
-    return rooms;
-  }
-  __name(makeRoomDoors, "makeRoomDoors");
-  function getRowRooms(map, row) {
-    const rooms = [];
-    let currentRoom = {
-      position: { x: 0, y: 0 },
-      length: 0,
-      doors: []
-    };
-    for (let x = 0; x < map.width; x++) {
-      const c = { x, y: row };
-      if (map.objs_at(n(c)).length == 0) {
-        currentRoom.doors.push(n(c));
-      }
-      if (map.objs_at(s(c)).length == 0) {
-        currentRoom.doors.push(s(c));
-      }
-      if (map.objs_at({ x, y: row }).length > 0) {
-        if (currentRoom.length > 0)
-          rooms.push(currentRoom);
-        currentRoom = {
-          position: { x, y: row },
-          length: 1,
-          doors: []
-        };
-      } else {
-        currentRoom.length += 1;
-      }
-    }
-    return rooms;
-  }
-  __name(getRowRooms, "getRowRooms");
-  function proper_distance(walls) {
-    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash2.default.sortBy(walls);
-    const distances = import_lodash2.default.chain(
-      import_lodash2.default.zip(sorted_walls, sorted_walls.slice(1))
-    ).initial().value().filter(notEmpty);
-    const result = import_lodash2.default.every(distances.map((x) => x[1] - x[0]), (x) => x > 2);
-    return result;
-  }
-  __name(proper_distance, "proper_distance");
-  function line(start, direction, size) {
-    const line_vector = [];
-    for (let i = 0; i < size; ++i) {
-      line_vector.push({
-        x: start.x + i * direction.x,
-        y: start.y + i * direction.y
-      });
-    }
-    return line_vector;
-  }
-  __name(line, "line");
-  function hline(start, size) {
-    return line(start, { x: 1, y: 0 }, size);
-  }
-  __name(hline, "hline");
-  function vline(start, size) {
-    return line(start, { x: 0, y: 1 }, size);
-  }
-  __name(vline, "vline");
-
-  // map.ts
-  var _4 = __toESM(require_lodash());
-  var _GameMap = class _GameMap {
-    constructor(width2, height2, objs) {
-      this.width = width2;
-      this.height = height2;
-      const a = _4.range(1, 21);
-      this.cells = _4.chunk(
-        _4.range(width2 * height2).map((x) => []),
-        width2
-      );
-      this.objects = [];
-      this.add(objs);
-    }
-    add(objs) {
-      this.objects = this.objects.concat(objs);
-      for (const obj of objs) {
-        const objs2 = this.cells[obj.position.y][obj.position.x];
-        objs2.push(obj);
-        this.cells[obj.position.y][obj.position.x] = _4.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
-      }
-    }
-    remove(objs) {
-      this.objects = this.objects.filter((x) => _4.indexOf(objs, x) == -1);
-      for (const obj of objs) {
-        this.cells[obj.position.y][obj.position.x] = _4.pull(
-          this.cells[obj.position.y][obj.position.x],
-          obj
-        );
-      }
-    }
-    move(obj, pos) {
-      this.remove([obj]);
-      obj.position = pos;
-      this.add([obj]);
-    }
-    objs_at(v) {
-      return this.cells[v.y][v.x];
-    }
-    isAt(v, type) {
-      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
-        return false;
-      const objs = this.cells[v.y][v.x];
-      return objs != null ? _4.some(objs, (x) => x.type == type) : false;
-    }
-    possibleDirections(position, type) {
-      const p = [];
-      for (const d of AllDirections) {
-        const newPos = moveBy(position, d);
-        if (this.isAt(newPos, type))
-          p.push(d);
-      }
-      return p;
-    }
-    toString() {
-      let s2 = "\n";
-      for (const y of _4.range(this.height)) {
-        for (const x of _4.range(this.width))
-          s2 += repr(this.cells[y][x]);
-        s2 += "\n";
-      }
-      return s2;
-    }
-    toJson() {
-      return {
-        height: this.height,
-        width: this.width,
-        objects: this.objects
-      };
-    }
-    static fromJson(json) {
-    }
-  };
-  __name(_GameMap, "GameMap");
-  var GameMap = _GameMap;
-  function repr(objs) {
-    if (objs.length > 0) {
-      switch (objs[0].type) {
-        case "wall":
-          return "~";
-        default:
-          return ".";
-      }
-    } else {
-      return " ";
-    }
-  }
-  __name(repr, "repr");
+  __name(command, "command");
 
   // utils.ts
   function assertUnreachable(x) {
@@ -6472,17 +6491,7 @@
       const row = [];
       for (let x = 0; x < map.width; x++) {
         const objs = map.cells[y][x];
-        if (objs.length) {
-          switch (objs[0].type) {
-            case "wall":
-              row.push(getWallRepresentation(map, { x, y }));
-              break;
-            default:
-              row.push(getRepresentation(map, objs[0]));
-              break;
-          }
-        } else
-          row.push(" ");
+        row.push(getRepresentation(map, objs));
       }
       buffer.push(row);
     }
@@ -6490,20 +6499,38 @@
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
-  function getRepresentation(map, obj) {
-    const t = obj.type;
-    switch (t) {
-      case "wall":
-        if (map.isAt(n(obj.position), "wall") && map.isAt(s(obj.position), "wall")) {
-          return "|";
-        } else
-          return "-";
+  function isVisible(obj) {
+    switch (obj.type) {
       case "boss":
-        return "+";
+      case "wall":
+      case "player":
+        return true;
       case "footprint":
-        return "\u25A0";
+        return false;
       default:
-        assertUnreachable(t);
+        assertUnreachable(obj);
+    }
+    return true;
+  }
+  __name(isVisible, "isVisible");
+  function getRepresentation(map, objs) {
+    let obj = objs.find(isVisible);
+    if (obj) {
+      const t = obj.type;
+      switch (t) {
+        case "wall":
+          return getWallRepresentation(map, obj.position);
+        case "boss":
+          return "+";
+        case "footprint":
+          return "\u25A0";
+        case "player":
+          return "P";
+        default:
+          assertUnreachable(t);
+      }
+    } else {
+      return " ";
     }
   }
   __name(getRepresentation, "getRepresentation");
@@ -6582,6 +6609,13 @@
     map.add(room_walls);
     const room_doors = generateRoomDoors(map);
     map.add([boss]);
+    const player = {
+      type: "player",
+      zIndex: 1e3,
+      position: map.getRandomEmptyLocation(),
+      tact: 0
+    };
+    map.add([player]);
     window.setInterval(() => process_tick(map), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
@@ -6593,11 +6627,44 @@
           if (loaded != null) {
             map = loaded;
           }
+        default:
+          const command2 = getCommand(event.key);
+          if (command2 != null) {
+            processCommand(command2, map);
+          }
       }
     });
     render(map);
   }
   __name(main, "main");
+  function processCommand(command2, map) {
+    for (const obj of map.objects) {
+      switch (obj.type) {
+        case "boss":
+        case "footprint":
+        case "wall":
+          break;
+        case "player":
+          command(command2);
+        default:
+          assertUnreachable(obj);
+      }
+    }
+  }
+  __name(processCommand, "processCommand");
+  function getCommand(key) {
+    switch (key) {
+      case "ArrowUp":
+        return { type: "move", direction: "up" };
+      case "ArrowDown":
+        return { type: "move", direction: "down" };
+      case "ArrowLeft":
+        return { type: "move", direction: "left" };
+      case "ArrowRight":
+        return { type: "move", direction: "right" };
+    }
+  }
+  __name(getCommand, "getCommand");
   function save(map) {
     window.localStorage.setItem("map", JSON.stringify(map.toJson()));
     console.log("Game saved!");
@@ -6616,12 +6683,12 @@
   __name(load, "load");
   function process_tick(map) {
     for (const obj of map.objects) {
-      tick3(obj, map);
+      tick4(obj, map);
     }
     render(map);
   }
   __name(process_tick, "process_tick");
-  function tick3(obj, map) {
+  function tick4(obj, map) {
     switch (obj.type) {
       case "boss":
         tick(obj, map);
@@ -6630,11 +6697,14 @@
       case "footprint":
         tick2(obj, map);
         break;
+      case "player":
+        tick3(obj, map);
+        break;
       default:
         assertUnreachable(obj);
     }
   }
-  __name(tick3, "tick");
+  __name(tick4, "tick");
   main();
 })();
 /*! Bundled license information:

@@ -1,12 +1,10 @@
 import * as Direction from "./direction"
-export interface Vector {
-    x: number
-    y: number
-}
+import * as Vector from "./vector"
 
-export const AllDirections: Direction.t[] = ["left", "right", "down", "up"]
+export * as Direction from "./direction"
+export * as Vector from "./vector"
 
-export function moveBy(vector: Vector, direction: Direction.t): Vector {
+export function moveBy(vector: Vector.t, direction: Direction.t): Vector.t {
     switch (direction) {
         case "down":
             return { ...vector, x: vector.x, y: vector.y + 1 }
@@ -17,20 +15,4 @@ export function moveBy(vector: Vector, direction: Direction.t): Vector {
         case "right":
             return { ...vector, x: vector.x + 1, y: vector.y }
     }
-}
-
-export function n(v: Vector): Vector {
-    return { x: v.x, y: v.y - 1 }
-}
-
-export function s(v: Vector): Vector {
-    return { x: v.x, y: v.y + 1 }
-}
-
-export function w(v: Vector): Vector {
-    return { x: v.x - 1, y: v.y }
-}
-
-export function e(v: Vector): Vector {
-    return { x: v.x + 1, y: v.y }
 }

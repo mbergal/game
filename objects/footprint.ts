@@ -1,5 +1,5 @@
-import { Vector } from "./geometry"
-import { GameMap } from "./map"
+import { Vector } from "../geometry"
+import { GameMap } from "../map"
 
 const LIFETIME = 1000
 

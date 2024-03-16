@@ -1,6 +1,6 @@
 import { test, expect } from "vitest"
 import { loadMap } from "./utils"
-import { possibleMoves } from "../boss"
+import { possibleMoves } from "../objects/boss"
 
 test("possibleMoves", () => {
     const map = loadMap(`

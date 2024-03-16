@@ -1,8 +1,8 @@
 import _ from "lodash"
-import * as Direction from "./direction"
-import { Vector, moveBy } from "./geometry"
-import { GameMap } from "./map"
-import * as random from "./random"
+import * as Direction from "../direction"
+import { Vector, moveBy } from "../geometry"
+import { GameMap } from "../map"
+import * as random from "../random"
 import { Footprint } from "./footprint"
 
 type Stopped = { type: "stopped"; previous_direction: Direction.t | null }
@@ -13,7 +13,7 @@ type BossState = Stopped | Moving | Instructing | Jumping
 
 export interface Boss extends LiveObject {
     type: "boss"
-    position: Vector
+    position: Vector.t
     state: BossState
     zIndex: number
 }
@@ -46,13 +46,13 @@ BOSS_WEIGHTS = {
 
 export type MoveActions = {
     turn?: { directions: Direction.t[] }
-    straight?: {}
+    straight?: { direction: Direction.t }
     jump?: { directions: Direction.t[] }
     back?: {}
 }
 
 export function possibleMoves(
-    pos: Vector,
+    pos: Vector.t,
     currentDirection: Direction.t,
     map: GameMap
 ): MoveActions {
@@ -68,7 +68,7 @@ export function possibleMoves(
     }
 
     if (_.includes(possible, currentDirection)) {
-        result.straight = {}
+        result.straight = { direction: currentDirection }
     }
 
     if (
@@ -85,7 +85,7 @@ export function possibleMoves(
     return result
 }
 
-function move(obj: Boss, new_pos: Vector, new_direction: Direction.t, map: GameMap) {
+function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: GameMap) {
     obj.state = { type: "moving", direction: new_direction, tact: 0 }
     map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint])
     map.move(obj, new_pos)
@@ -114,7 +114,7 @@ export function tick(obj: Boss, map: GameMap) {
                 ]
                 if (moves.turn) {
                     console.log(JSON.stringify({ move_types, move_weights }))
-                    debugger
+                    // debugger
                 }
 
                 const move_choice = random.choice<keyof MoveActions>(
@@ -176,7 +176,7 @@ export function tick(obj: Boss, map: GameMap) {
 }
 
 function choose_direction(
-    pos: Vector,
+    pos: Vector.t,
     least_preferred: Direction.t | null,
     map: GameMap
 ): Direction.t | null {

@@ -1,7 +1,7 @@
 import { expect, test, describe } from "vitest"
 import { GameMap } from "../map"
 import _ from "lodash"
-import { Wall } from "../wall"
+import { Wall } from "../objects/wall"
 import { loadMap } from "./utils"
 
 export function sum(a: number, b: number) {
