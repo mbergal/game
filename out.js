@@ -6501,7 +6501,8 @@
   __name(assertUnreachable, "assertUnreachable");
 
   // renderer.ts
-  function render(map) {
+  function render(game) {
+    const map = game.map;
     const buffer = [];
     for (let y = 0; y < map.height; y++) {
       const row = [];
@@ -6511,6 +6512,7 @@
       }
       buffer.push(row);
     }
+    buffer.push(game.score.ticks.toString().padStart(6, "0").split(""));
     const contentBlock = document.getElementById("content");
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
@@ -6594,7 +6596,12 @@
       state: { type: "stopped", previous_direction: null }
       // tick: (objs: GameObject[]) => boss_move(),
     };
-    let map = new GameMap(width, height, []);
+    const game = {
+      map: new GameMap(width, height, []),
+      score: {
+        ticks: 0
+      }
+    };
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
         position: point,
@@ -6602,7 +6609,7 @@
         zIndex: 0
       })
     );
-    map.add(outer_walls);
+    game.map.add(outer_walls);
     const inner_walls = _5.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
@@ -6610,7 +6617,7 @@
         zIndex: 0
       })
     );
-    map.add(inner_walls);
+    game.map.add(inner_walls);
     const room_walls = generateRoomWalls({
       height,
       width,
@@ -6622,36 +6629,36 @@
         zIndex: 0
       })
     );
-    map.add(room_walls);
-    const room_doors = generateRoomDoors(map);
-    map.add([boss]);
+    game.map.add(room_walls);
+    const room_doors = generateRoomDoors(game.map);
+    game.map.add([boss]);
     const player = {
       type: "player",
       zIndex: 1e3,
       direction: null,
-      position: map.getRandomEmptyLocation(),
+      position: game.map.getRandomEmptyLocation(),
       tact: 0
     };
-    map.add([player]);
-    window.setInterval(() => process_tick(map), TICK_INTERVAL);
+    game.map.add([player]);
+    window.setInterval(() => processTick(game), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
         case "s":
-          save(map);
+          save(game.map);
           break;
         case "l":
           const loaded = load();
           if (loaded != null) {
-            map = loaded;
+            game.map = loaded;
           }
         default:
           const command2 = getCommand(event.key);
           if (command2 != null) {
-            processCommand(command2, map);
+            processCommand(command2, game.map);
           }
       }
     });
-    render(map);
+    render(game);
   }
   __name(main, "main");
   function processCommand(command2, map) {
@@ -6699,13 +6706,14 @@
     }
   }
   __name(load, "load");
-  function process_tick(map) {
-    for (const obj of map.objects) {
-      tick4(obj, map);
+  function processTick(game) {
+    game.score.ticks += 1;
+    for (const obj of game.map.objects) {
+      tick4(obj, game.map);
     }
-    render(map);
+    render(game);
   }
-  __name(process_tick, "process_tick");
+  __name(processTick, "processTick");
   function tick4(obj, map) {
     switch (obj.type) {
       case "boss":

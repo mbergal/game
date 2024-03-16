@@ -9,6 +9,7 @@ import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
+import { Game } from "./game"
 
 const TICK_INTERVAL = 50
 // class Game {
@@ -59,8 +60,12 @@ export function main() {
         state: { type: "stopped", previous_direction: null },
         // tick: (objs: GameObject[]) => boss_move(),
     }
-
-    let map = new GameMap(width, height, [])
+    const game = {
+        map: new GameMap(width, height, []),
+        score: {
+            ticks: 0,
+        },
+    }
 
     const outer_walls = hline({ x: 0, y: 0 }, width)
         .concat(vline({ x: 0, y: 0 }, height))
@@ -73,7 +78,7 @@ export function main() {
             })
         )
 
-    map.add(outer_walls)
+    game.map.add(outer_walls)
 
     const inner_walls = _.range(0, height, 2)
         .map((y: number) => hline({ x: 0, y }, width))
@@ -86,7 +91,7 @@ export function main() {
             })
         )
 
-    map.add(inner_walls)
+    game.map.add(inner_walls)
 
     const room_walls = generateRoomWalls({
         height,
@@ -100,42 +105,42 @@ export function main() {
         })
     )
 
-    map.add(room_walls)
+    game.map.add(room_walls)
 
-    const room_doors = generateRoomDoors(map)
-    map.add([boss])
+    const room_doors = generateRoomDoors(game.map)
+    game.map.add([boss])
 
     const player: Player.Player = {
         type: "player",
         zIndex: 1000,
         direction: null,
-        position: map.getRandomEmptyLocation(),
+        position: game.map.getRandomEmptyLocation(),
         tact: 0,
     }
 
-    map.add([player])
+    game.map.add([player])
 
-    window.setInterval(() => process_tick(map), TICK_INTERVAL)
+    window.setInterval(() => processTick(game), TICK_INTERVAL)
 
     window.addEventListener("keydown", (event) => {
         switch (event.key) {
             case "s":
-                save(map)
+                save(game.map)
                 break
             case "l":
                 const loaded = load()
                 if (loaded != null) {
-                    map = loaded
+                    game.map = loaded
                 }
             default:
                 const command = getCommand(event.key)
                 if (command != null) {
-                    processCommand(command, map)
+                    processCommand(command, game.map)
                 }
         }
     })
 
-    render(map)
+    render(game)
 }
 
 function processCommand(command: Command, map: GameMap) {
@@ -184,11 +189,12 @@ export function load(): GameMap | null {
     }
 }
 
-function process_tick(map: GameMap) {
-    for (const obj of map.objects) {
-        tick(obj, map)
+function processTick(game: Game) {
+    game.score.ticks += 1
+    for (const obj of game.map.objects) {
+        tick(obj, game.map)
     }
-    render(map)
+    render(game)
 }
 
 function tick(obj: GameObject, map: GameMap) {

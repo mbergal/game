@@ -2,8 +2,10 @@ import { Vector } from "./geometry"
 import { GameMap } from "./game/map"
 import { GameObject } from "./objects/object"
 import { assertUnreachable } from "./utils/utils"
+import { Game } from "./game"
 
-export function render(map: GameMap) {
+export function render(game: Game) {
+    const map = game.map
     const buffer = []
     for (let y = 0; y < map.height; y++) {
         const row = []
@@ -16,6 +18,7 @@ export function render(map: GameMap) {
         buffer.push(row)
     }
 
+    buffer.push(game.score.ticks.toString().padStart(6, "0").split(""))
     const contentBlock = document.getElementById("content")
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
