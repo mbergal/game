@@ -1,7 +1,7 @@
 import { Vector } from "./geometry"
-import { GameMap } from "./map"
+import { GameMap } from "./game/map"
 import { GameObject } from "./objects/object"
-import { assertUnreachable } from "./utils"
+import { assertUnreachable } from "./utils/utils"
 
 export function render(map: GameMap) {
     const buffer = []
@@ -46,7 +46,7 @@ function getRepresentation(map: GameMap, objs: GameObject[]): string {
             case "footprint":
                 return "■"
             case "player":
-                return "P"
+                return "*"
             default:
                 assertUnreachable(t)
         }

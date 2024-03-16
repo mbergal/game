@@ -1,5 +1,5 @@
 import { expect, test, describe } from "vitest"
-import { GameMap } from "../map"
+import { GameMap } from "../game/map"
 import _ from "lodash"
 import { Wall } from "../objects/wall"
 import { loadMap } from "./utils"

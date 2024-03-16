@@ -7,9 +7,9 @@ export type Room = {
 }
 
 export function upperDoors(room: Room) {
-    return room.doors.filter(x => x.y < room.position.y).length
+    return room.doors.filter((x) => x.y < room.position.y).length
 }
 
 export function lowerDoors(room: Room) {
-    return room.doors.filter(x => x.y > room.position.y).length
+    return room.doors.filter((x) => x.y > room.position.y).length
 }

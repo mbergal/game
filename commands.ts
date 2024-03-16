@@ -1,4 +1,4 @@
-import * as Direction from "./direction"
+import * as Direction from "./geometry/direction"
 
 export type MoveCommand = {
     type: "move"

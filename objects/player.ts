@@ -1,7 +1,7 @@
-import * as Direction from "../direction"
+import * as Direction from "../geometry/direction"
 import { Command } from "../commands"
 import { Vector } from "../geometry"
-import { GameMap } from "../map"
+import { GameMap } from "../game/map"
 
 export interface Player {
     type: "player"

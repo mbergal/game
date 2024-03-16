@@ -1,5 +1,5 @@
 import _ from "lodash"
-import { GameMap } from "../map"
+import { GameMap } from "../game/map"
 import { Wall } from "../objects/wall"
 
 function removeEmptyLines(str: string) {

@@ -1,8 +1,8 @@
 import _ from "lodash"
-import * as Direction from "../direction"
+import * as Direction from "../geometry/direction"
 import { Vector, moveBy } from "../geometry"
-import { GameMap } from "../map"
-import * as random from "../random"
+import { GameMap } from "../game/map"
+import * as random from "../utils/random"
 import { Footprint } from "./footprint"
 
 type Stopped = { type: "stopped"; previous_direction: Direction.t | null }

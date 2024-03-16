@@ -1,7 +1,7 @@
 import _ from "lodash"
-import { Vector, n, s } from "./geometry"
-import { GameMap } from "./map"
-import * as random from "./random"
+import { Vector } from "./geometry"
+import { GameMap } from "./game/map"
+import * as random from "./utils/random"
 import * as Room from "./room"
 
 export function check<T>(t: () => T, f: (t: T) => boolean) {
@@ -15,7 +15,7 @@ export function generateRoomWalls(args: {
     width: number
     height: number
     wallsPerRow: { min: number; max: number }
-}): Vector[] {
+}): Vector.t[] {
     const room_walls = _.flatMap(
         _.range(3, args.height - 2, 2).map((y: number) =>
             _.flatMap(
@@ -92,11 +92,11 @@ function getRowRooms(map: GameMap, row: number): Room.Room[] {
     }
     for (let x = 0; x < map.width; x++) {
         const c = { x: x, y: row }
-        if (map.at(n(c)).length == 0) {
-            currentRoom.doors.push(n(c))
+        if (map.at(Vector.n(c)).length == 0) {
+            currentRoom.doors.push(Vector.n(c))
         }
-        if (map.at(s(c)).length == 0) {
-            currentRoom.doors.push(s(c))
+        if (map.at(Vector.s(c)).length == 0) {
+            currentRoom.doors.push(Vector.s(c))
         }
         if (map.at({ x: x, y: row }).length > 0) {
             if (currentRoom.length > 0) rooms.push(currentRoom)
@@ -132,7 +132,7 @@ function proper_distance(walls: number[]): boolean {
     return result
 }
 
-function line(start: Vector, direction: Vector, size: number): Vector[] {
+function line(start: Vector.t, direction: Vector.t, size: number): Vector.t[] {
     const line_vector = []
     for (let i = 0; i < size; ++i) {
         line_vector.push({
@@ -143,10 +143,10 @@ function line(start: Vector, direction: Vector, size: number): Vector[] {
     return line_vector
 }
 
-export function hline(start: Vector, size: number): Vector[] {
+export function hline(start: Vector.t, size: number): Vector.t[] {
     return line(start, { x: 1, y: 0 }, size)
 }
 
-export function vline(start: Vector, size: number): Vector[] {
+export function vline(start: Vector.t, size: number): Vector.t[] {
     return line(start, { x: 0, y: 1 }, size)
 }

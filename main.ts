@@ -2,13 +2,13 @@ import * as _ from "lodash"
 import { Command } from "./commands"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
-import { GameMap } from "./map"
+import { GameMap } from "./game/map"
 import * as Boss from "./objects/boss"
 import * as Footprint from "./objects/footprint"
 import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
-import { assertUnreachable } from "./utils"
+import { assertUnreachable } from "./utils/utils"
 
 const TICK_INTERVAL = 50
 // class Game {

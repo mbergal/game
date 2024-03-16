@@ -10,6 +10,10 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
+  var __export = (target, all2) => {
+    for (var name in all2)
+      __defProp(target, name, { get: all2[name], enumerable: true });
+  };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
       for (let key of __getOwnPropNames(from))
@@ -6003,21 +6007,35 @@
   // generator.ts
   var import_lodash = __toESM(require_lodash());
 
-  // geometry.ts
-  var AllDirections = ["left", "right", "down", "up"];
-  function moveBy(vector, direction) {
+  // geometry/direction.ts
+  var direction_exports = {};
+  __export(direction_exports, {
+    all: () => all,
+    reverse: () => reverse
+  });
+  function reverse(direction) {
     switch (direction) {
       case "down":
-        return { ...vector, x: vector.x, y: vector.y + 1 };
+        return "up";
       case "up":
-        return { ...vector, x: vector.x, y: vector.y - 1 };
+        return "down";
       case "left":
-        return { ...vector, x: vector.x - 1, y: vector.y };
+        return "right";
       case "right":
-        return { ...vector, x: vector.x + 1, y: vector.y };
+        return "left";
     }
   }
-  __name(moveBy, "moveBy");
+  __name(reverse, "reverse");
+  var all = ["left", "right", "down", "up"];
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    n: () => n,
+    s: () => s,
+    w: () => w
+  });
   function n(v) {
     return { x: v.x, y: v.y - 1 };
   }
@@ -6035,7 +6053,22 @@
   }
   __name(e, "e");
 
-  // random.ts
+  // geometry/index.ts
+  function moveBy(vector, direction) {
+    switch (direction) {
+      case "down":
+        return { ...vector, x: vector.x, y: vector.y + 1 };
+      case "up":
+        return { ...vector, x: vector.x, y: vector.y - 1 };
+      case "left":
+        return { ...vector, x: vector.x - 1, y: vector.y };
+      case "right":
+        return { ...vector, x: vector.x + 1, y: vector.y };
+    }
+  }
+  __name(moveBy, "moveBy");
+
+  // utils/random.ts
   var _ = __toESM(require_lodash());
   function getInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -6150,11 +6183,11 @@
     };
     for (let x = 0; x < map.width; x++) {
       const c = { x, y: row };
-      if (map.at(n(c)).length == 0) {
-        currentRoom.doors.push(n(c));
+      if (map.at(vector_exports.n(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.n(c));
       }
-      if (map.at(s(c)).length == 0) {
-        currentRoom.doors.push(s(c));
+      if (map.at(vector_exports.s(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.s(c));
       }
       if (map.at({ x, y: row }).length > 0) {
         if (currentRoom.length > 0)
@@ -6202,7 +6235,7 @@
   }
   __name(vline, "vline");
 
-  // map.ts
+  // game/map.ts
   var _3 = __toESM(require_lodash());
   var _GameMap = class _GameMap {
     constructor(width2, height2, objs) {
@@ -6256,7 +6289,7 @@
     }
     possibleDirections(position, type) {
       const p = [];
-      for (const d of AllDirections) {
+      for (const d of direction_exports.all) {
         const newPos = moveBy(position, d);
         if (this.isAt(newPos, type))
           p.push(d);
@@ -6300,23 +6333,6 @@
 
   // objects/boss.ts
   var import_lodash2 = __toESM(require_lodash());
-
-  // direction.ts
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
-
-  // objects/boss.ts
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6478,7 +6494,7 @@
   }
   __name(command, "command");
 
-  // utils.ts
+  // utils/utils.ts
   function assertUnreachable(x) {
     throw new Error("Didn't expect to get here");
   }
@@ -6525,7 +6541,7 @@
         case "footprint":
           return "\u25A0";
         case "player":
-          return "P";
+          return "*";
         default:
           assertUnreachable(t);
       }
@@ -6543,19 +6559,19 @@
       return "\u2557";
     } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
       return "\u255D";
-    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(w(pos), "wall")) {
+    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
       return "\u2562";
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(e(pos), "wall")) {
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
       return "\u255F";
     } else if (pos.x == 0 || pos.x == map.width - 1) {
       return "\u2551";
     } else if (pos.y == 0 || pos.y == map.height - 1) {
       return "\u2550";
-    } else if (map.isAt(n(pos), "wall") && map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
       return "\u2502";
-    } else if (map.isAt(s(pos), "wall")) {
+    } else if (map.isAt(vector_exports.s(pos), "wall")) {
       return "\u252C";
-    } else if (map.isAt(n(pos), "wall")) {
+    } else if (map.isAt(vector_exports.n(pos), "wall")) {
       return "\u2534";
     } else {
       return "\u2500";
@@ -6612,6 +6628,7 @@
     const player = {
       type: "player",
       zIndex: 1e3,
+      direction: null,
       position: map.getRandomEmptyLocation(),
       tact: 0
     };
@@ -6645,7 +6662,8 @@
         case "wall":
           break;
         case "player":
-          command(command2);
+          command(obj, command2, map);
+          break;
         default:
           assertUnreachable(obj);
       }
