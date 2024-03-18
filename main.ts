@@ -4,6 +4,7 @@ import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
 import { GameMap } from "./game/map"
 import * as Boss from "./objects/boss"
+import * as Item from "./objects/item"
 import * as Footprint from "./objects/footprint"
 import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
@@ -63,6 +64,7 @@ export function main() {
     const game: Game = {
         map: new GameMap(width, height, []),
         commands: [],
+        itemGenerator: { tact: 0 },
         score: {
             ticks: 0,
         },
@@ -175,8 +177,19 @@ export function load(): GameMap | null {
     }
 }
 
+function generateAnItem(game: Game) {
+    if (game.itemGenerator.tact > 100) {
+        game.itemGenerator.tact = 0
+        const item = Item.make(game.map.getRandomEmptyLocation())
+        game.map.add([item])
+    } else {
+        game.itemGenerator.tact += 1
+        return null
+    }
+}
 function processTick(game: Game) {
     game.score.ticks += 1
+    const item = generateAnItem(game)
     for (const obj of game.map.objects) {
         tick(obj, game.map, game.commands)
     }
@@ -195,6 +208,8 @@ function tick(obj: GameObject, map: GameMap, commands: Command[]) {
             break
         case "player":
             Player.tick(obj, map, commands)
+            break
+        case "item":
             break
         default:
             assertUnreachable(obj)

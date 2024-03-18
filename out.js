@@ -6471,6 +6471,16 @@
   }
   __name(choose_direction, "choose_direction");
 
+  // objects/item.ts
+  function make(position) {
+    return {
+      type: "item",
+      position,
+      zIndex: 1
+    };
+  }
+  __name(make, "make");
+
   // objects/footprint.ts
   var LIFETIME = 1e3;
   function tick2(obj, map) {
@@ -6542,6 +6552,7 @@
       case "boss":
       case "wall":
       case "player":
+      case "item":
         return true;
       case "footprint":
         return false;
@@ -6564,6 +6575,8 @@
           return "\u25A0";
         case "player":
           return "*";
+        case "item":
+          return ".";
         default:
           assertUnreachable(t);
       }
@@ -6619,6 +6632,7 @@
     const game = {
       map: new GameMap(width, height, []),
       commands: [],
+      itemGenerator: { tact: 0 },
       score: {
         ticks: 0
       }
@@ -6712,8 +6726,20 @@
     }
   }
   __name(load, "load");
+  function generateAnItem(game) {
+    if (game.itemGenerator.tact > 100) {
+      game.itemGenerator.tact = 0;
+      const item = make(game.map.getRandomEmptyLocation());
+      game.map.add([item]);
+    } else {
+      game.itemGenerator.tact += 1;
+      return null;
+    }
+  }
+  __name(generateAnItem, "generateAnItem");
   function processTick(game) {
     game.score.ticks += 1;
+    const item = generateAnItem(game);
     for (const obj of game.map.objects) {
       tick4(obj, game.map, game.commands);
     }
@@ -6732,6 +6758,8 @@
         break;
       case "player":
         tick3(obj, map, commands);
+        break;
+      case "item":
         break;
       default:
         assertUnreachable(obj);

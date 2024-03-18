@@ -28,6 +28,7 @@ function isVisible(obj: GameObject) {
         case "boss":
         case "wall":
         case "player":
+        case "item":
             return true
         case "footprint":
             return false
@@ -50,6 +51,8 @@ function getRepresentation(map: GameMap, objs: GameObject[]): string {
                 return "■"
             case "player":
                 return "*"
+            case "item":
+                return "."
             default:
                 assertUnreachable(t)
         }
