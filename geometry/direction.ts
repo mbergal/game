@@ -1,4 +1,5 @@
 export type t = "left" | "right" | "down" | "up"
+export type Rose = Partial<Record<t, true>>
 
 export function reverse(direction: t) {
     switch (direction) {
@@ -11,6 +12,14 @@ export function reverse(direction: t) {
         case "right":
             return "left"
     }
+}
+
+export function toRose(directions: t[]) {
+    const rose: Rose = {}
+    for (const direction of directions) {
+        rose[direction] = true
+    }
+    return rose
 }
 
 export const all: t[] = ["left", "right", "down", "up"]

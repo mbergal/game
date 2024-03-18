@@ -112,14 +112,7 @@ export function main() {
     const room_doors = generateRoomDoors(game.map)
     game.map.add([boss])
 
-    const player: Player.Player = {
-        type: "player",
-        zIndex: 1000,
-        direction: null,
-        position: game.map.getRandomEmptyLocation(),
-        tact: 0,
-        commands: [],
-    }
+    const player: Player.Player = Player.make(game.map.getRandomEmptyLocation())
 
     game.map.add([player])
 

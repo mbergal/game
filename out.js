@@ -6011,7 +6011,8 @@
   var direction_exports = {};
   __export(direction_exports, {
     all: () => all,
-    reverse: () => reverse
+    reverse: () => reverse,
+    toRose: () => toRose
   });
   function reverse(direction) {
     switch (direction) {
@@ -6026,6 +6027,14 @@
     }
   }
   __name(reverse, "reverse");
+  function toRose(directions) {
+    const rose = {};
+    for (const direction of directions) {
+      rose[direction] = true;
+    }
+    return rose;
+  }
+  __name(toRose, "toRose");
   var all = ["left", "right", "down", "up"];
 
   // geometry/vector.ts
@@ -6236,6 +6245,11 @@
   __name(vline, "vline");
 
   // game/map.ts
+  var map_exports = {};
+  __export(map_exports, {
+    GameMap: () => GameMap,
+    directionTo: () => directionTo
+  });
   var _3 = __toESM(require_lodash());
   var _GameMap = class _GameMap {
     constructor(width2, height2, objs) {
@@ -6281,7 +6295,12 @@
       return { x, y };
     }
     at(v) {
-      return this.cells[v.y][v.x];
+      return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
+    }
+    atObj(v, type) {
+      const objs = this.at(v);
+      const objOfType = objs.find((x) => x.type == type) ?? null;
+      return objOfType;
     }
     isAt(v, type) {
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
@@ -6319,6 +6338,10 @@
   };
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
+  function directionTo(map, objType) {
+    return "left";
+  }
+  __name(directionTo, "directionTo");
   function repr(objs) {
     if (objs.length > 0) {
       switch (objs[0].type) {
@@ -6348,6 +6371,8 @@
 
   // objects/boss.ts
   var import_lodash2 = __toESM(require_lodash());
+  var TACTS_FOR_SINGLE_MOVE = 40;
+  var TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE;
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6400,11 +6425,25 @@
     map.move(obj, new_pos);
   }
   __name(move, "move");
+  function pipPlayer(obj, player) {
+    player.isBeingPipped = true;
+  }
+  __name(pipPlayer, "pipPlayer");
   function tick(obj, map) {
     switch (obj.state.type) {
       case "instructing":
         break;
       case "moving":
+        const directionToPlayer = map_exports.directionTo(map, "player");
+        if (directionToPlayer) {
+          const a = map.atObj(moveBy(obj.position, directionToPlayer), "player");
+          if (a)
+            pipPlayer(obj, a);
+        }
+        obj.state.tact += 1;
+        if (obj.state.tact < TACTS_FOR_SINGLE_MOVE) {
+          return;
+        }
         const moves = possibleMoves(obj.position, obj.state.direction, map);
         if (moves.turn || moves.straight) {
           const move_types = [
@@ -6456,7 +6495,7 @@
           direction: obj.state.direction,
           tact: obj.state.tact + 1
         };
-        if (obj.state.tact > 4) {
+        if (obj.state.tact > TACTS_FOR_JUMP) {
           move(
             obj,
             moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
@@ -6508,6 +6547,18 @@
   __name(tick2, "tick");
 
   // objects/player.ts
+  function make3(position) {
+    return {
+      type: "player",
+      zIndex: 1e3,
+      direction: null,
+      position,
+      tact: 0,
+      commands: [],
+      isBeingPipped: false
+    };
+  }
+  __name(make3, "make");
   function canMoveOn(objs) {
     if (objs.length > 0)
       switch (objs[0].type) {
@@ -6706,14 +6757,7 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    const player = {
-      type: "player",
-      zIndex: 1e3,
-      direction: null,
-      position: game.map.getRandomEmptyLocation(),
-      tact: 0,
-      commands: []
-    };
+    const player = make3(game.map.getRandomEmptyLocation());
     game.map.add([player]);
     window.setInterval(() => processTick(game), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {

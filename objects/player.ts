@@ -10,6 +10,7 @@ export interface Player {
     direction: Direction.t | null
     zIndex: number
     tact: number
+    isBeingPipped: boolean
     commands: {
         command: Command
         tact: number
@@ -20,6 +21,17 @@ export interface Result {
     codeBlocks: number
 }
 
+export function make(position: Vector.t): Player {
+    return {
+        type: "player",
+        zIndex: 1000,
+        direction: null,
+        position: position,
+        tact: 0,
+        commands: [],
+        isBeingPipped: false,
+    }
+}
 export function canMoveOn(objs: GameObject[]) {
     if (objs.length > 0)
         switch (objs[0].type) {

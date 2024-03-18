@@ -1,9 +1,10 @@
 import _ from "lodash"
 import * as Direction from "../geometry/direction"
 import { Vector, moveBy } from "../geometry"
-import { GameMap } from "../game/map"
+import { GameMap } from "../game"
 import * as random from "../utils/random"
 import { Footprint } from "./footprint"
+import { Player } from "./player"
 
 type Stopped = { type: "stopped"; previous_direction: Direction.t | null }
 type Moving = { type: "moving"; direction: Direction.t; tact: 0 | 1 }
@@ -11,6 +12,8 @@ type Instructing = { type: "instructing" }
 type Jumping = { type: "jumping"; direction: Direction.t; tact: number }
 type BossState = Stopped | Moving | Instructing | Jumping
 
+const TACTS_FOR_SINGLE_MOVE = 40
+const TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE
 export interface Boss extends LiveObject {
     type: "boss"
     position: Vector.t
@@ -54,7 +57,7 @@ export type MoveActions = {
 export function possibleMoves(
     pos: Vector.t,
     currentDirection: Direction.t,
-    map: GameMap
+    map: GameMap.GameMap
 ): MoveActions {
     const result: MoveActions = {}
     const possible = map.possibleDirections(pos, "wall")
@@ -85,17 +88,33 @@ export function possibleMoves(
     return result
 }
 
-function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: GameMap) {
+function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: GameMap.GameMap) {
     obj.state = { type: "moving", direction: new_direction, tact: 0 }
     map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint])
     map.move(obj, new_pos)
 }
 
-export function tick(obj: Boss, map: GameMap) {
+function pipPlayer(obj: Boss, player: Player) {
+    player.isBeingPipped = true
+}
+
+export function tick(obj: Boss, map: GameMap.GameMap) {
     switch (obj.state.type) {
         case "instructing":
             break
         case "moving":
+            // First check if there is a player to instruct
+            const directionToPlayer = GameMap.directionTo(map, "player")
+            if (directionToPlayer) {
+                const a: Player = map.atObj(moveBy(obj.position, directionToPlayer), "player")!
+                if (a) pipPlayer(obj, a)
+            }
+
+            obj.state.tact += 1
+            if (obj.state.tact < TACTS_FOR_SINGLE_MOVE) {
+                return
+            }
+
             const moves = possibleMoves(obj.position, obj.state.direction, map)
 
             // First, check if we can move forward
@@ -158,7 +177,7 @@ export function tick(obj: Boss, map: GameMap) {
                 direction: obj.state.direction,
                 tact: obj.state.tact + 1,
             }
-            if (obj.state.tact > 4) {
+            if (obj.state.tact > TACTS_FOR_JUMP) {
                 move(
                     obj,
                     moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
@@ -178,7 +197,7 @@ export function tick(obj: Boss, map: GameMap) {
 function choose_direction(
     pos: Vector.t,
     least_preferred: Direction.t | null,
-    map: GameMap
+    map: GameMap.GameMap
 ): Direction.t | null {
     const forks = map.possibleDirections(pos, "wall")
     const b = forks.filter((x) => x[0] != least_preferred)

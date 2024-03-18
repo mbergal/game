@@ -63,7 +63,15 @@ export class GameMap {
     }
 
     at(v: Vector.t): GameObject[] {
-        return this.cells[v.y][v.x]
+        return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height
+            ? this.cells[v.y][v.x]
+            : []
+    }
+
+    atObj(v: Vector.t, type: GameObject["type"]): GameObject | null {
+        const objs = this.at(v)
+        const objOfType = objs.find((x) => x.type == type) ?? null
+        return objOfType
     }
 
     isAt(v: Vector.t, type: GameObject["type"]) {
@@ -99,6 +107,10 @@ export class GameMap {
     }
 
     static fromJson(json: object) {}
+}
+
+export function directionTo(map: GameMap, objType: GameObject["type"]): Direction.t | null {
+    return "left"
 }
 
 function repr(objs: GameObject[]) {
