@@ -11,7 +11,7 @@ import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
 import { Game } from "./game"
 
-const TICK_INTERVAL = 50
+const TICK_INTERVAL = 100
 // class Game {
 //   tick(): void {
 //     for (const obj of this.objects) {
@@ -60,8 +60,9 @@ export function main() {
         state: { type: "stopped", previous_direction: null },
         // tick: (objs: GameObject[]) => boss_move(),
     }
-    const game = {
+    const game: Game = {
         map: new GameMap(width, height, []),
+        commands: [],
         score: {
             ticks: 0,
         },
@@ -116,6 +117,7 @@ export function main() {
         direction: null,
         position: game.map.getRandomEmptyLocation(),
         tact: 0,
+        commands: [],
     }
 
     game.map.add([player])
@@ -135,28 +137,12 @@ export function main() {
             default:
                 const command = getCommand(event.key)
                 if (command != null) {
-                    processCommand(command, game.map)
+                    game.commands.push(command)
                 }
         }
     })
 
     render(game)
-}
-
-function processCommand(command: Command, map: GameMap) {
-    for (const obj of map.objects) {
-        switch (obj.type) {
-            case "boss":
-            case "footprint":
-            case "wall":
-                break
-            case "player":
-                Player.command(obj, command, map)
-                break
-            default:
-                assertUnreachable(obj)
-        }
-    }
 }
 
 function getCommand(key: string): Command | null | undefined {
@@ -192,12 +178,13 @@ export function load(): GameMap | null {
 function processTick(game: Game) {
     game.score.ticks += 1
     for (const obj of game.map.objects) {
-        tick(obj, game.map)
+        tick(obj, game.map, game.commands)
     }
+    game.commands = []
     render(game)
 }
 
-function tick(obj: GameObject, map: GameMap) {
+function tick(obj: GameObject, map: GameMap, commands: Command[]) {
     switch (obj.type) {
         case "boss":
             Boss.tick(obj, map)
@@ -207,7 +194,7 @@ function tick(obj: GameObject, map: GameMap) {
             Footprint.tick(obj, map)
             break
         case "player":
-            Player.tick(obj, map)
+            Player.tick(obj, map, commands)
             break
         default:
             assertUnreachable(obj)

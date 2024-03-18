@@ -6483,16 +6483,36 @@
   __name(tick2, "tick");
 
   // objects/player.ts
-  function tick3(obj, map) {
-  }
-  __name(tick3, "tick");
-  function command(obj, command2, map) {
-    switch (command2.type) {
-      case "move":
-        break;
+  function tick3(obj, map, commands) {
+    obj.commands = [...obj.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
+    if (obj.commands.length > 0) {
+      console.log(JSON.stringify(obj.commands));
+      switch (obj.commands[0].command.type) {
+        case "move":
+          const newPosition = moveBy(obj.position, obj.commands[0].command.direction);
+          const obsjAtNewPosition = map.at(newPosition);
+          if (obsjAtNewPosition.length > 0) {
+          } else {
+            obj.direction = obj.commands[0].command.direction;
+            obj.commands.pop();
+          }
+          break;
+      }
+      for (const c of obj.commands) {
+        c.tact += 1;
+      }
+      obj.commands = obj.commands.filter((x) => x.tact < 10);
+    }
+    if (obj.direction) {
+      const newPosition = moveBy(obj.position, obj.direction);
+      const obsjAtNewPosition = map.at(newPosition);
+      if (obsjAtNewPosition.length > 0) {
+      } else {
+        map.move(obj, newPosition);
+      }
     }
   }
-  __name(command, "command");
+  __name(tick3, "tick");
 
   // utils/utils.ts
   function assertUnreachable(x) {
@@ -6582,7 +6602,7 @@
   __name(getWallRepresentation, "getWallRepresentation");
 
   // main.ts
-  var TICK_INTERVAL = 50;
+  var TICK_INTERVAL = 100;
   var height = 25;
   var width = 80;
   function main() {
@@ -6598,6 +6618,7 @@
     };
     const game = {
       map: new GameMap(width, height, []),
+      commands: [],
       score: {
         ticks: 0
       }
@@ -6637,7 +6658,8 @@
       zIndex: 1e3,
       direction: null,
       position: game.map.getRandomEmptyLocation(),
-      tact: 0
+      tact: 0,
+      commands: []
     };
     game.map.add([player]);
     window.setInterval(() => processTick(game), TICK_INTERVAL);
@@ -6652,31 +6674,15 @@
             game.map = loaded;
           }
         default:
-          const command2 = getCommand(event.key);
-          if (command2 != null) {
-            processCommand(command2, game.map);
+          const command = getCommand(event.key);
+          if (command != null) {
+            game.commands.push(command);
           }
       }
     });
     render(game);
   }
   __name(main, "main");
-  function processCommand(command2, map) {
-    for (const obj of map.objects) {
-      switch (obj.type) {
-        case "boss":
-        case "footprint":
-        case "wall":
-          break;
-        case "player":
-          command(obj, command2, map);
-          break;
-        default:
-          assertUnreachable(obj);
-      }
-    }
-  }
-  __name(processCommand, "processCommand");
   function getCommand(key) {
     switch (key) {
       case "ArrowUp":
@@ -6709,12 +6715,13 @@
   function processTick(game) {
     game.score.ticks += 1;
     for (const obj of game.map.objects) {
-      tick4(obj, game.map);
+      tick4(obj, game.map, game.commands);
     }
+    game.commands = [];
     render(game);
   }
   __name(processTick, "processTick");
-  function tick4(obj, map) {
+  function tick4(obj, map, commands) {
     switch (obj.type) {
       case "boss":
         tick(obj, map);
@@ -6724,7 +6731,7 @@
         tick2(obj, map);
         break;
       case "player":
-        tick3(obj, map);
+        tick3(obj, map, commands);
         break;
       default:
         assertUnreachable(obj);
