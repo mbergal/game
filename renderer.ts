@@ -18,7 +18,13 @@ export function render(game: Game) {
         buffer.push(row)
     }
 
-    buffer.push(game.score.ticks.toString().padStart(6, "0").split(""))
+    buffer.push(
+        (
+            game.score.ticks.toString().padStart(6, "0") +
+            " " +
+            game.score.codeBlocks.toString().padStart(3, "0")
+        ).split("")
+    )
     const contentBlock = document.getElementById("content")
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }

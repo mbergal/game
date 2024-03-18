@@ -23,9 +23,10 @@ export class GameMap {
         this.add(objs)
     }
 
-    add(objs: GameObject[]) {
-        this.objects = this.objects.concat(objs)
-        for (const obj of objs) {
+    add(objs: GameObject | GameObject[]) {
+        const objs_ = objs instanceof Array ? objs : [objs]
+        this.objects = this.objects.concat(objs_)
+        for (const obj of objs_) {
             const objs = this.cells[obj.position.y][obj.position.x]
             objs.push(obj)
             this.cells[obj.position.y][obj.position.x] = _.chain(objs)
@@ -35,9 +36,10 @@ export class GameMap {
         }
     }
 
-    remove(objs: GameObject[]) {
-        this.objects = this.objects.filter((x) => _.indexOf(objs, x) == -1)
-        for (const obj of objs) {
+    remove(objs: GameObject | GameObject[]) {
+        const objs_ = objs instanceof Array ? objs : [objs]
+        this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
+        for (const obj of objs_) {
             this.cells[obj.position.y][obj.position.x] = _.pull(
                 this.cells[obj.position.y][obj.position.x],
                 obj

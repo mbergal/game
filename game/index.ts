@@ -1,13 +1,12 @@
 import { Command } from "../commands"
 import { ItemGenerator } from "../objects/item"
 import { GameMap } from "./map"
+import * as Score from "./score"
+export * as Score from "./score"
 
-export type Score = {
-    ticks: number
-}
 export type Game = {
     map: GameMap
-    score: Score
+    score: Score.Score
     itemGenerator: ItemGenerator
     commands: Command[]
 }

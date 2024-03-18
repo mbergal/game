@@ -6250,16 +6250,18 @@
       this.add(objs);
     }
     add(objs) {
-      this.objects = this.objects.concat(objs);
-      for (const obj of objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.concat(objs_);
+      for (const obj of objs_) {
         const objs2 = this.cells[obj.position.y][obj.position.x];
         objs2.push(obj);
         this.cells[obj.position.y][obj.position.x] = _3.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
       }
     }
     remove(objs) {
-      this.objects = this.objects.filter((x) => _3.indexOf(objs, x) == -1);
-      for (const obj of objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.filter((x) => _3.indexOf(objs_, x) == -1);
+      for (const obj of objs_) {
         this.cells[obj.position.y][obj.position.x] = _3.pull(
           this.cells[obj.position.y][obj.position.x],
           obj
@@ -6330,6 +6332,19 @@
     }
   }
   __name(repr, "repr");
+
+  // game/score.ts
+  var score_exports = {};
+  __export(score_exports, {
+    make: () => make
+  });
+  function make() {
+    return {
+      ticks: 0,
+      codeBlocks: 0
+    };
+  }
+  __name(make, "make");
 
   // objects/boss.ts
   var import_lodash2 = __toESM(require_lodash());
@@ -6472,14 +6487,14 @@
   __name(choose_direction, "choose_direction");
 
   // objects/item.ts
-  function make(position) {
+  function make2(position) {
     return {
       type: "item",
       position,
       zIndex: 1
     };
   }
-  __name(make, "make");
+  __name(make2, "make");
 
   // objects/footprint.ts
   var LIFETIME = 1e3;
@@ -6493,6 +6508,19 @@
   __name(tick2, "tick");
 
   // objects/player.ts
+  function canMoveOn(objs) {
+    if (objs.length > 0)
+      switch (objs[0].type) {
+        case "item":
+          return true;
+        default:
+          return false;
+      }
+    else {
+      return true;
+    }
+  }
+  __name(canMoveOn, "canMoveOn");
   function tick3(obj, map, commands) {
     obj.commands = [...obj.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (obj.commands.length > 0) {
@@ -6501,10 +6529,10 @@
         case "move":
           const newPosition = moveBy(obj.position, obj.commands[0].command.direction);
           const obsjAtNewPosition = map.at(newPosition);
-          if (obsjAtNewPosition.length > 0) {
-          } else {
+          if (canMoveOn(obsjAtNewPosition)) {
             obj.direction = obj.commands[0].command.direction;
             obj.commands.pop();
+          } else {
           }
           break;
       }
@@ -6513,14 +6541,25 @@
       }
       obj.commands = obj.commands.filter((x) => x.tact < 10);
     }
+    const result = {
+      codeBlocks: 0
+    };
     if (obj.direction) {
       const newPosition = moveBy(obj.position, obj.direction);
-      const obsjAtNewPosition = map.at(newPosition);
-      if (obsjAtNewPosition.length > 0) {
-      } else {
+      const objsAtNewPosition = map.at(newPosition);
+      if (canMoveOn(objsAtNewPosition)) {
+        if (objsAtNewPosition.length > 0) {
+          switch (objsAtNewPosition[0].type) {
+            case "item":
+              map.remove(objsAtNewPosition[0]);
+              result.codeBlocks += 1;
+          }
+        }
         map.move(obj, newPosition);
+      } else {
       }
     }
+    return result;
   }
   __name(tick3, "tick");
 
@@ -6542,7 +6581,9 @@
       }
       buffer.push(row);
     }
-    buffer.push(game.score.ticks.toString().padStart(6, "0").split(""));
+    buffer.push(
+      (game.score.ticks.toString().padStart(6, "0") + " " + game.score.codeBlocks.toString().padStart(3, "0")).split("")
+    );
     const contentBlock = document.getElementById("content");
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
@@ -6633,9 +6674,7 @@
       map: new GameMap(width, height, []),
       commands: [],
       itemGenerator: { tact: 0 },
-      score: {
-        ticks: 0
-      }
+      score: score_exports.make()
     };
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
@@ -6729,7 +6768,7 @@
   function generateAnItem(game) {
     if (game.itemGenerator.tact > 100) {
       game.itemGenerator.tact = 0;
-      const item = make(game.map.getRandomEmptyLocation());
+      const item = make2(game.map.getRandomEmptyLocation());
       game.map.add([item]);
     } else {
       game.itemGenerator.tact += 1;
@@ -6741,13 +6780,15 @@
     game.score.ticks += 1;
     const item = generateAnItem(game);
     for (const obj of game.map.objects) {
-      tick4(obj, game.map, game.commands);
+      const result = tick4(obj, game.map, game.commands);
+      game.score.codeBlocks += result.codeBlocks;
     }
     game.commands = [];
     render(game);
   }
   __name(processTick, "processTick");
   function tick4(obj, map, commands) {
+    let result = { codeBlocks: 0 };
     switch (obj.type) {
       case "boss":
         tick(obj, map);
@@ -6757,13 +6798,13 @@
         tick2(obj, map);
         break;
       case "player":
-        tick3(obj, map, commands);
-        break;
+        result = tick3(obj, map, commands);
       case "item":
         break;
       default:
         assertUnreachable(obj);
     }
+    return result;
   }
   __name(tick4, "tick");
   main();

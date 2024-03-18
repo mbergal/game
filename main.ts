@@ -3,6 +3,7 @@ import { Command } from "./commands"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
 import { GameMap } from "./game/map"
+import { Score } from "./game"
 import * as Boss from "./objects/boss"
 import * as Item from "./objects/item"
 import * as Footprint from "./objects/footprint"
@@ -65,9 +66,7 @@ export function main() {
         map: new GameMap(width, height, []),
         commands: [],
         itemGenerator: { tact: 0 },
-        score: {
-            ticks: 0,
-        },
+        score: Score.make(),
     }
 
     const outer_walls = hline({ x: 0, y: 0 }, width)
@@ -191,13 +190,19 @@ function processTick(game: Game) {
     game.score.ticks += 1
     const item = generateAnItem(game)
     for (const obj of game.map.objects) {
-        tick(obj, game.map, game.commands)
+        const result = tick(obj, game.map, game.commands)
+        game.score.codeBlocks += result.codeBlocks
     }
     game.commands = []
     render(game)
 }
 
-function tick(obj: GameObject, map: GameMap, commands: Command[]) {
+interface Result {
+    codeBlocks: number
+}
+
+function tick(obj: GameObject, map: GameMap, commands: Command[]): Result {
+    let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":
             Boss.tick(obj, map)
@@ -207,13 +212,13 @@ function tick(obj: GameObject, map: GameMap, commands: Command[]) {
             Footprint.tick(obj, map)
             break
         case "player":
-            Player.tick(obj, map, commands)
-            break
+            result = Player.tick(obj, map, commands)
         case "item":
             break
         default:
             assertUnreachable(obj)
     }
+    return result
 }
 
 main()
