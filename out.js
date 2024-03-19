@@ -10,9 +10,9 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
-  var __export = (target, all2) => {
-    for (var name in all2)
-      __defProp(target, name, { get: all2[name], enumerable: true });
+  var __export = (target, all3) => {
+    for (var name in all3)
+      __defProp(target, name, { get: all3[name], enumerable: true });
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -3444,7 +3444,7 @@
             return result2;
           }
           __name(chunk2, "chunk");
-          function compact(array) {
+          function compact2(array) {
             var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result2 = [];
             while (++index < length) {
               var value = array[index];
@@ -3454,7 +3454,7 @@
             }
             return result2;
           }
-          __name(compact, "compact");
+          __name(compact2, "compact");
           function concat() {
             var length = arguments.length;
             if (!length) {
@@ -5524,7 +5524,7 @@
           lodash.castArray = castArray;
           lodash.chain = chain2;
           lodash.chunk = chunk2;
-          lodash.compact = compact;
+          lodash.compact = compact2;
           lodash.concat = concat;
           lodash.cond = cond;
           lodash.conforms = conforms;
@@ -6338,8 +6338,9 @@
   };
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
-  function directionTo(map, objType) {
-    return "left";
+  function directionTo(position, map, objType) {
+    const dd = _3.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
+    return dd.length ? dd[0] : null;
   }
   __name(directionTo, "directionTo");
   function repr(objs) {
@@ -6364,7 +6365,9 @@
   function make() {
     return {
       ticks: 0,
-      codeBlocks: 0
+      codeBlocks: 0,
+      money: 0,
+      level: 0
     };
   }
   __name(make, "make");
@@ -6426,25 +6429,25 @@
   }
   __name(move, "move");
   function pipPlayer(obj, player) {
-    player.isBeingPipped = true;
+    player.hrTaskTact = 0;
   }
   __name(pipPlayer, "pipPlayer");
-  function tick(obj, map) {
-    switch (obj.state.type) {
+  function tick(boss, map) {
+    switch (boss.state.type) {
       case "instructing":
         break;
       case "moving":
-        const directionToPlayer = map_exports.directionTo(map, "player");
+        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
         if (directionToPlayer) {
-          const a = map.atObj(moveBy(obj.position, directionToPlayer), "player");
-          if (a)
-            pipPlayer(obj, a);
+          const player = map.atObj(moveBy(boss.position, directionToPlayer), "player");
+          if (player)
+            pipPlayer(boss, player);
         }
-        obj.state.tact += 1;
-        if (obj.state.tact < TACTS_FOR_SINGLE_MOVE) {
+        boss.state.tact += 1;
+        if (boss.state.tact < TACTS_FOR_SINGLE_MOVE) {
           return;
         }
-        const moves = possibleMoves(obj.position, obj.state.direction, map);
+        const moves = possibleMoves(boss.position, boss.state.direction, map);
         if (moves.turn || moves.straight) {
           const move_types = [
             moves.turn ? "turn" : null,
@@ -6452,7 +6455,7 @@
           ];
           const move_weights = [
             moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
-            moves.straight ? map.isAt(moveBy(obj.position, obj.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
           ];
           if (moves.turn) {
             console.log(JSON.stringify({ move_types, move_weights }));
@@ -6464,13 +6467,13 @@
           switch (move_choice) {
             case "turn":
               const weights = moves.turn.directions.map(
-                (x) => map.isAt(moveBy(obj.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
               );
               const chosen = choice(moves.turn.directions, weights);
-              obj.state.direction = chosen;
+              boss.state.direction = chosen;
             case "straight":
-              const new_pos = moveBy(obj.position, obj.state.direction);
-              move(obj, new_pos, obj.state.direction, map);
+              const new_pos = moveBy(boss.position, boss.state.direction);
+              move(boss, new_pos, boss.state.direction, map);
           }
           return;
         }
@@ -6481,33 +6484,33 @@
           );
           switch (move_choice) {
             case "back":
-              obj.state.direction = reverse(obj.state.direction);
+              boss.state.direction = reverse(boss.state.direction);
               break;
             case "jump":
-              obj.state = { type: "jumping", direction: obj.state.direction, tact: 0 };
+              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
               break;
           }
         }
         break;
       case "jumping":
-        obj.state = {
+        boss.state = {
           type: "jumping",
-          direction: obj.state.direction,
-          tact: obj.state.tact + 1
+          direction: boss.state.direction,
+          tact: boss.state.tact + 1
         };
-        if (obj.state.tact > TACTS_FOR_JUMP) {
+        if (boss.state.tact > TACTS_FOR_JUMP) {
           move(
-            obj,
-            moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
-            obj.state.direction,
+            boss,
+            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+            boss.state.direction,
             map
           );
         }
         break;
       case "stopped": {
-        const direction = choose_direction(obj.position, null, map);
+        const direction = choose_direction(boss.position, null, map);
         if (direction != null)
-          obj.state = { type: "moving", direction, tact: 0 };
+          boss.state = { type: "moving", direction, tact: 0 };
         break;
       }
     }
@@ -6525,15 +6528,45 @@
   }
   __name(choose_direction, "choose_direction");
 
-  // objects/item.ts
-  function make2(position) {
-    return {
-      type: "item",
-      position,
-      zIndex: 1
-    };
-  }
-  __name(make2, "make");
+  // game/levels.ts
+  var all2 = [
+    {
+      name: "Engineer I",
+      rate: 15
+    },
+    {
+      name: "Engineer II",
+      rate: 30
+    },
+    {
+      name: "Engineer III",
+      rate: 40
+    },
+    {
+      name: "Senior Engineer I",
+      rate: 40
+    },
+    {
+      name: "Senior Engineer II",
+      rate: 40
+    },
+    {
+      name: "Engineering Lead",
+      rate: 40
+    },
+    {
+      name: "Staff Engineer I",
+      rate: 40
+    },
+    {
+      name: "Staff Engineer II",
+      rate: 40
+    },
+    {
+      name: "Principal Engineer",
+      rate: 40
+    }
+  ];
 
   // objects/footprint.ts
   var LIFETIME = 1e3;
@@ -6546,8 +6579,14 @@
   }
   __name(tick2, "tick");
 
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
+
   // objects/player.ts
-  function make3(position) {
+  function make2(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6555,58 +6594,150 @@
       position,
       tact: 0,
       commands: [],
-      isBeingPipped: false
+      hrTaskTact: null,
+      item: null,
+      task: null
     };
   }
-  __name(make3, "make");
+  __name(make2, "make");
   function canMoveOn(objs) {
-    if (objs.length > 0)
-      switch (objs[0].type) {
-        case "item":
+    if (objs.length > 0) {
+      const obj = objs[0];
+      switch (obj.type) {
+        case "door":
+        case "story":
+        case "commit":
           return true;
         default:
           return false;
       }
-    else {
+    } else {
       return true;
     }
   }
   __name(canMoveOn, "canMoveOn");
-  function tick3(obj, map, commands) {
-    obj.commands = [...obj.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
-    if (obj.commands.length > 0) {
-      console.log(JSON.stringify(obj.commands));
-      switch (obj.commands[0].command.type) {
+  function canTakeTask(task, player) {
+    return true;
+  }
+  __name(canTakeTask, "canTakeTask");
+  function takeTask(player, task, map) {
+    player.task = task;
+  }
+  __name(takeTask, "takeTask");
+  function canPickItem(player) {
+    return player.hrTaskTact == null;
+  }
+  __name(canPickItem, "canPickItem");
+  function pickItem(player, item, map) {
+    map.remove(item);
+    switch (item.type) {
+      case "door":
+      case "commit":
+        break;
+      case "story":
+        player.task = {
+          type: "story",
+          size: item.size,
+          neededCommits: 10,
+          appliedCommits: 0
+        };
+        break;
+      default:
+        assertUnreachable(item);
+    }
+    player.item = item;
+  }
+  __name(pickItem, "pickItem");
+  function tickHrTask(player) {
+    if (player.hrTaskTact != null) {
+      player.hrTaskTact += 1;
+      if (player.hrTaskTact > 200) {
+        player.hrTaskTact = null;
+      }
+    }
+  }
+  __name(tickHrTask, "tickHrTask");
+  function handleDrop(player, map) {
+    if (player.item != null) {
+      const droppingItem = player.item;
+      droppingItem.open = true;
+      droppingItem.position = player.position;
+      map.add(droppingItem);
+      player.item = null;
+    }
+  }
+  __name(handleDrop, "handleDrop");
+  function processCommands(player, commands, map) {
+    player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
+    if (player.commands.length > 0) {
+      console.log(JSON.stringify(player.commands));
+      switch (player.commands[0].command.type) {
         case "move":
-          const newPosition = moveBy(obj.position, obj.commands[0].command.direction);
+          const newPosition = moveBy(player.position, player.commands[0].command.direction);
           const obsjAtNewPosition = map.at(newPosition);
           if (canMoveOn(obsjAtNewPosition)) {
-            obj.direction = obj.commands[0].command.direction;
-            obj.commands.pop();
+            player.direction = player.commands[0].command.direction;
+            player.commands.pop();
           } else {
           }
           break;
+        case "stop":
+          player.commands = [];
+          player.direction = null;
+          break;
+        case "drop":
+          handleDrop(player, map);
+          break;
       }
-      for (const c of obj.commands) {
+      for (const c of player.commands) {
         c.tact += 1;
       }
-      obj.commands = obj.commands.filter((x) => x.tact < 10);
+      player.commands = player.commands.filter((x) => x.tact < 10);
     }
+  }
+  __name(processCommands, "processCommands");
+  function tick3(player, map, commands) {
+    tickHrTask(player);
+    processCommands(player, commands, map);
     const result = {
       codeBlocks: 0
     };
-    if (obj.direction) {
-      const newPosition = moveBy(obj.position, obj.direction);
+    if (player.direction) {
+      const newPosition = moveBy(player.position, player.direction);
       const objsAtNewPosition = map.at(newPosition);
       if (canMoveOn(objsAtNewPosition)) {
         if (objsAtNewPosition.length > 0) {
-          switch (objsAtNewPosition[0].type) {
-            case "item":
-              map.remove(objsAtNewPosition[0]);
-              result.codeBlocks += 1;
+          const obj = objsAtNewPosition[0];
+          switch (obj.type) {
+            case "door":
+            case "commit":
+              if (canPickItem(player)) {
+                pickItem(player, obj, map);
+                result.codeBlocks += 1;
+              }
+              break;
+            case "story":
+              const task = {
+                type: "story",
+                size: obj.size,
+                neededCommits: 10,
+                appliedCommits: 0
+              };
+              if (canTakeTask(task, player)) {
+                takeTask(player, task, map);
+                map.remove(obj);
+              }
+              break;
+            case "player":
+            case "wall":
+            case "boss":
+            case "footprint":
+              break;
+            default:
+              assertUnreachable(obj);
           }
         }
-        map.move(obj, newPosition);
+        map.move(player, newPosition);
       } else {
       }
     }
@@ -6614,11 +6745,16 @@
   }
   __name(tick3, "tick");
 
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
+  // objects/story.ts
+  function make3(position, size) {
+    return {
+      type: "story",
+      position,
+      size,
+      zIndex: 1
+    };
   }
-  __name(assertUnreachable, "assertUnreachable");
+  __name(make3, "make");
 
   // renderer.ts
   function render(game) {
@@ -6628,37 +6764,60 @@
       const row = [];
       for (let x = 0; x < map.width; x++) {
         const objs = map.cells[y][x];
-        row.push(getRepresentation(map, objs));
+        row.push(getRepresentation(map, objs, game.score.ticks));
       }
       buffer.push(row);
     }
     buffer.push(
-      (game.score.ticks.toString().padStart(6, "0") + " " + game.score.codeBlocks.toString().padStart(3, "0")).split("")
+      (showTicks(game) + showLevel(game) + " $" + game.score.money.toString().padStart(6, "0") + " *:" + (game.player?.hrTaskTact ? "P" : "") + " " + showTask(game)).split("")
     );
     const contentBlock = document.getElementById("content");
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
+  function showTicks(game) {
+    return game.score.ticks.toString().padStart(6, "0");
+  }
+  __name(showTicks, "showTicks");
+  function showLevel(game) {
+    return " " + all2[game.score.level].name;
+  }
+  __name(showLevel, "showLevel");
+  function showTask(game) {
+    const task = game.player.task;
+    if (task != null) {
+      switch (task.type) {
+        case "story":
+          return `Story ${task.appliedCommits}/${task.neededCommits}`;
+      }
+    }
+    return "";
+  }
+  __name(showTask, "showTask");
   function isVisible(obj) {
     switch (obj.type) {
       case "boss":
       case "wall":
       case "player":
-      case "item":
         return true;
       case "footprint":
         return false;
+      case "door":
+        return true;
+      case "story":
+        return true;
+      case "commit":
+        return true;
       default:
         assertUnreachable(obj);
     }
     return true;
   }
   __name(isVisible, "isVisible");
-  function getRepresentation(map, objs) {
+  function getRepresentation(map, objs, tick5) {
     let obj = objs.find(isVisible);
     if (obj) {
-      const t = obj.type;
-      switch (t) {
+      switch (obj.type) {
         case "wall":
           return getWallRepresentation(map, obj.position);
         case "boss":
@@ -6666,11 +6825,39 @@
         case "footprint":
           return "\u25A0";
         case "player":
-          return "*";
-        case "item":
-          return ".";
+          if (obj.hrTaskTact) {
+            return tick5 % 10 < 5 ? "*" : "@";
+          } else {
+            if (obj.item != null) {
+              const item = obj.item;
+              switch (item.type) {
+                case "door":
+                  return "]";
+                case "commit":
+                  return "\u03B5";
+                default:
+                  return "?";
+              }
+            }
+            return "*";
+          }
+        case "door":
+          return obj.open ? "]" : ".";
+        case "door":
+          return "[";
+        case "commit":
+          return "\u03B5";
+        case "story":
+          switch (obj.size) {
+            case 0 /* small */:
+              return "s";
+            case 1 /* medium */:
+              return "m";
+            case 2 /* large */:
+              return "l";
+          }
         default:
-          assertUnreachable(t);
+          assertUnreachable(obj);
       }
     } else {
       return " ";
@@ -6706,6 +6893,61 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
+  // objects/door.ts
+  function make4(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make4, "make");
+
+  // objects/commit.ts
+  function make5(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1
+    };
+  }
+  __name(make5, "make");
+
+  // game/item_generator.ts
+  function generateAnItem(game) {
+    if (game.itemGenerator.tact > 100) {
+      game.itemGenerator.tact = 0;
+      const aa = choice(["door", "commit"], [1, 9]);
+      let item;
+      switch (aa) {
+        case "door":
+          item = make4(game.map.getRandomEmptyLocation());
+          game.map.add([item]);
+          break;
+        case "commit":
+          item = make5(game.map.getRandomEmptyLocation());
+          game.map.add([item]);
+          break;
+      }
+    } else {
+      game.itemGenerator.tact += 1;
+      return null;
+    }
+  }
+  __name(generateAnItem, "generateAnItem");
+
+  // game/sprint.ts
+  function generateSprint(map) {
+    const small = make3(map.getRandomEmptyLocation(), 0 /* small */);
+    map.add(small);
+    const medium = make3(map.getRandomEmptyLocation(), 1 /* medium */);
+    map.add(medium);
+    const large = make3(map.getRandomEmptyLocation(), 2 /* large */);
+    map.add(large);
+  }
+  __name(generateSprint, "generateSprint");
+
   // main.ts
   var TICK_INTERVAL = 100;
   var height = 25;
@@ -6725,7 +6967,8 @@
       map: new GameMap(width, height, []),
       commands: [],
       itemGenerator: { tact: 0 },
-      score: score_exports.make()
+      score: score_exports.make(),
+      messages: []
     };
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
@@ -6757,8 +7000,8 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    const player = make3(game.map.getRandomEmptyLocation());
-    game.map.add([player]);
+    game.player = make2(game.map.getRandomEmptyLocation());
+    game.map.add([game.player]);
     window.setInterval(() => processTick(game), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
       switch (event.key) {
@@ -6790,6 +7033,10 @@
         return { type: "move", direction: "left" };
       case "ArrowRight":
         return { type: "move", direction: "right" };
+      case "Insert":
+        return { type: "stop" };
+      case " ":
+        return { type: "drop" };
     }
   }
   __name(getCommand, "getCommand");
@@ -6809,23 +7056,16 @@
     }
   }
   __name(load, "load");
-  function generateAnItem(game) {
-    if (game.itemGenerator.tact > 100) {
-      game.itemGenerator.tact = 0;
-      const item = make2(game.map.getRandomEmptyLocation());
-      game.map.add([item]);
-    } else {
-      game.itemGenerator.tact += 1;
-      return null;
-    }
-  }
-  __name(generateAnItem, "generateAnItem");
   function processTick(game) {
     game.score.ticks += 1;
+    game.score.money += all2[game.score.level].rate;
     const item = generateAnItem(game);
     for (const obj of game.map.objects) {
       const result = tick4(obj, game.map, game.commands);
       game.score.codeBlocks += result.codeBlocks;
+    }
+    if (game.score.ticks % 1e3 == 1) {
+      generateSprint(game.map);
     }
     game.commands = [];
     render(game);
@@ -6843,7 +7083,9 @@
         break;
       case "player":
         result = tick3(obj, map, commands);
-      case "item":
+      case "door":
+      case "story":
+      case "commit":
         break;
       default:
         assertUnreachable(obj);

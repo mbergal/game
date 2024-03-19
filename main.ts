@@ -5,13 +5,15 @@ import { Vector } from "./geometry"
 import { GameMap } from "./game/map"
 import { Score } from "./game"
 import * as Boss from "./objects/boss"
-import * as Item from "./objects/item"
+import * as EngineeringLevels from "./game/levels"
 import * as Footprint from "./objects/footprint"
 import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
 import { Game } from "./game"
+import { generateAnItem } from "./game/item_generator"
+import { generateSprint } from "./game/sprint"
 
 const TICK_INTERVAL = 100
 // class Game {
@@ -62,11 +64,12 @@ export function main() {
         state: { type: "stopped", previous_direction: null },
         // tick: (objs: GameObject[]) => boss_move(),
     }
-    const game: Game = {
+    const game: Game.Game = {
         map: new GameMap(width, height, []),
         commands: [],
         itemGenerator: { tact: 0 },
         score: Score.make(),
+        messages: [],
     }
 
     const outer_walls = hline({ x: 0, y: 0 }, width)
@@ -112,9 +115,9 @@ export function main() {
     const room_doors = generateRoomDoors(game.map)
     game.map.add([boss])
 
-    const player: Player.Player = Player.make(game.map.getRandomEmptyLocation())
+    game.player = Player.make(game.map.getRandomEmptyLocation())
 
-    game.map.add([player])
+    game.map.add([game.player])
 
     window.setInterval(() => processTick(game), TICK_INTERVAL)
 
@@ -149,6 +152,10 @@ function getCommand(key: string): Command | null | undefined {
             return { type: "move", direction: "left" }
         case "ArrowRight":
             return { type: "move", direction: "right" }
+        case "Insert":
+            return { type: "stop" }
+        case " ":
+            return { type: "drop" }
     }
 }
 
@@ -169,22 +176,16 @@ export function load(): GameMap | null {
     }
 }
 
-function generateAnItem(game: Game) {
-    if (game.itemGenerator.tact > 100) {
-        game.itemGenerator.tact = 0
-        const item = Item.make(game.map.getRandomEmptyLocation())
-        game.map.add([item])
-    } else {
-        game.itemGenerator.tact += 1
-        return null
-    }
-}
-function processTick(game: Game) {
+function processTick(game: Game.t) {
     game.score.ticks += 1
+    game.score.money += EngineeringLevels.all[game.score.level].rate
     const item = generateAnItem(game)
     for (const obj of game.map.objects) {
         const result = tick(obj, game.map, game.commands)
         game.score.codeBlocks += result.codeBlocks
+    }
+    if (game.score.ticks % 1000 == 1) {
+        generateSprint(game.map)
     }
     game.commands = []
     render(game)
@@ -206,7 +207,9 @@ function tick(obj: GameObject, map: GameMap, commands: Command[]): Result {
             break
         case "player":
             result = Player.tick(obj, map, commands)
-        case "item":
+        case "door":
+        case "story":
+        case "commit":
             break
         default:
             assertUnreachable(obj)

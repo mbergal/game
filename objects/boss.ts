@@ -95,27 +95,27 @@ function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: Gam
 }
 
 function pipPlayer(obj: Boss, player: Player) {
-    player.isBeingPipped = true
+    player.hrTaskTact = 0
 }
 
-export function tick(obj: Boss, map: GameMap.GameMap) {
-    switch (obj.state.type) {
+export function tick(boss: Boss, map: GameMap.GameMap) {
+    switch (boss.state.type) {
         case "instructing":
             break
         case "moving":
             // First check if there is a player to instruct
-            const directionToPlayer = GameMap.directionTo(map, "player")
+            const directionToPlayer = GameMap.directionTo(boss.position, map, "player")
             if (directionToPlayer) {
-                const a: Player = map.atObj(moveBy(obj.position, directionToPlayer), "player")!
-                if (a) pipPlayer(obj, a)
+                const player = map.atObj(moveBy(boss.position, directionToPlayer), "player")!
+                if (player) pipPlayer(boss, player)
             }
 
-            obj.state.tact += 1
-            if (obj.state.tact < TACTS_FOR_SINGLE_MOVE) {
+            boss.state.tact += 1
+            if (boss.state.tact < TACTS_FOR_SINGLE_MOVE) {
                 return
             }
 
-            const moves = possibleMoves(obj.position, obj.state.direction, map)
+            const moves = possibleMoves(boss.position, boss.state.direction, map)
 
             // First, check if we can move forward
             if (moves.turn || moves.straight) {
@@ -126,7 +126,7 @@ export function tick(obj: Boss, map: GameMap.GameMap) {
                 const move_weights = [
                     moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
                     moves.straight
-                        ? map.isAt(moveBy(obj.position, obj.state.direction), "footprint")
+                        ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint")
                             ? BOSS_WEIGHTS.straight.visited
                             : BOSS_WEIGHTS.straight.notVisited
                         : null,
@@ -143,15 +143,15 @@ export function tick(obj: Boss, map: GameMap.GameMap) {
                 switch (move_choice) {
                     case "turn":
                         const weights = moves.turn!.directions.map((x) =>
-                            map.isAt(moveBy(obj.position, x), "footprint")
+                            map.isAt(moveBy(boss.position, x), "footprint")
                                 ? BOSS_WEIGHTS.turn.visited
                                 : BOSS_WEIGHTS.turn.notVisited
                         )
                         const chosen = random.choice(moves.turn!.directions, weights)
-                        obj.state.direction = chosen
+                        boss.state.direction = chosen
                     case "straight":
-                        const new_pos = moveBy(obj.position, obj.state.direction)
-                        move(obj, new_pos, obj.state.direction, map)
+                        const new_pos = moveBy(boss.position, boss.state.direction)
+                        move(boss, new_pos, boss.state.direction, map)
                 }
                 return
             }
@@ -163,32 +163,32 @@ export function tick(obj: Boss, map: GameMap.GameMap) {
                 )
                 switch (move_choice) {
                     case "back":
-                        obj.state.direction = Direction.reverse(obj.state.direction)
+                        boss.state.direction = Direction.reverse(boss.state.direction)
                         break
                     case "jump":
-                        obj.state = { type: "jumping", direction: obj.state.direction, tact: 0 }
+                        boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 }
                         break
                 }
             }
             break
         case "jumping":
-            obj.state = {
+            boss.state = {
                 type: "jumping",
-                direction: obj.state.direction,
-                tact: obj.state.tact + 1,
+                direction: boss.state.direction,
+                tact: boss.state.tact + 1,
             }
-            if (obj.state.tact > TACTS_FOR_JUMP) {
+            if (boss.state.tact > TACTS_FOR_JUMP) {
                 move(
-                    obj,
-                    moveBy(moveBy(obj.position, obj.state.direction), obj.state.direction),
-                    obj.state.direction,
+                    boss,
+                    moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+                    boss.state.direction,
                     map
                 )
             }
             break
         case "stopped": {
-            const direction = choose_direction(obj.position, null, map)
-            if (direction != null) obj.state = { type: "moving", direction, tact: 0 }
+            const direction = choose_direction(boss.position, null, map)
+            if (direction != null) boss.state = { type: "moving", direction, tact: 0 }
             break
         }
     }

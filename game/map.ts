@@ -68,10 +68,10 @@ export class GameMap {
             : []
     }
 
-    atObj(v: Vector.t, type: GameObject["type"]): GameObject | null {
+    atObj<T extends GameObject["type"]>(v: Vector.t, type: T): (GameObject & { type: T }) | null {
         const objs = this.at(v)
         const objOfType = objs.find((x) => x.type == type) ?? null
-        return objOfType
+        return objOfType as (GameObject & { type: T }) | null
     }
 
     isAt(v: Vector.t, type: GameObject["type"]) {
@@ -109,8 +109,13 @@ export class GameMap {
     static fromJson(json: object) {}
 }
 
-export function directionTo(map: GameMap, objType: GameObject["type"]): Direction.t | null {
-    return "left"
+export function directionTo(
+    position: Vector.t,
+    map: GameMap,
+    objType: GameObject["type"]
+): Direction.t | null {
+    const dd = _.compact(Direction.all.filter((x) => map.isAt(moveBy(position, x), objType)))
+    return dd.length ? dd[0] : null
 }
 
 function repr(objs: GameObject[]) {

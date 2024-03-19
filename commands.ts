@@ -5,4 +5,16 @@ export type MoveCommand = {
     direction: Direction.t
 }
 
-export type Command = MoveCommand
+export function isMoveCommand(command: Command): command is MoveCommand {
+    return command.type == "move"
+}
+
+export type StopCommand = {
+    type: "stop"
+}
+
+export type DropCommand = {
+    type: "drop"
+}
+
+export type Command = MoveCommand | StopCommand | DropCommand
