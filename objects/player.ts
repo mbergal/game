@@ -5,6 +5,7 @@ import { Vector, moveBy } from "../geometry"
 import { GameMap } from "../game/map"
 import { GameObject, Item } from "./object"
 import { assertUnreachable } from "../utils/utils"
+import _ from "lodash"
 
 interface StoryTask {
     type: "story"
@@ -51,21 +52,24 @@ export function make(position: Vector.t): Player {
 
 function canMoveOn(objs: GameObject[]) {
     if (objs.length > 0) {
-        const obj = objs[0]
-        switch (obj.type) {
-            case "door":
-            case "story":
-            case "footprint":
-            case "commit":
-            case "coffee":
-                return true
-            case "player":
-            case "wall":
-            case "boss":
-                return false
-            default:
-                assertUnreachable(obj)
+        const canMoveOnObj = (obj: GameObject) => {
+            switch (obj.type) {
+                case "door":
+                case "story":
+                case "footprint":
+                case "commit":
+                case "coffee":
+                    return true
+                case "player":
+                case "wall":
+                case "boss":
+                    return false
+                default:
+                    assertUnreachable(obj)
+            }
         }
+        const result = _.every(objs, canMoveOnObj)
+        return result
     } else {
         return true
     }

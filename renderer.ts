@@ -123,9 +123,9 @@ function getRepresentation(map: GameMap, objs: GameObject[], tick: number): stri
             case "door":
                 return "["
             case "commit":
-                return "ε"
+                return obj.open ? "ε" : "."
             case "coffee":
-                return "c"
+                return obj.open ? "c" : "."
             case "story":
                 switch (obj.size) {
                     case Size.small:

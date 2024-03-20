@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _6.defaults(root.Object(), context, _6.pick(root, contextProps));
+          context = context == null ? root : _7.defaults(root.Object(), context, _7.pick(root, contextProps));
           var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -5985,24 +5985,24 @@
           }
           return lodash;
         }, "runInContext");
-        var _6 = runInContext();
+        var _7 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _6;
+          root._ = _7;
           define(function() {
-            return _6;
+            return _7;
           });
         } else if (freeModule) {
-          (freeModule.exports = _6)._ = _6;
-          freeExports._ = _6;
+          (freeModule.exports = _7)._ = _7;
+          freeExports._ = _7;
         } else {
-          root._ = _6;
+          root._ = _7;
         }
       }).call(exports);
     }
   });
 
   // main.ts
-  var _5 = __toESM(require_lodash());
+  var _6 = __toESM(require_lodash());
 
   // generator.ts
   var import_lodash = __toESM(require_lodash());
@@ -6676,6 +6676,7 @@
   __name(assertUnreachable, "assertUnreachable");
 
   // objects/player.ts
+  var import_lodash3 = __toESM(require_lodash());
   function make4(position) {
     return {
       type: "player",
@@ -6692,21 +6693,24 @@
   __name(make4, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
-      const obj = objs[0];
-      switch (obj.type) {
-        case "door":
-        case "story":
-        case "footprint":
-        case "commit":
-        case "coffee":
-          return true;
-        case "player":
-        case "wall":
-        case "boss":
-          return false;
-        default:
-          assertUnreachable(obj);
-      }
+      const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
+        switch (obj.type) {
+          case "door":
+          case "story":
+          case "footprint":
+          case "commit":
+          case "coffee":
+            return true;
+          case "player":
+          case "wall":
+          case "boss":
+            return false;
+          default:
+            assertUnreachable(obj);
+        }
+      }, "canMoveOnObj");
+      const result = import_lodash3.default.every(objs, canMoveOnObj);
+      return result;
     } else {
       return true;
     }
@@ -6964,9 +6968,9 @@
         case "door":
           return "[";
         case "commit":
-          return "\u03B5";
+          return obj.open ? "\u03B5" : ".";
         case "coffee":
-          return "c";
+          return obj.open ? "c" : ".";
         case "story":
           switch (obj.size) {
             case 0 /* small */:
@@ -7029,7 +7033,8 @@
     return {
       type: "commit",
       position,
-      zIndex: 1
+      zIndex: 1,
+      open: false
     };
   }
   __name(make7, "make");
@@ -7103,7 +7108,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = _5.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
+    const inner_walls = _6.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
