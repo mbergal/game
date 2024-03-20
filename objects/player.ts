@@ -1,26 +1,15 @@
 import _ from "lodash"
 import { Command } from "../commands"
 import { Game } from "../game"
+import config from "../game/config"
 import { GameMap } from "../game/map"
+import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
-import * as Messages from "../game/messages"
 import { assertUnreachable } from "../utils/utils"
 import { GameObject, Item } from "./object"
-import * as Story from "./story"
-
-interface StoryTask {
-    type: "story"
-    size: Story.Size
-    neededCommits: number
-    appliedCommits: number
-}
-
-interface NullTask {
-    type: "null"
-}
-
-type Task = StoryTask | NullTask
+import { Task } from "./tasks"
+import { StoryTask } from "./tasks"
 
 export interface t {
     type: "player"
@@ -104,8 +93,10 @@ function pickItem(player: Player, item: Item, map: GameMap) {
     map.remove(item)
     switch (item.type) {
         case "door":
+            player.item = item
             break
         case "coffee":
+            player.item = item
             break
         case "commit":
             if (player.task) {
@@ -113,22 +104,20 @@ function pickItem(player: Player, item: Item, map: GameMap) {
                 switch (task.type) {
                     case "story":
                         task.appliedCommits += 1
+                        if (task.appliedCommits == task.neededCommits) {
+                        }
                 }
+            } else {
+                player.item = item
             }
+
             break
         case "story":
-            player.task = {
-                type: "story",
-                size: item.size,
-                neededCommits: 10,
-                appliedCommits: 0,
-            }
+            player.task = StoryTask.make(item.size)
             break
         default:
             assertUnreachable(item)
     }
-
-    player.item = item
 }
 
 function tickHrTask(player: Player) {
@@ -213,12 +202,8 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Result 
                         }
                         break
                     case "story":
-                        const task: StoryTask = {
-                            type: "story",
-                            size: obj.size,
-                            neededCommits: 10,
-                            appliedCommits: 0,
-                        }
+                        const task: StoryTask.t = StoryTask.make(obj.size)
+
                         if (canTakeTask(task, player)) {
                             takeTask(player, task, game)
                             game.map.remove(obj)

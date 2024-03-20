@@ -6079,6 +6079,23 @@
 
   // utils/random.ts
   var _ = __toESM(require_lodash());
+
+  // utils/assert.ts
+  var _AssertionError = class _AssertionError extends Error {
+    constructor(message2) {
+      super(message2);
+    }
+  };
+  __name(_AssertionError, "AssertionError");
+  var AssertionError = _AssertionError;
+  function assert(condition, message2 = null) {
+    if (!(typeof condition === "function" ? condition() : condition)) {
+      throw new AssertionError(message2 || "Assertion failed");
+    }
+  }
+  __name(assert, "assert");
+
+  // utils/random.ts
   function getInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   }
@@ -6088,6 +6105,7 @@
   }
   __name(getInts, "getInts");
   function choice(choices, weights = null) {
+    assert(weights == null || choices.length == weights?.length);
     weights = weights ?? _.range(choices.length).map((x) => 1);
     let total = _.sum(weights);
     const threshold = Math.random() * total;
@@ -6451,9 +6469,34 @@
   }
   __name(load, "load");
 
+  // objects/story_size.ts
+  function toString(size) {
+    switch (size) {
+      case 0 /* small */:
+        return "small";
+      case 1 /* medium */:
+        return "medium";
+      case 2 /* large */:
+        return "large";
+    }
+  }
+  __name(toString, "toString");
+
+  // game/config.ts
+  var config = {
+    boss: {
+      TACTS_FOR_JUMP: 3,
+      TACTS_FOR_SINGLE_MOVE: 4 * 3
+    },
+    story: {
+      [0 /* small */]: { neededCommits: 2, impact: 1 },
+      [1 /* medium */]: { neededCommits: 5, impact: 2 },
+      [2 /* large */]: { neededCommits: 8, impact: 4 }
+    }
+  };
+  var config_default = config;
+
   // objects/boss.ts
-  var TACTS_FOR_SINGLE_MOVE = 1;
-  var TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE;
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6534,7 +6577,7 @@
             pipPlayer(boss, player);
         }
         boss.state.tact += 1;
-        if (boss.state.tact < TACTS_FOR_SINGLE_MOVE) {
+        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
           return;
         }
         const moves = possibleMoves(boss.position, boss.state.direction, map);
@@ -6588,7 +6631,7 @@
           direction: boss.state.direction,
           tact: boss.state.tact + 1
         };
-        if (boss.state.tact > TACTS_FOR_JUMP) {
+        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
           move(
             boss,
             moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
@@ -6672,42 +6715,8 @@
   // objects/player.ts
   var import_lodash3 = __toESM(require_lodash());
 
-  // objects/door.ts
-  function make4(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make4, "make");
-
   // objects/story.ts
-  var story_exports = {};
-  __export(story_exports, {
-    Size: () => Size,
-    make: () => make5,
-    toString: () => toString
-  });
-  var Size = /* @__PURE__ */ ((Size2) => {
-    Size2[Size2["small"] = 0] = "small";
-    Size2[Size2["medium"] = 1] = "medium";
-    Size2[Size2["large"] = 2] = "large";
-    return Size2;
-  })(Size || {});
-  function toString(size) {
-    switch (size) {
-      case 0 /* small */:
-        return "small";
-      case 1 /* medium */:
-        return "medium";
-      case 2 /* large */:
-        return "large";
-    }
-  }
-  __name(toString, "toString");
-  function make5(position, size) {
+  function make4(position, size) {
     return {
       type: "story",
       position,
@@ -6715,39 +6724,17 @@
       zIndex: 1
     };
   }
-  __name(make5, "make");
-
-  // objects/commit.ts
-  function make6(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make6, "make");
-
-  // objects/coffee.ts
-  function make7(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make7, "make");
+  __name(make4, "make");
 
   // game/messages.ts
   var startedStory = /* @__PURE__ */ __name((size) => ({
-    text: `You started on ${story_exports.toString(size)} ${stories[size]}`,
+    text: `You started on ${toString(size)} ${stories[size]}`,
     ttl: 100
   }), "startedStory");
   var stories = {
-    [story_exports.Size.small]: "Bug Fix: Paperclip Panic\nResolve the issue where the 'undo' function mistakenly deletes the user's last paperclip click",
-    [story_exports.Size.medium]: 'Meeting Madness Expansion (Feature Development): Develop a new module that automatically schedules meetings based on employee availability, ensuring maximum "meeting madness" efficiency',
-    [story_exports.Size.large]: `"Corporate Culture Overhaul" (Major Feature Development): Implement a comprehensive initiative to revamp the company's culture, including mandatory 'fun' activities and a rewards program for using the most corporate buzzwords.`
+    [0 /* small */]: "Bug Fix: Paperclip Panic\nResolve the issue where the 'undo' function mistakenly deletes the user's last paperclip click",
+    [1 /* medium */]: 'Meeting Madness Expansion (Feature Development): Develop a new module that automatically schedules meetings based on employee availability, ensuring maximum "meeting madness" efficiency',
+    [2 /* large */]: `"Corporate Culture Overhaul" (Major Feature Development): Implement a comprehensive initiative to revamp the company's culture, including mandatory 'fun' activities and a rewards program for using the most corporate buzzwords.`
   };
 
   // utils/utils.ts
@@ -6756,8 +6743,24 @@
   }
   __name(assertUnreachable, "assertUnreachable");
 
+  // objects/tasks/story.ts
+  var story_exports2 = {};
+  __export(story_exports2, {
+    make: () => make5
+  });
+  function make5(size) {
+    return {
+      type: "story",
+      size,
+      impact: config_default.story[size].impact,
+      neededCommits: config_default.story[size].neededCommits,
+      appliedCommits: 0
+    };
+  }
+  __name(make5, "make");
+
   // objects/player.ts
-  function make8(position) {
+  function make6(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6770,7 +6773,7 @@
       task: null
     };
   }
-  __name(make8, "make");
+  __name(make6, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -6821,8 +6824,10 @@
     map.remove(item);
     switch (item.type) {
       case "door":
+        player.item = item;
         break;
       case "coffee":
+        player.item = item;
         break;
       case "commit":
         if (player.task) {
@@ -6830,21 +6835,19 @@
           switch (task.type) {
             case "story":
               task.appliedCommits += 1;
+              if (task.appliedCommits == task.neededCommits) {
+              }
           }
+        } else {
+          player.item = item;
         }
         break;
       case "story":
-        player.task = {
-          type: "story",
-          size: item.size,
-          neededCommits: 10,
-          appliedCommits: 0
-        };
+        player.task = story_exports2.make(item.size);
         break;
       default:
         assertUnreachable(item);
     }
-    player.item = item;
   }
   __name(pickItem, "pickItem");
   function tickHrTask(player) {
@@ -6922,12 +6925,7 @@
               }
               break;
             case "story":
-              const task = {
-                type: "story",
-                size: obj.size,
-                neededCommits: 10,
-                appliedCommits: 0
-              };
+              const task = story_exports2.make(obj.size);
               if (canTakeTask(task, player)) {
                 takeTask(player, task, game);
                 game.map.remove(obj);
@@ -7105,22 +7103,55 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
+  // objects/coffee.ts
+  function make7(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make7, "make");
+
+  // objects/commit.ts
+  function make8(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make8, "make");
+
+  // objects/door.ts
+  function make9(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make9, "make");
+
   // game/item_generator.ts
   function generateAnItem(game) {
     if (game.itemGenerator.tact > 100) {
       game.itemGenerator.tact = 0;
       const aa = choice(
         ["door", "commit", "coffee"],
-        [1, 1, 100]
+        [1, 100, 0]
       );
       let item;
       switch (aa) {
         case "door":
-          item = make4(game.map.getRandomEmptyLocation());
+          item = make9(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         case "commit":
-          item = make6(game.map.getRandomEmptyLocation());
+          item = make8(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         case "coffee":
@@ -7139,11 +7170,11 @@
 
   // game/sprint.ts
   function generateSprint(map) {
-    const small = make5(map.getRandomEmptyLocation(), 0 /* small */);
+    const small = make4(map.getRandomEmptyLocation(), 0 /* small */);
     map.add(small);
-    const medium = make5(map.getRandomEmptyLocation(), 1 /* medium */);
+    const medium = make4(map.getRandomEmptyLocation(), 1 /* medium */);
     map.add(medium);
-    const large = make5(map.getRandomEmptyLocation(), 2 /* large */);
+    const large = make4(map.getRandomEmptyLocation(), 2 /* large */);
     map.add(large);
   }
   __name(generateSprint, "generateSprint");
@@ -7185,7 +7216,7 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    game.player = make8(game.map.getRandomEmptyLocation());
+    game.player = make6(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, { text: "Welcome to the Rat Race", ttl: 30 });
     window.setInterval(() => processTick(game), TICK_INTERVAL);

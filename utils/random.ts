@@ -1,4 +1,5 @@
 import * as _ from "lodash"
+import { assert } from "./assert"
 
 export function getInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min)) + min
@@ -9,6 +10,7 @@ export function getInts(min: number, max: number, num_of_ints: number): number[]
 }
 
 export function choice<T>(choices: T[], weights: number[] | null = null): T {
+    assert(weights == null || choices.length == weights?.length)
     weights = weights ?? _.range(choices.length).map((x) => 1)
     let total = _.sum(weights)
 

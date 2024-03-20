@@ -1,8 +1,10 @@
-import { Story } from "../objects/object"
+import * as Story from "../objects/story"
+import * as StorySize from "../objects/story_size"
+
 import { Message } from "./message"
 
 export const startedStory = (size: Story.Size): Message => ({
-    text: `You started on ${Story.toString(size)} ${stories[size]}`,
+    text: `You started on ${StorySize.toString(size)} ${stories[size]}`,
     ttl: 100,
 })
 

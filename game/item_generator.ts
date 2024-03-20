@@ -10,7 +10,7 @@ export function generateAnItem(game: Game.Game) {
         game.itemGenerator.tact = 0
         const aa = random.choice(
             ["door" as const, "commit" as const, "coffee" as const],
-            [1, 1, 100]
+            [1, 100, 0]
         )
         let item
         switch (aa) {

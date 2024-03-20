@@ -5,6 +5,7 @@ import { GameMap } from "../game"
 import * as random from "../utils/random"
 import { Footprint } from "./footprint"
 import { Player } from "./player"
+import config from "../game/config"
 
 type Stopped = { type: "stopped"; previous_direction: Direction.t | null }
 type Moving = { type: "moving"; direction: Direction.t; tact: 0 | 1 }
@@ -12,8 +13,6 @@ type Instructing = { type: "instructing" }
 type Jumping = { type: "jumping"; direction: Direction.t; tact: number }
 type BossState = Stopped | Moving | Instructing | Jumping
 
-const TACTS_FOR_SINGLE_MOVE = 1
-const TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE
 export interface t extends LiveObject {
     type: "boss"
     position: Vector.t
@@ -126,7 +125,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             }
 
             boss.state.tact += 1
-            if (boss.state.tact < TACTS_FOR_SINGLE_MOVE) {
+            if (boss.state.tact < config.boss.TACTS_FOR_SINGLE_MOVE) {
                 return
             }
 
@@ -192,7 +191,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                 direction: boss.state.direction,
                 tact: boss.state.tact + 1,
             }
-            if (boss.state.tact > TACTS_FOR_JUMP) {
+            if (boss.state.tact > config.boss.TACTS_FOR_JUMP) {
                 move(
                     boss,
                     moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
