@@ -7,7 +7,7 @@ export interface t {
     open: false
 }
 
-export type Commit = t
+export interface Commit extends t {}
 
 export function make(position: Vector.t): Commit {
     return {

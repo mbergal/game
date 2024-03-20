@@ -22,4 +22,4 @@ export type GameObject =
     | Coffee.t
 
 export type GameObjectType = GameObject["type"]
-export type Item = Door.Door | Commit.t | Story.t | Coffee.t
+export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee

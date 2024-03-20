@@ -37,19 +37,19 @@ export function render(game: Game.t) {
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
-function showMessage(game: Game.t) {
-    game.messageTact += 1
-    let text = ""
+function showMessage(game: Game.t): string[] {
     if (game.messages.length > 0) {
-        text = game.messages[0].text
+        game.messageTact += 1
+        const text = game.messages[0].text
         if (game.messageTact > game.messages[0].ttl) {
             game.messageTact = 0
             game.messages.pop()
-            text = ""
+        } else {
+            return text.split("")
         }
     }
 
-    return text.split("")
+    return []
 }
 
 function showTicks(game: Game.t): string {
@@ -82,7 +82,7 @@ function isVisible(obj: GameObject) {
         case "door":
             return true
         case "footprint":
-            return true
+            return false
         default:
             assertUnreachable(obj)
     }
@@ -109,11 +109,12 @@ function getRepresentation(map: GameMap, objs: GameObject[], tick: number): stri
                                 return "]"
                             case "commit":
                                 return "ε"
+                            case "coffee":
+                                return "C"
+                            case "story":
+                                return ""
                             default:
-                                return "?"
-                            // default:
-                            //     const a = item
-                            //     assertUnreachable(item)
+                                return assertUnreachable(item)
                         }
                     }
                     return "*"

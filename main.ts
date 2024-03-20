@@ -105,7 +105,7 @@ export function main() {
 
     game.map.add([game.player])
 
-    Game.message(game, "Welcome to the Rat Race", 30)
+    Game.message(game, { text: "Welcome to the Rat Race", ttl: 30 })
 
     window.setInterval(() => processTick(game), TICK_INTERVAL)
 
@@ -173,7 +173,7 @@ function processTick(game: Game.t) {
     game.score.money += EngineeringLevels.all[game.score.level].rate
     const item = generateAnItem(game)
     for (const obj of game.map.objects) {
-        const result = tick(obj, game.map, game.commands)
+        const result = tick(obj, game, game.commands)
         game.score.codeBlocks += result.codeBlocks
     }
     if (game.score.ticks % 1000 == 1) {
@@ -187,17 +187,17 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: GameObject, map: GameMap, commands: Command[]): Result {
+function tick(obj: GameObject, game: Game.t, commands: Command[]): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":
-            Boss.tick(obj, map)
+            Boss.tick(obj, game.map)
             break
         case "footprint":
-            Footprint.tick(obj, map)
+            Footprint.tick(obj, game.map)
             break
         case "player":
-            result = Player.tick(obj, map, commands)
+            Player.tick(obj, game, commands)
         case "door":
         case "story":
         case "commit":

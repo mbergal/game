@@ -1,11 +1,13 @@
-import * as Direction from "../geometry/direction"
-import * as Story from "./story"
-import { Command, isMoveCommand } from "../commands"
-import { Vector, moveBy } from "../geometry"
-import { GameMap } from "../game/map"
-import { GameObject, Item } from "./object"
-import { assertUnreachable } from "../utils/utils"
 import _ from "lodash"
+import { Command } from "../commands"
+import { Game } from "../game"
+import { GameMap } from "../game/map"
+import { Vector, moveBy } from "../geometry"
+import * as Direction from "../geometry/direction"
+import * as Messages from "../game/messages"
+import { assertUnreachable } from "../utils/utils"
+import { GameObject, Item } from "./object"
+import * as Story from "./story"
 
 interface StoryTask {
     type: "story"
@@ -14,7 +16,11 @@ interface StoryTask {
     appliedCommits: number
 }
 
-type Task = StoryTask
+interface NullTask {
+    type: "null"
+}
+
+type Task = StoryTask | NullTask
 
 export interface t {
     type: "player"
@@ -32,9 +38,7 @@ export interface t {
 }
 
 export type Player = t
-export interface Result {
-    codeBlocks: number
-}
+export interface Result {}
 
 export function make(position: Vector.t): Player {
     return {
@@ -79,8 +83,17 @@ function canTakeTask(task: Task, player: Player) {
     return true
 }
 
-function takeTask(player: Player, task: Task, map: GameMap) {
+function takeTask(player: Player, task: Task, game: Game.t) {
     player.task = task
+    switch (task.type) {
+        case "story":
+            Game.message(game, Messages.startedStory(task.size))
+            break
+        case "null":
+            break
+        default:
+            assertUnreachable(task)
+    }
 }
 
 function canPickItem(player: Player) {
@@ -172,25 +185,31 @@ function processCommands(player: Player, commands: Command[], map: GameMap) {
         player.commands = player.commands.filter((x) => x.tact < 10)
     }
 }
-export function tick(player: Player, map: GameMap, commands: Command[]): Result {
+export function tick(player: Player, game: Game.t, commands: Command[]): Result {
     tickHrTask(player)
-    processCommands(player, commands, map)
+    processCommands(player, commands, game.map)
 
-    const result: Result = {
-        codeBlocks: 0,
-    }
+    const result: Result = {}
     if (player.direction) {
         const newPosition = moveBy(player.position, player.direction)
-        const objsAtNewPosition = map.at(newPosition)
+        const objsAtNewPosition = game.map.at(newPosition)
         if (canMoveOn(objsAtNewPosition)) {
             if (objsAtNewPosition.length > 0) {
                 const obj = objsAtNewPosition[0]
                 switch (obj.type) {
                     case "door":
-                    case "commit":
                     case "coffee":
                         if (canPickItem(player)) {
-                            pickItem(player, obj, map)
+                            console.log(`Can pick item  ${JSON.stringify(player)}`)
+                            Game.message(game, { text: `Picked a ${obj.type}`, ttl: 40 })
+                            pickItem(player, obj, game.map)
+                        }
+                        break
+                    case "commit":
+                        if (canPickItem(player)) {
+                            console.log(`Can pick item  ${JSON.stringify(player)}`)
+                            Game.message(game, { text: `Picked a commit`, ttl: 40 })
+                            pickItem(player, obj, game.map)
                         }
                         break
                     case "story":
@@ -201,8 +220,8 @@ export function tick(player: Player, map: GameMap, commands: Command[]): Result 
                             appliedCommits: 0,
                         }
                         if (canTakeTask(task, player)) {
-                            takeTask(player, task, map)
-                            map.remove(obj)
+                            takeTask(player, task, game)
+                            game.map.remove(obj)
                         }
                         break
                     case "player":
@@ -214,7 +233,7 @@ export function tick(player: Player, map: GameMap, commands: Command[]): Result 
                         assertUnreachable(obj)
                 }
             }
-            map.move(player, newPosition)
+            game.map.move(player, newPosition)
         } else {
         }
     }

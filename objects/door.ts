@@ -7,7 +7,7 @@ export interface t {
     open: boolean
 }
 
-export type Door = t
+export interface Door extends t {}
 
 export function make(position: Vector.t): t {
     return {

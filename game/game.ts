@@ -3,6 +3,7 @@ import { ItemGenerator } from "../objects/item"
 import { GameObject } from "../objects/object"
 import * as Player from "../objects/player"
 import * as GameMap from "./map"
+import { Message } from "./message"
 export * as GameMap from "./map"
 import * as Score from "./score"
 export * as Score from "./score"
@@ -17,10 +18,6 @@ export type t = {
     player?: Player.Player
 }
 
-export interface Message {
-    text: string
-    ttl: number
-}
 export type Game = t
 
 export function make(width: number, height: number): t {
@@ -45,8 +42,8 @@ export function toJson(game: t): object {
     }
 }
 
-export function message(game: t, text: string, ttl: number) {
-    game.messages.push({ text, ttl })
+export function message(game: t, m: Message) {
+    game.messages.push(m)
 }
 
 export interface GameStorage {

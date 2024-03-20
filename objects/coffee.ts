@@ -7,7 +7,7 @@ export interface t {
     open: boolean
 }
 
-export type Coffee = t
+export interface Coffee extends t {}
 
 export function make(position: Vector.t): t {
     return {

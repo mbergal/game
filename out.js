@@ -2194,7 +2194,7 @@
             if (isArray(value)) {
               return value;
             }
-            return isKey(value, object) ? [value] : stringToPath(toString(value));
+            return isKey(value, object) ? [value] : stringToPath(toString2(value));
           }
           __name(castPath, "castPath");
           var castRest = baseRest;
@@ -2409,7 +2409,7 @@
           __name(createBind, "createBind");
           function createCaseFirst(methodName) {
             return function(string) {
-              string = toString(string);
+              string = toString2(string);
               var strSymbols = hasUnicode(string) ? stringToArray(string) : undefined;
               var chr = strSymbols ? strSymbols[0] : string.charAt(0);
               var trailing = strSymbols ? castSlice(strSymbols, 1).join("") : string.slice(1);
@@ -2714,8 +2714,8 @@
               number = toNumber(number);
               precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
               if (precision && nativeIsFinite(number)) {
-                var pair = (toString(number) + "e").split("e"), value = func(pair[0] + "e" + (+pair[1] + precision));
-                pair = (toString(value) + "e").split("e");
+                var pair = (toString2(number) + "e").split("e"), value = func(pair[0] + "e" + (+pair[1] + precision));
+                pair = (toString2(value) + "e").split("e");
                 return +(pair[0] + "e" + (+pair[1] - precision));
               }
               return func(number);
@@ -4676,10 +4676,10 @@
             return value ? baseClamp(toInteger(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER) : value === 0 ? value : 0;
           }
           __name(toSafeInteger, "toSafeInteger");
-          function toString(value) {
+          function toString2(value) {
             return value == null ? "" : baseToString(value);
           }
-          __name(toString, "toString");
+          __name(toString2, "toString");
           var assign = createAssigner(function(object, source) {
             if (isPrototype(source) || isArrayLike(source)) {
               copyObject(source, keys(source), object);
@@ -5007,16 +5007,16 @@
             return result2 + (index ? capitalize(word) : word);
           });
           function capitalize(string) {
-            return upperFirst(toString(string).toLowerCase());
+            return upperFirst(toString2(string).toLowerCase());
           }
           __name(capitalize, "capitalize");
           function deburr(string) {
-            string = toString(string);
+            string = toString2(string);
             return string && string.replace(reLatin, deburrLetter).replace(reComboMark, "");
           }
           __name(deburr, "deburr");
           function endsWith(string, target, position) {
-            string = toString(string);
+            string = toString2(string);
             target = baseToString(target);
             var length = string.length;
             position = position === undefined ? length : baseClamp(toInteger(position), 0, length);
@@ -5026,12 +5026,12 @@
           }
           __name(endsWith, "endsWith");
           function escape(string) {
-            string = toString(string);
+            string = toString2(string);
             return string && reHasUnescapedHtml.test(string) ? string.replace(reUnescapedHtml, escapeHtmlChar) : string;
           }
           __name(escape, "escape");
           function escapeRegExp(string) {
-            string = toString(string);
+            string = toString2(string);
             return string && reHasRegExpChar.test(string) ? string.replace(reRegExpChar, "\\$&") : string;
           }
           __name(escapeRegExp, "escapeRegExp");
@@ -5043,7 +5043,7 @@
           });
           var lowerFirst = createCaseFirst("toLowerCase");
           function pad(string, length, chars) {
-            string = toString(string);
+            string = toString2(string);
             length = toInteger(length);
             var strLength = length ? stringSize(string) : 0;
             if (!length || strLength >= length) {
@@ -5054,14 +5054,14 @@
           }
           __name(pad, "pad");
           function padEnd(string, length, chars) {
-            string = toString(string);
+            string = toString2(string);
             length = toInteger(length);
             var strLength = length ? stringSize(string) : 0;
             return length && strLength < length ? string + createPadding(length - strLength, chars) : string;
           }
           __name(padEnd, "padEnd");
           function padStart(string, length, chars) {
-            string = toString(string);
+            string = toString2(string);
             length = toInteger(length);
             var strLength = length ? stringSize(string) : 0;
             return length && strLength < length ? createPadding(length - strLength, chars) + string : string;
@@ -5073,7 +5073,7 @@
             } else if (radix) {
               radix = +radix;
             }
-            return nativeParseInt(toString(string).replace(reTrimStart, ""), radix || 0);
+            return nativeParseInt(toString2(string).replace(reTrimStart, ""), radix || 0);
           }
           __name(parseInt2, "parseInt");
           function repeat(string, n2, guard) {
@@ -5082,11 +5082,11 @@
             } else {
               n2 = toInteger(n2);
             }
-            return baseRepeat(toString(string), n2);
+            return baseRepeat(toString2(string), n2);
           }
           __name(repeat, "repeat");
           function replace() {
-            var args = arguments, string = toString(args[0]);
+            var args = arguments, string = toString2(args[0]);
             return args.length < 3 ? string : string.replace(args[1], args[2]);
           }
           __name(replace, "replace");
@@ -5101,7 +5101,7 @@
             if (!limit) {
               return [];
             }
-            string = toString(string);
+            string = toString2(string);
             if (string && (typeof separator == "string" || separator != null && !isRegExp(separator))) {
               separator = baseToString(separator);
               if (!separator && hasUnicode(string)) {
@@ -5115,7 +5115,7 @@
             return result2 + (index ? " " : "") + upperFirst(word);
           });
           function startsWith(string, target, position) {
-            string = toString(string);
+            string = toString2(string);
             position = position == null ? 0 : baseClamp(toInteger(position), 0, string.length);
             target = baseToString(target);
             return string.slice(position, position + target.length) == target;
@@ -5126,7 +5126,7 @@
             if (guard && isIterateeCall(string, options, guard)) {
               options = undefined;
             }
-            string = toString(string);
+            string = toString2(string);
             options = assignInWith({}, options, settings, customDefaultsAssignIn);
             var imports = assignInWith({}, options.imports, settings.imports, customDefaultsAssignIn), importsKeys = keys(imports), importsValues = baseValues(imports, importsKeys);
             var isEscaping, isEvaluating, index = 0, interpolate = options.interpolate || reNoMatch, source = "__p += '";
@@ -5172,15 +5172,15 @@
           }
           __name(template, "template");
           function toLower(value) {
-            return toString(value).toLowerCase();
+            return toString2(value).toLowerCase();
           }
           __name(toLower, "toLower");
           function toUpper(value) {
-            return toString(value).toUpperCase();
+            return toString2(value).toUpperCase();
           }
           __name(toUpper, "toUpper");
           function trim(string, chars, guard) {
-            string = toString(string);
+            string = toString2(string);
             if (string && (guard || chars === undefined)) {
               return baseTrim(string);
             }
@@ -5192,7 +5192,7 @@
           }
           __name(trim, "trim");
           function trimEnd(string, chars, guard) {
-            string = toString(string);
+            string = toString2(string);
             if (string && (guard || chars === undefined)) {
               return string.slice(0, trimmedEndIndex(string) + 1);
             }
@@ -5204,7 +5204,7 @@
           }
           __name(trimEnd, "trimEnd");
           function trimStart(string, chars, guard) {
-            string = toString(string);
+            string = toString2(string);
             if (string && (guard || chars === undefined)) {
               return string.replace(reTrimStart, "");
             }
@@ -5222,7 +5222,7 @@
               length = "length" in options ? toInteger(options.length) : length;
               omission = "omission" in options ? baseToString(options.omission) : omission;
             }
-            string = toString(string);
+            string = toString2(string);
             var strLength = string.length;
             if (hasUnicode(string)) {
               var strSymbols = stringToArray(string);
@@ -5246,7 +5246,7 @@
               if (string.slice(end).search(separator)) {
                 var match, substring = result2;
                 if (!separator.global) {
-                  separator = RegExp2(separator.source, toString(reFlags.exec(separator)) + "g");
+                  separator = RegExp2(separator.source, toString2(reFlags.exec(separator)) + "g");
                 }
                 separator.lastIndex = 0;
                 while (match = separator.exec(substring)) {
@@ -5264,7 +5264,7 @@
           }
           __name(truncate, "truncate");
           function unescape(string) {
-            string = toString(string);
+            string = toString2(string);
             return string && reHasEscapedHtml.test(string) ? string.replace(reEscapedHtml, unescapeHtmlChar) : string;
           }
           __name(unescape, "unescape");
@@ -5273,7 +5273,7 @@
           });
           var upperFirst = createCaseFirst("toUpperCase");
           function words(string, pattern, guard) {
-            string = toString(string);
+            string = toString2(string);
             pattern = guard ? undefined : pattern;
             if (pattern === undefined) {
               return hasUnicodeWord(string) ? unicodeWords(string) : asciiWords(string);
@@ -5455,12 +5455,12 @@
             if (isArray(value)) {
               return arrayMap(value, toKey);
             }
-            return isSymbol(value) ? [value] : copyArray(stringToPath(toString(value)));
+            return isSymbol(value) ? [value] : copyArray(stringToPath(toString2(value)));
           }
           __name(toPath, "toPath");
           function uniqueId(prefix) {
             var id = ++idCounter;
-            return toString(prefix) + id;
+            return toString2(prefix) + id;
           }
           __name(uniqueId, "uniqueId");
           var add = createMathOperation(function(augend, addend) {
@@ -5803,7 +5803,7 @@
           lodash.toLower = toLower;
           lodash.toNumber = toNumber;
           lodash.toSafeInteger = toSafeInteger;
-          lodash.toString = toString;
+          lodash.toString = toString2;
           lodash.toUpper = toUpper;
           lodash.trim = trim;
           lodash.trimEnd = trimEnd;
@@ -6410,8 +6410,8 @@
     };
   }
   __name(toJson, "toJson");
-  function message(game, text, ttl) {
-    game.messages.push({ text, ttl });
+  function message(game, m) {
+    game.messages.push(m);
   }
   __name(message, "message");
   function save(game, storage) {
@@ -6669,6 +6669,87 @@
   }
   __name(tick2, "tick");
 
+  // objects/player.ts
+  var import_lodash3 = __toESM(require_lodash());
+
+  // objects/door.ts
+  function make4(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make4, "make");
+
+  // objects/story.ts
+  var story_exports = {};
+  __export(story_exports, {
+    Size: () => Size,
+    make: () => make5,
+    toString: () => toString
+  });
+  var Size = /* @__PURE__ */ ((Size2) => {
+    Size2[Size2["small"] = 0] = "small";
+    Size2[Size2["medium"] = 1] = "medium";
+    Size2[Size2["large"] = 2] = "large";
+    return Size2;
+  })(Size || {});
+  function toString(size) {
+    switch (size) {
+      case 0 /* small */:
+        return "small";
+      case 1 /* medium */:
+        return "medium";
+      case 2 /* large */:
+        return "large";
+    }
+  }
+  __name(toString, "toString");
+  function make5(position, size) {
+    return {
+      type: "story",
+      position,
+      size,
+      zIndex: 1
+    };
+  }
+  __name(make5, "make");
+
+  // objects/commit.ts
+  function make6(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make6, "make");
+
+  // objects/coffee.ts
+  function make7(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make7, "make");
+
+  // game/messages.ts
+  var startedStory = /* @__PURE__ */ __name((size) => ({
+    text: `You started on ${story_exports.toString(size)} ${stories[size]}`,
+    ttl: 100
+  }), "startedStory");
+  var stories = {
+    [story_exports.Size.small]: "Bug Fix: Paperclip Panic\nResolve the issue where the 'undo' function mistakenly deletes the user's last paperclip click",
+    [story_exports.Size.medium]: 'Meeting Madness Expansion (Feature Development): Develop a new module that automatically schedules meetings based on employee availability, ensuring maximum "meeting madness" efficiency',
+    [story_exports.Size.large]: `"Corporate Culture Overhaul" (Major Feature Development): Implement a comprehensive initiative to revamp the company's culture, including mandatory 'fun' activities and a rewards program for using the most corporate buzzwords.`
+  };
+
   // utils/utils.ts
   function assertUnreachable(x) {
     throw new Error("Didn't expect to get here");
@@ -6676,8 +6757,7 @@
   __name(assertUnreachable, "assertUnreachable");
 
   // objects/player.ts
-  var import_lodash3 = __toESM(require_lodash());
-  function make4(position) {
+  function make8(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6690,7 +6770,7 @@
       task: null
     };
   }
-  __name(make4, "make");
+  __name(make8, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -6720,8 +6800,17 @@
     return true;
   }
   __name(canTakeTask, "canTakeTask");
-  function takeTask(player, task, map) {
+  function takeTask(player, task, game) {
     player.task = task;
+    switch (task.type) {
+      case "story":
+        game_exports.message(game, startedStory(task.size));
+        break;
+      case "null":
+        break;
+      default:
+        assertUnreachable(task);
+    }
   }
   __name(takeTask, "takeTask");
   function canPickItem(player) {
@@ -6806,24 +6895,30 @@
     }
   }
   __name(processCommands, "processCommands");
-  function tick3(player, map, commands) {
+  function tick3(player, game, commands) {
     tickHrTask(player);
-    processCommands(player, commands, map);
-    const result = {
-      codeBlocks: 0
-    };
+    processCommands(player, commands, game.map);
+    const result = {};
     if (player.direction) {
       const newPosition = moveBy(player.position, player.direction);
-      const objsAtNewPosition = map.at(newPosition);
+      const objsAtNewPosition = game.map.at(newPosition);
       if (canMoveOn(objsAtNewPosition)) {
         if (objsAtNewPosition.length > 0) {
           const obj = objsAtNewPosition[0];
           switch (obj.type) {
             case "door":
-            case "commit":
             case "coffee":
               if (canPickItem(player)) {
-                pickItem(player, obj, map);
+                console.log(`Can pick item  ${JSON.stringify(player)}`);
+                game_exports.message(game, { text: `Picked a ${obj.type}`, ttl: 40 });
+                pickItem(player, obj, game.map);
+              }
+              break;
+            case "commit":
+              if (canPickItem(player)) {
+                console.log(`Can pick item  ${JSON.stringify(player)}`);
+                game_exports.message(game, { text: `Picked a commit`, ttl: 40 });
+                pickItem(player, obj, game.map);
               }
               break;
             case "story":
@@ -6834,8 +6929,8 @@
                 appliedCommits: 0
               };
               if (canTakeTask(task, player)) {
-                takeTask(player, task, map);
-                map.remove(obj);
+                takeTask(player, task, game);
+                game.map.remove(obj);
               }
               break;
             case "player":
@@ -6847,24 +6942,13 @@
               assertUnreachable(obj);
           }
         }
-        map.move(player, newPosition);
+        game.map.move(player, newPosition);
       } else {
       }
     }
     return result;
   }
   __name(tick3, "tick");
-
-  // objects/story.ts
-  function make5(position, size) {
-    return {
-      type: "story",
-      position,
-      size,
-      zIndex: 1
-    };
-  }
-  __name(make5, "make");
 
   // renderer.ts
   function render(game) {
@@ -6886,17 +6970,17 @@
   }
   __name(render, "render");
   function showMessage(game) {
-    game.messageTact += 1;
-    let text = "";
     if (game.messages.length > 0) {
-      text = game.messages[0].text;
+      game.messageTact += 1;
+      const text = game.messages[0].text;
       if (game.messageTact > game.messages[0].ttl) {
         game.messageTact = 0;
         game.messages.pop();
-        text = "";
+      } else {
+        return text.split("");
       }
     }
-    return text.split("");
+    return [];
   }
   __name(showMessage, "showMessage");
   function showTicks(game) {
@@ -6929,7 +7013,7 @@
       case "door":
         return true;
       case "footprint":
-        return true;
+        return false;
       default:
         assertUnreachable(obj);
     }
@@ -6957,8 +7041,12 @@
                   return "]";
                 case "commit":
                   return "\u03B5";
+                case "coffee":
+                  return "C";
+                case "story":
+                  return "";
                 default:
-                  return "?";
+                  return assertUnreachable(item);
               }
             }
             return "*";
@@ -7017,39 +7105,6 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
-  // objects/coffee.ts
-  function make6(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make6, "make");
-
-  // objects/commit.ts
-  function make7(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make7, "make");
-
-  // objects/door.ts
-  function make8(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make8, "make");
-
   // game/item_generator.ts
   function generateAnItem(game) {
     if (game.itemGenerator.tact > 100) {
@@ -7061,15 +7116,15 @@
       let item;
       switch (aa) {
         case "door":
-          item = make8(game.map.getRandomEmptyLocation());
+          item = make4(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         case "commit":
-          item = make7(game.map.getRandomEmptyLocation());
+          item = make6(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         case "coffee":
-          item = make6(game.map.getRandomEmptyLocation());
+          item = make7(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         default:
@@ -7130,9 +7185,9 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    game.player = make4(game.map.getRandomEmptyLocation());
+    game.player = make8(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
-    game_exports.message(game, "Welcome to the Rat Race", 30);
+    game_exports.message(game, { text: "Welcome to the Rat Race", ttl: 30 });
     window.setInterval(() => processTick(game), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
       console.log("keydown:", event.key);
@@ -7195,7 +7250,7 @@
     game.score.money += all2[game.score.level].rate;
     const item = generateAnItem(game);
     for (const obj of game.map.objects) {
-      const result = tick4(obj, game.map, game.commands);
+      const result = tick4(obj, game, game.commands);
       game.score.codeBlocks += result.codeBlocks;
     }
     if (game.score.ticks % 1e3 == 1) {
@@ -7205,17 +7260,17 @@
     render(game);
   }
   __name(processTick, "processTick");
-  function tick4(obj, map, commands) {
+  function tick4(obj, game, commands) {
     let result = { codeBlocks: 0 };
     switch (obj.type) {
       case "boss":
-        tick(obj, map);
+        tick(obj, game.map);
         break;
       case "footprint":
-        tick2(obj, map);
+        tick2(obj, game.map);
         break;
       case "player":
-        result = tick3(obj, map, commands);
+        tick3(obj, game, commands);
       case "door":
       case "story":
       case "commit":
