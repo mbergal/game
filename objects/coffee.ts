@@ -1,17 +1,17 @@
 import { Vector } from "../geometry"
 
 export interface t {
-    type: "door"
+    type: "coffee"
     position: Vector.t
-    zIndex: 1
+    zIndex: number
     open: boolean
 }
 
-export type Door = t
+export type Coffee = t
 
 export function make(position: Vector.t): t {
     return {
-        type: "door",
+        type: "coffee",
         position: position,
         zIndex: 1,
         open: false,

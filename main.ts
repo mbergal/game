@@ -14,6 +14,7 @@ import { assertUnreachable } from "./utils/utils"
 import { Game } from "./game"
 import { generateAnItem } from "./game/item_generator"
 import { generateSprint } from "./game/sprint"
+import { GameStorage } from "./game/game"
 
 const TICK_INTERVAL = 100
 // class Game {
@@ -54,23 +55,8 @@ const height = 25
 const width = 80
 
 export function main() {
-    const boss: Boss.Boss = {
-        position: {
-            x: 0,
-            y: 0,
-        },
-        type: "boss",
-        zIndex: 10,
-        state: { type: "stopped", previous_direction: null },
-        // tick: (objs: GameObject[]) => boss_move(),
-    }
-    const game: Game.Game = {
-        map: new GameMap(width, height, []),
-        commands: [],
-        itemGenerator: { tact: 0 },
-        score: Score.make(),
-        messages: [],
-    }
+    const boss: Boss.t = Boss.make()
+    let game: Game.t = Game.make(width, height)
 
     const outer_walls = hline({ x: 0, y: 0 }, width)
         .concat(vline({ x: 0, y: 0 }, height))
@@ -119,17 +105,20 @@ export function main() {
 
     game.map.add([game.player])
 
+    Game.message(game, "Welcome to the Rat Race", 30)
+
     window.setInterval(() => processTick(game), TICK_INTERVAL)
 
     window.addEventListener("keydown", (event) => {
+        console.log("keydown:", event.key)
         switch (event.key) {
             case "s":
-                save(game.map)
+                save(game)
                 break
             case "l":
                 const loaded = load()
                 if (loaded != null) {
-                    game.map = loaded
+                    game = loaded
                 }
             default:
                 const command = getCommand(event.key)
@@ -159,21 +148,24 @@ function getCommand(key: string): Command | null | undefined {
     }
 }
 
-export function save(map: GameMap) {
-    window.localStorage.setItem("map", JSON.stringify(map.toJson()))
+const localStorage: GameStorage = {
+    save(json: string): void {
+        window.localStorage.setItem("map", json)
+    },
+
+    load(): string | null {
+        const objectsStorage = window.localStorage.getItem("map")
+        return objectsStorage
+    },
+}
+
+export function save(game: Game.t) {
+    Game.save(game, localStorage)
     console.log("Game saved!")
 }
 
-export function load(): GameMap | null {
-    const objectsStorage = window.localStorage.getItem("map")
-    if (objectsStorage != null) {
-        const { width, height, objects }: { width: number; height: number; objects: GameObject[] } =
-            JSON.parse(objectsStorage)
-        return new GameMap(width, height, objects)
-    } else {
-        console.log("There is no saved game.")
-        return null
-    }
+export function load(): Game.t | null {
+    return Game.load(localStorage)
 }
 
 function processTick(game: Game.t) {
@@ -200,7 +192,6 @@ function tick(obj: GameObject, map: GameMap, commands: Command[]): Result {
     switch (obj.type) {
         case "boss":
             Boss.tick(obj, map)
-        case "wall":
             break
         case "footprint":
             Footprint.tick(obj, map)
@@ -210,6 +201,8 @@ function tick(obj: GameObject, map: GameMap, commands: Command[]): Result {
         case "door":
         case "story":
         case "commit":
+        case "coffee":
+        case "wall":
             break
         default:
             assertUnreachable(obj)

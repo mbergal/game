@@ -6244,6 +6244,9 @@
   }
   __name(vline, "vline");
 
+  // objects/boss.ts
+  var import_lodash2 = __toESM(require_lodash());
+
   // game/map.ts
   var map_exports = {};
   __export(map_exports, {
@@ -6334,6 +6337,8 @@
       };
     }
     static fromJson(json) {
+      const { width: width2, height: height2, objects } = json;
+      return new _GameMap(width2, height2, objects);
     }
   };
   __name(_GameMap, "GameMap");
@@ -6372,9 +6377,82 @@
   }
   __name(make, "make");
 
+  // game/game.ts
+  var game_exports = {};
+  __export(game_exports, {
+    GameMap: () => map_exports,
+    Score: () => score_exports,
+    load: () => load,
+    make: () => make2,
+    message: () => message,
+    save: () => save,
+    toJson: () => toJson
+  });
+  function make2(width2, height2) {
+    return {
+      map: new GameMap(width2, height2, []),
+      commands: [],
+      itemGenerator: { tact: 0 },
+      score: make(),
+      messages: [],
+      messageTact: 0
+    };
+  }
+  __name(make2, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function message(game, text, ttl) {
+    game.messages.push({ text, ttl });
+  }
+  __name(message, "message");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    console.log("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        width: width2,
+        height: height2,
+        objects,
+        commands,
+        itemGenerator,
+        score,
+        messages,
+        messageTact,
+        map
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find((x) => x.type === "player");
+      return {
+        score,
+        itemGenerator,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player
+      };
+    } else {
+      console.log("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
   // objects/boss.ts
-  var import_lodash2 = __toESM(require_lodash());
-  var TACTS_FOR_SINGLE_MOVE = 40;
+  var TACTS_FOR_SINGLE_MOVE = 1;
   var TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE;
   var BOSS_WEIGHTS = {
     turn: {
@@ -6400,6 +6478,18 @@
     back: 1e-7,
     jump: 5
   };
+  function make3() {
+    return {
+      position: {
+        x: 0,
+        y: 0
+      },
+      type: "boss",
+      zIndex: 10,
+      state: { type: "stopped", previous_direction: null }
+    };
+  }
+  __name(make3, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -6586,7 +6676,7 @@
   __name(assertUnreachable, "assertUnreachable");
 
   // objects/player.ts
-  function make2(position) {
+  function make4(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6599,17 +6689,23 @@
       task: null
     };
   }
-  __name(make2, "make");
+  __name(make4, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const obj = objs[0];
       switch (obj.type) {
         case "door":
         case "story":
+        case "footprint":
         case "commit":
+        case "coffee":
           return true;
-        default:
+        case "player":
+        case "wall":
+        case "boss":
           return false;
+        default:
+          assertUnreachable(obj);
       }
     } else {
       return true;
@@ -6632,7 +6728,17 @@
     map.remove(item);
     switch (item.type) {
       case "door":
+        break;
+      case "coffee":
+        break;
       case "commit":
+        if (player.task) {
+          const task = player.task;
+          switch (task.type) {
+            case "story":
+              task.appliedCommits += 1;
+          }
+        }
         break;
       case "story":
         player.task = {
@@ -6711,9 +6817,9 @@
           switch (obj.type) {
             case "door":
             case "commit":
+            case "coffee":
               if (canPickItem(player)) {
                 pickItem(player, obj, map);
-                result.codeBlocks += 1;
               }
               break;
             case "story":
@@ -6746,7 +6852,7 @@
   __name(tick3, "tick");
 
   // objects/story.ts
-  function make3(position, size) {
+  function make5(position, size) {
     return {
       type: "story",
       position,
@@ -6754,12 +6860,12 @@
       zIndex: 1
     };
   }
-  __name(make3, "make");
+  __name(make5, "make");
 
   // renderer.ts
   function render(game) {
     const map = game.map;
-    const buffer = [];
+    const buffer = [showMessage(game)];
     for (let y = 0; y < map.height; y++) {
       const row = [];
       for (let x = 0; x < map.width; x++) {
@@ -6775,6 +6881,20 @@
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
+  function showMessage(game) {
+    game.messageTact += 1;
+    let text = "";
+    if (game.messages.length > 0) {
+      text = game.messages[0].text;
+      if (game.messageTact > game.messages[0].ttl) {
+        game.messageTact = 0;
+        game.messages.pop();
+        text = "";
+      }
+    }
+    return text.split("");
+  }
+  __name(showMessage, "showMessage");
   function showTicks(game) {
     return game.score.ticks.toString().padStart(6, "0");
   }
@@ -6799,14 +6919,12 @@
       case "boss":
       case "wall":
       case "player":
-        return true;
-      case "footprint":
-        return false;
+      case "coffee":
+      case "story":
+      case "commit":
       case "door":
         return true;
-      case "story":
-        return true;
-      case "commit":
+      case "footprint":
         return true;
       default:
         assertUnreachable(obj);
@@ -6847,6 +6965,8 @@
           return "[";
         case "commit":
           return "\u03B5";
+        case "coffee":
+          return "c";
         case "story":
           switch (obj.size) {
             case 0 /* small */:
@@ -6893,8 +7013,29 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
+  // objects/coffee.ts
+  function make6(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make6, "make");
+
+  // objects/commit.ts
+  function make7(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1
+    };
+  }
+  __name(make7, "make");
+
   // objects/door.ts
-  function make4(position) {
+  function make8(position) {
     return {
       type: "door",
       position,
@@ -6902,33 +7043,32 @@
       open: false
     };
   }
-  __name(make4, "make");
-
-  // objects/commit.ts
-  function make5(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1
-    };
-  }
-  __name(make5, "make");
+  __name(make8, "make");
 
   // game/item_generator.ts
   function generateAnItem(game) {
     if (game.itemGenerator.tact > 100) {
       game.itemGenerator.tact = 0;
-      const aa = choice(["door", "commit"], [1, 9]);
+      const aa = choice(
+        ["door", "commit", "coffee"],
+        [1, 1, 100]
+      );
       let item;
       switch (aa) {
         case "door":
-          item = make4(game.map.getRandomEmptyLocation());
+          item = make8(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
         case "commit":
-          item = make5(game.map.getRandomEmptyLocation());
+          item = make7(game.map.getRandomEmptyLocation());
           game.map.add([item]);
           break;
+        case "coffee":
+          item = make6(game.map.getRandomEmptyLocation());
+          game.map.add([item]);
+          break;
+        default:
+          assertUnreachable(aa);
       }
     } else {
       game.itemGenerator.tact += 1;
@@ -6939,11 +7079,11 @@
 
   // game/sprint.ts
   function generateSprint(map) {
-    const small = make3(map.getRandomEmptyLocation(), 0 /* small */);
+    const small = make5(map.getRandomEmptyLocation(), 0 /* small */);
     map.add(small);
-    const medium = make3(map.getRandomEmptyLocation(), 1 /* medium */);
+    const medium = make5(map.getRandomEmptyLocation(), 1 /* medium */);
     map.add(medium);
-    const large = make3(map.getRandomEmptyLocation(), 2 /* large */);
+    const large = make5(map.getRandomEmptyLocation(), 2 /* large */);
     map.add(large);
   }
   __name(generateSprint, "generateSprint");
@@ -6953,23 +7093,8 @@
   var height = 25;
   var width = 80;
   function main() {
-    const boss = {
-      position: {
-        x: 0,
-        y: 0
-      },
-      type: "boss",
-      zIndex: 10,
-      state: { type: "stopped", previous_direction: null }
-      // tick: (objs: GameObject[]) => boss_move(),
-    };
-    const game = {
-      map: new GameMap(width, height, []),
-      commands: [],
-      itemGenerator: { tact: 0 },
-      score: score_exports.make(),
-      messages: []
-    };
+    const boss = make3();
+    let game = game_exports.make(width, height);
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
         position: point,
@@ -7000,18 +7125,20 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    game.player = make2(game.map.getRandomEmptyLocation());
+    game.player = make4(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
+    game_exports.message(game, "Welcome to the Rat Race", 30);
     window.setInterval(() => processTick(game), TICK_INTERVAL);
     window.addEventListener("keydown", (event) => {
+      console.log("keydown:", event.key);
       switch (event.key) {
         case "s":
-          save(game.map);
+          save2(game);
           break;
         case "l":
-          const loaded = load();
+          const loaded = load2();
           if (loaded != null) {
-            game.map = loaded;
+            game = loaded;
           }
         default:
           const command = getCommand(event.key);
@@ -7040,22 +7167,24 @@
     }
   }
   __name(getCommand, "getCommand");
-  function save(map) {
-    window.localStorage.setItem("map", JSON.stringify(map.toJson()));
+  var localStorage = {
+    save(json) {
+      window.localStorage.setItem("map", json);
+    },
+    load() {
+      const objectsStorage = window.localStorage.getItem("map");
+      return objectsStorage;
+    }
+  };
+  function save2(game) {
+    game_exports.save(game, localStorage);
     console.log("Game saved!");
   }
-  __name(save, "save");
-  function load() {
-    const objectsStorage = window.localStorage.getItem("map");
-    if (objectsStorage != null) {
-      const { width: width2, height: height2, objects } = JSON.parse(objectsStorage);
-      return new GameMap(width2, height2, objects);
-    } else {
-      console.log("There is no saved game.");
-      return null;
-    }
+  __name(save2, "save");
+  function load2() {
+    return game_exports.load(localStorage);
   }
-  __name(load, "load");
+  __name(load2, "load");
   function processTick(game) {
     game.score.ticks += 1;
     game.score.money += all2[game.score.level].rate;
@@ -7076,7 +7205,6 @@
     switch (obj.type) {
       case "boss":
         tick(obj, map);
-      case "wall":
         break;
       case "footprint":
         tick2(obj, map);
@@ -7086,6 +7214,8 @@
       case "door":
       case "story":
       case "commit":
+      case "coffee":
+      case "wall":
         break;
       default:
         assertUnreachable(obj);

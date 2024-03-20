@@ -4,6 +4,7 @@ import { Vector, Direction, moveBy } from "../geometry"
 import * as random from "../utils/random"
 import { GameObject, GameObjectType } from "../objects/object"
 import { check } from "../generator"
+import { Game } from "."
 
 export class GameMap {
     width: number
@@ -106,7 +107,10 @@ export class GameMap {
         }
     }
 
-    static fromJson(json: object) {}
+    static fromJson(json: object): GameMap {
+        const { width, height, objects } = json as any
+        return new GameMap(width, height, objects)
+    }
 }
 
 export function directionTo(

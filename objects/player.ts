@@ -15,7 +15,7 @@ interface StoryTask {
 
 type Task = StoryTask
 
-export interface Player {
+export interface t {
     type: "player"
     position: Vector.t
     direction: Direction.t | null
@@ -30,6 +30,7 @@ export interface Player {
     item: Item | null
 }
 
+export type Player = t
 export interface Result {
     codeBlocks: number
 }
@@ -54,10 +55,16 @@ function canMoveOn(objs: GameObject[]) {
         switch (obj.type) {
             case "door":
             case "story":
+            case "footprint":
             case "commit":
+            case "coffee":
                 return true
-            default:
+            case "player":
+            case "wall":
+            case "boss":
                 return false
+            default:
+                assertUnreachable(obj)
         }
     } else {
         return true
@@ -80,7 +87,17 @@ function pickItem(player: Player, item: Item, map: GameMap) {
     map.remove(item)
     switch (item.type) {
         case "door":
+            break
+        case "coffee":
+            break
         case "commit":
+            if (player.task) {
+                const task = player.task
+                switch (task.type) {
+                    case "story":
+                        task.appliedCommits += 1
+                }
+            }
             break
         case "story":
             player.task = {
@@ -167,9 +184,9 @@ export function tick(player: Player, map: GameMap, commands: Command[]): Result 
                 switch (obj.type) {
                     case "door":
                     case "commit":
+                    case "coffee":
                         if (canPickItem(player)) {
                             pickItem(player, obj, map)
-                            result.codeBlocks += 1
                         }
                         break
                     case "story":

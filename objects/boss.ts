@@ -12,14 +12,16 @@ type Instructing = { type: "instructing" }
 type Jumping = { type: "jumping"; direction: Direction.t; tact: number }
 type BossState = Stopped | Moving | Instructing | Jumping
 
-const TACTS_FOR_SINGLE_MOVE = 40
+const TACTS_FOR_SINGLE_MOVE = 1
 const TACTS_FOR_JUMP = 4 * TACTS_FOR_SINGLE_MOVE
-export interface Boss extends LiveObject {
+export interface t extends LiveObject {
     type: "boss"
     position: Vector.t
     state: BossState
     zIndex: number
 }
+
+export type Boss = t
 
 let BOSS_WEIGHTS = {
     turn: {
@@ -45,6 +47,18 @@ BOSS_WEIGHTS = {
     },
     back: 0.0000001,
     jump: 5.0,
+}
+
+export function make(): t {
+    return {
+        position: {
+            x: 0,
+            y: 0,
+        },
+        type: "boss",
+        zIndex: 10,
+        state: { type: "stopped", previous_direction: null },
+    }
 }
 
 export type MoveActions = {
@@ -107,6 +121,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             const directionToPlayer = GameMap.directionTo(boss.position, map, "player")
             if (directionToPlayer) {
                 const player = map.atObj(moveBy(boss.position, directionToPlayer), "player")!
+
                 if (player) pipPlayer(boss, player)
             }
 

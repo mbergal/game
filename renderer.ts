@@ -8,7 +8,7 @@ import { Size } from "./objects/story"
 
 export function render(game: Game.t) {
     const map = game.map
-    const buffer = []
+    const buffer = [showMessage(game)]
     for (let y = 0; y < map.height; y++) {
         const row = []
 
@@ -37,6 +37,21 @@ export function render(game: Game.t) {
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
+function showMessage(game: Game.t) {
+    game.messageTact += 1
+    let text = ""
+    if (game.messages.length > 0) {
+        text = game.messages[0].text
+        if (game.messageTact > game.messages[0].ttl) {
+            game.messageTact = 0
+            game.messages.pop()
+            text = ""
+        }
+    }
+
+    return text.split("")
+}
+
 function showTicks(game: Game.t): string {
     return game.score.ticks.toString().padStart(6, "0")
 }
@@ -61,14 +76,12 @@ function isVisible(obj: GameObject) {
         case "boss":
         case "wall":
         case "player":
-            return true
-        case "footprint":
-            return false
+        case "coffee":
+        case "story":
+        case "commit":
         case "door":
             return true
-        case "story":
-            return true
-        case "commit":
+        case "footprint":
             return true
         default:
             assertUnreachable(obj)
@@ -111,6 +124,8 @@ function getRepresentation(map: GameMap, objs: GameObject[], tick: number): stri
                 return "["
             case "commit":
                 return "ε"
+            case "coffee":
+                return "c"
             case "story":
                 switch (obj.size) {
                     case Size.small:
