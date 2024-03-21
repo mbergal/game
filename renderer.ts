@@ -4,11 +4,13 @@ import { GameObject } from "./objects/object"
 import { assertUnreachable } from "./utils/utils"
 import { Game } from "./game"
 import * as EngineeringLevel from "./game/levels"
+import * as Message from "./game/message"
 import { Size } from "./objects/story"
+import config from "./game/config"
 
 export function render(game: Game.t) {
     const map = game.map
-    const buffer = [showMessage(game)]
+    const buffer = [showMessage(game).split("")]
     for (let y = 0; y < map.height; y++) {
         const row = []
 
@@ -24,32 +26,39 @@ export function render(game: Game.t) {
         (
             showTicks(game) +
             showLevel(game) +
-            " $" +
+            "    FY Money: $" +
             game.score.money.toString().padStart(6, "0") +
             " " +
-            "*:" +
-            (game.player?.hrTaskTact ? "P" : "") +
+            // "*:" +
+            // (game.player?.hrTaskTact ? "P" : "") +
+            // " " +
+            showTask(game) +
             " " +
-            showTask(game)
+            showStockPrice(game)
         ).split("")
     )
     const contentBlock = document.getElementById("content")
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
-function showMessage(game: Game.t): string[] {
+export function showMessage(game: { messages: Message.t[]; messageTact: number }): string {
     if (game.messages.length > 0) {
         game.messageTact += 1
-        const text = game.messages[0].text
+        let text = game.messages[0].text
         if (game.messageTact > game.messages[0].ttl) {
             game.messageTact = 0
-            game.messages.pop()
+            game.messages.shift()
+        } else if (game.messageTact > 3 && game.messages.length > 1) {
+            game.messageTact = 0
+            game.messages.shift()
         } else {
-            return text.split("")
+            return text
         }
-    }
 
-    return []
+        return game.messages.length > 0 ? game.messages[0].text : ""
+    } else {
+        return ""
+    }
 }
 
 function showTicks(game: Game.t): string {
@@ -71,6 +80,9 @@ function showTask(game: Game.t): string {
     return ""
 }
 
+function showStockPrice(game: Game.t): string {
+    return `Company Stock Price: $${((config.totalTicks - game.score.ticks) / 100).toFixed(2)} ▼`
+}
 function isVisible(obj: GameObject) {
     switch (obj.type) {
         case "boss":

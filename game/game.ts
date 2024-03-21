@@ -1,17 +1,18 @@
 import { Command } from "../commands"
 import { ItemGenerator } from "../objects/item"
-import { GameObject } from "../objects/object"
 import * as Player from "../objects/player"
 import * as GameMap from "./map"
 import { Message } from "./message"
-export * as GameMap from "./map"
 import * as Score from "./score"
+import * as Sprint from "./sprint"
+export * as GameMap from "./map"
 export * as Score from "./score"
 
 export type t = {
     map: GameMap.GameMap
     score: Score.Score
     itemGenerator: ItemGenerator
+    sprint: Sprint.t
     commands: Command[]
     messages: Message[]
     messageTact: number
@@ -25,6 +26,7 @@ export function make(width: number, height: number): t {
         map: new GameMap.GameMap(width, height, []),
         commands: [],
         itemGenerator: { tact: 0 },
+        sprint: Sprint.make(),
         score: Score.make(),
         messages: [],
         messageTact: 0,
@@ -60,20 +62,16 @@ export function load(storage: GameStorage): Game | null {
     const objectsStorage = storage.load()
     if (objectsStorage != null) {
         const {
-            width,
-            height,
-            objects,
             commands,
             itemGenerator,
             score,
+            sprint,
             messages,
             messageTact,
             map,
         }: {
-            width: number
-            height: number
-            objects: GameObject[]
             score: Score.Score
+            sprint: Sprint.t
             commands: Command[]
             messages: Message[]
             messageTact: number
@@ -85,6 +83,7 @@ export function load(storage: GameStorage): Game | null {
         return {
             score: score,
             itemGenerator: itemGenerator,
+            sprint: sprint,
             messages: messages,
             messageTact: messageTact,
             commands: commands,

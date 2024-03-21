@@ -1,22 +1,20 @@
 import * as _ from "lodash"
 import { Command } from "./commands"
+import { Game } from "./game"
+import { GameStorage } from "./game/game"
+import { generateAnItem } from "./game/item_generator"
+import * as EngineeringLevels from "./game/levels"
+import * as Sprint from "./game/sprint"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
-import { GameMap } from "./game/map"
-import { Score } from "./game"
 import * as Boss from "./objects/boss"
-import * as EngineeringLevels from "./game/levels"
 import * as Footprint from "./objects/footprint"
 import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
-import { Game } from "./game"
-import { generateAnItem } from "./game/item_generator"
-import { generateSprint } from "./game/sprint"
-import { GameStorage } from "./game/game"
+import config from "./game/config"
 
-const TICK_INTERVAL = 100
 // class Game {
 //   tick(): void {
 //     for (const obj of this.objects) {
@@ -105,13 +103,34 @@ export function main() {
 
     game.map.add([game.player])
 
-    Game.message(game, { text: "Welcome to the Rat Race", ttl: 30 })
+    Game.message(game, {
+        text: "Welcome to the Rat Race. You are '*' - SE who needs to get FY money and get out",
+        ttl: 30,
+    })
 
-    window.setInterval(() => processTick(game), TICK_INTERVAL)
+    let interval = window.setInterval(() => processTick(game), config.tickInterval)
 
     window.addEventListener("keydown", (event) => {
         console.log("keydown:", event.key)
         switch (event.key) {
+            case "+":
+                config.tickInterval -= 5
+                window.clearInterval(interval)
+                interval = window.setInterval(() => processTick(game), config.tickInterval)
+                Game.message(game, { text: `Speed increased to ${config.tickInterval}`, ttl: 2 })
+                break
+            case "-":
+                config.tickInterval += 5
+                window.clearInterval(interval)
+                interval = window.setInterval(() => processTick(game), config.tickInterval)
+                Game.message(game, { text: "Speed decreased", ttl: 2 })
+                break
+            case "]":
+                game.score.level += 1
+                break
+            case "[":
+                game.score.level -= 1
+                break
             case "s":
                 save(game)
                 break
@@ -172,12 +191,11 @@ function processTick(game: Game.t) {
     game.score.ticks += 1
     game.score.money += EngineeringLevels.all[game.score.level].rate
     const item = generateAnItem(game)
+    Sprint.tick(game.sprint, game)
+
     for (const obj of game.map.objects) {
         const result = tick(obj, game, game.commands)
         game.score.codeBlocks += result.codeBlocks
-    }
-    if (game.score.ticks % 1000 == 1) {
-        generateSprint(game.map)
     }
     game.commands = []
     render(game)

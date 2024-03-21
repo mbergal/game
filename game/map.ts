@@ -69,7 +69,7 @@ export class GameMap {
             : []
     }
 
-    atObj<T extends GameObject["type"]>(v: Vector.t, type: T): (GameObject & { type: T }) | null {
+    objAt<T extends GameObject["type"]>(v: Vector.t, type: T): (GameObject & { type: T }) | null {
         const objs = this.at(v)
         const objOfType = objs.find((x) => x.type == type) ?? null
         return objOfType as (GameObject & { type: T }) | null

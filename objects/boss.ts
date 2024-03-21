@@ -119,7 +119,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             // First check if there is a player to instruct
             const directionToPlayer = GameMap.directionTo(boss.position, map, "player")
             if (directionToPlayer) {
-                const player = map.atObj(moveBy(boss.position, directionToPlayer), "player")!
+                const player = map.objAt(moveBy(boss.position, directionToPlayer), "player")!
 
                 if (player) pipPlayer(boss, player)
             }

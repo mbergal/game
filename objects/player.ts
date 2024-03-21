@@ -89,8 +89,8 @@ function canPickItem(player: Player) {
     return player.hrTaskTact == null
 }
 
-function pickItem(player: Player, item: Item, map: GameMap) {
-    map.remove(item)
+function pickItem(player: Player, item: Item, game: Game.t) {
+    game.map.remove(item)
     switch (item.type) {
         case "door":
             player.item = item
@@ -105,6 +105,8 @@ function pickItem(player: Player, item: Item, map: GameMap) {
                     case "story":
                         task.appliedCommits += 1
                         if (task.appliedCommits == task.neededCommits) {
+                            game.score.impact += task.impact
+                            player.task = null
                         }
                 }
             } else {
@@ -191,14 +193,14 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Result 
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
                             Game.message(game, { text: `Picked a ${obj.type}`, ttl: 40 })
-                            pickItem(player, obj, game.map)
+                            pickItem(player, obj, game)
                         }
                         break
                     case "commit":
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            Game.message(game, { text: `Picked a commit`, ttl: 40 })
-                            pickItem(player, obj, game.map)
+                            Game.message(game, { text: `Picked a commit ${obj.hash}`, ttl: 40 })
+                            pickItem(player, obj, game)
                         }
                         break
                     case "story":

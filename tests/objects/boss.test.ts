@@ -1,6 +1,6 @@
 import { test, expect } from "vitest"
-import { loadMap } from "./utils"
-import { possibleMoves } from "../objects/boss"
+import { loadMap } from "../utils"
+import { possibleMoves } from "../../objects/boss"
 
 test("possibleMoves", () => {
     const map = loadMap(`
@@ -9,7 +9,7 @@ test("possibleMoves", () => {
         ---------
         |   |   |
         ---- ----
-        |   |   |
+        |   |   |q
         ---------
         `)
 
