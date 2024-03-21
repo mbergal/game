@@ -1,5 +1,5 @@
 import { Command } from "../commands"
-import { ItemGenerator } from "../objects/item"
+import * as ItemGenerator from "../game/item_generator"
 import * as Player from "../objects/player"
 import * as GameMap from "./map"
 import { Message } from "./message"
@@ -11,7 +11,7 @@ export * as Score from "./score"
 export type t = {
     map: GameMap.GameMap
     score: Score.Score
-    itemGenerator: ItemGenerator
+    itemGenerator: ItemGenerator.t
     sprint: Sprint.t
     commands: Command[]
     messages: Message[]
@@ -25,7 +25,7 @@ export function make(width: number, height: number): t {
     return {
         map: new GameMap.GameMap(width, height, []),
         commands: [],
-        itemGenerator: { tact: 0 },
+        itemGenerator: ItemGenerator.make(),
         sprint: Sprint.make(),
         score: Score.make(),
         messages: [],
@@ -75,7 +75,7 @@ export function load(storage: GameStorage): Game | null {
             commands: Command[]
             messages: Message[]
             messageTact: number
-            itemGenerator: ItemGenerator
+            itemGenerator: ItemGenerator.t
             map: object
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)

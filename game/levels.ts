@@ -6,7 +6,7 @@ export type EngineeringLevel = {
 export const all: EngineeringLevel[] = [
     {
         name: "Engineer I",
-        rate: 15,
+        rate: 5,
     },
     {
         name: "Engineer II",

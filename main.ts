@@ -2,9 +2,9 @@ import * as _ from "lodash"
 import { Command } from "./commands"
 import { Game } from "./game"
 import { GameStorage } from "./game/game"
-import { generateAnItem } from "./game/item_generator"
 import * as EngineeringLevels from "./game/levels"
 import * as Sprint from "./game/sprint"
+import * as ItemGenerator from "./game/item_generator"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
@@ -14,40 +14,6 @@ import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
 import config from "./game/config"
-
-// class Game {
-//   tick(): void {
-//     for (const obj of this.objects) {
-//       obj.tick();
-//     }
-//   }
-//   objects: GameObject[];
-//   map: GameMap;
-// }
-
-// class GameMap {}
-
-// class GameObject {
-//   tick(): void {}
-// }
-
-// type Tick = () => void;
-
-// class Game {
-//   tick(): void {
-//     for (const object of this.objects) {
-//       object.tick();
-//     }
-//   }
-//   objects: GameObject[];
-//   map: GameMap;
-// }
-
-// class GameMap {}
-
-interface OutOfBounds {
-    type: "out_of_bounds"
-}
 
 const height = 25
 const width = 80
@@ -104,8 +70,8 @@ export function main() {
     game.map.add([game.player])
 
     Game.message(game, {
-        text: "Welcome to the Rat Race. You are '*' - SE who needs to get FY money and get out",
-        ttl: 30,
+        text: "Welcome to the Rat Race. You need to earn enough money and get out of the system",
+        ttl: 100,
     })
 
     let interval = window.setInterval(() => processTick(game), config.tickInterval)
@@ -190,7 +156,8 @@ export function load(): Game.t | null {
 function processTick(game: Game.t) {
     game.score.ticks += 1
     game.score.money += EngineeringLevels.all[game.score.level].rate
-    const item = generateAnItem(game)
+
+    ItemGenerator.tick(game.itemGenerator, game)
     Sprint.tick(game.sprint, game)
 
     for (const obj of game.map.objects) {

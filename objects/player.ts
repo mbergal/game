@@ -93,9 +93,8 @@ function pickItem(player: Player, item: Item, game: Game.t) {
     game.map.remove(item)
     switch (item.type) {
         case "door":
-            player.item = item
-            break
         case "coffee":
+            dropItemIfNeeded(player, game)
             player.item = item
             break
         case "commit":
@@ -110,6 +109,7 @@ function pickItem(player: Player, item: Item, game: Game.t) {
                         }
                 }
             } else {
+                dropItemIfNeeded(player, game)
                 player.item = item
             }
 
@@ -122,6 +122,18 @@ function pickItem(player: Player, item: Item, game: Game.t) {
     }
 }
 
+function dropItemIfNeeded(player: t, game: Game.t) {
+    if (player.item != null) {
+        // player.item.position = moveBy(
+        //     player.position,
+        //     Direction.reverse(player.direction!)
+        // )
+        player.item.position = player.position
+        player.item.open = true
+        game.map.add(player.item)
+        game.messages.push(Messages.itemDropped(player.item))
+    }
+}
 function tickHrTask(player: Player) {
     if (player.hrTaskTact != null) {
         player.hrTaskTact += 1

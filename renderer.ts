@@ -26,7 +26,7 @@ export function render(game: Game.t) {
         (
             showTicks(game) +
             showLevel(game) +
-            "    FY Money: $" +
+            "    Money: $" +
             game.score.money.toString().padStart(6, "0") +
             " " +
             // "*:" +

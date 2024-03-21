@@ -16,6 +16,7 @@ export type Config = {
         start: number
     }
     tickInterval: number
+    itemGenerator: { start: number; interval: number }
 }
 
 const config: Config = {
@@ -38,6 +39,7 @@ const config: Config = {
     performanceReview: {
         interval: 10,
     },
+    itemGenerator: { start: 0, interval: 40 },
 }
 
 export default config

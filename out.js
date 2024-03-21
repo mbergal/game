@@ -6401,18 +6401,61 @@
     GameMap: () => map_exports,
     Score: () => score_exports,
     load: () => load,
-    make: () => make4,
+    make: () => make8,
     message: () => message,
     save: () => save,
     toJson: () => toJson
   });
 
-  // objects/objects.ts
-  var import_lodash2 = __toESM(require_lodash());
-  function filter(objs, type) {
-    return import_lodash2.default.filter(objs, (x) => x.type == type);
+  // objects/coffee.ts
+  function make2(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
   }
-  __name(filter, "filter");
+  __name(make2, "make");
+
+  // objects/commit.ts
+  function make3(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false,
+      hash: generateId(8)
+    };
+  }
+  __name(make3, "make");
+  function byteToHex(byte) {
+    return ("0" + byte.toString(16)).slice(-2);
+  }
+  __name(byteToHex, "byteToHex");
+  function generateId(len = 40) {
+    var arr = new Uint8Array(len / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, byteToHex).join("");
+  }
+  __name(generateId, "generateId");
+
+  // objects/door.ts
+  function make4(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make4, "make");
+
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
 
   // objects/story_size.ts
   function toString(size) {
@@ -6426,17 +6469,6 @@
     }
   }
   __name(toString, "toString");
-
-  // objects/story.ts
-  function make2(position, size) {
-    return {
-      type: "story",
-      position,
-      size,
-      zIndex: 1
-    };
-  }
-  __name(make2, "make");
 
   // game/config.ts
   var config = {
@@ -6458,12 +6490,75 @@
     },
     performanceReview: {
       interval: 10
-    }
+    },
+    itemGenerator: { start: 0, interval: 40 }
   };
   var config_default = config;
 
+  // game/item_generator.ts
+  function make5() {
+    return { state: { type: "waiting", tact: 0 } };
+  }
+  __name(make5, "make");
+  function tick(itemGenerator, game) {
+    switch (itemGenerator.state.type) {
+      case "waiting":
+        if (itemGenerator.state.tact > config_default.itemGenerator.start)
+          itemGenerator.state = { type: "generating", tact: 0 };
+        else {
+          itemGenerator.state.tact += 1;
+        }
+      case "generating":
+        if (itemGenerator.state.tact > config_default.itemGenerator.interval) {
+          itemGenerator.state.tact = 0;
+          const aa = choice(
+            ["door", "commit", "coffee"],
+            [1, 100, 0]
+          );
+          let item;
+          switch (aa) {
+            case "door":
+              item = make4(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "commit":
+              item = make3(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "coffee":
+              item = make2(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            default:
+              assertUnreachable(aa);
+          }
+        } else {
+          itemGenerator.state.tact += 1;
+        }
+    }
+  }
+  __name(tick, "tick");
+
+  // objects/objects.ts
+  var import_lodash2 = __toESM(require_lodash());
+  function filter(objs, type) {
+    return import_lodash2.default.filter(objs, (x) => x.type == type);
+  }
+  __name(filter, "filter");
+
+  // objects/story.ts
+  function make6(position, size) {
+    return {
+      type: "story",
+      position,
+      size,
+      zIndex: 1
+    };
+  }
+  __name(make6, "make");
+
   // game/sprint.ts
-  function make3() {
+  function make7() {
     return {
       state: {
         type: "grooming",
@@ -6471,8 +6566,8 @@
       }
     };
   }
-  __name(make3, "make");
-  function tick(sprint, game) {
+  __name(make7, "make");
+  function tick2(sprint, game) {
     switch (sprint.state.type) {
       case "grooming":
         sprint.state.tact += 1;
@@ -6488,13 +6583,13 @@
         }
     }
   }
-  __name(tick, "tick");
+  __name(tick2, "tick");
   function startSprint(game) {
-    const small = make2(game.map.getRandomEmptyLocation(), 0 /* small */);
+    const small = make6(game.map.getRandomEmptyLocation(), 0 /* small */);
     game.map.add(small);
-    const medium = make2(game.map.getRandomEmptyLocation(), 1 /* medium */);
+    const medium = make6(game.map.getRandomEmptyLocation(), 1 /* medium */);
     game.map.add(medium);
-    const large = make2(game.map.getRandomEmptyLocation(), 2 /* large */);
+    const large = make6(game.map.getRandomEmptyLocation(), 2 /* large */);
     game.map.add(large);
     message(game, { text: "Sprint started!!!", ttl: 40 });
   }
@@ -6506,18 +6601,18 @@
   __name(endSprint, "endSprint");
 
   // game/game.ts
-  function make4(width2, height2) {
+  function make8(width2, height2) {
     return {
       map: new GameMap(width2, height2, []),
       commands: [],
-      itemGenerator: { tact: 0 },
-      sprint: make3(),
+      itemGenerator: make5(),
+      sprint: make7(),
       score: make(),
       messages: [],
       messageTact: 0
     };
   }
-  __name(make4, "make");
+  __name(make8, "make");
   function toJson(game) {
     return {
       map: game.map.toJson(),
@@ -6569,93 +6664,11 @@
   }
   __name(load, "load");
 
-  // objects/coffee.ts
-  function make5(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make5, "make");
-
-  // objects/commit.ts
-  function make6(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false,
-      hash: generateId(8)
-    };
-  }
-  __name(make6, "make");
-  function byteToHex(byte) {
-    return ("0" + byte.toString(16)).slice(-2);
-  }
-  __name(byteToHex, "byteToHex");
-  function generateId(len = 40) {
-    var arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, byteToHex).join("");
-  }
-  __name(generateId, "generateId");
-
-  // objects/door.ts
-  function make7(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make7, "make");
-
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
-
-  // game/item_generator.ts
-  function generateAnItem(game) {
-    if (game.itemGenerator.tact > 100) {
-      game.itemGenerator.tact = 0;
-      const aa = choice(
-        ["door", "commit", "coffee"],
-        [1, 100, 0]
-      );
-      let item;
-      switch (aa) {
-        case "door":
-          item = make7(game.map.getRandomEmptyLocation());
-          game.map.add([item]);
-          break;
-        case "commit":
-          item = make6(game.map.getRandomEmptyLocation());
-          game.map.add([item]);
-          break;
-        case "coffee":
-          item = make5(game.map.getRandomEmptyLocation());
-          game.map.add([item]);
-          break;
-        default:
-          assertUnreachable(aa);
-      }
-    } else {
-      game.itemGenerator.tact += 1;
-      return null;
-    }
-  }
-  __name(generateAnItem, "generateAnItem");
-
   // game/levels.ts
   var all2 = [
     {
       name: "Engineer I",
-      rate: 15
+      rate: 5
     },
     {
       name: "Engineer II",
@@ -6717,7 +6730,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make8() {
+  function make9() {
     return {
       position: {
         x: 0,
@@ -6728,7 +6741,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make8, "make");
+  __name(make9, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -6761,7 +6774,7 @@
     player.hrTaskTact = 0;
   }
   __name(pipPlayer, "pipPlayer");
-  function tick2(boss, map) {
+  function tick3(boss, map) {
     switch (boss.state.type) {
       case "instructing":
         break;
@@ -6844,7 +6857,7 @@
       }
     }
   }
-  __name(tick2, "tick");
+  __name(tick3, "tick");
   function choose_direction(pos, least_preferred, map) {
     const forks = map.possibleDirections(pos, "wall");
     const b = forks.filter((x) => x[0] != least_preferred);
@@ -6859,14 +6872,14 @@
 
   // objects/footprint.ts
   var LIFETIME = 1e3;
-  function tick3(obj, map) {
+  function tick4(obj, map) {
     if (obj.tact > LIFETIME) {
       map.remove([obj]);
     } else {
       obj.tact += 1;
     }
   }
-  __name(tick3, "tick");
+  __name(tick4, "tick");
 
   // objects/player.ts
   var import_lodash4 = __toESM(require_lodash());
@@ -6885,9 +6898,9 @@
   // objects/tasks/story.ts
   var story_exports2 = {};
   __export(story_exports2, {
-    make: () => make9
+    make: () => make10
   });
-  function make9(size) {
+  function make10(size) {
     return {
       type: "story",
       size,
@@ -6896,10 +6909,10 @@
       appliedCommits: 0
     };
   }
-  __name(make9, "make");
+  __name(make10, "make");
 
   // objects/player.ts
-  function make10(position) {
+  function make11(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6912,7 +6925,7 @@
       task: null
     };
   }
-  __name(make10, "make");
+  __name(make11, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -6963,9 +6976,8 @@
     game.map.remove(item);
     switch (item.type) {
       case "door":
-        player.item = item;
-        break;
       case "coffee":
+        dropItemIfNeeded(player, game);
         player.item = item;
         break;
       case "commit":
@@ -6980,6 +6992,7 @@
               }
           }
         } else {
+          dropItemIfNeeded(player, game);
           player.item = item;
         }
         break;
@@ -6991,6 +7004,15 @@
     }
   }
   __name(pickItem, "pickItem");
+  function dropItemIfNeeded(player, game) {
+    if (player.item != null) {
+      player.item.position = player.position;
+      player.item.open = true;
+      game.map.add(player.item);
+      game.messages.push((void 0)(player.item));
+    }
+  }
+  __name(dropItemIfNeeded, "dropItemIfNeeded");
   function tickHrTask(player) {
     if (player.hrTaskTact != null) {
       player.hrTaskTact += 1;
@@ -7039,7 +7061,7 @@
     }
   }
   __name(processCommands, "processCommands");
-  function tick4(player, game, commands) {
+  function tick5(player, game, commands) {
     tickHrTask(player);
     processCommands(player, commands, game.map);
     const result = {};
@@ -7087,7 +7109,7 @@
     }
     return result;
   }
-  __name(tick4, "tick");
+  __name(tick5, "tick");
 
   // renderer.ts
   function render(game) {
@@ -7102,7 +7124,7 @@
       buffer.push(row);
     }
     buffer.push(
-      (showTicks(game) + showLevel(game) + "    FY Money: $" + game.score.money.toString().padStart(6, "0") + " " + // "*:" +
+      (showTicks(game) + showLevel(game) + "    Money: $" + game.score.money.toString().padStart(6, "0") + " " + // "*:" +
       // (game.player?.hrTaskTact ? "P" : "") +
       // " " +
       showTask(game) + " " + showStockPrice(game)).split("")
@@ -7171,7 +7193,7 @@
     return true;
   }
   __name(isVisible, "isVisible");
-  function getRepresentation(map, objs, tick6) {
+  function getRepresentation(map, objs, tick7) {
     let obj = objs.find(isVisible);
     if (obj) {
       switch (obj.type) {
@@ -7183,7 +7205,7 @@
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return tick6 % 10 < 5 ? "*" : "@";
+            return tick7 % 10 < 5 ? "*" : "@";
           } else {
             if (obj.item != null) {
               const item = obj.item;
@@ -7260,7 +7282,7 @@
   var height = 25;
   var width = 80;
   function main() {
-    const boss = make8();
+    const boss = make9();
     let game = game_exports.make(width, height);
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
@@ -7292,11 +7314,11 @@
     game.map.add(room_walls);
     const room_doors = generateRoomDoors(game.map);
     game.map.add([boss]);
-    game.player = make10(game.map.getRandomEmptyLocation());
+    game.player = make11(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
-      text: "Welcome to the Rat Race. You are '*' - SE who needs to get FY money and get out",
-      ttl: 30
+      text: "Welcome to the Rat Race. You need to earn enough money and get out of the system",
+      ttl: 100
     });
     let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
     window.addEventListener("keydown", (event) => {
@@ -7376,27 +7398,27 @@
   function processTick(game) {
     game.score.ticks += 1;
     game.score.money += all2[game.score.level].rate;
-    const item = generateAnItem(game);
-    tick(game.sprint, game);
+    tick(game.itemGenerator, game);
+    tick2(game.sprint, game);
     for (const obj of game.map.objects) {
-      const result = tick5(obj, game, game.commands);
+      const result = tick6(obj, game, game.commands);
       game.score.codeBlocks += result.codeBlocks;
     }
     game.commands = [];
     render(game);
   }
   __name(processTick, "processTick");
-  function tick5(obj, game, commands) {
+  function tick6(obj, game, commands) {
     let result = { codeBlocks: 0 };
     switch (obj.type) {
       case "boss":
-        tick2(obj, game.map);
-        break;
-      case "footprint":
         tick3(obj, game.map);
         break;
+      case "footprint":
+        tick4(obj, game.map);
+        break;
       case "player":
-        tick4(obj, game, commands);
+        tick5(obj, game, commands);
       case "door":
       case "story":
       case "commit":
@@ -7408,7 +7430,7 @@
     }
     return result;
   }
-  __name(tick5, "tick");
+  __name(tick6, "tick");
   main();
 })();
 /*! Bundled license information:
