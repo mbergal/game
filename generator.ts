@@ -21,10 +21,10 @@ export function generateRoomWalls(args: {
             _.flatMap(
                 check(
                     () =>
-                        random.getInts(
+                        random.ints(
                             0,
                             args.width,
-                            random.getInt(args.wallsPerRow.min, args.wallsPerRow.max)
+                            random.int(args.wallsPerRow.min, args.wallsPerRow.max)
                         ),
                     (x) => proper_distance(x.concat([0, args.width]))
                 ).map((x) => vline({ x, y }, 1))
@@ -55,7 +55,7 @@ function desiredNumOfDoors(room: Room.Room) {
     ]
     const min_max = _.find(a, (x) => x[0] > room.length)!
 
-    return random.getInt(min_max[1], min_max[2])
+    return random.int(min_max[1], min_max[2])
 }
 
 function noWalls(map: GameMap, xs: number[], y: number): boolean {
@@ -73,7 +73,7 @@ function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
         const num_of_lower = desiredNumOfDoors(room) / 2 - Room.lowerDoors(room)
 
         const xx = check(
-            () => random.getInts(room.position.x, room.position.x + room.length, num_of_lower),
+            () => random.ints(room.position.x, room.position.x + room.length, num_of_lower),
             (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
         )
 

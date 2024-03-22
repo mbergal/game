@@ -1,12 +1,18 @@
 import * as _ from "lodash"
 import { assert } from "./assert"
 
-export function getInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min)) + min
+let rng = Math.random
+
+export function setRng(g: () => number) {
+    rng = g
 }
 
-export function getInts(min: number, max: number, num_of_ints: number): number[] {
-    return _.range(num_of_ints).map((i: number) => getInt(min, max))
+export function int(min: number, max: number): number {
+    return Math.floor(rng() * (max - min)) + min
+}
+
+export function ints(min: number, max: number, num_of_ints: number): number[] {
+    return _.range(num_of_ints).map((i: number) => int(min, max))
 }
 
 export function choice<T>(choices: T[], weights: number[] | null = null): T {

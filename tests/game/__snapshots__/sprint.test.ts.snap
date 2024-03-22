@@ -1,0 +1,173 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`a 1`] = `
+{
+  "   0": [
+    {
+      "type": "sprintStart",
+    },
+    {
+      "type": "groomBacklogStart",
+    },
+    {
+      "size": 0,
+      "type": "createBacklogIssue",
+    },
+  ],
+  "  17": [
+    {
+      "size": 0,
+      "type": "createBacklogIssue",
+    },
+  ],
+  "  33": [
+    {
+      "size": 0,
+      "type": "createBacklogIssue",
+    },
+  ],
+  "  50": [
+    {
+      "size": 1,
+      "type": "createBacklogIssue",
+    },
+  ],
+  "  67": [
+    {
+      "size": 1,
+      "type": "createBacklogIssue",
+    },
+  ],
+  "  83": [
+    {
+      "size": 2,
+      "type": "createBacklogIssue",
+    },
+  ],
+  " 100": [
+    {
+      "day": 1,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 182": [
+    {
+      "type": "groomBacklogEnd",
+    },
+  ],
+  " 199": [
+    {
+      "day": 1,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 200": [
+    {
+      "day": 2,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 299": [
+    {
+      "day": 2,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 300": [
+    {
+      "day": 3,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 399": [
+    {
+      "day": 3,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 400": [
+    {
+      "day": 4,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 499": [
+    {
+      "day": 4,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 500": [
+    {
+      "type": "sprintEnd",
+    },
+    {
+      "type": "weekendStart",
+    },
+  ],
+  " 701": [
+    {
+      "type": "weekendEnd",
+    },
+    {
+      "day": 5,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 800": [
+    {
+      "day": 5,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 801": [
+    {
+      "day": 6,
+      "type": "sprintDayStart",
+    },
+  ],
+  " 900": [
+    {
+      "day": 6,
+      "type": "sprintDayEnd",
+    },
+  ],
+  " 901": [
+    {
+      "day": 7,
+      "type": "sprintDayStart",
+    },
+  ],
+  "1000": [
+    {
+      "day": 7,
+      "type": "sprintDayEnd",
+    },
+  ],
+  "1001": [
+    {
+      "day": 8,
+      "type": "sprintDayStart",
+    },
+  ],
+  "1100": [
+    {
+      "day": 8,
+      "type": "sprintDayEnd",
+    },
+  ],
+  "1101": [
+    {
+      "type": "sprintEnd",
+    },
+    {
+      "type": "weekendStart",
+    },
+  ],
+  "1302": [
+    {
+      "type": "weekendEnd",
+    },
+  ],
+}
+`;

@@ -62,7 +62,7 @@ export function main() {
 
     game.map.add(room_walls)
 
-    const room_doors = generateRoomDoors(game.map)
+    generateRoomDoors(game.map)
     game.map.add([boss])
 
     game.player = Player.make(game.map.getRandomEmptyLocation())
@@ -100,16 +100,21 @@ export function main() {
             case "s":
                 save(game)
                 break
-            case "l":
+            case "l": {
                 const loaded = load()
                 if (loaded != null) {
                     game = loaded
                 }
-            default:
+                break
+            }
+
+            default: {
                 const command = getCommand(event.key)
                 if (command != null) {
                     game.commands.push(command)
                 }
+                break
+            }
         }
     })
 
@@ -154,11 +159,19 @@ export function load(): Game.t | null {
 }
 
 function processTick(game: Game.t) {
-    game.score.ticks += 1
+    game.ticks += 1
     game.score.money += EngineeringLevels.all[game.score.level].rate
 
     ItemGenerator.tick(game.itemGenerator, game)
-    Sprint.tick(game.sprint, game)
+    /*eslint no-unused-expressions: "error"*/
+
+    if (config.sprint.startDay * config.dayTicks <= game.ticks && !game.sprint) {
+        game.sprint = Sprint.make(game.ticks)
+    }
+
+    if (game.sprint) {
+        Game.handleEffects(game, Sprint.tick(game.sprint, game))
+    }
 
     for (const obj of game.map.objects) {
         const result = tick(obj, game, game.commands)

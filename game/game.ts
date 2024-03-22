@@ -16,7 +16,7 @@ export type t = {
     score: Score.Score
     ticks: number
     itemGenerator: ItemGenerator.t
-    sprint: Sprint.t
+    sprint: Sprint.t | null
     commands: Command[]
     messages: Message[]
     messageTact: number
@@ -30,7 +30,7 @@ export function make(width: number, height: number): t {
         map: new GameMap.GameMap(width, height, []),
         commands: [],
         itemGenerator: ItemGenerator.make(),
-        sprint: Sprint.make(),
+        sprint: null,
         score: Score.make(),
         messages: [],
         messageTact: 0,

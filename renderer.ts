@@ -16,7 +16,7 @@ export function render(game: Game.t) {
 
         for (let x = 0; x < map.width; x++) {
             const objs = map.cells[y][x]
-            row.push(getRepresentation(map, objs, game.score.ticks))
+            row.push(getRepresentation(map, objs, game.ticks))
         }
 
         buffer.push(row)
@@ -48,7 +48,7 @@ export function showMessage(game: { messages: Message.t[]; messageTact: number }
         if (game.messageTact > game.messages[0].ttl) {
             game.messageTact = 0
             game.messages.shift()
-        } else if (game.messageTact > 3 && game.messages.length > 1) {
+        } else if (game.messageTact > 5 && game.messages.length > 1) {
             game.messageTact = 0
             game.messages.shift()
         } else {
@@ -62,7 +62,7 @@ export function showMessage(game: { messages: Message.t[]; messageTact: number }
 }
 
 function showTicks(game: Game.t): string {
-    return game.score.ticks.toString().padStart(6, "0")
+    return game.ticks.toString().padStart(6, "0")
 }
 
 function showLevel(game: Game.t): string {
@@ -81,7 +81,7 @@ function showTask(game: Game.t): string {
 }
 
 function showStockPrice(game: Game.t): string {
-    return `Company Stock Price: $${((config.totalTicks - game.score.ticks) / 100).toFixed(2)} ▼`
+    return `Company Stock Price: $${((config.totalTicks - game.ticks) / 100).toFixed(2)} ▼`
 }
 function isVisible(obj: GameObject) {
     switch (obj.type) {

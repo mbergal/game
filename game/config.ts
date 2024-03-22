@@ -1,7 +1,5 @@
 import * as StorySize from "../objects/story_size"
 
-export type SprintScheduleDay = "weekend" | "working" | "grooming"
-
 export type Config = {
     boss: {
         TACTS_FOR_SINGLE_MOVE: number
@@ -14,7 +12,6 @@ export type Config = {
         interval: number
     }
     sprint: {
-        schedule: SprintScheduleDay[]
         startDay: number
     }
     tickInterval: number
@@ -27,7 +24,7 @@ const config: Config = {
         TACTS_FOR_JUMP: 3,
         TACTS_FOR_SINGLE_MOVE: 4 * 3,
     },
-    dayTicks: 30,
+    dayTicks: 100,
     story: {
         [StorySize.Size.small]: { neededCommits: 2, impact: 1 },
         [StorySize.Size.medium]: { neededCommits: 5, impact: 2 },
@@ -35,23 +32,7 @@ const config: Config = {
     },
     totalTicks: 10000,
     sprint: {
-        schedule: [
-            "grooming",
-            "working",
-            "working",
-            "working",
-            "working",
-            "weekend",
-            "weekend",
-            "working",
-            "working",
-            "working",
-            "working",
-            "working",
-            "weekend",
-            "weekend",
-        ],
-        startDay: 2,
+        startDay: 0,
     },
     performanceReview: {
         interval: 10,

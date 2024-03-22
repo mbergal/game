@@ -4,6 +4,3 @@ export interface t {
     open: boolean
 }
 
-export interface ItemGenerator {
-    tact: number
-}

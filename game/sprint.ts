@@ -1,3 +1,4 @@
+import _ from "lodash"
 import * as GameObjects from "../objects/objects"
 import * as Story from "../objects/story"
 import { assertUnreachable } from "../utils/utils"
@@ -5,116 +6,169 @@ import config from "./config"
 import { Effect, showMessage } from "./effects"
 import * as Game from "./game"
 import * as GameMap from "./map"
+import * as random from "../utils/random"
+import * as StorySize from "../objects/story_size"
 
-type _State = { enter: boolean }
+type SprintStart = {
+    type: "sprintStart"
+}
 
-type Sprinting = {
-    type: "sprinting"
-    tact: number
-} & _State
+type SprintEnd = {
+    type: "sprintEnd"
+}
 
-type Grooming = {
-    type: "grooming"
-    tact: number
-} & _State
+type GroomBacklogStart = {
+    type: "groomBacklogStart"
+}
 
-type State = Sprinting | Grooming
+type CreateBacklogIssue = { type: "createBacklogIssue"; size: StorySize.Size }
+
+type GroomBacklogEnd = {
+    type: "groomBacklogEnd"
+}
+
+type SprintDayStart = {
+    type: "sprintDayStart"
+    day: number
+}
+
+type SprintDayEnd = {
+    type: "sprintDayEnd"
+    day: number
+}
+
+type WeekendStart = {
+    type: "weekendStart"
+}
+type WeekendEnd = {
+    type: "weekendEnd"
+}
+
+type Event =
+    | SprintStart
+    | SprintEnd
+    | WeekendEnd
+    | WeekendStart
+    | GroomBacklogStart
+    | GroomBacklogEnd
+    | SprintDayStart
+    | SprintDayEnd
+    | CreateBacklogIssue
+
+type Plan = Record<number, Event[]>
 
 export interface t {
-    state: State
+    plan: Plan
     day: number
 }
 
 export interface Sprint extends t {}
 
-export function make(): t {
+export function make(startTick: number): t {
     return {
         day: 0,
-        state: {
-            type: "grooming",
-            tact: 0,
-            enter: true,
-        },
+        plan: generatePlan(startTick),
     }
 }
 
+export function generatePlan(startTick: number): Record<number, Event[]> {
+    const DAY = config.dayTicks
+    const plan: Record<number, Event[]> = {}
+
+    const addEvent = (event: Event) => {
+        if (plan[startTick] == null) plan[startTick] = []
+        plan[startTick].push(event)
+    }
+
+    addEvent({ type: "sprintStart" })
+    addEvent({ type: "groomBacklogStart" })
+
+    const storySizes = [
+        StorySize.Size.small,
+        StorySize.Size.small,
+        StorySize.Size.small,
+        StorySize.Size.medium,
+        StorySize.Size.medium,
+        StorySize.Size.large,
+    ]
+
+    const times = storySizes.map((x, i) => [x, Math.round((DAY / storySizes.length) * i)])
+
+    const groomingStart = startTick
+    for (const t of times) {
+        startTick = groomingStart + t[1]
+        addEvent({ type: "createBacklogIssue", size: t[0] })
+    }
+
+    startTick += DAY - 1
+    addEvent({ type: "groomBacklogEnd" })
+    startTick = DAY
+
+    let sprintDay = 0
+    for (const i of _.range(4)) {
+        sprintDay += 1
+        addEvent({ type: "sprintDayStart", day: sprintDay })
+        startTick += DAY - 1
+        addEvent({ type: "sprintDayEnd", day: sprintDay })
+        startTick += 1
+    }
+    addEvent({ type: "sprintEnd" })
+
+    addEvent({ type: "weekendStart" })
+    startTick += 2 * DAY + 1
+    addEvent({ type: "weekendEnd" })
+
+    for (const i of _.range(4)) {
+        sprintDay += 1
+        addEvent({ type: "sprintDayStart", day: sprintDay })
+        startTick += DAY - 1
+        addEvent({ type: "sprintDayEnd", day: sprintDay })
+        startTick += 1
+    }
+    addEvent({ type: "sprintEnd" })
+
+    addEvent({ type: "weekendStart" })
+    startTick += 2 * DAY + 1
+    addEvent({ type: "weekendEnd" })
+
+    return plan
+}
+
 export function* tick(sprint: t, game: { map: GameMap.GameMap; ticks: number }): Generator<Effect> {
-    const go = (state: State["type"]) => (sprint.state = { type: state, tact: 0, enter: true })
-    sprint.state.tact += 1
-    const day = Math.floor(game.ticks / config.dayTicks) % config.sprint.schedule.length
-    const sprintDay = Math.floor(game.ticks / config.dayTicks)
-    const dayType = config.sprint.schedule[day % config.sprint.schedule.length]
-    const isNewDay = sprint.day != day
+    const events = sprint.plan[game.ticks]
+    if (events) {
+        for (const event of events) {
+            switch (event.type) {
+                case "createBacklogIssue":
+                    const small = Story.make(game.map.getRandomEmptyLocation(), event.size)
+                    game.map.add(small)
 
-    start: while (true)
-        try {
-            switch (sprint.state.type) {
-                case "grooming": {
-                    if (sprint.state.enter) {
-                        debugger
-                        for (const effect of startSprint(game.map)) yield effect
-                    }
-                    switch (dayType) {
-                        case "grooming":
-                            break
-                        case "weekend":
-                        case "working":
-                            go("sprinting")
-                            continue start
-                        default:
-                            assertUnreachable(dayType)
-                    }
-                    sprint.state.enter = false
+                    yield showMessage(
+                        `Added ${StorySize.toString(event.size)} story to "To Do"`,
+                        10
+                    )
                     break
-                }
-                case "sprinting":
-                    switch (dayType) {
-                        case "grooming":
-                            for (const effect of endSprint(game.map)) yield effect
-                            debugger
-
-                            go("grooming")
-                            break
-                        case "weekend":
-                            if (isNewDay) {
-                                yield showMessage(`Weekend! Let's get some rest!`, 50)
-                            }
-                            sprint.state.enter = false
-                            break
-                        case "working":
-                            if (isNewDay) {
-                                yield showMessage(`Sprint day ${day} :(`, 50)
-                            }
-                            sprint.state.enter = false
-                            break
-                        default:
-                            assertUnreachable(dayType)
-                    }
-
+                case "groomBacklogEnd":
+                    break
+                case "groomBacklogStart":
+                    yield showMessage("Grooming backlog ...", 40)
+                    break
+                case "sprintDayEnd":
+                case "sprintDayStart":
+                    yield showMessage(`Sprint day ${event.day}`, 20)
+                    break
+                case "sprintEnd":
+                    yield showMessage("Sprint ended", 49)
+                    const stories = GameObjects.filter(game.map.objects, "story")
+                    game.map.remove(stories)
+                    break
+                case "sprintStart":
+                case "weekendEnd":
+                case "weekendStart":
                     break
                 default:
-                    assertUnreachable(sprint.state)
+                    assertUnreachable(event)
             }
-            return
-        } finally {
-            sprint.day = day
         }
-}
-
-function* startSprint(map: GameMap.GameMap): Generator<Effect> {
-    const small = Story.make(map.getRandomEmptyLocation(), Story.Size.small)
-    map.add(small)
-    const medium = Story.make(map.getRandomEmptyLocation(), Story.Size.medium)
-    map.add(medium)
-    const large = Story.make(map.getRandomEmptyLocation(), Story.Size.large)
-    map.add(large)
-
-    yield showMessage("Grooming backlog ...", 40)
-}
-
-function* endSprint(map: GameMap.GameMap): Generator<Effect> {
-    yield showMessage("Sprint ended", 20)
-
-    const stories = GameObjects.filter(map.objects, "story")
-    map.remove(stories)
+    }
 }

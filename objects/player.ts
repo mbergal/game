@@ -89,13 +89,13 @@ function canPickItem(player: Player) {
     return player.hrTaskTact == null
 }
 
-function pickItem(player: Player, item: Item, game: Game.t) {
-    game.map.remove(item)
-    switch (item.type) {
+function pickItem(player: Player, newItem: Item, game: Game.t) {
+    game.map.remove(newItem)
+    switch (newItem.type) {
         case "door":
         case "coffee":
-            dropItemIfNeeded(player, game)
-            player.item = item
+            dropCarriedItem(player, game)
+            player.item = newItem
             break
         case "commit":
             if (player.task) {
@@ -109,31 +109,30 @@ function pickItem(player: Player, item: Item, game: Game.t) {
                         }
                 }
             } else {
-                dropItemIfNeeded(player, game)
-                player.item = item
+                dropCarriedItem(player, game)
+                player.item = newItem
             }
 
             break
         case "story":
-            player.task = StoryTask.make(item.size)
+            player.task = StoryTask.make(newItem.size)
             break
         default:
-            assertUnreachable(item)
+            assertUnreachable(newItem)
     }
 }
 
-function dropItemIfNeeded(player: t, game: Game.t) {
-    if (player.item != null) {
+function dropCarriedItem(player: t, game: Game.t) {
+    const carriedItem = player.item
+    if (carriedItem != null) {
         // player.item.position = moveBy(
         //     player.position,
         //     Direction.reverse(player.direction!)
         // )
-        player.item.position = player.position
-        player.item.open = true
-        game.map.add(player.item)
-        game.messages.push(Messages.itemDropped(player.item))
+        dropItem(player, game.map)
     }
 }
+
 function tickHrTask(player: Player) {
     if (player.hrTaskTact != null) {
         player.hrTaskTact += 1
@@ -145,13 +144,18 @@ function tickHrTask(player: Player) {
 
 function handleDrop(player: Player, map: GameMap) {
     if (player.item != null) {
-        const droppingItem = player.item
-        droppingItem.open = true
-        droppingItem.position = player.position
-        map.add(droppingItem)
-        player.item = null
+        dropItem(player, map)
     }
 }
+
+function dropItem(player: Player, map: GameMap) {
+    const droppingItem = player.item!
+    droppingItem.open = true
+    droppingItem.position = player.position
+    map.add(droppingItem)
+    player.item = null
+}
+
 function processCommands(player: Player, commands: Command[], map: GameMap) {
     // const moveCommands = commands.filter(isMoveCommand)
     // const otherCommands = commands.filter((x) => !isMoveCommand(x))

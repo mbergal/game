@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _8.defaults(root.Object(), context, _8.pick(root, contextProps));
+          context = context == null ? root : _9.defaults(root.Object(), context, _9.pick(root, contextProps));
           var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -5985,24 +5985,24 @@
           }
           return lodash;
         }, "runInContext");
-        var _8 = runInContext();
+        var _9 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _8;
+          root._ = _9;
           define(function() {
-            return _8;
+            return _9;
           });
         } else if (freeModule) {
-          (freeModule.exports = _8)._ = _8;
-          freeExports._ = _8;
+          (freeModule.exports = _9)._ = _9;
+          freeExports._ = _9;
         } else {
-          root._ = _8;
+          root._ = _9;
         }
       }).call(exports);
     }
   });
 
   // main.ts
-  var _7 = __toESM(require_lodash());
+  var _8 = __toESM(require_lodash());
 
   // game/map.ts
   var map_exports = {};
@@ -6101,14 +6101,15 @@
   __name(assert, "assert");
 
   // utils/random.ts
-  function getInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+  var rng = Math.random;
+  function int(min, max) {
+    return Math.floor(rng() * (max - min)) + min;
   }
-  __name(getInt, "getInt");
-  function getInts(min, max, num_of_ints) {
-    return _.range(num_of_ints).map((i) => getInt(min, max));
+  __name(int, "int");
+  function ints(min, max, num_of_ints) {
+    return _.range(num_of_ints).map((i) => int(min, max));
   }
-  __name(getInts, "getInts");
+  __name(ints, "ints");
   function choice(choices, weights = null) {
     assert(weights == null || choices.length == weights?.length);
     weights = weights ?? _.range(choices.length).map((x) => 1);
@@ -6152,10 +6153,10 @@
       import_lodash.default.range(3, args.height - 2, 2).map(
         (y) => import_lodash.default.flatMap(
           check(
-            () => getInts(
+            () => ints(
               0,
               args.width,
-              getInt(args.wallsPerRow.min, args.wallsPerRow.max)
+              int(args.wallsPerRow.min, args.wallsPerRow.max)
             ),
             (x) => proper_distance(x.concat([0, args.width]))
           ).map((x) => vline({ x, y }, 1))
@@ -6184,7 +6185,7 @@
       [100, 2, 5]
     ];
     const min_max = import_lodash.default.find(a, (x) => x[0] > room.length);
-    return getInt(min_max[1], min_max[2]);
+    return int(min_max[1], min_max[2]);
   }
   __name(desiredNumOfDoors, "desiredNumOfDoors");
   function noWalls(map, xs, y) {
@@ -6201,7 +6202,7 @@
       const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
       const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
       const xx = check(
-        () => getInts(room.position.x, room.position.x + room.length, num_of_lower),
+        () => ints(room.position.x, room.position.x + room.length, num_of_lower),
         (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
       );
       room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
@@ -6309,7 +6310,7 @@
     }
     getRandomEmptyLocation() {
       const [x, y] = check(
-        () => [getInt(0, this.width), getInt(0, this.height)],
+        () => [int(0, this.width), int(0, this.height)],
         ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
       );
       return { x, y };
@@ -6386,7 +6387,6 @@
   });
   function make() {
     return {
-      ticks: 0,
       codeBlocks: 0,
       money: 0,
       level: 0,
@@ -6400,8 +6400,9 @@
   __export(game_exports, {
     GameMap: () => map_exports,
     Score: () => score_exports,
+    handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make8,
+    make: () => make6,
     message: () => message,
     save: () => save,
     toJson: () => toJson
@@ -6477,6 +6478,7 @@
       TACTS_FOR_JUMP: 3,
       TACTS_FOR_SINGLE_MOVE: 4 * 3
     },
+    dayTicks: 100,
     story: {
       [0 /* small */]: { neededCommits: 2, impact: 1 },
       [1 /* medium */]: { neededCommits: 5, impact: 2 },
@@ -6484,9 +6486,7 @@
     },
     totalTicks: 1e4,
     sprint: {
-      interval: 300,
-      grooming: 50,
-      start: 300
+      startDay: 0
     },
     performanceReview: {
       interval: 10
@@ -6539,80 +6539,20 @@
   }
   __name(tick, "tick");
 
-  // objects/objects.ts
-  var import_lodash2 = __toESM(require_lodash());
-  function filter(objs, type) {
-    return import_lodash2.default.filter(objs, (x) => x.type == type);
-  }
-  __name(filter, "filter");
-
-  // objects/story.ts
-  function make6(position, size) {
-    return {
-      type: "story",
-      position,
-      size,
-      zIndex: 1
-    };
-  }
-  __name(make6, "make");
-
-  // game/sprint.ts
-  function make7() {
-    return {
-      state: {
-        type: "grooming",
-        tact: 0
-      }
-    };
-  }
-  __name(make7, "make");
-  function tick2(sprint, game) {
-    switch (sprint.state.type) {
-      case "grooming":
-        sprint.state.tact += 1;
-        if (sprint.state.tact > config_default.sprint.grooming) {
-          startSprint(game);
-          sprint.state = { type: "inprocess", tact: 0 };
-        }
-      case "inprocess":
-        sprint.state.tact += 1;
-        if (sprint.state.tact > config_default.sprint.interval) {
-          endSprint(game.map);
-          sprint.state = { type: "grooming", tact: 0 };
-        }
-    }
-  }
-  __name(tick2, "tick");
-  function startSprint(game) {
-    const small = make6(game.map.getRandomEmptyLocation(), 0 /* small */);
-    game.map.add(small);
-    const medium = make6(game.map.getRandomEmptyLocation(), 1 /* medium */);
-    game.map.add(medium);
-    const large = make6(game.map.getRandomEmptyLocation(), 2 /* large */);
-    game.map.add(large);
-    message(game, { text: "Sprint started!!!", ttl: 40 });
-  }
-  __name(startSprint, "startSprint");
-  function endSprint(map) {
-    const stories2 = filter(map.objects, "story");
-    map.remove(stories2);
-  }
-  __name(endSprint, "endSprint");
-
   // game/game.ts
-  function make8(width2, height2) {
+  function make6(width2, height2) {
     return {
       map: new GameMap(width2, height2, []),
       commands: [],
       itemGenerator: make5(),
-      sprint: make7(),
+      sprint: null,
       score: make(),
       messages: [],
-      messageTact: 0
+      messageTact: 0,
+      ticks: 0
     };
   }
-  __name(make8, "make");
+  __name(make6, "make");
   function toJson(game) {
     return {
       map: game.map.toJson(),
@@ -6624,6 +6564,21 @@
     };
   }
   __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          1;
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
   function message(game, m) {
     game.messages.push(m);
   }
@@ -6643,11 +6598,13 @@
         sprint,
         messages,
         messageTact,
-        map
+        map,
+        ticks
       } = JSON.parse(objectsStorage);
       const map_ = GameMap.fromJson(map);
       const player = map_.objects.find((x) => x.type === "player");
       return {
+        ticks,
         score,
         itemGenerator,
         sprint,
@@ -6704,8 +6661,135 @@
     }
   ];
 
-  // objects/boss.ts
+  // game/sprint.ts
   var import_lodash3 = __toESM(require_lodash());
+
+  // objects/objects.ts
+  var import_lodash2 = __toESM(require_lodash());
+  function filter(objs, type) {
+    return import_lodash2.default.filter(objs, (x) => x.type == type);
+  }
+  __name(filter, "filter");
+
+  // objects/story.ts
+  function make7(position, size) {
+    return {
+      type: "story",
+      position,
+      size,
+      zIndex: 1
+    };
+  }
+  __name(make7, "make");
+
+  // game/effects.ts
+  function showMessage(text, ttl) {
+    return { type: "showMessage", message: { text, ttl } };
+  }
+  __name(showMessage, "showMessage");
+
+  // game/sprint.ts
+  function make8(startTick) {
+    return {
+      day: 0,
+      plan: generatePlan(startTick)
+    };
+  }
+  __name(make8, "make");
+  function generatePlan(startTick) {
+    const DAY = config_default.dayTicks;
+    const plan = {};
+    const addEvent = /* @__PURE__ */ __name((event) => {
+      if (plan[startTick] == null)
+        plan[startTick] = [];
+      plan[startTick].push(event);
+    }, "addEvent");
+    addEvent({ type: "sprintStart" });
+    addEvent({ type: "groomBacklogStart" });
+    const storySizes = [
+      0 /* small */,
+      0 /* small */,
+      0 /* small */,
+      1 /* medium */,
+      1 /* medium */,
+      2 /* large */
+    ];
+    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
+    const groomingStart = startTick;
+    for (const t of times) {
+      startTick = groomingStart + t[1];
+      addEvent({ type: "createBacklogIssue", size: t[0] });
+    }
+    startTick += DAY - 1;
+    addEvent({ type: "groomBacklogEnd" });
+    startTick = DAY;
+    let sprintDay = 0;
+    for (const i of import_lodash3.default.range(4)) {
+      sprintDay += 1;
+      addEvent({ type: "sprintDayStart", day: sprintDay });
+      startTick += DAY - 1;
+      addEvent({ type: "sprintDayEnd", day: sprintDay });
+      startTick += 1;
+    }
+    addEvent({ type: "sprintEnd" });
+    addEvent({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent({ type: "weekendEnd" });
+    for (const i of import_lodash3.default.range(4)) {
+      sprintDay += 1;
+      addEvent({ type: "sprintDayStart", day: sprintDay });
+      startTick += DAY - 1;
+      addEvent({ type: "sprintDayEnd", day: sprintDay });
+      startTick += 1;
+    }
+    addEvent({ type: "sprintEnd" });
+    addEvent({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent({ type: "weekendEnd" });
+    return plan;
+  }
+  __name(generatePlan, "generatePlan");
+  function* tick2(sprint, game) {
+    const events = sprint.plan[game.ticks];
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "createBacklogIssue":
+            const small = make7(game.map.getRandomEmptyLocation(), event.size);
+            game.map.add(small);
+            yield showMessage(
+              `Added ${toString(event.size)} story to "To Do"`,
+              10
+            );
+            break;
+          case "groomBacklogEnd":
+            break;
+          case "groomBacklogStart":
+            yield showMessage("Grooming backlog ...", 40);
+            break;
+          case "sprintDayEnd":
+          case "sprintDayStart":
+            yield showMessage(`Sprint day ${event.day}`, 20);
+            break;
+          case "sprintEnd":
+            yield showMessage("Sprint ended", 49);
+            const stories2 = filter(game.map.objects, "story");
+            game.map.remove(stories2);
+            break;
+          case "sprintStart":
+          case "weekendEnd":
+          case "weekendStart":
+            break;
+          default:
+            assertUnreachable(event);
+        }
+      }
+    }
+  }
+  __name(tick2, "tick");
+
+  // objects/boss.ts
+  var import_lodash4 = __toESM(require_lodash());
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6745,20 +6829,20 @@
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash3.default.difference(possible, [
+    const turns = import_lodash4.default.difference(possible, [
       currentDirection,
       reverse(currentDirection)
     ]);
     if (turns.length > 0) {
       result.turn = { directions: turns };
     }
-    if (import_lodash3.default.includes(possible, currentDirection)) {
+    if (import_lodash4.default.includes(possible, currentDirection)) {
       result.straight = { direction: currentDirection };
     }
-    if (!import_lodash3.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+    if (!import_lodash4.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
       result.jump = { directions: [currentDirection] };
     }
-    if (import_lodash3.default.includes(possible, reverse(currentDirection))) {
+    if (import_lodash4.default.includes(possible, reverse(currentDirection))) {
       result.back = {};
     }
     return result;
@@ -6803,8 +6887,8 @@
             console.log(JSON.stringify({ move_types, move_weights }));
           }
           const move_choice = choice(
-            import_lodash3.default.compact(move_types),
-            import_lodash3.default.compact(move_weights)
+            import_lodash4.default.compact(move_types),
+            import_lodash4.default.compact(move_weights)
           );
           switch (move_choice) {
             case "turn":
@@ -6821,8 +6905,8 @@
         }
         if (moves.back || moves.jump) {
           const move_choice = choice(
-            import_lodash3.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash3.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+            import_lodash4.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash4.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
           );
           switch (move_choice) {
             case "back":
@@ -6882,7 +6966,7 @@
   __name(tick4, "tick");
 
   // objects/player.ts
-  var import_lodash4 = __toESM(require_lodash());
+  var import_lodash5 = __toESM(require_lodash());
 
   // game/messages.ts
   var startedStory = /* @__PURE__ */ __name((size) => ({
@@ -6944,7 +7028,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash4.default.every(objs, canMoveOnObj);
+      const result = import_lodash5.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -6972,13 +7056,13 @@
     return player.hrTaskTact == null;
   }
   __name(canPickItem, "canPickItem");
-  function pickItem(player, item, game) {
-    game.map.remove(item);
-    switch (item.type) {
+  function pickItem(player, newItem, game) {
+    game.map.remove(newItem);
+    switch (newItem.type) {
       case "door":
       case "coffee":
-        dropItemIfNeeded(player, game);
-        player.item = item;
+        dropCarriedItem(player, game);
+        player.item = newItem;
         break;
       case "commit":
         if (player.task) {
@@ -6992,27 +7076,25 @@
               }
           }
         } else {
-          dropItemIfNeeded(player, game);
-          player.item = item;
+          dropCarriedItem(player, game);
+          player.item = newItem;
         }
         break;
       case "story":
-        player.task = story_exports2.make(item.size);
+        player.task = story_exports2.make(newItem.size);
         break;
       default:
-        assertUnreachable(item);
+        assertUnreachable(newItem);
     }
   }
   __name(pickItem, "pickItem");
-  function dropItemIfNeeded(player, game) {
-    if (player.item != null) {
-      player.item.position = player.position;
-      player.item.open = true;
-      game.map.add(player.item);
-      game.messages.push((void 0)(player.item));
+  function dropCarriedItem(player, game) {
+    const carriedItem = player.item;
+    if (carriedItem != null) {
+      dropItem(player, game.map);
     }
   }
-  __name(dropItemIfNeeded, "dropItemIfNeeded");
+  __name(dropCarriedItem, "dropCarriedItem");
   function tickHrTask(player) {
     if (player.hrTaskTact != null) {
       player.hrTaskTact += 1;
@@ -7024,14 +7106,18 @@
   __name(tickHrTask, "tickHrTask");
   function handleDrop(player, map) {
     if (player.item != null) {
-      const droppingItem = player.item;
-      droppingItem.open = true;
-      droppingItem.position = player.position;
-      map.add(droppingItem);
-      player.item = null;
+      dropItem(player, map);
     }
   }
   __name(handleDrop, "handleDrop");
+  function dropItem(player, map) {
+    const droppingItem = player.item;
+    droppingItem.open = true;
+    droppingItem.position = player.position;
+    map.add(droppingItem);
+    player.item = null;
+  }
+  __name(dropItem, "dropItem");
   function processCommands(player, commands, map) {
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
@@ -7114,12 +7200,12 @@
   // renderer.ts
   function render(game) {
     const map = game.map;
-    const buffer = [showMessage(game).split("")];
+    const buffer = [showMessage2(game).split("")];
     for (let y = 0; y < map.height; y++) {
       const row = [];
       for (let x = 0; x < map.width; x++) {
         const objs = map.cells[y][x];
-        row.push(getRepresentation(map, objs, game.score.ticks));
+        row.push(getRepresentation(map, objs, game.ticks));
       }
       buffer.push(row);
     }
@@ -7133,14 +7219,14 @@
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
-  function showMessage(game) {
+  function showMessage2(game) {
     if (game.messages.length > 0) {
       game.messageTact += 1;
       let text = game.messages[0].text;
       if (game.messageTact > game.messages[0].ttl) {
         game.messageTact = 0;
         game.messages.shift();
-      } else if (game.messageTact > 3 && game.messages.length > 1) {
+      } else if (game.messageTact > 5 && game.messages.length > 1) {
         game.messageTact = 0;
         game.messages.shift();
       } else {
@@ -7151,9 +7237,9 @@
       return "";
     }
   }
-  __name(showMessage, "showMessage");
+  __name(showMessage2, "showMessage");
   function showTicks(game) {
-    return game.score.ticks.toString().padStart(6, "0");
+    return game.ticks.toString().padStart(6, "0");
   }
   __name(showTicks, "showTicks");
   function showLevel(game) {
@@ -7172,7 +7258,7 @@
   }
   __name(showTask, "showTask");
   function showStockPrice(game) {
-    return `Company Stock Price: $${((config_default.totalTicks - game.score.ticks) / 100).toFixed(2)} \u25BC`;
+    return `Company Stock Price: $${((config_default.totalTicks - game.ticks) / 100).toFixed(2)} \u25BC`;
   }
   __name(showStockPrice, "showStockPrice");
   function isVisible(obj) {
@@ -7292,7 +7378,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = _7.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
+    const inner_walls = _8.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
@@ -7312,7 +7398,7 @@
       })
     );
     game.map.add(room_walls);
-    const room_doors = generateRoomDoors(game.map);
+    generateRoomDoors(game.map);
     game.map.add([boss]);
     game.player = make11(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
@@ -7345,16 +7431,20 @@
         case "s":
           save2(game);
           break;
-        case "l":
+        case "l": {
           const loaded = load2();
           if (loaded != null) {
             game = loaded;
           }
-        default:
+          break;
+        }
+        default: {
           const command = getCommand(event.key);
           if (command != null) {
             game.commands.push(command);
           }
+          break;
+        }
       }
     });
     render(game);
@@ -7396,10 +7486,15 @@
   }
   __name(load2, "load");
   function processTick(game) {
-    game.score.ticks += 1;
+    game.ticks += 1;
     game.score.money += all2[game.score.level].rate;
     tick(game.itemGenerator, game);
-    tick2(game.sprint, game);
+    if (config_default.sprint.startDay * config_default.dayTicks <= game.ticks && !game.sprint) {
+      game.sprint = make8(game.ticks);
+    }
+    if (game.sprint) {
+      game_exports.handleEffects(game, tick2(game.sprint, game));
+    }
     for (const obj of game.map.objects) {
       const result = tick6(obj, game, game.commands);
       game.score.codeBlocks += result.codeBlocks;

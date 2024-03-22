@@ -56,7 +56,7 @@ export class GameMap {
 
     getRandomEmptyLocation(): Vector.t {
         const [x, y] = check(
-            () => [random.getInt(0, this.width), random.getInt(0, this.height)],
+            () => [random.int(0, this.width), random.int(0, this.height)],
             ([x, y]) => this.at({ x, y }).length == 0
         )
 
