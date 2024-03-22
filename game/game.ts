@@ -1,16 +1,20 @@
+import { assert } from "console"
 import { Command } from "../commands"
 import * as ItemGenerator from "../game/item_generator"
 import * as Player from "../objects/player"
+import { Effect } from "./effects"
 import * as GameMap from "./map"
 import { Message } from "./message"
 import * as Score from "./score"
 import * as Sprint from "./sprint"
+import { assertUnreachable } from "../utils/utils"
 export * as GameMap from "./map"
 export * as Score from "./score"
 
 export type t = {
     map: GameMap.GameMap
     score: Score.Score
+    ticks: number
     itemGenerator: ItemGenerator.t
     sprint: Sprint.t
     commands: Command[]
@@ -30,6 +34,7 @@ export function make(width: number, height: number): t {
         score: Score.make(),
         messages: [],
         messageTact: 0,
+        ticks: 0,
     }
 }
 
@@ -44,6 +49,20 @@ export function toJson(game: t): object {
     }
 }
 
+export function handleEffects(game: t, effects: Generator<Effect>) {
+    for (const effect of effects) {
+        switch (effect.type) {
+            case "null":
+                break
+            case "showMessage":
+                message(game, effect.message)
+                break
+            default:
+                1
+                assertUnreachable(effect)
+        }
+    }
+}
 export function message(game: t, m: Message) {
     game.messages.push(m)
 }
@@ -69,6 +88,7 @@ export function load(storage: GameStorage): Game | null {
             messages,
             messageTact,
             map,
+            ticks,
         }: {
             score: Score.Score
             sprint: Sprint.t
@@ -77,10 +97,12 @@ export function load(storage: GameStorage): Game | null {
             messageTact: number
             itemGenerator: ItemGenerator.t
             map: object
+            ticks: number
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)
         const player = map_.objects.find<Player.t>((x): x is Player.t => x.type === "player")
         return {
+            ticks: ticks,
             score: score,
             itemGenerator: itemGenerator,
             sprint: sprint,

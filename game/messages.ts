@@ -1,3 +1,4 @@
+import { Item } from "../objects/object"
 import * as Story from "../objects/story"
 import * as StorySize from "../objects/story_size"
 
@@ -8,6 +9,10 @@ export const startedStory = (size: Story.Size): Message => ({
     ttl: 100,
 })
 
+export const itemDropped = (item: Item) => ({
+    text: `You droppped on ${item.type}`,
+    ttl: 5,
+})
 const stories: Record<Story.Size, string> = {
     [Story.Size.small]:
         "Bug Fix: Paperclip Panic\nResolve the issue where the 'undo' function mistakenly deletes the user's last paperclip click",
