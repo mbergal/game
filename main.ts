@@ -1,10 +1,11 @@
 import * as _ from "lodash"
 import { Command } from "./commands"
 import { Game } from "./game"
+import config from "./game/config"
 import { GameStorage } from "./game/game"
+import * as ItemGenerator from "./game/item_generator"
 import * as EngineeringLevels from "./game/levels"
 import * as Sprint from "./game/sprint"
-import * as ItemGenerator from "./game/item_generator"
 import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
@@ -13,7 +14,6 @@ import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
-import config from "./game/config"
 
 const height = 25
 const width = 80
@@ -195,7 +195,8 @@ function tick(obj: GameObject, game: Game.t, commands: Command[]): Result {
             Footprint.tick(obj, game.map)
             break
         case "player":
-            Player.tick(obj, game, commands)
+            Game.handleEffects(game, Player.tick(obj, game, commands))
+            break
         case "door":
         case "story":
         case "commit":

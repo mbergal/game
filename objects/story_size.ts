@@ -1,16 +1,12 @@
-export enum Size {
-    small,
-    medium,
-    large,
-}
+export type Size = "small" | "medium" | "large"
 
 export function toString(size: Size) {
     switch (size) {
-        case Size.small:
+        case "small":
             return "small"
-        case Size.medium:
+        case "medium":
             return "medium"
-        case Size.large:
+        case "large":
             return "large"
     }
 }

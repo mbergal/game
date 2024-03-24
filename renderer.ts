@@ -26,12 +26,10 @@ export function render(game: Game.t) {
         (
             showTicks(game) +
             showLevel(game) +
-            "    Money: $" +
+            " Money: $" +
             game.score.money.toString().padStart(6, "0") +
-            " " +
-            // "*:" +
-            // (game.player?.hrTaskTact ? "P" : "") +
-            // " " +
+            " Impact: " +
+            game.score.impact.toString().padStart(3, " ") +
             showTask(game) +
             " " +
             showStockPrice(game)
@@ -141,11 +139,11 @@ function getRepresentation(map: GameMap, objs: GameObject[], tick: number): stri
                 return obj.open ? "c" : "."
             case "story":
                 switch (obj.size) {
-                    case Size.small:
+                    case "small":
                         return "s"
-                    case Size.medium:
+                    case "medium":
                         return "m"
-                    case Size.large:
+                    case "large":
                         return "l"
                 }
             default:

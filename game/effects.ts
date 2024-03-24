@@ -1,15 +1,14 @@
-import * as Message from "./message"
+import _ from "lodash"
+import * as Effect from "./effect"
 
-export type NullEffect = {
-    type: "null"
-}
-export type ShowMessage = {
-    type: "showMessage"
-    message: Message.t
-}
+export type t = Array<Effect.t>
+export type Effects = t
 
-export function showMessage(text: string, ttl: number): ShowMessage {
-    return { type: "showMessage", message: { text, ttl } }
+export function append(effects: t, other: t | Effect.t) {
+    if (!_.isArray(other)) {
+        other = [other]
+    }
+    for (const effect of other) {
+        effects.push(effect)
+    }
 }
-
-export type Effect = NullEffect | ShowMessage

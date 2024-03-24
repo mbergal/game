@@ -1,15 +1,15 @@
 import _ from "lodash"
 import { Command } from "../commands"
 import { Game } from "../game"
-import config from "../game/config"
+import { Effect, showMessage } from "../game/effect"
+import * as Effects from "../game/effects"
 import { GameMap } from "../game/map"
 import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
 import { assertUnreachable } from "../utils/utils"
 import { GameObject, Item } from "./object"
-import { Task } from "./tasks"
-import { StoryTask } from "./tasks"
+import { StoryTask, Task } from "./tasks"
 
 export interface t {
     type: "player"
@@ -69,14 +69,14 @@ function canMoveOn(objs: GameObject[]) {
 }
 
 function canTakeTask(task: Task, player: Player) {
-    return true
+    return player.task == null
 }
 
 function takeTask(player: Player, task: Task, game: Game.t) {
     player.task = task
     switch (task.type) {
         case "story":
-            Game.message(game, Messages.startedStory(task.size))
+            Game.message(game, Messages.startedStory(task.story))
             break
         case "null":
             break
@@ -89,7 +89,8 @@ function canPickItem(player: Player) {
     return player.hrTaskTact == null
 }
 
-function pickItem(player: Player, newItem: Item, game: Game.t) {
+function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
+    const effects: Effects.t = []
     game.map.remove(newItem)
     switch (newItem.type) {
         case "door":
@@ -102,11 +103,8 @@ function pickItem(player: Player, newItem: Item, game: Game.t) {
                 const task = player.task
                 switch (task.type) {
                     case "story":
-                        task.appliedCommits += 1
-                        if (task.appliedCommits == task.neededCommits) {
-                            game.score.impact += task.impact
-                            player.task = null
-                        }
+                        Effects.append(effects, StoryTask.addCommit(player, task, newItem))
+                        break
                 }
             } else {
                 dropCarriedItem(player, game)
@@ -115,11 +113,12 @@ function pickItem(player: Player, newItem: Item, game: Game.t) {
 
             break
         case "story":
-            player.task = StoryTask.make(newItem.size)
+            player.task = StoryTask.make(newItem)
             break
         default:
             assertUnreachable(newItem)
     }
+    return effects
 }
 
 function dropCarriedItem(player: t, game: Game.t) {
@@ -192,11 +191,11 @@ function processCommands(player: Player, commands: Command[], map: GameMap) {
         player.commands = player.commands.filter((x) => x.tact < 10)
     }
 }
-export function tick(player: Player, game: Game.t, commands: Command[]): Result {
+export function tick(player: Player, game: Game.t, commands: Command[]): Effect[] {
     tickHrTask(player)
     processCommands(player, commands, game.map)
 
-    const result: Result = {}
+    const result: Effect[] = []
     if (player.direction) {
         const newPosition = moveBy(player.position, player.direction)
         const objsAtNewPosition = game.map.at(newPosition)
@@ -208,19 +207,19 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Result 
                     case "coffee":
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            Game.message(game, { text: `Picked a ${obj.type}`, ttl: 40 })
-                            pickItem(player, obj, game)
+                            result.push(showMessage(`Picked a ${obj.type}`, 40))
+                            Effects.append(result, pickItem(player, obj, game))
                         }
                         break
                     case "commit":
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            Game.message(game, { text: `Picked a commit ${obj.hash}`, ttl: 40 })
-                            pickItem(player, obj, game)
+                            Effects.append(result, showMessage(`Picked a commit ${obj.hash}`, 40))
+                            Effects.append(result, pickItem(player, obj, game))
                         }
                         break
                     case "story":
-                        const task: StoryTask.t = StoryTask.make(obj.size)
+                        const task: StoryTask.t = StoryTask.make(obj)
 
                         if (canTakeTask(task, player)) {
                             takeTask(player, task, game)

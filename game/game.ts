@@ -2,7 +2,8 @@ import { assert } from "console"
 import { Command } from "../commands"
 import * as ItemGenerator from "../game/item_generator"
 import * as Player from "../objects/player"
-import { Effect } from "./effects"
+import * as Effect from "./effect"
+import * as Effects from "./effects"
 import * as GameMap from "./map"
 import { Message } from "./message"
 import * as Score from "./score"
@@ -49,16 +50,18 @@ export function toJson(game: t): object {
     }
 }
 
-export function handleEffects(game: t, effects: Generator<Effect>) {
+export function handleEffects(game: t, effects: Generator<Effect.t> | Effects.t) {
     for (const effect of effects) {
         switch (effect.type) {
             case "null":
+                break
+            case "addImpact":
+                game.score.impact += effect.impact
                 break
             case "showMessage":
                 message(game, effect.message)
                 break
             default:
-                1
                 assertUnreachable(effect)
         }
     }

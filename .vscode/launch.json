@@ -17,7 +17,13 @@
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/main.ts",
-      "console": "integratedTerminal",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "chrome",
+      "name": "/home/misha/projects/game/index.html",
+      "request": "launch",
+      "url": "file:///home/misha/projects/game/index.html"
     }
   ]
 }

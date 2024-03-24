@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _9.defaults(root.Object(), context, _9.pick(root, contextProps));
+          context = context == null ? root : _10.defaults(root.Object(), context, _10.pick(root, contextProps));
           var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -802,10 +802,10 @@
           }();
           var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date && Date.now !== root.Date.now && Date.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
           var nativeCeil = Math2.ceil, nativeFloor = Math2.floor, nativeGetSymbols = Object2.getOwnPropertySymbols, nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined, nativeIsFinite = context.isFinite, nativeJoin = arrayProto.join, nativeKeys = overArg(Object2.keys, Object2), nativeMax = Math2.max, nativeMin = Math2.min, nativeNow = Date.now, nativeParseInt = context.parseInt, nativeRandom = Math2.random, nativeReverse = arrayProto.reverse;
-          var DataView = getNative(context, "DataView"), Map = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
+          var DataView = getNative(context, "DataView"), Map2 = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
           var metaMap = WeakMap && new WeakMap();
           var realNames = {};
-          var dataViewCtorString = toSource(DataView), mapCtorString = toSource(Map), promiseCtorString = toSource(Promise2), setCtorString = toSource(Set), weakMapCtorString = toSource(WeakMap);
+          var dataViewCtorString = toSource(DataView), mapCtorString = toSource(Map2), promiseCtorString = toSource(Promise2), setCtorString = toSource(Set), weakMapCtorString = toSource(WeakMap);
           var symbolProto = Symbol2 ? Symbol2.prototype : undefined, symbolValueOf = symbolProto ? symbolProto.valueOf : undefined, symbolToString = symbolProto ? symbolProto.toString : undefined;
           function lodash(value) {
             if (isObjectLike(value) && !isArray(value) && !(value instanceof LazyWrapper)) {
@@ -1071,7 +1071,7 @@
             this.size = 0;
             this.__data__ = {
               "hash": new Hash(),
-              "map": new (Map || ListCache)(),
+              "map": new (Map2 || ListCache)(),
               "string": new Hash()
             };
           }
@@ -1149,7 +1149,7 @@
             var data = this.__data__;
             if (data instanceof ListCache) {
               var pairs = data.__data__;
-              if (!Map || pairs.length < LARGE_ARRAY_SIZE - 1) {
+              if (!Map2 || pairs.length < LARGE_ARRAY_SIZE - 1) {
                 pairs.push([key, value]);
                 this.size = ++data.size;
                 return this;
@@ -3040,7 +3040,7 @@
             return result2;
           };
           var getTag = baseGetTag;
-          if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map && getTag(new Map()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+          if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
             getTag = /* @__PURE__ */ __name(function(value) {
               var result2 = baseGetTag(value), Ctor = result2 == objectTag ? value.constructor : undefined, ctorString = Ctor ? toSource(Ctor) : "";
               if (ctorString) {
@@ -5985,24 +5985,24 @@
           }
           return lodash;
         }, "runInContext");
-        var _9 = runInContext();
+        var _10 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _9;
+          root._ = _10;
           define(function() {
-            return _9;
+            return _10;
           });
         } else if (freeModule) {
-          (freeModule.exports = _9)._ = _9;
-          freeExports._ = _9;
+          (freeModule.exports = _10)._ = _10;
+          freeExports._ = _10;
         } else {
-          root._ = _9;
+          root._ = _10;
         }
       }).call(exports);
     }
   });
 
   // main.ts
-  var _8 = __toESM(require_lodash());
+  var _9 = __toESM(require_lodash());
 
   // game/map.ts
   var map_exports = {};
@@ -6458,19 +6458,6 @@
   }
   __name(assertUnreachable, "assertUnreachable");
 
-  // objects/story_size.ts
-  function toString(size) {
-    switch (size) {
-      case 0 /* small */:
-        return "small";
-      case 1 /* medium */:
-        return "medium";
-      case 2 /* large */:
-        return "large";
-    }
-  }
-  __name(toString, "toString");
-
   // game/config.ts
   var config = {
     tickInterval: 100,
@@ -6478,11 +6465,12 @@
       TACTS_FOR_JUMP: 3,
       TACTS_FOR_SINGLE_MOVE: 4 * 3
     },
+    totalDays: 14 * 10,
     dayTicks: 100,
     story: {
-      [0 /* small */]: { neededCommits: 2, impact: 1 },
-      [1 /* medium */]: { neededCommits: 5, impact: 2 },
-      [2 /* large */]: { neededCommits: 8, impact: 4 }
+      small: { neededCommits: 2, impact: 1 },
+      medium: { neededCommits: 5, impact: 2 },
+      large: { neededCommits: 8, impact: 4 }
     },
     totalTicks: 1e4,
     sprint: {
@@ -6569,11 +6557,13 @@
       switch (effect.type) {
         case "null":
           break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
         case "showMessage":
           message(game, effect.message);
           break;
         default:
-          1;
           assertUnreachable(effect);
       }
     }
@@ -6671,96 +6661,183 @@
   }
   __name(filter, "filter");
 
+  // objects/story_size.ts
+  function toString(size) {
+    switch (size) {
+      case "small":
+        return "small";
+      case "medium":
+        return "medium";
+      case "large":
+        return "large";
+    }
+  }
+  __name(toString, "toString");
+
   // objects/story.ts
   function make7(position, size) {
     return {
       type: "story",
       position,
       size,
-      zIndex: 1
+      zIndex: 1,
+      impact: 1,
+      name: choice(storyNames[size])
     };
   }
   __name(make7, "make");
+  var storyNames = {
+    medium: [
+      "Implement Dark Mode for Night Owls",
+      "Refactor 'Frankencode' Module",
+      "Add Emoji Support for Error Messages",
+      "Address Complaints About Clashing Color Scheme",
+      "Clarify the Meaning of 'Technical Debt'",
+      "Reduce Loading Time for Image-heavy Pages",
+      "Streamline Checkout Process for Mobile Users",
+      "Update Third-party Libraries to Latest Versions",
+      "Resolve Issue with Form Submission Error Handling",
+      "Integrate Social Media Sharing Buttons"
+    ],
+    small: [
+      "Option to Change Font Size",
+      "Fix Typo in Terms of Service Link",
+      "Update README with Installation Instructions",
+      "Add Loading Spinner for AJAX Requests",
+      "Remove Deprecated Function Calls",
+      "Increase Character Limit for Comments",
+      "Adjust Button Placement for Accessibility",
+      "Minify CSS and JavaScript Files",
+      "Implement CSRF Protection on Forms",
+      "Resolve Issue with Broken Image Links"
+    ],
+    large: [
+      "Revamp User Interface for Modern Look and Feel",
+      "Rewrite Monolithic Codebase into Microservices",
+      "Implement Machine Learning Algorithm for Recommendations",
+      "Redesign Navigation Structure for Improved Usability",
+      "Create Comprehensive Developer Guide",
+      "Conduct Full Accessibility Audit and Remediation",
+      "Implement Caching Strategy for Scalability",
+      "Migrate to OAuth2 for Enhanced Authentication",
+      "Transition to Cloud-based Hosting Environment",
+      "Integrate Multi-language Support Across Platform"
+    ]
+  };
 
-  // game/effects.ts
+  // game/effect.ts
+  function addImpact(impact) {
+    return {
+      type: "addImpact",
+      impact
+    };
+  }
+  __name(addImpact, "addImpact");
   function showMessage(text, ttl) {
     return { type: "showMessage", message: { text, ttl } };
   }
   __name(showMessage, "showMessage");
 
+  // game/plan.ts
+  function make8() {
+    return /* @__PURE__ */ new Map();
+  }
+  __name(make8, "make");
+  function addEvent(plan, time, event) {
+    if (!plan.has(time)) {
+      plan.set(time, []);
+    }
+    plan.get(time).push(event);
+  }
+  __name(addEvent, "addEvent");
+  function append(plan, other) {
+    for (const time of other.keys()) {
+      for (const event of other.get(time)) {
+        addEvent(plan, time, event);
+      }
+    }
+    return plan;
+  }
+  __name(append, "append");
+
   // game/sprint.ts
-  function make8(startTick) {
+  function make9(startTick) {
     return {
       day: 0,
       plan: generatePlan(startTick)
     };
   }
-  __name(make8, "make");
-  function generatePlan(startTick) {
+  __name(make9, "make");
+  function generatePlan(startDay) {
+    let plan = make8();
+    let startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash3.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const r = generateSprint(startTick);
+      append(plan, r[0]);
+      startTick += r[1];
+    }
+    return plan;
+  }
+  __name(generatePlan, "generatePlan");
+  function generateSprint(startTick) {
     const DAY = config_default.dayTicks;
-    const plan = {};
-    const addEvent = /* @__PURE__ */ __name((event) => {
-      if (plan[startTick] == null)
-        plan[startTick] = [];
-      plan[startTick].push(event);
+    const plan = make8();
+    const addEvent2 = /* @__PURE__ */ __name((event) => {
+      addEvent(plan, startTick, event);
     }, "addEvent");
-    addEvent({ type: "sprintStart" });
-    addEvent({ type: "groomBacklogStart" });
+    addEvent2({ type: "sprintStart" });
+    addEvent2({ type: "groomBacklogStart" });
     const storySizes = [
-      0 /* small */,
-      0 /* small */,
-      0 /* small */,
-      1 /* medium */,
-      1 /* medium */,
-      2 /* large */
+      "small",
+      "small",
+      "small",
+      "medium",
+      "medium",
+      "large"
     ];
     const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
     const groomingStart = startTick;
     for (const t of times) {
       startTick = groomingStart + t[1];
-      addEvent({ type: "createBacklogIssue", size: t[0] });
+      addEvent2({ type: "createBacklogIssue", size: t[0] });
     }
     startTick += DAY - 1;
-    addEvent({ type: "groomBacklogEnd" });
-    startTick = DAY;
+    addEvent2({ type: "groomBacklogEnd" });
+    startTick += 1;
     let sprintDay = 0;
     for (const i of import_lodash3.default.range(4)) {
       sprintDay += 1;
-      addEvent({ type: "sprintDayStart", day: sprintDay });
+      addEvent2({ type: "sprintDayStart", day: sprintDay });
       startTick += DAY - 1;
-      addEvent({ type: "sprintDayEnd", day: sprintDay });
+      addEvent2({ type: "sprintDayEnd", day: sprintDay });
       startTick += 1;
     }
-    addEvent({ type: "sprintEnd" });
-    addEvent({ type: "weekendStart" });
+    addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
-    addEvent({ type: "weekendEnd" });
+    addEvent2({ type: "weekendEnd" });
     for (const i of import_lodash3.default.range(4)) {
       sprintDay += 1;
-      addEvent({ type: "sprintDayStart", day: sprintDay });
+      addEvent2({ type: "sprintDayStart", day: sprintDay });
       startTick += DAY - 1;
-      addEvent({ type: "sprintDayEnd", day: sprintDay });
+      addEvent2({ type: "sprintDayEnd", day: sprintDay });
       startTick += 1;
     }
-    addEvent({ type: "sprintEnd" });
-    addEvent({ type: "weekendStart" });
+    addEvent2({ type: "sprintEnd" });
+    addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
-    addEvent({ type: "weekendEnd" });
-    return plan;
+    addEvent2({ type: "weekendEnd" });
+    return [plan, startTick];
   }
-  __name(generatePlan, "generatePlan");
+  __name(generateSprint, "generateSprint");
   function* tick2(sprint, game) {
-    const events = sprint.plan[game.ticks];
+    const events = sprint.plan.get(game.ticks);
     if (events) {
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const small = make7(game.map.getRandomEmptyLocation(), event.size);
-            game.map.add(small);
-            yield showMessage(
-              `Added ${toString(event.size)} story to "To Do"`,
-              10
-            );
+            const story = make7(game.map.getRandomEmptyLocation(), event.size);
+            game.map.add(story);
+            yield showMessage(`Added ${story.name}`, 20);
             break;
           case "groomBacklogEnd":
             break;
@@ -6768,17 +6845,22 @@
             yield showMessage("Grooming backlog ...", 40);
             break;
           case "sprintDayEnd":
+            break;
           case "sprintDayStart":
             yield showMessage(`Sprint day ${event.day}`, 20);
             break;
           case "sprintEnd":
             yield showMessage("Sprint ended", 49);
-            const stories2 = filter(game.map.objects, "story");
-            game.map.remove(stories2);
+            const stories = filter(game.map.objects, "story");
+            game.map.remove(stories);
             break;
           case "sprintStart":
-          case "weekendEnd":
+            break;
           case "weekendStart":
+            yield showMessage("Weekend, finally!!!", 30);
+            break;
+          case "weekendEnd":
+            yield showMessage("End of Weekend :(", 30);
             break;
           default:
             assertUnreachable(event);
@@ -6814,7 +6896,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make9() {
+  function make10() {
     return {
       position: {
         x: 0,
@@ -6825,7 +6907,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make9, "make");
+  __name(make10, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -6966,37 +7048,56 @@
   __name(tick4, "tick");
 
   // objects/player.ts
+  var import_lodash6 = __toESM(require_lodash());
+
+  // game/effects.ts
   var import_lodash5 = __toESM(require_lodash());
+  function append2(effects, other) {
+    if (!import_lodash5.default.isArray(other)) {
+      other = [other];
+    }
+    for (const effect of other) {
+      effects.push(effect);
+    }
+  }
+  __name(append2, "append");
 
   // game/messages.ts
-  var startedStory = /* @__PURE__ */ __name((size) => ({
-    text: `You started on ${toString(size)} ${stories[size]}`,
+  var startedStory = /* @__PURE__ */ __name((story) => ({
+    text: `You started on ${toString(story.size)} ${story.name}`,
     ttl: 100
   }), "startedStory");
-  var stories = {
-    [0 /* small */]: "Bug Fix: Paperclip Panic\nResolve the issue where the 'undo' function mistakenly deletes the user's last paperclip click",
-    [1 /* medium */]: 'Meeting Madness Expansion (Feature Development): Develop a new module that automatically schedules meetings based on employee availability, ensuring maximum "meeting madness" efficiency',
-    [2 /* large */]: `"Corporate Culture Overhaul" (Major Feature Development): Implement a comprehensive initiative to revamp the company's culture, including mandatory 'fun' activities and a rewards program for using the most corporate buzzwords.`
-  };
 
   // objects/tasks/story.ts
   var story_exports2 = {};
   __export(story_exports2, {
-    make: () => make10
+    addCommit: () => addCommit,
+    make: () => make11
   });
-  function make10(size) {
+  function make11(story) {
     return {
       type: "story",
-      size,
-      impact: config_default.story[size].impact,
-      neededCommits: config_default.story[size].neededCommits,
+      story,
+      impact: config_default.story[story.size].impact,
+      neededCommits: config_default.story[story.size].neededCommits,
       appliedCommits: 0
     };
   }
-  __name(make10, "make");
+  __name(make11, "make");
+  function addCommit(player, task, commit) {
+    const effects = [];
+    task.appliedCommits += 1;
+    if (task.appliedCommits == task.neededCommits) {
+      append2(effects, addImpact(task.impact));
+      append2(effects, showMessage(`Finished ${task.story.name}`, 30));
+      player.task = null;
+    }
+    return effects;
+  }
+  __name(addCommit, "addCommit");
 
   // objects/player.ts
-  function make11(position) {
+  function make12(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7009,7 +7110,7 @@
       task: null
     };
   }
-  __name(make11, "make");
+  __name(make12, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -7028,7 +7129,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash5.default.every(objs, canMoveOnObj);
+      const result = import_lodash6.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -7036,14 +7137,14 @@
   }
   __name(canMoveOn, "canMoveOn");
   function canTakeTask(task, player) {
-    return true;
+    return player.task == null;
   }
   __name(canTakeTask, "canTakeTask");
   function takeTask(player, task, game) {
     player.task = task;
     switch (task.type) {
       case "story":
-        game_exports.message(game, startedStory(task.size));
+        game_exports.message(game, startedStory(task.story));
         break;
       case "null":
         break;
@@ -7057,6 +7158,7 @@
   }
   __name(canPickItem, "canPickItem");
   function pickItem(player, newItem, game) {
+    const effects = [];
     game.map.remove(newItem);
     switch (newItem.type) {
       case "door":
@@ -7069,11 +7171,8 @@
           const task = player.task;
           switch (task.type) {
             case "story":
-              task.appliedCommits += 1;
-              if (task.appliedCommits == task.neededCommits) {
-                game.score.impact += task.impact;
-                player.task = null;
-              }
+              append2(effects, story_exports2.addCommit(player, task, newItem));
+              break;
           }
         } else {
           dropCarriedItem(player, game);
@@ -7081,11 +7180,12 @@
         }
         break;
       case "story":
-        player.task = story_exports2.make(newItem.size);
+        player.task = story_exports2.make(newItem);
         break;
       default:
         assertUnreachable(newItem);
     }
+    return effects;
   }
   __name(pickItem, "pickItem");
   function dropCarriedItem(player, game) {
@@ -7150,7 +7250,7 @@
   function tick5(player, game, commands) {
     tickHrTask(player);
     processCommands(player, commands, game.map);
-    const result = {};
+    const result = [];
     if (player.direction) {
       const newPosition = moveBy(player.position, player.direction);
       const objsAtNewPosition = game.map.at(newPosition);
@@ -7162,19 +7262,19 @@
             case "coffee":
               if (canPickItem(player)) {
                 console.log(`Can pick item  ${JSON.stringify(player)}`);
-                game_exports.message(game, { text: `Picked a ${obj.type}`, ttl: 40 });
-                pickItem(player, obj, game);
+                result.push(showMessage(`Picked a ${obj.type}`, 40));
+                append2(result, pickItem(player, obj, game));
               }
               break;
             case "commit":
               if (canPickItem(player)) {
                 console.log(`Can pick item  ${JSON.stringify(player)}`);
-                game_exports.message(game, { text: `Picked a commit ${obj.hash}`, ttl: 40 });
-                pickItem(player, obj, game);
+                append2(result, showMessage(`Picked a commit ${obj.hash}`, 40));
+                append2(result, pickItem(player, obj, game));
               }
               break;
             case "story":
-              const task = story_exports2.make(obj.size);
+              const task = story_exports2.make(obj);
               if (canTakeTask(task, player)) {
                 takeTask(player, task, game);
                 game.map.remove(obj);
@@ -7210,10 +7310,7 @@
       buffer.push(row);
     }
     buffer.push(
-      (showTicks(game) + showLevel(game) + "    Money: $" + game.score.money.toString().padStart(6, "0") + " " + // "*:" +
-      // (game.player?.hrTaskTact ? "P" : "") +
-      // " " +
-      showTask(game) + " " + showStockPrice(game)).split("")
+      (showTicks(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)).split("")
     );
     const contentBlock = document.getElementById("content");
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
@@ -7320,11 +7417,11 @@
           return obj.open ? "c" : ".";
         case "story":
           switch (obj.size) {
-            case 0 /* small */:
+            case "small":
               return "s";
-            case 1 /* medium */:
+            case "medium":
               return "m";
-            case 2 /* large */:
+            case "large":
               return "l";
           }
         default:
@@ -7368,7 +7465,7 @@
   var height = 25;
   var width = 80;
   function main() {
-    const boss = make9();
+    const boss = make10();
     let game = game_exports.make(width, height);
     const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
       (point) => ({
@@ -7378,7 +7475,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = _8.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
+    const inner_walls = _9.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
@@ -7400,7 +7497,7 @@
     game.map.add(room_walls);
     generateRoomDoors(game.map);
     game.map.add([boss]);
-    game.player = make11(game.map.getRandomEmptyLocation());
+    game.player = make12(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
       text: "Welcome to the Rat Race. You need to earn enough money and get out of the system",
@@ -7490,7 +7587,7 @@
     game.score.money += all2[game.score.level].rate;
     tick(game.itemGenerator, game);
     if (config_default.sprint.startDay * config_default.dayTicks <= game.ticks && !game.sprint) {
-      game.sprint = make8(game.ticks);
+      game.sprint = make9(game.ticks);
     }
     if (game.sprint) {
       game_exports.handleEffects(game, tick2(game.sprint, game));
@@ -7513,7 +7610,8 @@
         tick4(obj, game.map);
         break;
       case "player":
-        tick5(obj, game, commands);
+        game_exports.handleEffects(game, tick5(obj, game, commands));
+        break;
       case "door":
       case "story":
       case "commit":
