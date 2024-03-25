@@ -1,8 +1,6 @@
 import { Vector } from "../geometry"
-import * as StorySize from "./story_size"
-import * as Commit from "./commit"
 import * as random from "../utils/random"
-import * as Game from "../game/game"
+import * as StorySize from "./story_size"
 
 export { Size } from "./story_size"
 

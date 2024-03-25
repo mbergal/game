@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _9.defaults(root.Object(), context, _9.pick(root, contextProps));
+          context = context == null ? root : _10.defaults(root.Object(), context, _10.pick(root, contextProps));
           var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -5985,17 +5985,17 @@
           }
           return lodash;
         }, "runInContext");
-        var _9 = runInContext();
+        var _10 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _9;
+          root._ = _10;
           define(function() {
-            return _9;
+            return _10;
           });
         } else if (freeModule) {
-          (freeModule.exports = _9)._ = _9;
-          freeExports._ = _9;
+          (freeModule.exports = _10)._ = _10;
+          freeExports._ = _10;
         } else {
-          root._ = _9;
+          root._ = _10;
         }
       }).call(exports);
     }
@@ -6557,7 +6557,7 @@
   __name(tick, "tick");
 
   // game/sprint.ts
-  var import_lodash3 = __toESM(require_lodash());
+  var import_lodash4 = __toESM(require_lodash());
 
   // objects/objects.ts
   var import_lodash2 = __toESM(require_lodash());
@@ -6644,10 +6644,38 @@
   __name(showMessage, "showMessage");
 
   // game/plan.ts
+  var import_lodash3 = __toESM(require_lodash());
   function make7() {
     return /* @__PURE__ */ new Map();
   }
   __name(make7, "make");
+  function addEvent(plan, time, event) {
+    if (!plan.has(time)) {
+      plan.set(time, []);
+    }
+    plan.get(time).push(event);
+  }
+  __name(addEvent, "addEvent");
+  function append(plan, other) {
+    for (const time of other.keys()) {
+      for (const event of other.get(time)) {
+        addEvent(plan, time, event);
+      }
+    }
+    return plan;
+  }
+  __name(append, "append");
+  function generatePlan(startDay) {
+    let plan = make7();
+    let startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash3.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const r = generateSprint(startTick);
+      append(plan, r[0]);
+      startTick += r[1];
+    }
+    return plan;
+  }
+  __name(generatePlan, "generatePlan");
 
   // game/sprint.ts
   function make8() {
@@ -6656,6 +6684,56 @@
     };
   }
   __name(make8, "make");
+  function generateSprint(startTick) {
+    const DAY = config_default.dayTicks;
+    const plan = make7();
+    const addEvent2 = /* @__PURE__ */ __name((event) => {
+      addEvent(plan, startTick, event);
+    }, "addEvent");
+    addEvent2({ type: "sprintStart" });
+    addEvent2({ type: "groomBacklogStart" });
+    const storySizes = [
+      "small",
+      "small",
+      "small",
+      "medium",
+      "medium",
+      "large"
+    ];
+    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
+    const groomingStart = startTick;
+    for (const t of times) {
+      startTick = groomingStart + t[1];
+      addEvent2({ type: "createBacklogIssue", size: t[0] });
+    }
+    startTick += DAY - 1;
+    addEvent2({ type: "groomBacklogEnd" });
+    startTick += 1;
+    let sprintDay = 0;
+    for (const i of import_lodash4.default.range(4)) {
+      sprintDay += 1;
+      addEvent2({ type: "sprintDayStart", day: sprintDay });
+      startTick += DAY - 1;
+      addEvent2({ type: "sprintDayEnd", day: sprintDay });
+      startTick += 1;
+    }
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    for (const i of import_lodash4.default.range(4)) {
+      sprintDay += 1;
+      addEvent2({ type: "sprintDayStart", day: sprintDay });
+      startTick += DAY - 1;
+      addEvent2({ type: "sprintDayEnd", day: sprintDay });
+      startTick += 1;
+    }
+    addEvent2({ type: "sprintEnd" });
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    return [plan, startTick];
+  }
+  __name(generateSprint, "generateSprint");
   function* tick2(sprint, game) {
     const events = game.plan.get(game.ticks);
     if (events) {
@@ -6829,7 +6907,7 @@
   ];
 
   // objects/boss.ts
-  var import_lodash4 = __toESM(require_lodash());
+  var import_lodash5 = __toESM(require_lodash());
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -6869,20 +6947,20 @@
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash4.default.difference(possible, [
+    const turns = import_lodash5.default.difference(possible, [
       currentDirection,
       reverse(currentDirection)
     ]);
     if (turns.length > 0) {
       result.turn = { directions: turns };
     }
-    if (import_lodash4.default.includes(possible, currentDirection)) {
+    if (import_lodash5.default.includes(possible, currentDirection)) {
       result.straight = { direction: currentDirection };
     }
-    if (!import_lodash4.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+    if (!import_lodash5.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
       result.jump = { directions: [currentDirection] };
     }
-    if (import_lodash4.default.includes(possible, reverse(currentDirection))) {
+    if (import_lodash5.default.includes(possible, reverse(currentDirection))) {
       result.back = {};
     }
     return result;
@@ -6927,8 +7005,8 @@
             console.log(JSON.stringify({ move_types, move_weights }));
           }
           const move_choice = choice(
-            import_lodash4.default.compact(move_types),
-            import_lodash4.default.compact(move_weights)
+            import_lodash5.default.compact(move_types),
+            import_lodash5.default.compact(move_weights)
           );
           switch (move_choice) {
             case "turn":
@@ -6945,8 +7023,8 @@
         }
         if (moves.back || moves.jump) {
           const move_choice = choice(
-            import_lodash4.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash4.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+            import_lodash5.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash5.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
           );
           switch (move_choice) {
             case "back":
@@ -7006,12 +7084,12 @@
   __name(tick4, "tick");
 
   // objects/player.ts
-  var import_lodash6 = __toESM(require_lodash());
+  var import_lodash7 = __toESM(require_lodash());
 
   // game/effects.ts
-  var import_lodash5 = __toESM(require_lodash());
+  var import_lodash6 = __toESM(require_lodash());
   function append2(effects, other) {
-    if (!import_lodash5.default.isArray(other)) {
+    if (!import_lodash6.default.isArray(other)) {
       other = [other];
     }
     for (const effect of other) {
@@ -7087,7 +7165,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash6.default.every(objs, canMoveOnObj);
+      const result = import_lodash7.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -7441,7 +7519,7 @@
   var MAZE_SIZE = { y: 25, x: 80 };
   function main() {
     const boss = make10();
-    const plan = make7();
+    const plan = generatePlan(0);
     let game = game_exports.make(MAZE_SIZE, plan);
     maze(MAZE_SIZE, game);
     game.map.add([boss]);

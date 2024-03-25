@@ -23,18 +23,7 @@ export function make(): t {
     }
 }
 
-export function generatePlan(startDay: number): Plan.t {
-    let plan = Plan.make()
-    let startTick = startDay * config.dayTicks
-    for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
-        const r = generateSprint(startTick)
-        Plan.append(plan, r[0])
-        startTick += r[1]
-    }
-    return plan
-}
-
-function generateSprint(startTick: number): [Plan.t, number] {
+export function generateSprint(startTick: number): [Plan.t, number] {
     const DAY = config.dayTicks
     const plan = Plan.make()
 

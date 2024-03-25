@@ -21,7 +21,7 @@ const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
 export function main() {
     const boss: Boss.t = Boss.make()
-    const plan: Plan.t = Plan.make()
+    const plan: Plan.t = Plan.generatePlan(0)
 
     let game: Game.t = Game.make(MAZE_SIZE, plan)
     MazeGenerator.maze(MAZE_SIZE, game)
