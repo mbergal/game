@@ -5,6 +5,7 @@ export type Score = {
     money: number
     level: number
     impact: number
+    stockPrice: number
 }
 
 export function make(): Score {
@@ -13,5 +14,6 @@ export function make(): Score {
         money: 0,
         level: 0,
         impact: 0,
+        stockPrice: 0,
     }
 }

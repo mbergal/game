@@ -1,15 +1,16 @@
 import _ from "lodash"
 import { Command } from "../commands"
 import { Game } from "../game"
-import { Effect, showMessage } from "../game/effect"
+import * as Effect from "../game/effect"
 import * as Effects from "../game/effects"
 import { GameMap } from "../game/map"
 import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
 import { assertUnreachable } from "../utils/utils"
-import { GameObject, Item } from "./object"
+import { Item } from "./object"
 import { StoryTask, Task } from "./tasks"
+import * as GameObject from "./object"
 
 export interface t {
     type: "player"
@@ -43,9 +44,9 @@ export function make(position: Vector.t): Player {
     }
 }
 
-function canMoveOn(objs: GameObject[]) {
+function canMoveOn(objs: GameObject.t[]) {
     if (objs.length > 0) {
-        const canMoveOnObj = (obj: GameObject) => {
+        const canMoveOnObj = (obj: GameObject.t) => {
             switch (obj.type) {
                 case "door":
                 case "story":
@@ -191,11 +192,11 @@ function processCommands(player: Player, commands: Command[], map: GameMap) {
         player.commands = player.commands.filter((x) => x.tact < 10)
     }
 }
-export function tick(player: Player, game: Game.t, commands: Command[]): Effect[] {
+export function tick(player: Player, game: Game.t, commands: Command[]): Effect.t[] {
     tickHrTask(player)
     processCommands(player, commands, game.map)
 
-    const result: Effect[] = []
+    const result: Effect.t[] = []
     if (player.direction) {
         const newPosition = moveBy(player.position, player.direction)
         const objsAtNewPosition = game.map.at(newPosition)
@@ -207,14 +208,17 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Effect[
                     case "coffee":
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            result.push(showMessage(`Picked a ${obj.type}`, 40))
+                            result.push(Effect.showMessage(`Picked a ${obj.type}`, 40))
                             Effects.append(result, pickItem(player, obj, game))
                         }
                         break
                     case "commit":
                         if (canPickItem(player)) {
                             console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            Effects.append(result, showMessage(`Picked a commit ${obj.hash}`, 40))
+                            Effects.append(
+                                result,
+                                Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
+                            )
                             Effects.append(result, pickItem(player, obj, game))
                         }
                         break

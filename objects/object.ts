@@ -11,15 +11,8 @@ export * as Commit from "./commit"
 import * as Coffee from "./coffee"
 export * as Coffee from "./coffee"
 
-export type GameObject =
-    | Wall
-    | Boss
-    | Footprint
-    | Player
-    | Door.Door
-    | Story.Story
-    | Commit.t
-    | Coffee.t
+export type t = Wall | Boss | Footprint | Player | Door.Door | Story.Story | Commit.t | Coffee.t
 
-export type GameObjectType = GameObject["type"]
+export type GameObject = t
+export type GameObjectType = t["type"]
 export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee

@@ -7,15 +7,14 @@ export type Config = {
     }
     totalDays: number
     dayTicks: number
+    tickInterval: number
     story: Record<StorySize.Size, { neededCommits: number; impact: number }>
-    totalTicks: number
     performanceReview: {
         interval: number
     }
     sprint: {
         startDay: number
     }
-    tickInterval: number
     itemGenerator: { start: number; interval: number }
 }
 
@@ -32,7 +31,6 @@ const config: Config = {
         medium: { neededCommits: 5, impact: 2 },
         large: { neededCommits: 8, impact: 4 },
     },
-    totalTicks: 10000,
     sprint: {
         startDay: 0,
     },

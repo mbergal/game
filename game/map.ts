@@ -2,17 +2,17 @@ import * as _ from "lodash"
 import { Vector, Direction, moveBy } from "../geometry"
 
 import * as random from "../utils/random"
-import { GameObject, GameObjectType } from "../objects/object"
+import * as GameObject from "../objects/object"
 import { check } from "../generator"
 import { Game } from "."
 
 export class GameMap {
     width: number
     height: number
-    cells: GameObject[][][]
-    objects: GameObject[]
+    cells: GameObject.t[][][]
+    objects: GameObject.t[]
 
-    constructor(width: number, height: number, objs: GameObject[]) {
+    constructor(width: number, height: number, objs: GameObject.t[]) {
         this.width = width
         this.height = height
         const a = _.range(1, 21)
@@ -24,7 +24,7 @@ export class GameMap {
         this.add(objs)
     }
 
-    add(objs: GameObject | GameObject[]) {
+    add(objs: GameObject.t | GameObject.t[]) {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.concat(objs_)
         for (const obj of objs_) {
@@ -37,7 +37,7 @@ export class GameMap {
         }
     }
 
-    remove(objs: GameObject | GameObject[]) {
+    remove(objs: GameObject.t | GameObject.t[]) {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
         for (const obj of objs_) {
@@ -48,7 +48,7 @@ export class GameMap {
         }
     }
 
-    move(obj: GameObject, pos: Vector.t) {
+    move(obj: GameObject.t, pos: Vector.t) {
         this.remove([obj])
         obj.position = pos
         this.add([obj])
@@ -63,25 +63,28 @@ export class GameMap {
         return { x, y }
     }
 
-    at(v: Vector.t): GameObject[] {
+    at(v: Vector.t): GameObject.t[] {
         return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height
             ? this.cells[v.y][v.x]
             : []
     }
 
-    objAt<T extends GameObject["type"]>(v: Vector.t, type: T): (GameObject & { type: T }) | null {
+    objAt<T extends GameObject.t["type"]>(
+        v: Vector.t,
+        type: T
+    ): (GameObject.t & { type: T }) | null {
         const objs = this.at(v)
         const objOfType = objs.find((x) => x.type == type) ?? null
-        return objOfType as (GameObject & { type: T }) | null
+        return objOfType as (GameObject.t & { type: T }) | null
     }
 
-    isAt(v: Vector.t, type: GameObject["type"]) {
+    isAt(v: Vector.t, type: GameObject.t["type"]) {
         if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
-        const objs: GameObject[] = this.cells[v.y][v.x]
+        const objs: GameObject.t[] = this.cells[v.y][v.x]
         return objs != null ? _.some(objs, (x) => x.type == type) : false
     }
 
-    possibleDirections(position: Vector.t, type: GameObjectType): Direction.t[] {
+    possibleDirections(position: Vector.t, type: GameObject.GameObjectType): Direction.t[] {
         const p: Direction.t[] = []
         for (const d of Direction.all) {
             const newPos = moveBy(position, d)
@@ -116,13 +119,13 @@ export class GameMap {
 export function directionTo(
     position: Vector.t,
     map: GameMap,
-    objType: GameObject["type"]
+    objType: GameObject.t["type"]
 ): Direction.t | null {
     const dd = _.compact(Direction.all.filter((x) => map.isAt(moveBy(position, x), objType)))
     return dd.length ? dd[0] : null
 }
 
-function repr(objs: GameObject[]) {
+function repr(objs: GameObject.t[]) {
     if (objs.length > 0) {
         switch (objs[0].type) {
             case "wall":

@@ -10,9 +10,9 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
-  var __export = (target, all3) => {
-    for (var name in all3)
-      __defProp(target, name, { get: all3[name], enumerable: true });
+  var __export = (target, all4) => {
+    for (var name in all4)
+      __defProp(target, name, { get: all4[name], enumerable: true });
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _10.defaults(root.Object(), context, _10.pick(root, contextProps));
+          context = context == null ? root : _9.defaults(root.Object(), context, _9.pick(root, contextProps));
           var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -5414,7 +5414,7 @@
             };
           }
           __name(propertyOf, "propertyOf");
-          var range4 = createRange();
+          var range3 = createRange();
           var rangeRight = createRange(true);
           function stubArray() {
             return [];
@@ -5604,7 +5604,7 @@
           lodash.pullAllBy = pullAllBy;
           lodash.pullAllWith = pullAllWith;
           lodash.pullAt = pullAt;
-          lodash.range = range4;
+          lodash.range = range3;
           lodash.rangeRight = rangeRight;
           lodash.rearg = rearg;
           lodash.reject = reject;
@@ -5985,24 +5985,21 @@
           }
           return lodash;
         }, "runInContext");
-        var _10 = runInContext();
+        var _9 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _10;
+          root._ = _9;
           define(function() {
-            return _10;
+            return _9;
           });
         } else if (freeModule) {
-          (freeModule.exports = _10)._ = _10;
-          freeExports._ = _10;
+          (freeModule.exports = _9)._ = _9;
+          freeExports._ = _9;
         } else {
-          root._ = _10;
+          root._ = _9;
         }
       }).call(exports);
     }
   });
-
-  // main.ts
-  var _9 = __toESM(require_lodash());
 
   // game/map.ts
   var map_exports = {};
@@ -6148,7 +6145,39 @@
     }
   }
   __name(check, "check");
-  function generateRoomWalls(args) {
+  function maze(size, game) {
+    const outer_walls = hline({ x: 0, y: 0 }, size.x).concat(vline({ x: 0, y: 0 }, size.y)).concat(vline({ x: size.x - 1, y: 0 }, size.y)).map(
+      (point) => ({
+        position: point,
+        type: "wall",
+        zIndex: 0
+      })
+    );
+    game.map.add(outer_walls);
+    const inner_walls = import_lodash.default.range(0, size.y, 2).map((y) => hline({ x: 0, y }, size.x)).flatMap((x) => x).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(inner_walls);
+    const room_walls = roomWalls({
+      height: size.y,
+      width: size.x,
+      wallsPerRow: { min: 3, max: 7 }
+    }).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(room_walls);
+    generateRoomDoors(game.map);
+  }
+  __name(maze, "maze");
+  function roomWalls(args) {
     const room_walls = import_lodash.default.flatMap(
       import_lodash.default.range(3, args.height - 2, 2).map(
         (y) => import_lodash.default.flatMap(
@@ -6165,7 +6194,7 @@
     );
     return room_walls;
   }
-  __name(generateRoomWalls, "generateRoomWalls");
+  __name(roomWalls, "roomWalls");
   function generateRoomDoors(map) {
     for (let row = 3; row <= map.height - 2; row += 2) {
       const rooms = getRowRooms(map, row);
@@ -6273,13 +6302,13 @@
 
   // game/map.ts
   var _GameMap = class _GameMap {
-    constructor(width2, height2, objs) {
-      this.width = width2;
-      this.height = height2;
+    constructor(width, height, objs) {
+      this.width = width;
+      this.height = height;
       const a = _3.range(1, 21);
       this.cells = _3.chunk(
-        _3.range(width2 * height2).map((x) => []),
-        width2
+        _3.range(width * height).map((x) => []),
+        width
       );
       this.objects = [];
       this.add(objs);
@@ -6355,8 +6384,8 @@
       };
     }
     static fromJson(json) {
-      const { width: width2, height: height2, objects } = json;
-      return new _GameMap(width2, height2, objects);
+      const { width, height, objects } = json;
+      return new _GameMap(width, height, objects);
     }
   };
   __name(_GameMap, "GameMap");
@@ -6390,7 +6419,8 @@
       codeBlocks: 0,
       money: 0,
       level: 0,
-      impact: 0
+      impact: 0,
+      stockPrice: 0
     };
   }
   __name(make, "make");
@@ -6402,7 +6432,7 @@
     Score: () => score_exports,
     handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make6,
+    make: () => make9,
     message: () => message,
     save: () => save,
     toJson: () => toJson
@@ -6472,7 +6502,6 @@
       medium: { neededCommits: 5, impact: 2 },
       large: { neededCommits: 8, impact: 4 }
     },
-    totalTicks: 1e4,
     sprint: {
       startDay: 0
     },
@@ -6527,130 +6556,6 @@
   }
   __name(tick, "tick");
 
-  // game/game.ts
-  function make6(width2, height2) {
-    return {
-      map: new GameMap(width2, height2, []),
-      commands: [],
-      itemGenerator: make5(),
-      sprint: null,
-      score: make(),
-      messages: [],
-      messageTact: 0,
-      ticks: 0
-    };
-  }
-  __name(make6, "make");
-  function toJson(game) {
-    return {
-      map: game.map.toJson(),
-      score: game.score,
-      itemGenerator: game.itemGenerator,
-      commands: game.commands,
-      messages: game.messages,
-      messageTact: game.messageTact
-    };
-  }
-  __name(toJson, "toJson");
-  function handleEffects(game, effects) {
-    for (const effect of effects) {
-      switch (effect.type) {
-        case "null":
-          break;
-        case "addImpact":
-          game.score.impact += effect.impact;
-          break;
-        case "showMessage":
-          message(game, effect.message);
-          break;
-        default:
-          assertUnreachable(effect);
-      }
-    }
-  }
-  __name(handleEffects, "handleEffects");
-  function message(game, m) {
-    game.messages.push(m);
-  }
-  __name(message, "message");
-  function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
-    console.log("Game saved!");
-  }
-  __name(save, "save");
-  function load(storage) {
-    const objectsStorage = storage.load();
-    if (objectsStorage != null) {
-      const {
-        commands,
-        itemGenerator,
-        score,
-        sprint,
-        messages,
-        messageTact,
-        map,
-        ticks
-      } = JSON.parse(objectsStorage);
-      const map_ = GameMap.fromJson(map);
-      const player = map_.objects.find((x) => x.type === "player");
-      return {
-        ticks,
-        score,
-        itemGenerator,
-        sprint,
-        messages,
-        messageTact,
-        commands,
-        map: map_,
-        player
-      };
-    } else {
-      console.log("There is no saved game.");
-      return null;
-    }
-  }
-  __name(load, "load");
-
-  // game/levels.ts
-  var all2 = [
-    {
-      name: "Engineer I",
-      rate: 5
-    },
-    {
-      name: "Engineer II",
-      rate: 30
-    },
-    {
-      name: "Engineer III",
-      rate: 40
-    },
-    {
-      name: "Senior Engineer I",
-      rate: 40
-    },
-    {
-      name: "Senior Engineer II",
-      rate: 40
-    },
-    {
-      name: "Engineering Lead",
-      rate: 40
-    },
-    {
-      name: "Staff Engineer I",
-      rate: 40
-    },
-    {
-      name: "Staff Engineer II",
-      rate: 40
-    },
-    {
-      name: "Principal Engineer",
-      rate: 40
-    }
-  ];
-
   // game/sprint.ts
   var import_lodash3 = __toESM(require_lodash());
 
@@ -6675,7 +6580,7 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make7(position, size) {
+  function make6(position, size) {
     return {
       type: "story",
       position,
@@ -6685,7 +6590,7 @@
       name: choice(storyNames[size])
     };
   }
-  __name(make7, "make");
+  __name(make6, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6739,103 +6644,25 @@
   __name(showMessage, "showMessage");
 
   // game/plan.ts
-  function make8() {
+  function make7() {
     return /* @__PURE__ */ new Map();
   }
-  __name(make8, "make");
-  function addEvent(plan, time, event) {
-    if (!plan.has(time)) {
-      plan.set(time, []);
-    }
-    plan.get(time).push(event);
-  }
-  __name(addEvent, "addEvent");
-  function append(plan, other) {
-    for (const time of other.keys()) {
-      for (const event of other.get(time)) {
-        addEvent(plan, time, event);
-      }
-    }
-    return plan;
-  }
-  __name(append, "append");
+  __name(make7, "make");
 
   // game/sprint.ts
-  function make9(startTick) {
+  function make8() {
     return {
-      day: 0,
-      plan: generatePlan(startTick)
+      day: 0
     };
   }
-  __name(make9, "make");
-  function generatePlan(startDay) {
-    let plan = make8();
-    let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash3.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const r = generateSprint(startTick);
-      append(plan, r[0]);
-      startTick += r[1];
-    }
-    return plan;
-  }
-  __name(generatePlan, "generatePlan");
-  function generateSprint(startTick) {
-    const DAY = config_default.dayTicks;
-    const plan = make8();
-    const addEvent2 = /* @__PURE__ */ __name((event) => {
-      addEvent(plan, startTick, event);
-    }, "addEvent");
-    addEvent2({ type: "sprintStart" });
-    addEvent2({ type: "groomBacklogStart" });
-    const storySizes = [
-      "small",
-      "small",
-      "small",
-      "medium",
-      "medium",
-      "large"
-    ];
-    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
-    const groomingStart = startTick;
-    for (const t of times) {
-      startTick = groomingStart + t[1];
-      addEvent2({ type: "createBacklogIssue", size: t[0] });
-    }
-    startTick += DAY - 1;
-    addEvent2({ type: "groomBacklogEnd" });
-    startTick += 1;
-    let sprintDay = 0;
-    for (const i of import_lodash3.default.range(4)) {
-      sprintDay += 1;
-      addEvent2({ type: "sprintDayStart", day: sprintDay });
-      startTick += DAY - 1;
-      addEvent2({ type: "sprintDayEnd", day: sprintDay });
-      startTick += 1;
-    }
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    for (const i of import_lodash3.default.range(4)) {
-      sprintDay += 1;
-      addEvent2({ type: "sprintDayStart", day: sprintDay });
-      startTick += DAY - 1;
-      addEvent2({ type: "sprintDayEnd", day: sprintDay });
-      startTick += 1;
-    }
-    addEvent2({ type: "sprintEnd" });
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    return [plan, startTick];
-  }
-  __name(generateSprint, "generateSprint");
+  __name(make8, "make");
   function* tick2(sprint, game) {
-    const events = sprint.plan.get(game.ticks);
+    const events = game.plan.get(game.ticks);
     if (events) {
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make7(game.map.getRandomEmptyLocation(), event.size);
+            const story = make6(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
             yield showMessage(`Added ${story.name}`, 20);
             break;
@@ -6869,6 +6696,137 @@
     }
   }
   __name(tick2, "tick");
+
+  // game/game.ts
+  function make9(size, plan) {
+    return {
+      map: new GameMap(size.x, size.y, []),
+      commands: [],
+      itemGenerator: make5(),
+      sprint: make8(),
+      score: make(),
+      messages: [],
+      messageTact: 0,
+      time: {
+        ticks: 0,
+        day: 0,
+        dayOfWeek: "Sunday"
+      },
+      plan
+    };
+  }
+  __name(make9, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
+  function message(game, m) {
+    game.messages.push(m);
+  }
+  __name(message, "message");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    console.log("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        commands,
+        itemGenerator,
+        score,
+        sprint,
+        messages,
+        messageTact,
+        map,
+        time,
+        plan
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find((x) => x.type === "player");
+      return {
+        time,
+        score,
+        itemGenerator,
+        sprint,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player,
+        plan
+      };
+    } else {
+      console.log("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
+  // game/levels.ts
+  var all2 = [
+    {
+      name: "Engineer I",
+      rate: 5
+    },
+    {
+      name: "Engineer II",
+      rate: 30
+    },
+    {
+      name: "Engineer III",
+      rate: 40
+    },
+    {
+      name: "Senior Engineer I",
+      rate: 40
+    },
+    {
+      name: "Senior Engineer II",
+      rate: 40
+    },
+    {
+      name: "Engineering Lead",
+      rate: 40
+    },
+    {
+      name: "Staff Engineer I",
+      rate: 40
+    },
+    {
+      name: "Staff Engineer II",
+      rate: 40
+    },
+    {
+      name: "Principal Engineer",
+      rate: 40
+    }
+  ];
 
   // objects/boss.ts
   var import_lodash4 = __toESM(require_lodash());
@@ -7269,7 +7227,10 @@
             case "commit":
               if (canPickItem(player)) {
                 console.log(`Can pick item  ${JSON.stringify(player)}`);
-                append2(result, showMessage(`Picked a commit ${obj.hash}`, 40));
+                append2(
+                  result,
+                  showMessage(`Picked a commit ${obj.hash}`, 40)
+                );
                 append2(result, pickItem(player, obj, game));
               }
               break;
@@ -7305,7 +7266,7 @@
       const row = [];
       for (let x = 0; x < map.width; x++) {
         const objs = map.cells[y][x];
-        row.push(getRepresentation(map, objs, game.ticks));
+        row.push(getRepresentation(map, objs, game.time.ticks));
       }
       buffer.push(row);
     }
@@ -7336,7 +7297,11 @@
   }
   __name(showMessage2, "showMessage");
   function showTicks(game) {
-    return game.ticks.toString().padStart(6, "0");
+    return (
+      // game.time.ticks.toString().padStart(6, "0") +
+      // " " +
+      game.time.day.toString() + " " + game.time.dayOfWeek + " " + game.sprint?.day
+    );
   }
   __name(showTicks, "showTicks");
   function showLevel(game) {
@@ -7355,7 +7320,7 @@
   }
   __name(showTask, "showTask");
   function showStockPrice(game) {
-    return `Company Stock Price: $${((config_default.totalTicks - game.ticks) / 100).toFixed(2)} \u25BC`;
+    return `\u{1F5E0}: $${game.score.stockPrice.toFixed(2)} \u25BC`;
   }
   __name(showStockPrice, "showStockPrice");
   function isVisible(obj) {
@@ -7461,46 +7426,29 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
+  // game/day_of_week.ts
+  var all3 = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
   // main.ts
-  var height = 25;
-  var width = 80;
+  var MAZE_SIZE = { y: 25, x: 80 };
   function main() {
     const boss = make10();
-    let game = game_exports.make(width, height);
-    const outer_walls = hline({ x: 0, y: 0 }, width).concat(vline({ x: 0, y: 0 }, height)).concat(vline({ x: width - 1, y: 0 }, height)).map(
-      (point) => ({
-        position: point,
-        type: "wall",
-        zIndex: 0
-      })
-    );
-    game.map.add(outer_walls);
-    const inner_walls = _9.range(0, height, 2).map((y) => hline({ x: 0, y }, width)).flatMap((x) => x).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(inner_walls);
-    const room_walls = generateRoomWalls({
-      height,
-      width,
-      wallsPerRow: { min: 3, max: 7 }
-    }).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(room_walls);
-    generateRoomDoors(game.map);
+    const plan = make7();
+    let game = game_exports.make(MAZE_SIZE, plan);
+    maze(MAZE_SIZE, game);
     game.map.add([boss]);
     game.player = make12(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
-      text: "Welcome to the Rat Race. You need to earn enough money and get out of the system",
+      text: "Requiem for a Programmer. You are in hell. Get enough money and get out !!!!!",
       ttl: 100
     });
     let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
@@ -7583,14 +7531,17 @@
   }
   __name(load2, "load");
   function processTick(game) {
-    game.ticks += 1;
+    game.time.ticks += 1;
+    game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
     game.score.money += all2[game.score.level].rate;
+    game.time.day = Math.floor(game.time.ticks / config_default.dayTicks);
+    game.time.dayOfWeek = all3[game.time.day % 7];
     tick(game.itemGenerator, game);
-    if (config_default.sprint.startDay * config_default.dayTicks <= game.ticks && !game.sprint) {
-      game.sprint = make9(game.ticks);
-    }
     if (game.sprint) {
-      game_exports.handleEffects(game, tick2(game.sprint, game));
+      game_exports.handleEffects(
+        game,
+        tick2(game.sprint, { map: game.map, ticks: game.time.ticks, plan: game.plan })
+      );
     }
     for (const obj of game.map.objects) {
       const result = tick6(obj, game, game.commands);

@@ -1,41 +1,55 @@
-import { assert } from "console"
 import { Command } from "../commands"
 import * as ItemGenerator from "../game/item_generator"
+import { Vector } from "../geometry"
 import * as Player from "../objects/player"
+import { assertUnreachable } from "../utils/utils"
+import * as DayOfWeek from "./day_of_week"
 import * as Effect from "./effect"
 import * as Effects from "./effects"
 import * as GameMap from "./map"
 import { Message } from "./message"
+import * as Plan from "./plan"
 import * as Score from "./score"
 import * as Sprint from "./sprint"
-import { assertUnreachable } from "../utils/utils"
 export * as GameMap from "./map"
 export * as Score from "./score"
 
 export type t = {
     map: GameMap.GameMap
     score: Score.Score
-    ticks: number
+    time: GameTime
     itemGenerator: ItemGenerator.t
-    sprint: Sprint.t | null
+    sprint: Sprint.t
     commands: Command[]
     messages: Message[]
     messageTact: number
     player?: Player.Player
+    plan: Plan.t
+}
+
+export type GameTime = {
+    day: number
+    ticks: number
+    dayOfWeek: DayOfWeek.t
 }
 
 export type Game = t
 
-export function make(width: number, height: number): t {
+export function make(size: Vector.t, plan: Plan.t): t {
     return {
-        map: new GameMap.GameMap(width, height, []),
+        map: new GameMap.GameMap(size.x, size.y, []),
         commands: [],
         itemGenerator: ItemGenerator.make(),
-        sprint: null,
+        sprint: Sprint.make(),
         score: Score.make(),
         messages: [],
         messageTact: 0,
-        ticks: 0,
+        time: {
+            ticks: 0,
+            day: 0,
+            dayOfWeek: "Sunday",
+        },
+        plan: plan,
     }
 }
 
@@ -91,7 +105,8 @@ export function load(storage: GameStorage): Game | null {
             messages,
             messageTact,
             map,
-            ticks,
+            time,
+            plan,
         }: {
             score: Score.Score
             sprint: Sprint.t
@@ -100,12 +115,13 @@ export function load(storage: GameStorage): Game | null {
             messageTact: number
             itemGenerator: ItemGenerator.t
             map: object
-            ticks: number
+            time: GameTime
+            plan: Plan.t
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)
         const player = map_.objects.find<Player.t>((x): x is Player.t => x.type === "player")
         return {
-            ticks: ticks,
+            time: time,
             score: score,
             itemGenerator: itemGenerator,
             sprint: sprint,
@@ -114,6 +130,7 @@ export function load(storage: GameStorage): Game | null {
             commands: commands,
             map: map_,
             player: player,
+            plan: plan,
         }
     } else {
         console.log("There is no saved game.")

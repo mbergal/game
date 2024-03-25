@@ -6,71 +6,33 @@ import { GameStorage } from "./game/game"
 import * as ItemGenerator from "./game/item_generator"
 import * as EngineeringLevels from "./game/levels"
 import * as Sprint from "./game/sprint"
-import { generateRoomDoors, generateRoomWalls, hline, vline } from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
 import * as Footprint from "./objects/footprint"
-import { GameObject } from "./objects/object"
+import { t } from "./objects/object"
 import * as Player from "./objects/player"
+import * as Plan from "./game/plan"
+import * as MazeGenerator from "./generator"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
+import * as DayOfWeek from "./game/day_of_week"
 
-const height = 25
-const width = 80
+const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
 export function main() {
     const boss: Boss.t = Boss.make()
-    let game: Game.t = Game.make(width, height)
+    const plan: Plan.t = Plan.make()
 
-    const outer_walls = hline({ x: 0, y: 0 }, width)
-        .concat(vline({ x: 0, y: 0 }, height))
-        .concat(vline({ x: width - 1, y: 0 }, height))
-        .map(
-            (point: Vector.t): GameObject => ({
-                position: point,
-                type: "wall",
-                zIndex: 0,
-            })
-        )
+    let game: Game.t = Game.make(MAZE_SIZE, plan)
+    MazeGenerator.maze(MAZE_SIZE, game)
 
-    game.map.add(outer_walls)
-
-    const inner_walls = _.range(0, height, 2)
-        .map((y: number) => hline({ x: 0, y }, width))
-        .flatMap((x) => x)
-        .map(
-            (point: Vector.t): GameObject => ({
-                type: "wall",
-                position: point,
-                zIndex: 0,
-            })
-        )
-
-    game.map.add(inner_walls)
-
-    const room_walls = generateRoomWalls({
-        height,
-        width,
-        wallsPerRow: { min: 3, max: 7 },
-    }).map(
-        (point: Vector.t): GameObject => ({
-            type: "wall",
-            position: point,
-            zIndex: 0,
-        })
-    )
-
-    game.map.add(room_walls)
-
-    generateRoomDoors(game.map)
     game.map.add([boss])
 
     game.player = Player.make(game.map.getRandomEmptyLocation())
-
     game.map.add([game.player])
 
     Game.message(game, {
-        text: "Welcome to the Rat Race. You need to earn enough money and get out of the system",
+        text: "Requiem for a Programmer. You are in hell. Get enough money and get out !!!!!",
         ttl: 100,
     })
 
@@ -159,18 +121,20 @@ export function load(): Game.t | null {
 }
 
 function processTick(game: Game.t) {
-    game.ticks += 1
+    game.time.ticks += 1
+    game.score.stockPrice = 100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
     game.score.money += EngineeringLevels.all[game.score.level].rate
+    game.time.day = Math.floor(game.time.ticks / config.dayTicks)
+    game.time.dayOfWeek = DayOfWeek.all[game.time.day % 7]
 
     ItemGenerator.tick(game.itemGenerator, game)
     /*eslint no-unused-expressions: "error"*/
 
-    if (config.sprint.startDay * config.dayTicks <= game.ticks && !game.sprint) {
-        game.sprint = Sprint.make(game.ticks)
-    }
-
     if (game.sprint) {
-        Game.handleEffects(game, Sprint.tick(game.sprint, game))
+        Game.handleEffects(
+            game,
+            Sprint.tick(game.sprint, { map: game.map, ticks: game.time.ticks, plan: game.plan })
+        )
     }
 
     for (const obj of game.map.objects) {
@@ -185,7 +149,7 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: GameObject, game: Game.t, commands: Command[]): Result {
+function tick(obj: t, game: Game.t, commands: Command[]): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":

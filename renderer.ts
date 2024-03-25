@@ -1,11 +1,10 @@
-import { Vector } from "./geometry"
-import { GameMap } from "./game/map"
-import { GameObject } from "./objects/object"
-import { assertUnreachable } from "./utils/utils"
 import { Game } from "./game"
 import * as EngineeringLevel from "./game/levels"
+import { GameMap } from "./game/map"
 import * as Message from "./game/message"
-import { Size } from "./objects/story"
+import { Vector } from "./geometry"
+import { t } from "./objects/object"
+import { assertUnreachable } from "./utils/utils"
 import config from "./game/config"
 
 export function render(game: Game.t) {
@@ -16,7 +15,7 @@ export function render(game: Game.t) {
 
         for (let x = 0; x < map.width; x++) {
             const objs = map.cells[y][x]
-            row.push(getRepresentation(map, objs, game.ticks))
+            row.push(getRepresentation(map, objs, game.time.ticks))
         }
 
         buffer.push(row)
@@ -60,7 +59,11 @@ export function showMessage(game: { messages: Message.t[]; messageTact: number }
 }
 
 function showTicks(game: Game.t): string {
-    return game.ticks.toString().padStart(6, "0")
+    return (
+        // game.time.ticks.toString().padStart(6, "0") +
+        // " " +
+        game.time.day.toString() + " " + game.time.dayOfWeek + " " + game.sprint?.day
+    )
 }
 
 function showLevel(game: Game.t): string {
@@ -79,9 +82,9 @@ function showTask(game: Game.t): string {
 }
 
 function showStockPrice(game: Game.t): string {
-    return `Company Stock Price: $${((config.totalTicks - game.ticks) / 100).toFixed(2)} ▼`
+    return `🗠: $${game.score.stockPrice.toFixed(2)} ▼`
 }
-function isVisible(obj: GameObject) {
+function isVisible(obj: t) {
     switch (obj.type) {
         case "boss":
         case "wall":
@@ -98,7 +101,7 @@ function isVisible(obj: GameObject) {
     }
     return true
 }
-function getRepresentation(map: GameMap, objs: GameObject[], tick: number): string {
+function getRepresentation(map: GameMap, objs: t[], tick: number): string {
     let obj = objs.find(isVisible)
     if (obj) {
         switch (obj.type) {

@@ -1,4 +1,18 @@
 import * as Story from "../objects/story"
+import * as DayOfWeek from "./day_of_week"
+
+type GameStarted = {
+    type: "gameStarted"
+}
+
+type GameEnded = {
+    type: "gameStarted"
+}
+
+type DayStarted = {
+    day: number
+    dayOfWeek: DayOfWeek.t
+}
 
 type SprintStart = {
     type: "sprintStart"

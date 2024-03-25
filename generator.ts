@@ -1,8 +1,10 @@
 import _ from "lodash"
-import { Vector } from "./geometry"
+import * as Game from "./game/game"
 import { GameMap } from "./game/map"
-import * as random from "./utils/random"
+import { Vector } from "./geometry"
+import * as GameObject from "./objects/object"
 import * as Room from "./room"
+import * as random from "./utils/random"
 
 export function check<T>(t: () => T, f: (t: T) => boolean) {
     while (true) {
@@ -11,7 +13,50 @@ export function check<T>(t: () => T, f: (t: T) => boolean) {
     }
 }
 
-export function generateRoomWalls(args: {
+export function maze(size: Vector.t, game: Game.t) {
+    const outer_walls = hline({ x: 0, y: 0 }, size.x)
+        .concat(vline({ x: 0, y: 0 }, size.y))
+        .concat(vline({ x: size.x - 1, y: 0 }, size.y))
+        .map(
+            (point: Vector.t): GameObject.t => ({
+                position: point,
+                type: "wall",
+                zIndex: 0,
+            })
+        )
+
+    game.map.add(outer_walls)
+
+    const inner_walls = _.range(0, size.y, 2)
+        .map((y: number) => hline({ x: 0, y }, size.x))
+        .flatMap((x) => x)
+        .map(
+            (point: Vector.t): GameObject.t => ({
+                type: "wall",
+                position: point,
+                zIndex: 0,
+            })
+        )
+
+    game.map.add(inner_walls)
+
+    const room_walls = roomWalls({
+        height: size.y,
+        width: size.x,
+        wallsPerRow: { min: 3, max: 7 },
+    }).map(
+        (point: Vector.t): GameObject.t => ({
+            type: "wall",
+            position: point,
+            zIndex: 0,
+        })
+    )
+
+    game.map.add(room_walls)
+
+    generateRoomDoors(game.map)
+}
+export function roomWalls(args: {
     width: number
     height: number
     wallsPerRow: { min: number; max: number }

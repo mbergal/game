@@ -12,16 +12,14 @@ import * as StorySize from "../objects/story_size"
 import * as Plan from "../game/plan"
 
 export interface t {
-    plan: Plan.t
     day: number
 }
 
 export interface Sprint extends t {}
 
-export function make(startTick: number): t {
+export function make(): t {
     return {
         day: 0,
-        plan: generatePlan(startTick),
     }
 }
 
@@ -96,8 +94,11 @@ function generateSprint(startTick: number): [Plan.t, number] {
     return [plan, startTick] as const
 }
 
-export function* tick(sprint: t, game: { map: GameMap.GameMap; ticks: number }): Generator<Effect> {
-    const events = sprint.plan.get(game.ticks)
+export function* tick(
+    sprint: t,
+    game: { map: GameMap.GameMap; ticks: number; plan: Plan.t }
+): Generator<Effect> {
+    const events = game.plan.get(game.ticks)
     if (events) {
         for (const event of events) {
             switch (event.type) {
