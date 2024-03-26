@@ -94,21 +94,20 @@ export function* tick(
                 case "createBacklogIssue":
                     const story = Story.make(game.map.getRandomEmptyLocation(), event.size)
                     game.map.add(story)
-
-                    yield showMessage(`Added ${story.name}`, 20)
+                    yield showMessage(`Moved "${story.name}" to To Do`, 2000)
                     break
                 case "groomBacklogEnd":
                     break
                 case "groomBacklogStart":
-                    yield showMessage("Grooming backlog ...", 40)
+                    yield showMessage("Grooming backlog ...", 2000)
                     break
                 case "sprintDayEnd":
                     break
                 case "sprintDayStart":
-                    yield showMessage(`Sprint day ${event.day}`, 20)
+                    yield showMessage(`Sprint day ${event.day}`, 2000)
                     break
                 case "sprintEnd":
-                    yield showMessage("Sprint ended", 49)
+                    yield showMessage("Sprint ended", 2000)
                     const stories = GameObjects.filter(game.map.objects, "story")
                     game.map.remove(stories)
                     break

@@ -775,7 +775,7 @@
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
           context = context == null ? root : _10.defaults(root.Object(), context, _10.pick(root, contextProps));
-          var Array2 = context.Array, Date = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
+          var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
           var funcToString = funcProto.toString;
@@ -800,8 +800,8 @@
             } catch (e2) {
             }
           }();
-          var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date && Date.now !== root.Date.now && Date.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
-          var nativeCeil = Math2.ceil, nativeFloor = Math2.floor, nativeGetSymbols = Object2.getOwnPropertySymbols, nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined, nativeIsFinite = context.isFinite, nativeJoin = arrayProto.join, nativeKeys = overArg(Object2.keys, Object2), nativeMax = Math2.max, nativeMin = Math2.min, nativeNow = Date.now, nativeParseInt = context.parseInt, nativeRandom = Math2.random, nativeReverse = arrayProto.reverse;
+          var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date2 && Date2.now !== root.Date.now && Date2.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
+          var nativeCeil = Math2.ceil, nativeFloor = Math2.floor, nativeGetSymbols = Object2.getOwnPropertySymbols, nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined, nativeIsFinite = context.isFinite, nativeJoin = arrayProto.join, nativeKeys = overArg(Object2.keys, Object2), nativeMax = Math2.max, nativeMin = Math2.min, nativeNow = Date2.now, nativeParseInt = context.parseInt, nativeRandom = Math2.random, nativeReverse = arrayProto.reverse;
           var DataView = getNative(context, "DataView"), Map2 = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
           var metaMap = WeakMap && new WeakMap();
           var realNames = {};
@@ -6530,7 +6530,7 @@
           itemGenerator.state.tact = 0;
           const aa = choice(
             ["door", "commit", "coffee"],
-            [1, 100, 0]
+            [100, 100, 0]
           );
           let item;
           switch (aa) {
@@ -6742,20 +6742,20 @@
           case "createBacklogIssue":
             const story = make6(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
-            yield showMessage(`Added ${story.name}`, 20);
+            yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
             break;
           case "groomBacklogEnd":
             break;
           case "groomBacklogStart":
-            yield showMessage("Grooming backlog ...", 40);
+            yield showMessage("Grooming backlog ...", 2e3);
             break;
           case "sprintDayEnd":
             break;
           case "sprintDayStart":
-            yield showMessage(`Sprint day ${event.day}`, 20);
+            yield showMessage(`Sprint day ${event.day}`, 2e3);
             break;
           case "sprintEnd":
-            yield showMessage("Sprint ended", 49);
+            yield showMessage("Sprint ended", 2e3);
             const stories = filter(game.map.objects, "story");
             game.map.remove(stories);
             break;
@@ -6790,7 +6790,8 @@
         day: 0,
         dayOfWeek: "Sunday"
       },
-      plan
+      plan,
+      messageStartTime: null
     };
   }
   __name(make9, "make");
@@ -6823,7 +6824,13 @@
   }
   __name(handleEffects, "handleEffects");
   function message(game, m) {
-    game.messages.push(m);
+    if (m.text instanceof Array) {
+      for (const text of m.text) {
+        game.messages.push({ text, ttl: m.ttl });
+      }
+    } else {
+      game.messages.push({ text: m.text, ttl: m.ttl });
+    }
   }
   __name(message, "message");
   function save(game, storage) {
@@ -6843,7 +6850,8 @@
         messageTact,
         map,
         time,
-        plan
+        plan,
+        messageStartTime
       } = JSON.parse(objectsStorage);
       const map_ = GameMap.fromJson(map);
       const player = map_.objects.find((x) => x.type === "player");
@@ -6857,7 +6865,8 @@
         commands,
         map: map_,
         player,
-        plan
+        plan,
+        messageStartTime
       };
     } else {
       console.log("There is no saved game.");
@@ -7357,13 +7366,15 @@
   __name(render, "render");
   function showMessage2(game) {
     if (game.messages.length > 0) {
-      game.messageTact += 1;
+      if (game.messageStartTime == null) {
+        game.messageStartTime = Date.now();
+      }
       let text = game.messages[0].text;
-      if (game.messageTact > game.messages[0].ttl) {
-        game.messageTact = 0;
+      if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
+        game.messageStartTime = Date.now();
         game.messages.shift();
-      } else if (game.messageTact > 5 && game.messages.length > 1) {
-        game.messageTact = 0;
+      } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > 3e3 && game.messages.length > 1) {
+        game.messageStartTime = Date.now();
         game.messages.shift();
       } else {
         return text;
@@ -7526,8 +7537,13 @@
     game.player = make12(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
-      text: "Requiem for a Programmer. You are in hell. Get enough money and get out !!!!!",
-      ttl: 100
+      text: [
+        "Requiem for a Programmer. ",
+        "You are in Agile hell.",
+        "Earn enough money and get out !!!!!",
+        "'*' is you. Use arrow keys to move."
+      ],
+      ttl: 3e3
     });
     let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
     window.addEventListener("keydown", (event) => {
@@ -7609,7 +7625,6 @@
   }
   __name(load2, "load");
   function processTick(game) {
-    game.time.ticks += 1;
     game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
     game.score.money += all2[game.score.level].rate;
     game.time.day = Math.floor(game.time.ticks / config_default.dayTicks);
@@ -7627,6 +7642,7 @@
     }
     game.commands = [];
     render(game);
+    game.time.ticks += 1;
   }
   __name(processTick, "processTick");
   function tick6(obj, game, commands) {

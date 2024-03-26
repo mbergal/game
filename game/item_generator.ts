@@ -30,7 +30,7 @@ export function tick(itemGenerator: t, game: Game.Game) {
                 itemGenerator.state.tact = 0
                 const aa = random.choice(
                     ["door" as const, "commit" as const, "coffee" as const],
-                    [1, 100, 0]
+                    [100, 100, 0]
                 )
                 let item
                 switch (aa) {

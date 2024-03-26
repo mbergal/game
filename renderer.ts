@@ -38,15 +38,23 @@ export function render(game: Game.t) {
     contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
 }
 
-export function showMessage(game: { messages: Message.t[]; messageTact: number }): string {
+export function showMessage(game: {
+    messages: Message.t[]
+    messageStartTime: number | null
+}): string {
     if (game.messages.length > 0) {
-        game.messageTact += 1
+        if (game.messageStartTime == null) {
+            game.messageStartTime = Date.now()
+        }
         let text = game.messages[0].text
-        if (game.messageTact > game.messages[0].ttl) {
-            game.messageTact = 0
+        if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
+            game.messageStartTime = Date.now()
             game.messages.shift()
-        } else if (game.messageTact > 5 && game.messages.length > 1) {
-            game.messageTact = 0
+        } else if (
+            Date.now().valueOf() - game.messageStartTime.valueOf() > 3000 &&
+            game.messages.length > 1
+        ) {
+            game.messageStartTime = Date.now()
             game.messages.shift()
         } else {
             return text

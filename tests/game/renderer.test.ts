@@ -3,11 +3,11 @@ import { showMessage } from "../../renderer"
 
 describe("showMessage", () => {
     test("shows non-expired message", () => {
-        const shown = showMessage({ messages: [{ text: "A", ttl: 1 }], messageTact: 0 })
+        const shown = showMessage({ messages: [{ text: "A", ttl: 1 }], messageStartTime: 0 })
         expect(shown).toEqual("A")
     })
     test("removes expired message and shows blank text if no messages are left", () => {
-        const shown = showMessage({ messages: [{ text: "A", ttl: 1 }], messageTact: 1 })
+        const shown = showMessage({ messages: [{ text: "A", ttl: 1 }], messageStartTime: 1 })
         expect(shown).toEqual("")
     })
     test("removes first expired message and shows the next line", () => {

@@ -25,6 +25,7 @@ export type t = {
     messageTact: number
     player?: Player.Player
     plan: Plan.t
+    messageStartTime: number | null
 }
 
 export type GameTime = {
@@ -50,6 +51,7 @@ export function make(size: Vector.t, plan: Plan.t): t {
             dayOfWeek: "Sunday",
         },
         plan: plan,
+        messageStartTime: null,
     }
 }
 
@@ -80,8 +82,14 @@ export function handleEffects(game: t, effects: Generator<Effect.t> | Effects.t)
         }
     }
 }
-export function message(game: t, m: Message) {
-    game.messages.push(m)
+export function message(game: t, m: Message | { text: string[]; ttl: number }) {
+    if (m.text instanceof Array) {
+        for (const text of m.text) {
+            game.messages.push({ text: text, ttl: m.ttl })
+        }
+    } else {
+        game.messages.push({ text: m.text, ttl: m.ttl })
+    }
 }
 
 export interface GameStorage {
@@ -107,6 +115,7 @@ export function load(storage: GameStorage): Game | null {
             map,
             time,
             plan,
+            messageStartTime,
         }: {
             score: Score.Score
             sprint: Sprint.t
@@ -117,6 +126,7 @@ export function load(storage: GameStorage): Game | null {
             map: object
             time: GameTime
             plan: Plan.t
+            messageStartTime: number
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)
         const player = map_.objects.find<Player.t>((x): x is Player.t => x.type === "player")
@@ -131,6 +141,7 @@ export function load(storage: GameStorage): Game | null {
             map: map_,
             player: player,
             plan: plan,
+            messageStartTime: messageStartTime,
         }
     } else {
         console.log("There is no saved game.")

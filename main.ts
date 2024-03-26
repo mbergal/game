@@ -32,8 +32,13 @@ export function main() {
     game.map.add([game.player])
 
     Game.message(game, {
-        text: "Requiem for a Programmer. You are in hell. Get enough money and get out !!!!!",
-        ttl: 100,
+        text: [
+            "Requiem for a Programmer. ",
+            "You are in Agile hell.",
+            "Earn enough money and get out !!!!!",
+            "'*' is you. Use arrow keys to move.",
+        ],
+        ttl: 3_000,
     })
 
     let interval = window.setInterval(() => processTick(game), config.tickInterval)
@@ -121,7 +126,6 @@ export function load(): Game.t | null {
 }
 
 function processTick(game: Game.t) {
-    game.time.ticks += 1
     game.score.stockPrice = 100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
     game.score.money += EngineeringLevels.all[game.score.level].rate
     game.time.day = Math.floor(game.time.ticks / config.dayTicks)
@@ -143,6 +147,7 @@ function processTick(game: Game.t) {
     }
     game.commands = []
     render(game)
+    game.time.ticks += 1
 }
 
 interface Result {
