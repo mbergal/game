@@ -1,27 +1,27 @@
-import * as _ from "lodash"
 import { Command } from "./commands"
 import { Game } from "./game"
+import * as Collapse from "./game/collapse"
 import config from "./game/config"
 import { GameStorage } from "./game/game"
+import * as GameTime from "./game/game_time"
 import * as ItemGenerator from "./game/item_generator"
 import * as EngineeringLevels from "./game/levels"
+import * as Plan from "./game/plan"
 import * as Sprint from "./game/sprint"
+import * as MazeGenerator from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
 import * as Footprint from "./objects/footprint"
 import { t } from "./objects/object"
 import * as Player from "./objects/player"
-import * as Plan from "./game/plan"
-import * as MazeGenerator from "./generator"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
-import * as DayOfWeek from "./game/day_of_week"
 
-const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
+const MAZE_SIZE: Vector.Vector = { y: 25, x: 80 }
 
 export function main() {
     const boss: Boss.t = Boss.make()
-    const plan: Plan.t = Plan.generatePlan(0)
+    const plan: Plan.Plan = Plan.generatePlan(0)
 
     let game: Game.t = Game.make(MAZE_SIZE, plan)
     MazeGenerator.maze(MAZE_SIZE, game)
@@ -128,17 +128,14 @@ export function load(): Game.t | null {
 function processTick(game: Game.t) {
     game.score.stockPrice = 100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
     game.score.money += EngineeringLevels.all[game.score.level].rate
-    game.time.day = Math.floor(game.time.ticks / config.dayTicks)
-    game.time.dayOfWeek = DayOfWeek.all[game.time.day % 7]
+    game.time = GameTime.make(game.time.ticks)
 
+    Game.tick(game)
+    Game.handleEffects(game, Collapse.tick(game))
     ItemGenerator.tick(game.itemGenerator, game)
-    /*eslint no-unused-expressions: "error"*/
 
     if (game.sprint) {
-        Game.handleEffects(
-            game,
-            Sprint.tick(game.sprint, { map: game.map, ticks: game.time.ticks, plan: game.plan })
-        )
+        Game.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
     }
 
     for (const obj of game.map.objects) {
@@ -179,29 +176,3 @@ function tick(obj: t, game: Game.t, commands: Command[]): Result {
 }
 
 main()
-
-/**
- *
- * Bosses
- * CEO 
-   ** Fucks CIO - CIO moves faster and tries to fuck VP
-   ** Team email - ????
-   ** Bonus
- 
- * CIO 
-   ** Fucks VP - VPs moves faster and tries to fuck dev
-   ** Team email - ????
-
- * VP -- fucks dev
- *
- * 
- * Inventory:
-    * PR
-    
- * Life:
- * Money: 
- * Fuck You Money: $60000 - quit
- * Happiness
- * Delivery: 
-
- */

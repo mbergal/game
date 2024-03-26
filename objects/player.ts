@@ -8,13 +8,13 @@ import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
 import { assertUnreachable } from "../utils/utils"
+import * as GameObject from "./object"
 import { Item } from "./object"
 import { StoryTask, Task } from "./tasks"
-import * as GameObject from "./object"
 
-export interface t {
+export interface Player {
     type: "player"
-    position: Vector.t
+    position: Vector.Vector
     direction: Direction.t | null
     zIndex: number
     tact: number
@@ -27,10 +27,9 @@ export interface t {
     item: Item | null
 }
 
-export type Player = t
 export interface Result {}
 
-export function make(position: Vector.t): Player {
+export function make(position: Vector.Vector): Player {
     return {
         type: "player",
         zIndex: 1000,
@@ -122,7 +121,7 @@ function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
     return effects
 }
 
-function dropCarriedItem(player: t, game: Game.t) {
+function dropCarriedItem(player: Player, game: Game.t) {
     const carriedItem = player.item
     if (carriedItem != null) {
         // player.item.position = moveBy(

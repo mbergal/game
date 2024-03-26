@@ -6,10 +6,11 @@ type GameStarted = {
 }
 
 type GameEnded = {
-    type: "gameStarted"
+    type: "gameEnded"
 }
 
 type DayStarted = {
+    type: "dayStarted"
     day: number
     dayOfWeek: DayOfWeek.t
 }
@@ -49,6 +50,10 @@ type WeekendEnd = {
     type: "weekendEnd"
 }
 
+type CollapseStart = {
+    type: "collapseStart"
+}
+
 export type t =
     | SprintStart
     | SprintEnd
@@ -59,5 +64,9 @@ export type t =
     | SprintDayStart
     | SprintDayEnd
     | CreateBacklogIssue
+    | GameStarted
+    | GameEnded
+    | DayStarted
+    | CollapseStart
 
 export type Event = t

@@ -1,15 +1,14 @@
 import _ from "lodash"
+import * as Plan from "../game/plan"
 import * as GameObjects from "../objects/objects"
+import * as Player from "../objects/player"
 import * as Story from "../objects/story"
+import * as StorySize from "../objects/story_size"
 import { assertUnreachable } from "../utils/utils"
 import config from "./config"
 import { Effect, showMessage } from "./effect"
-import * as Game from "./game"
 import * as Event from "./event"
 import * as GameMap from "./map"
-import * as random from "../utils/random"
-import * as StorySize from "../objects/story_size"
-import * as Plan from "../game/plan"
 
 export interface t {
     day: number
@@ -23,7 +22,7 @@ export function make(): t {
     }
 }
 
-export function generateSprint(startTick: number): [Plan.t, number] {
+export function generateSprint(startTick: number): [Plan.Plan, number] {
     const DAY = config.dayTicks
     const plan = Plan.make()
 
@@ -85,9 +84,9 @@ export function generateSprint(startTick: number): [Plan.t, number] {
 
 export function* tick(
     sprint: t,
-    game: { map: GameMap.GameMap; ticks: number; plan: Plan.t }
+    game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player }
 ): Generator<Effect> {
-    const events = game.plan.get(game.ticks)
+    const events = game.plan.get(game.time.ticks)
     if (events) {
         for (const event of events) {
             switch (event.type) {
@@ -97,6 +96,7 @@ export function* tick(
                     yield showMessage(`Moved "${story.name}" to To Do`, 2000)
                     break
                 case "groomBacklogEnd":
+                case "collapseStart":
                     break
                 case "groomBacklogStart":
                     yield showMessage("Grooming backlog ...", 2000)
@@ -110,6 +110,10 @@ export function* tick(
                     yield showMessage("Sprint ended", 2000)
                     const stories = GameObjects.filter(game.map.objects, "story")
                     game.map.remove(stories)
+                    if (game.player.task != null) {
+                        yield showMessage(`Abandoned ${game.player.task}`, 2000)
+                        game.player.task = null
+                    }
                     break
                 case "sprintStart":
                     break
@@ -118,6 +122,11 @@ export function* tick(
                     break
                 case "weekendEnd":
                     yield showMessage("End of Weekend :(", 30)
+                    break
+                case "gameEnded":
+                case "gameStarted":
+                    break
+                case "dayStarted":
                     break
                 default:
                     assertUnreachable(event)

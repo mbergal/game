@@ -165,7 +165,7 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
     }
 }
 
-function getWallRepresentation(map: GameMap, pos: Vector.t) {
+function getWallRepresentation(map: GameMap, pos: Vector.Vector) {
     if (pos.x == 0 && pos.y == 0) {
         return "╔"
     } else if (pos.x == 0 && pos.y == map.height - 1) {

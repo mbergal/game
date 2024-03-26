@@ -37,3 +37,7 @@ export function choice<T>(choices: T[], weights: number[] | null = null): T {
 
     return choices[choices.length - 1]
 }
+
+export function select<T>(choices: T[], num: number): T[] {
+    return _.sampleSize(choices, num)
+}

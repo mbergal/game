@@ -3,9 +3,9 @@ import * as ItemGenerator from "../game/item_generator"
 import { Vector } from "../geometry"
 import * as Player from "../objects/player"
 import { assertUnreachable } from "../utils/utils"
-import * as DayOfWeek from "./day_of_week"
 import * as Effect from "./effect"
 import * as Effects from "./effects"
+import * as GameTime from "./game_time"
 import * as GameMap from "./map"
 import { Message } from "./message"
 import * as Plan from "./plan"
@@ -13,30 +13,26 @@ import * as Score from "./score"
 import * as Sprint from "./sprint"
 export * as GameMap from "./map"
 export * as Score from "./score"
+import * as Collapse from "./collapse"
 
 export type t = {
     map: GameMap.GameMap
     score: Score.Score
-    time: GameTime
+    time: GameTime.t
     itemGenerator: ItemGenerator.t
     sprint: Sprint.t
     commands: Command[]
     messages: Message[]
     messageTact: number
     player?: Player.Player
-    plan: Plan.t
+    plan: Plan.Plan
     messageStartTime: number | null
-}
-
-export type GameTime = {
-    day: number
-    ticks: number
-    dayOfWeek: DayOfWeek.t
+    collapse: Collapse.Collapse | null
 }
 
 export type Game = t
 
-export function make(size: Vector.t, plan: Plan.t): t {
+export function make(size: Vector.Vector, plan: Plan.Plan): t {
     return {
         map: new GameMap.GameMap(size.x, size.y, []),
         commands: [],
@@ -52,6 +48,7 @@ export function make(size: Vector.t, plan: Plan.t): t {
         },
         plan: plan,
         messageStartTime: null,
+        collapse: null,
     }
 }
 
@@ -92,6 +89,33 @@ export function message(game: t, m: Message | { text: string[]; ttl: number }) {
     }
 }
 
+export function tick(game: t) {
+    const events = game.plan.get(game.time.ticks)
+    if (events) {
+        for (const event of events) {
+            switch (event.type) {
+                case "createBacklogIssue":
+                case "groomBacklogEnd":
+                case "groomBacklogStart":
+                case "sprintDayEnd":
+                case "sprintDayStart":
+                case "sprintStart":
+                case "sprintEnd":
+                case "weekendStart":
+                case "weekendEnd":
+                case "gameStarted":
+                case "collapseStart":
+                case "dayStarted":
+                case "gameEnded":
+                    console.log(event)
+                    break
+                default:
+                    assertUnreachable(event)
+            }
+        }
+    }
+}
+
 export interface GameStorage {
     save(json: string): void
     load(): string | null
@@ -116,6 +140,7 @@ export function load(storage: GameStorage): Game | null {
             time,
             plan,
             messageStartTime,
+            collapse,
         }: {
             score: Score.Score
             sprint: Sprint.t
@@ -124,12 +149,15 @@ export function load(storage: GameStorage): Game | null {
             messageTact: number
             itemGenerator: ItemGenerator.t
             map: object
-            time: GameTime
-            plan: Plan.t
+            time: GameTime.t
+            plan: Plan.Plan
             messageStartTime: number
+            collapse: Collapse.Collapse
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)
-        const player = map_.objects.find<Player.t>((x): x is Player.t => x.type === "player")
+        const player = map_.objects.find<Player.Player>(
+            (x): x is Player.Player => x.type === "player"
+        )
         return {
             time: time,
             score: score,
@@ -142,6 +170,7 @@ export function load(storage: GameStorage): Game | null {
             player: player,
             plan: plan,
             messageStartTime: messageStartTime,
+            collapse: collapse,
         }
     } else {
         console.log("There is no saved game.")

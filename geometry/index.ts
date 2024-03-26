@@ -4,7 +4,7 @@ import * as Vector from "./vector"
 export * as Direction from "./direction"
 export * as Vector from "./vector"
 
-export function moveBy(vector: Vector.t, direction: Direction.t): Vector.t {
+export function moveBy(vector: Vector.Vector, direction: Direction.t): Vector.Vector {
     switch (direction) {
         case "down":
             return { ...vector, x: vector.x, y: vector.y + 1 }

@@ -25,7 +25,7 @@ export function make(story: Story.t): t {
     }
 }
 
-export function addCommit(player: Player.t, task: t, commit: Commit.t): Effects.t {
+export function addCommit(player: Player.Player, task: t, commit: Commit.t): Effects.t {
     const effects: Effects.t = []
     task.appliedCommits += 1
     if (task.appliedCommits == task.neededCommits) {
