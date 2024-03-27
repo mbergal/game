@@ -7670,6 +7670,10 @@
     return true;
   }
   __name(isVisible, "isVisible");
+  function blink(a, b, tick7) {
+    return tick7 % 10 < 5 ? a : b;
+  }
+  __name(blink, "blink");
   function getRepresentation(map, objs, tick7) {
     let obj = objs.find(isVisible);
     if (obj) {
@@ -7682,15 +7686,15 @@
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return tick7 % 10 < 5 ? "*" : "@";
+            return blink("*", "@", tick7);
           } else {
             if (obj.item != null) {
               const item = obj.item;
               switch (item.type) {
                 case "door":
-                  return tick7 % 10 < 5 ? "]" : "*";
+                  return blink("]", "*", tick7);
                 case "commit":
-                  return tick7 % 10 < 5 ? "\u03B5" : "*";
+                  return blink("\u03B5", "*", tick7);
                 case "coffee":
                   return tick7 % 10 < 5 ? "C" : "*";
                 case "story":

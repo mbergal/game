@@ -108,6 +108,10 @@ function isVisible(obj: t) {
     }
     return true
 }
+
+function blink(a: string, b: string, tick: number) {
+    return tick % 10 < 5 ? a : b
+}
 function getRepresentation(map: GameMap, objs: t[], tick: number): string {
     let obj = objs.find(isVisible)
     if (obj) {
@@ -120,15 +124,15 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
                 return "■"
             case "player":
                 if (obj.hrTaskTact) {
-                    return tick % 10 < 5 ? "*" : "@"
+                    return blink("*", "@", tick)
                 } else {
                     if (obj.item != null) {
                         const item = obj.item
                         switch (item.type) {
                             case "door":
-                                return tick % 10 < 5 ? "]" : "*"
+                                return blink("]", "*", tick)
                             case "commit":
-                                return tick % 10 < 5 ? "ε" : "*"
+                                return blink("ε", "*", tick)
                             case "coffee":
                                 return tick % 10 < 5 ? "C" : "*"
                             case "story":
