@@ -35,7 +35,7 @@ const config: Config = {
         startDay: 0,
     },
     performanceReview: {
-        interval: 10,
+        interval: 28,
     },
     itemGenerator: { start: 0, interval: 40 },
 }

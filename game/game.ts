@@ -5,10 +5,10 @@ import * as Player from "../objects/player"
 import { assertUnreachable } from "../utils/utils"
 import * as Effect from "./effect"
 import { Effects } from "./effects"
-import * as GameTime from "./game_time"
+import { GameTime } from "./game_time"
 import * as GameMap from "./map"
 import { Message } from "./message"
-import * as Plan from "./plan"
+import { Plan } from "./plan"
 import * as Score from "./score"
 import * as Sprint from "./sprint"
 export * as GameMap from "./map"
@@ -28,14 +28,14 @@ export type t = {
     messages: Message[]
     messageTact: number
     player?: Player.Player
-    plan: Plan.Plan
+    plan: Plan.t
     messageStartTime: number | null
     collapse: Collapse.Collapse | null
 }
 
 export type Game = t
 
-export function make(size: Vector.Vector, plan: Plan.Plan): t {
+export function make(size: Vector.Vector, plan: Plan.t): t {
     return {
         map: new GameMap.GameMap(size.x, size.y, []),
         commands: [],
@@ -153,7 +153,7 @@ export function load(storage: GameStorage): Game | null {
             itemGenerator: ItemGenerator.t
             map: object
             time: GameTime.t
-            plan: Plan.Plan
+            plan: Plan.t
             messageStartTime: number
             collapse: Collapse.Collapse
         } = JSON.parse(objectsStorage)

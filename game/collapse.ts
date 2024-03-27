@@ -1,6 +1,6 @@
 import * as Game from "./game"
 import * as Effect from "./effect"
-import * as Plan from "./plan"
+import { Plan } from "./plan"
 import * as random from "../utils/random"
 import config from "./config"
 
@@ -10,7 +10,7 @@ export function make(): Collapse {
     return {}
 }
 
-export function plan(): Plan.Plan {
+export function plan(): Plan.t {
     const plan = Plan.make()
     Plan.addEvent(plan, (config.totalDays - 5) * config.dayTicks, { type: "collapseStart" })
     return plan

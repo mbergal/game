@@ -1,12 +1,13 @@
+import _ from "lodash"
 import { Command } from "./command"
 import { Game } from "./game"
 import * as Collapse from "./game/collapse"
 import config from "./game/config"
 import { GameStorage } from "./game/game"
-import * as GameTime from "./game/game_time"
+import { GameTime } from "./game/game_time"
 import * as ItemGenerator from "./game/item_generator"
 import * as EngineeringLevels from "./game/levels"
-import * as Plan from "./game/plan"
+import { Plan } from "./game/plan"
 import * as Sprint from "./game/sprint"
 import * as MazeGenerator from "./generator"
 import { Vector } from "./geometry"
@@ -14,10 +15,9 @@ import * as Boss from "./objects/boss"
 import * as Footprint from "./objects/footprint"
 import { t } from "./objects/object"
 import * as Player from "./objects/player"
-import { Logging } from "./utils/logging"
 import { render } from "./renderer"
+import { Logging } from "./utils/logging"
 import { assertUnreachable } from "./utils/utils"
-import _ from "lodash"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
@@ -27,7 +27,7 @@ Logging.setIsEnabled((name: string) => _.includes(["main", "player"], name))
 
 export function main() {
     const boss: Boss.t = Boss.make()
-    const plan: Plan.Plan = Plan.generatePlan(0)
+    const plan: Plan.t = Plan.generatePlan(0)
 
     let game: Game.t = Game.make(MAZE_SIZE, plan)
     MazeGenerator.maze(MAZE_SIZE, game)
@@ -134,25 +134,35 @@ export function load(): Game.t | null {
 }
 
 function processTick(game: Game.t) {
-    game.score.stockPrice = 100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-    game.score.money += EngineeringLevels.all[game.score.level].rate
-    game.time = GameTime.make(game.time.ticks)
+    const t = () => {
+        game.score.stockPrice =
+            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
+        game.score.money += EngineeringLevels.all[game.score.level].rate
+        game.time = GameTime.make(game.time.ticks)
 
-    Game.tick(game)
-    Game.handleEffects(game, Collapse.tick(game))
-    ItemGenerator.tick(game.itemGenerator, game)
+        Game.tick(game)
+        Game.handleEffects(game, Collapse.tick(game))
+        ItemGenerator.tick(game.itemGenerator, game)
 
-    if (game.sprint) {
-        Game.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
+        if (game.sprint) {
+            Game.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
+        }
+
+        for (const obj of game.map.objects) {
+            const result = tick(obj, game, game.commands)
+        }
+        game.commands = []
+        render(game)
     }
 
-    for (const obj of game.map.objects) {
-        const result = tick(obj, game, game.commands)
-        game.score.codeBlocks += result.codeBlocks
+    t()
+    if (!game.player!.flags.spedUp) {
+        game.time.ticks += 1
+    } else {
+        game.time.ticks += 0.5
+        t()
+        game.time.ticks += 0.5
     }
-    game.commands = []
-    render(game)
-    game.time.ticks += 1
 }
 
 interface Result {

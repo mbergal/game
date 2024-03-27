@@ -6001,6 +6001,9 @@
     }
   });
 
+  // main.ts
+  var import_lodash8 = __toESM(require_lodash());
+
   // game/map.ts
   var map_exports = {};
   __export(map_exports, {
@@ -6420,7 +6423,6 @@
   });
   function make() {
     return {
-      codeBlocks: 0,
       money: 0,
       level: 0,
       impact: 0,
@@ -6436,7 +6438,7 @@
     Score: () => score_exports,
     handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make10,
+    make: () => make9,
     message: () => message,
     save: () => save,
     tick: () => tick4,
@@ -6482,7 +6484,8 @@
       type: "door",
       position,
       zIndex: 1,
-      open: false
+      open: false,
+      placed: false
     };
   }
   __name(make4, "make");
@@ -6511,7 +6514,7 @@
       startDay: 0
     },
     performanceReview: {
-      interval: 10
+      interval: 28
     },
     itemGenerator: { start: 0, interval: 40 }
   };
@@ -6535,7 +6538,7 @@
           itemGenerator.state.tact = 0;
           const aa = choice(
             ["door", "commit", "coffee"],
-            [3, 100, 0]
+            [300, 1, 10]
           );
           let item;
           switch (aa) {
@@ -6565,20 +6568,20 @@
   var import_lodash4 = __toESM(require_lodash());
 
   // game/collapse.ts
-  function make7() {
+  function make6() {
     return {};
   }
-  __name(make7, "make");
+  __name(make6, "make");
   function plan() {
-    const plan2 = make6();
-    addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
+    const plan2 = Plan.make();
+    Plan.addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
     return plan2;
   }
   __name(plan, "plan");
   function tick2(game) {
     const events = game.plan.get(game.time.ticks);
     if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make7();
+      game.collapse = make6();
     }
     if (game.collapse) {
       const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
@@ -6595,38 +6598,45 @@
 
   // game/plan.ts
   var import_lodash2 = __toESM(require_lodash());
-  function make6() {
-    return /* @__PURE__ */ new Map();
-  }
-  __name(make6, "make");
-  function addEvent(plan2, time, event) {
-    if (!plan2.has(time)) {
-      plan2.set(time, []);
+  var Plan;
+  ((Plan2) => {
+    function make13() {
+      return /* @__PURE__ */ new Map();
     }
-    plan2.get(time).push(event);
-  }
-  __name(addEvent, "addEvent");
-  function append(plan2, other) {
-    for (const time of other.keys()) {
-      for (const event of other.get(time)) {
-        addEvent(plan2, time, event);
+    Plan2.make = make13;
+    __name(make13, "make");
+    function addEvent(plan2, time, event) {
+      if (!plan2.has(time)) {
+        plan2.set(time, []);
       }
+      plan2.get(time).push(event);
     }
-    return plan2;
-  }
-  __name(append, "append");
-  function generatePlan(startDay) {
-    let plan2 = make6();
-    let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash2.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const r = generateSprint(startTick);
-      append(plan2, r[0]);
-      startTick = r[1];
+    Plan2.addEvent = addEvent;
+    __name(addEvent, "addEvent");
+    function append(plan2, other) {
+      for (const time of other.keys()) {
+        for (const event of other.get(time)) {
+          addEvent(plan2, time, event);
+        }
+      }
+      return plan2;
     }
-    append(plan2, plan());
-    return plan2;
-  }
-  __name(generatePlan, "generatePlan");
+    Plan2.append = append;
+    __name(append, "append");
+    function generatePlan(startDay) {
+      let plan2 = make13();
+      let startTick = startDay * config_default.dayTicks;
+      for (const i in import_lodash2.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+        const r = generateSprint(startTick);
+        append(plan2, r[0]);
+        startTick = r[1];
+      }
+      append(plan2, plan());
+      return plan2;
+    }
+    Plan2.generatePlan = generatePlan;
+    __name(generatePlan, "generatePlan");
+  })(Plan || (Plan = {}));
 
   // objects/objects.ts
   var import_lodash3 = __toESM(require_lodash());
@@ -6649,7 +6659,7 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make8(position, size) {
+  function make7(position, size) {
     return {
       type: "story",
       position,
@@ -6659,7 +6669,7 @@
       name: choice(storyNames[size])
     };
   }
-  __name(make8, "make");
+  __name(make7, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6712,21 +6722,48 @@
   }
   __name(showMessage, "showMessage");
 
+  // game/day_of_week.ts
+  var all2 = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  // game/game_time.ts
+  var GameTime;
+  ((GameTime2) => {
+    function make13(ticks) {
+      const day = Math.floor(ticks / config_default.dayTicks);
+      const dayOfWeek = all2[day % 7];
+      return {
+        ticks,
+        day,
+        dayOfWeek
+      };
+    }
+    GameTime2.make = make13;
+    __name(make13, "make");
+  })(GameTime || (GameTime = {}));
+
   // game/sprint.ts
-  function make9() {
+  function make8() {
     return {
       day: 0
     };
   }
-  __name(make9, "make");
+  __name(make8, "make");
   function generateSprint(startTick) {
     const DAY = config_default.dayTicks;
-    const plan2 = make6();
-    const addEvent2 = /* @__PURE__ */ __name((event) => {
-      addEvent(plan2, startTick, event);
+    const plan2 = Plan.make();
+    const addEvent = /* @__PURE__ */ __name((event) => {
+      Plan.addEvent(plan2, startTick, event);
     }, "addEvent");
-    addEvent2({ type: "sprintStart" });
-    addEvent2({ type: "groomBacklogStart" });
+    addEvent({ type: "sprintStart" });
+    addEvent({ type: "groomBacklogStart" });
     const storySizes = [
       "small",
       "small",
@@ -6739,33 +6776,34 @@
     const groomingStart = startTick;
     for (const t of times) {
       startTick = groomingStart + t[1];
-      addEvent2({ type: "createBacklogIssue", size: t[0] });
+      addEvent({ type: "createBacklogIssue", size: t[0] });
     }
     startTick += DAY - 1;
-    addEvent2({ type: "groomBacklogEnd" });
+    addEvent({ type: "groomBacklogEnd" });
     startTick += 1;
     let sprintDay = 0;
     for (const i of import_lodash4.default.range(4)) {
+      const day = Math.floor(startTick / DAY);
       sprintDay += 1;
-      addEvent2({ type: "sprintDayStart", day: sprintDay });
+      addEvent({ type: "sprintDayStart", sprintDay, ...GameTime.make(startTick) });
       startTick += DAY - 1;
-      addEvent2({ type: "sprintDayEnd", day: sprintDay });
+      addEvent({ type: "sprintDayEnd", sprintDay, ...GameTime.make(startTick) });
       startTick += 1;
     }
-    addEvent2({ type: "weekendStart" });
+    addEvent({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
+    addEvent({ type: "weekendEnd" });
     for (const i of import_lodash4.default.range(4)) {
       sprintDay += 1;
-      addEvent2({ type: "sprintDayStart", day: sprintDay });
+      addEvent({ type: "sprintDayStart", sprintDay, ...GameTime.make(startTick) });
       startTick += DAY - 1;
-      addEvent2({ type: "sprintDayEnd", day: sprintDay });
+      addEvent({ type: "sprintDayEnd", sprintDay, ...GameTime.make(startTick) });
       startTick += 1;
     }
-    addEvent2({ type: "sprintEnd" });
-    addEvent2({ type: "weekendStart" });
+    addEvent({ type: "sprintEnd" });
+    addEvent({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
+    addEvent({ type: "weekendEnd" });
     return [plan2, startTick];
   }
   __name(generateSprint, "generateSprint");
@@ -6775,7 +6813,7 @@
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make8(game.map.getRandomEmptyLocation(), event.size);
+            const story = make7(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
             yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
             break;
@@ -6788,7 +6826,7 @@
           case "sprintDayEnd":
             break;
           case "sprintDayStart":
-            yield showMessage(`Sprint day ${event.day}`, 3e3);
+            yield showMessage(`Sprint day ${event.sprintDay} ${event.dayOfWeek}`, 3e3);
             break;
           case "sprintEnd":
             yield showMessage("Sprint ended", 3e3);
@@ -6832,27 +6870,27 @@
     }
     Logging2.setTime = setTime;
     __name(setTime, "setTime");
-    function make15(name) {
+    function make13(name) {
       return (message2) => {
         if (isEnabled(name)) {
           console.log(tick9.toString().padStart(4, "0") + " " + message2);
         }
       };
     }
-    Logging2.make = make15;
-    __name(make15, "make");
+    Logging2.make = make13;
+    __name(make13, "make");
     let isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
     let tick9 = 0;
   })(Logging || (Logging = {}));
 
   // game/game.ts
   var logger = Logging.make("game");
-  function make10(size, plan2) {
+  function make9(size, plan2) {
     return {
       map: new GameMap(size.x, size.y, []),
       commands: [],
       itemGenerator: make5(),
-      sprint: make9(),
+      sprint: make8(),
       score: make(),
       messages: [],
       messageTact: 0,
@@ -6866,7 +6904,7 @@
       collapse: null
     };
   }
-  __name(make10, "make");
+  __name(make9, "make");
   function toJson(game) {
     return {
       map: game.map.toJson(),
@@ -6978,29 +7016,6 @@
   }
   __name(load, "load");
 
-  // game/day_of_week.ts
-  var all2 = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
-  // game/game_time.ts
-  function make11(ticks) {
-    const day = Math.floor(ticks / config_default.dayTicks);
-    const dayOfWeek = all2[day % 7];
-    return {
-      ticks,
-      day,
-      dayOfWeek
-    };
-  }
-  __name(make11, "make");
-
   // game/levels.ts
   var all3 = [
     {
@@ -7076,7 +7091,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make12() {
+  function make10() {
     return {
       position: {
         x: 0,
@@ -7087,7 +7102,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make12, "make");
+  __name(make10, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -7234,7 +7249,7 @@
   var import_lodash6 = __toESM(require_lodash());
   var Effects;
   ((Effects2) => {
-    function append2(effects, other) {
+    function append(effects, other) {
       if (!import_lodash6.default.isArray(other)) {
         other = [other];
       }
@@ -7242,8 +7257,8 @@
         effects.push(effect);
       }
     }
-    Effects2.append = append2;
-    __name(append2, "append");
+    Effects2.append = append;
+    __name(append, "append");
   })(Effects || (Effects = {}));
 
   // game/messages.ts
@@ -7256,9 +7271,9 @@
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make13
+    make: () => make11
   });
-  function make13(story) {
+  function make11(story) {
     return {
       type: "story",
       story,
@@ -7267,7 +7282,7 @@
       appliedCommits: 0
     };
   }
-  __name(make13, "make");
+  __name(make11, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -7281,7 +7296,7 @@
 
   // objects/player.ts
   var logger2 = Logging.make("player");
-  function make14(position) {
+  function make12(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7291,10 +7306,13 @@
       commands: [],
       hrTaskTact: null,
       item: null,
-      task: null
+      task: null,
+      flags: {
+        spedUp: false
+      }
     };
   }
-  __name(make14, "make");
+  __name(make12, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -7337,18 +7355,25 @@
     }
   }
   __name(takeTask, "takeTask");
-  function canPickItem(player) {
+  function canPickItem(player, item) {
+    switch (item.type) {
+      case "door":
+        if (item.placed) {
+          return false;
+        }
+    }
     return player.hrTaskTact == null;
   }
   __name(canPickItem, "canPickItem");
-  function useItem(player, newItem, effects) {
-    switch (newItem.type) {
+  function useItem(player, item, map, effects) {
+    logger2(`Using item ${item.type}`);
+    switch (item.type) {
       case "commit":
         if (player.task) {
           const task = player.task;
           switch (task.type) {
             case "story":
-              story_exports2.addCommit(player, task, newItem, effects);
+              story_exports2.addCommit(player, task, item, effects);
               player.item = null;
               break;
           }
@@ -7357,6 +7382,22 @@
           Effects.append(effects, showMessage("No task to apply commit to", 3e3));
           return false;
         }
+      case "coffee":
+        Effects.append(effects, showMessage("Drinking coffee", 3e3));
+        player.flags.spedUp = true;
+        player.item = null;
+        return true;
+      case "door":
+        Effects.append(effects, showMessage("Placing door", 3e3));
+        item.position = player.position;
+        map.add(item);
+        item.placed = true;
+        player.item = null;
+        return true;
+      case "story":
+        break;
+      default:
+        assertUnreachable(item);
     }
     return false;
   }
@@ -7366,6 +7407,10 @@
     game.map.remove(newItem);
     switch (newItem.type) {
       case "door":
+        newItem.open = true;
+        dropCarriedItem(player, game);
+        player.item = newItem;
+        break;
       case "coffee":
         dropCarriedItem(player, game);
         player.item = newItem;
@@ -7444,7 +7489,7 @@
           break;
         case "use":
           if (player.item != null) {
-            useItem(player, player.item, effects);
+            useItem(player, player.item, map, effects);
           }
           player.commands.shift();
           break;
@@ -7471,14 +7516,14 @@
           switch (obj.type) {
             case "door":
             case "coffee":
-              if (canPickItem(player)) {
+              if (canPickItem(player, obj)) {
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
                 Effects.append(effects, showMessage(`Picked a ${obj.type}`, 40));
                 Effects.append(effects, pickItem(player, obj, game));
               }
               break;
             case "commit":
-              if (canPickItem(player)) {
+              if (canPickItem(player, obj)) {
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
                 Effects.append(
                   effects,
@@ -7628,9 +7673,7 @@
             return "*";
           }
         case "door":
-          return obj.open ? "]" : ".";
-        case "door":
-          return "[";
+          return obj.open ? obj.placed ? "]" : "[" : ".";
         case "commit":
           return obj.open ? "\u03B5" : ".";
         case "coffee":
@@ -7682,17 +7725,16 @@
   __name(getWallRepresentation, "getWallRepresentation");
 
   // main.ts
-  var import_lodash8 = __toESM(require_lodash());
   var MAZE_SIZE = { y: 25, x: 80 };
   var logger3 = Logging.make("main");
   Logging.setIsEnabled((name) => import_lodash8.default.includes(["main", "player"], name));
   function main() {
-    const boss = make12();
-    const plan2 = generatePlan(0);
+    const boss = make10();
+    const plan2 = Plan.generatePlan(0);
     let game = game_exports.make(MAZE_SIZE, plan2);
     maze(MAZE_SIZE, game);
     game.map.add([boss]);
-    game.player = make14(game.map.getRandomEmptyLocation());
+    game.player = make12(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
       text: [
@@ -7785,22 +7827,30 @@
   }
   __name(load2, "load");
   function processTick(game) {
-    game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-    game.score.money += all3[game.score.level].rate;
-    game.time = make11(game.time.ticks);
-    game_exports.tick(game);
-    game_exports.handleEffects(game, tick2(game));
-    tick(game.itemGenerator, game);
-    if (game.sprint) {
-      game_exports.handleEffects(game, tick3(game.sprint, { ...game, player: game.player }));
+    const t = /* @__PURE__ */ __name(() => {
+      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
+      game.score.money += all3[game.score.level].rate;
+      game.time = GameTime.make(game.time.ticks);
+      game_exports.tick(game);
+      game_exports.handleEffects(game, tick2(game));
+      tick(game.itemGenerator, game);
+      if (game.sprint) {
+        game_exports.handleEffects(game, tick3(game.sprint, { ...game, player: game.player }));
+      }
+      for (const obj of game.map.objects) {
+        const result = tick8(obj, game, game.commands);
+      }
+      game.commands = [];
+      render(game);
+    }, "t");
+    t();
+    if (!game.player.flags.spedUp) {
+      game.time.ticks += 1;
+    } else {
+      game.time.ticks += 0.5;
+      t();
+      game.time.ticks += 0.5;
     }
-    for (const obj of game.map.objects) {
-      const result = tick8(obj, game, game.commands);
-      game.score.codeBlocks += result.codeBlocks;
-    }
-    game.commands = [];
-    render(game);
-    game.time.ticks += 1;
   }
   __name(processTick, "processTick");
   function tick8(obj, game, commands) {

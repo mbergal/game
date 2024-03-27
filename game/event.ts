@@ -35,12 +35,14 @@ type GroomBacklogEnd = {
 
 type SprintDayStart = {
     type: "sprintDayStart"
+    sprintDay: number
     day: number
+    dayOfWeek: DayOfWeek.t
 }
 
 type SprintDayEnd = {
     type: "sprintDayEnd"
-    day: number
+    sprintDay: number
 }
 
 type WeekendStart = {

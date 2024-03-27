@@ -141,9 +141,7 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
                     return "*"
                 }
             case "door":
-                return obj.open ? "]" : "."
-            case "door":
-                return "["
+                return obj.open ? (obj.placed ? "]" : "[") : "."
             case "commit":
                 return obj.open ? "ε" : "."
             case "coffee":

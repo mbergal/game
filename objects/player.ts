@@ -15,6 +15,9 @@ import { Logging } from "../utils/logging"
 
 const logger = Logging.make("player")
 
+type PlayerFlags = {
+    spedUp: boolean
+}
 export interface Player {
     type: "player"
     position: Vector.Vector
@@ -23,6 +26,7 @@ export interface Player {
     tact: number
     hrTaskTact: number | null
     task: Task | null
+    flags: PlayerFlags
     commands: {
         command: Command.t
         tact: number
@@ -43,6 +47,9 @@ export function make(position: Vector.Vector): Player {
         hrTaskTact: null,
         item: null,
         task: null,
+        flags: {
+            spedUp: false,
+        },
     }
 }
 
@@ -88,18 +95,25 @@ function takeTask(player: Player, task: Task, game: Game.t) {
     }
 }
 
-function canPickItem(player: Player) {
+function canPickItem(player: Player, item: Item) {
+    switch (item.type) {
+        case "door":
+            if (item.placed) {
+                return false
+            }
+    }
     return player.hrTaskTact == null
 }
 
-function useItem(player: Player, newItem: Item, effects: Effect.t[]): boolean {
-    switch (newItem.type) {
+function useItem(player: Player, item: Item, map: GameMap, effects: Effect.t[]): boolean {
+    logger(`Using item ${item.type}`)
+    switch (item.type) {
         case "commit":
             if (player.task) {
                 const task = player.task
                 switch (task.type) {
                     case "story":
-                        StoryTask.addCommit(player, task, newItem, effects)
+                        StoryTask.addCommit(player, task, item, effects)
                         player.item = null
                         break
                 }
@@ -108,6 +122,23 @@ function useItem(player: Player, newItem: Item, effects: Effect.t[]): boolean {
                 Effects.append(effects, Effect.showMessage("No task to apply commit to", 3_000))
                 return false
             }
+        case "coffee":
+            Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
+            player.flags.spedUp = true
+            player.item = null
+            return true
+        case "door":
+            Effects.append(effects, Effect.showMessage("Placing door", 3_000))
+            item.position = player.position
+            map.add(item)
+
+            item.placed = true
+            player.item = null
+            return true
+        case "story":
+            break
+        default:
+            assertUnreachable(item)
     }
     return false
 }
@@ -117,6 +148,10 @@ function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
     game.map.remove(newItem)
     switch (newItem.type) {
         case "door":
+            newItem.open = true
+            dropCarriedItem(player, game)
+            player.item = newItem
+            break
         case "coffee":
             dropCarriedItem(player, game)
             player.item = newItem
@@ -214,7 +249,7 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
                 break
             case "use":
                 if (player.item != null) {
-                    useItem(player, player.item!, effects)
+                    useItem(player, player.item!, map, effects)
                 }
                 player.commands.shift()
                 break
@@ -242,14 +277,14 @@ export function tick(player: Player, game: Game.t, commands: Command.t[]): Effec
                 switch (obj.type) {
                     case "door":
                     case "coffee":
-                        if (canPickItem(player)) {
+                        if (canPickItem(player, obj)) {
                             logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40))
                             Effects.append(effects, pickItem(player, obj, game))
                         }
                         break
                     case "commit":
-                        if (canPickItem(player)) {
+                        if (canPickItem(player, obj)) {
                             logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(
                                 effects,

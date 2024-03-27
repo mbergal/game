@@ -1,5 +1,5 @@
 import _ from "lodash"
-import * as Plan from "../game/plan"
+import { Plan } from "../game/plan"
 import * as GameObjects from "../objects/objects"
 import * as Player from "../objects/player"
 import * as Story from "../objects/story"
@@ -9,6 +9,7 @@ import config from "./config"
 import { Effect, showMessage } from "./effect"
 import * as Event from "./event"
 import * as GameMap from "./map"
+import { GameTime } from "./game_time"
 
 export interface t {
     day: number
@@ -22,7 +23,7 @@ export function make(): t {
     }
 }
 
-export function generateSprint(startTick: number): [Plan.Plan, number] {
+export function generateSprint(startTick: number): [Plan.t, number] {
     const DAY = config.dayTicks
     const plan = Plan.make()
 
@@ -56,10 +57,11 @@ export function generateSprint(startTick: number): [Plan.Plan, number] {
 
     let sprintDay = 0
     for (const i of _.range(4)) {
+        const day = Math.floor(startTick / DAY)
         sprintDay += 1
-        addEvent({ type: "sprintDayStart", day: sprintDay })
+        addEvent({ type: "sprintDayStart", sprintDay: sprintDay, ...GameTime.make(startTick) })
         startTick += DAY - 1
-        addEvent({ type: "sprintDayEnd", day: sprintDay })
+        addEvent({ type: "sprintDayEnd", sprintDay: sprintDay, ...GameTime.make(startTick) })
         startTick += 1
     }
     addEvent({ type: "weekendStart" })
@@ -68,9 +70,9 @@ export function generateSprint(startTick: number): [Plan.Plan, number] {
 
     for (const i of _.range(4)) {
         sprintDay += 1
-        addEvent({ type: "sprintDayStart", day: sprintDay })
+        addEvent({ type: "sprintDayStart", sprintDay: sprintDay, ...GameTime.make(startTick) })
         startTick += DAY - 1
-        addEvent({ type: "sprintDayEnd", day: sprintDay })
+        addEvent({ type: "sprintDayEnd", sprintDay: sprintDay, ...GameTime.make(startTick) })
         startTick += 1
     }
     addEvent({ type: "sprintEnd" })
@@ -84,7 +86,7 @@ export function generateSprint(startTick: number): [Plan.Plan, number] {
 
 export function* tick(
     sprint: t,
-    game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player }
+    game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.t; player: Player.Player }
 ): Generator<Effect> {
     const events = game.plan.get(game.time.ticks)
     if (events) {
@@ -104,7 +106,7 @@ export function* tick(
                 case "sprintDayEnd":
                     break
                 case "sprintDayStart":
-                    yield showMessage(`Sprint day ${event.day}`, 3000)
+                    yield showMessage(`Sprint day ${event.sprintDay} ${event.dayOfWeek}`, 3000)
                     break
                 case "sprintEnd":
                     yield showMessage("Sprint ended", 3000)
