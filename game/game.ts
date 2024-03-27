@@ -10,10 +10,10 @@ import * as GameMap from "./map"
 import { Message } from "./message"
 import { Plan } from "./plan"
 import * as Score from "./score"
-import * as Sprint from "./sprint"
+import { Sprint } from "./sprint"
 export * as GameMap from "./map"
 export * as Score from "./score"
-import * as Collapse from "./collapse"
+import { Collapse } from "./collapse"
 import { Logging } from "../utils/logging"
 
 const logger = Logging.make("game")
@@ -30,7 +30,7 @@ export type t = {
     player?: Player.Player
     plan: Plan.t
     messageStartTime: number | null
-    collapse: Collapse.Collapse | null
+    collapse: Collapse.t | null
 }
 
 export type Game = t

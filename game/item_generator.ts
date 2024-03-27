@@ -28,12 +28,12 @@ export function tick(itemGenerator: t, game: Game.Game) {
         case "generating":
             if (itemGenerator.state.tact > config.itemGenerator.interval) {
                 itemGenerator.state.tact = 0
-                const aa = random.choice(
+                const item_type = random.choice(
                     ["door" as const, "commit" as const, "coffee" as const],
-                    [300, 1, 10]
+                    [1, 90, 10]
                 )
                 let item
-                switch (aa) {
+                switch (item_type) {
                     case "door":
                         item = Door.make(game.map.getRandomEmptyLocation())
                         game.map.add([item])
@@ -46,9 +46,8 @@ export function tick(itemGenerator: t, game: Game.Game) {
                         item = Coffee.make(game.map.getRandomEmptyLocation())
                         game.map.add([item])
                         break
-
                     default:
-                        assertUnreachable(aa)
+                        assertUnreachable(item_type)
                 }
             } else {
                 itemGenerator.state.tact += 1

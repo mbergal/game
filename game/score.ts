@@ -1,4 +1,4 @@
-import { EngineeringLevel } from "./levels"
+import { EngineeringLevels } from "./levels"
 
 export type Score = {
     money: number

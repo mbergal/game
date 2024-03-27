@@ -1,11 +1,10 @@
 import { Game } from "./game"
-import * as EngineeringLevel from "./game/levels"
+import { EngineeringLevels } from "./game/levels"
 import { GameMap } from "./game/map"
 import * as Message from "./game/message"
 import { Vector } from "./geometry"
 import { t } from "./objects/object"
 import { assertUnreachable } from "./utils/utils"
-import config from "./game/config"
 
 export function render(game: Game.t) {
     const map = game.map
@@ -75,7 +74,7 @@ function showTicks(game: Game.t): string {
 }
 
 function showLevel(game: Game.t): string {
-    return " " + EngineeringLevel.all[game.score.level].name
+    return " " + EngineeringLevels.all[game.score.level].name
 }
 
 function showTask(game: Game.t): string {
@@ -127,11 +126,11 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
                         const item = obj.item
                         switch (item.type) {
                             case "door":
-                                return "]"
+                                return tick % 10 < 5 ? "]" : "*"
                             case "commit":
-                                return "ε"
+                                return tick % 10 < 5 ? "ε" : "*"
                             case "coffee":
-                                return "C"
+                                return tick % 10 < 5 ? "C" : "*"
                             case "story":
                                 return ""
                             default:

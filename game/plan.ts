@@ -1,6 +1,6 @@
-import * as Event from "./event"
-import * as Sprint from "./sprint"
-import * as Collapse from "./collapse"
+import { Event } from "./event"
+import { Sprint } from "./sprint"
+import { Collapse } from "./collapse"
 
 import config from "./config"
 import _ from "lodash"

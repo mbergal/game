@@ -1,14 +1,14 @@
 import _ from "lodash"
 import { Command } from "./command"
 import { Game } from "./game"
-import * as Collapse from "./game/collapse"
+import { Collapse } from "./game/collapse"
 import config from "./game/config"
 import { GameStorage } from "./game/game"
 import { GameTime } from "./game/game_time"
 import * as ItemGenerator from "./game/item_generator"
-import * as EngineeringLevels from "./game/levels"
+import { EngineeringLevels } from "./game/levels"
 import { Plan } from "./game/plan"
-import * as Sprint from "./game/sprint"
+import { Sprint } from "./game/sprint"
 import * as MazeGenerator from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
@@ -106,9 +106,10 @@ function getCommand(key: string): Command.t | null | undefined {
             return { type: "move", direction: "right" }
         case "Enter":
             return { type: "use" }
-        case " ":
-            return { type: "stop" }
+        case "End":
         case "Delete":
+            return { type: "stop" }
+        case " ":
             return { type: "drop" }
     }
 }
@@ -134,7 +135,8 @@ export function load(): Game.t | null {
 }
 
 function processTick(game: Game.t) {
-    const t = () => {
+    const fullTick = () => {
+        Logging.setTime(game.time.ticks)
         game.score.stockPrice =
             100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
         game.score.money += EngineeringLevels.all[game.score.level].rate
@@ -149,19 +151,31 @@ function processTick(game: Game.t) {
         }
 
         for (const obj of game.map.objects) {
-            const result = tick(obj, game, game.commands)
+            const result = tick(obj, game, game.commands, 1)
         }
         game.commands = []
         render(game)
     }
 
-    t()
+    const playerTick = () => {
+        Logging.setTime(game.time.ticks)
+        game.score.stockPrice =
+            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
+        game.score.money += EngineeringLevels.all[game.score.level].rate
+        game.time = GameTime.make(game.time.ticks)
+        const result = tick(game.player!, game, game.commands, 0.5)
+        game.commands = []
+        render(game)
+    }
+
     if (!game.player!.flags.spedUp) {
         game.time.ticks += 1
+        fullTick()
     } else {
         game.time.ticks += 0.5
-        t()
+        playerTick()
         game.time.ticks += 0.5
+        fullTick()
     }
 }
 
@@ -169,7 +183,7 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: t, game: Game.t, commands: Command.t[]): Result {
+function tick(obj: t, game: Game.t, commands: Command.t[], ticksPassed: number): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":
@@ -179,7 +193,7 @@ function tick(obj: t, game: Game.t, commands: Command.t[]): Result {
             Footprint.tick(obj, game.map)
             break
         case "player":
-            Game.handleEffects(game, Player.tick(obj, game, commands))
+            Game.handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
             break
         case "door":
         case "story":

@@ -12,12 +12,14 @@ import * as GameObject from "./object"
 import { Item } from "./object"
 import { StoryTask, Task } from "./tasks"
 import { Logging } from "../utils/logging"
+import config from "../game/config"
 
 const logger = Logging.make("player")
 
 type PlayerFlags = {
-    spedUp: boolean
+    spedUp: false | number
 }
+
 export interface Player {
     type: "player"
     position: Vector.Vector
@@ -124,7 +126,7 @@ function useItem(player: Player, item: Item, map: GameMap, effects: Effect.t[]):
             }
         case "coffee":
             Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
-            player.flags.spedUp = true
+            player.flags.spedUp = config.items.coffee.speedUpDays
             player.item = null
             return true
         case "door":
@@ -180,11 +182,17 @@ function dropCarriedItem(player: Player, game: Game.t) {
     }
 }
 
-function tickHrTask(player: Player) {
+function tickHrTask(player: Player, ticksPassed: number) {
     if (player.hrTaskTact != null) {
-        player.hrTaskTact += 1
+        player.hrTaskTact += ticksPassed
         if (player.hrTaskTact > 200) {
             player.hrTaskTact = null
+        }
+    }
+    if (player.flags.spedUp && player.flags.spedUp > 0) {
+        player.flags.spedUp -= ticksPassed
+        if (player.flags.spedUp <= 0) {
+            player.flags.spedUp = false
         }
     }
 }
@@ -263,9 +271,14 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
         player.commands = player.commands.filter((x) => x.tact < 10)
     }
 }
-export function tick(player: Player, game: Game.t, commands: Command.t[]): Effect.t[] {
+export function tick(
+    player: Player,
+    game: Game.t,
+    commands: Command.t[],
+    ticksPassed: number
+): Effect.t[] {
     const effects: Effects.t = []
-    tickHrTask(player)
+    tickHrTask(player, ticksPassed)
     processCommands(player, commands, game.map, effects)
 
     if (player.direction) {

@@ -5,7 +5,10 @@ export namespace Logging {
         isEnabled = f
     }
 
-    export function setTime(tick: number) {}
+    export function setTime(time: number) {
+        tick = time
+    }
+
     export function make<T extends string>(name: T): Logger {
         return (message: string) => {
             if (isEnabled(name)) {

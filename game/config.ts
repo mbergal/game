@@ -16,6 +16,11 @@ export type Config = {
         startDay: number
     }
     itemGenerator: { start: number; interval: number }
+    items: {
+        coffee: {
+            speedUpDays: number
+        }
+    }
 }
 
 const config: Config = {
@@ -38,6 +43,11 @@ const config: Config = {
         interval: 28,
     },
     itemGenerator: { start: 0, interval: 40 },
+    items: {
+        coffee: {
+            speedUpDays: 1,
+        },
+    },
 }
 
 export default config
