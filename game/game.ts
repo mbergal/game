@@ -1,10 +1,10 @@
-import { Command } from "../commands"
+import { Command } from "../command"
 import * as ItemGenerator from "../game/item_generator"
 import { Vector } from "../geometry"
 import * as Player from "../objects/player"
 import { assertUnreachable } from "../utils/utils"
 import * as Effect from "./effect"
-import * as Effects from "./effects"
+import { Effects } from "./effects"
 import * as GameTime from "./game_time"
 import * as GameMap from "./map"
 import { Message } from "./message"
@@ -14,6 +14,9 @@ import * as Sprint from "./sprint"
 export * as GameMap from "./map"
 export * as Score from "./score"
 import * as Collapse from "./collapse"
+import { Logging } from "../utils/logging"
+
+const logger = Logging.make("game")
 
 export type t = {
     map: GameMap.GameMap
@@ -21,7 +24,7 @@ export type t = {
     time: GameTime.t
     itemGenerator: ItemGenerator.t
     sprint: Sprint.t
-    commands: Command[]
+    commands: Command.t[]
     messages: Message[]
     messageTact: number
     player?: Player.Player
@@ -107,7 +110,7 @@ export function tick(game: t) {
                 case "collapseStart":
                 case "dayStarted":
                 case "gameEnded":
-                    console.log(event)
+                    logger(JSON.stringify(event))
                     break
                 default:
                     assertUnreachable(event)
@@ -123,7 +126,7 @@ export interface GameStorage {
 
 export function save(game: Game, storage: GameStorage) {
     storage.save(JSON.stringify(toJson(game)))
-    console.log("Game saved!")
+    logger("Game saved!")
 }
 
 export function load(storage: GameStorage): Game | null {
@@ -144,7 +147,7 @@ export function load(storage: GameStorage): Game | null {
         }: {
             score: Score.Score
             sprint: Sprint.t
-            commands: Command[]
+            commands: Command.t[]
             messages: Message[]
             messageTact: number
             itemGenerator: ItemGenerator.t
@@ -173,7 +176,7 @@ export function load(storage: GameStorage): Game | null {
             collapse: collapse,
         }
     } else {
-        console.log("There is no saved game.")
+        logger("There is no saved game.")
         return null
     }
 }

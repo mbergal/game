@@ -1,4 +1,4 @@
-import { Command } from "./commands"
+import { Command } from "./command"
 import { Game } from "./game"
 import * as Collapse from "./game/collapse"
 import config from "./game/config"
@@ -14,10 +14,16 @@ import * as Boss from "./objects/boss"
 import * as Footprint from "./objects/footprint"
 import { t } from "./objects/object"
 import * as Player from "./objects/player"
+import { Logging } from "./utils/logging"
 import { render } from "./renderer"
 import { assertUnreachable } from "./utils/utils"
+import _ from "lodash"
 
-const MAZE_SIZE: Vector.Vector = { y: 25, x: 80 }
+const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
+
+const logger = Logging.make("main")
+
+Logging.setIsEnabled((name: string) => _.includes(["main", "player"], name))
 
 export function main() {
     const boss: Boss.t = Boss.make()
@@ -33,7 +39,7 @@ export function main() {
 
     Game.message(game, {
         text: [
-            "Requiem for a Programmer. ",
+            "Requiem for a Programmer.",
             "You are in Agile hell.",
             "Earn enough money and get out !!!!!",
             "'*' is you. Use arrow keys to move.",
@@ -44,7 +50,7 @@ export function main() {
     let interval = window.setInterval(() => processTick(game), config.tickInterval)
 
     window.addEventListener("keydown", (event) => {
-        console.log("keydown:", event.key)
+        logger(`keydown: ${event.key}`)
         switch (event.key) {
             case "+":
                 config.tickInterval -= 5
@@ -88,7 +94,7 @@ export function main() {
     render(game)
 }
 
-function getCommand(key: string): Command | null | undefined {
+function getCommand(key: string): Command.t | null | undefined {
     switch (key) {
         case "ArrowUp":
             return { type: "move", direction: "up" }
@@ -98,9 +104,11 @@ function getCommand(key: string): Command | null | undefined {
             return { type: "move", direction: "left" }
         case "ArrowRight":
             return { type: "move", direction: "right" }
-        case "Insert":
-            return { type: "stop" }
+        case "Enter":
+            return { type: "use" }
         case " ":
+            return { type: "stop" }
+        case "Delete":
             return { type: "drop" }
     }
 }
@@ -151,7 +159,7 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: t, game: Game.t, commands: Command[]): Result {
+function tick(obj: t, game: Game.t, commands: Command.t[]): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":

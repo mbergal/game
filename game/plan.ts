@@ -32,7 +32,7 @@ export function generatePlan(startDay: number): Plan {
     for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
         const r = Sprint.generateSprint(startTick)
         append(plan, r[0])
-        startTick += r[1]
+        startTick = r[1]
     }
 
     append(plan, Collapse.plan())

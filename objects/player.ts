@@ -1,8 +1,8 @@
 import _ from "lodash"
-import { Command } from "../commands"
+import { Command } from "../command"
 import { Game } from "../game"
 import * as Effect from "../game/effect"
-import * as Effects from "../game/effects"
+import { Effects } from "../game/effects"
 import { GameMap } from "../game/map"
 import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
@@ -11,6 +11,9 @@ import { assertUnreachable } from "../utils/utils"
 import * as GameObject from "./object"
 import { Item } from "./object"
 import { StoryTask, Task } from "./tasks"
+import { Logging } from "../utils/logging"
+
+const logger = Logging.make("player")
 
 export interface Player {
     type: "player"
@@ -21,7 +24,7 @@ export interface Player {
     hrTaskTact: number | null
     task: Task | null
     commands: {
-        command: Command
+        command: Command.t
         tact: number
     }[]
     item: Item | null
@@ -89,6 +92,26 @@ function canPickItem(player: Player) {
     return player.hrTaskTact == null
 }
 
+function useItem(player: Player, newItem: Item, effects: Effect.t[]): boolean {
+    switch (newItem.type) {
+        case "commit":
+            if (player.task) {
+                const task = player.task
+                switch (task.type) {
+                    case "story":
+                        StoryTask.addCommit(player, task, newItem, effects)
+                        player.item = null
+                        break
+                }
+                return true
+            } else {
+                Effects.append(effects, Effect.showMessage("No task to apply commit to", 3_000))
+                return false
+            }
+    }
+    return false
+}
+
 function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
     const effects: Effects.t = []
     game.map.remove(newItem)
@@ -99,18 +122,8 @@ function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
             player.item = newItem
             break
         case "commit":
-            if (player.task) {
-                const task = player.task
-                switch (task.type) {
-                    case "story":
-                        Effects.append(effects, StoryTask.addCommit(player, task, newItem))
-                        break
-                }
-            } else {
-                dropCarriedItem(player, game)
-                player.item = newItem
-            }
-
+            dropCarriedItem(player, game)
+            player.item = newItem
             break
         case "story":
             player.task = StoryTask.make(newItem)
@@ -155,24 +168,39 @@ function dropItem(player: Player, map: GameMap) {
     player.item = null
 }
 
-function processCommands(player: Player, commands: Command[], map: GameMap) {
-    // const moveCommands = commands.filter(isMoveCommand)
-    // const otherCommands = commands.filter((x) => !isMoveCommand(x))
-
+function processCommands(player: Player, commands: Command.t[], map: GameMap, effects: Effect.t[]) {
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))]
+
+    if (player.commands.length > 0) {
+        logger(JSON.stringify(player.commands))
+    }
+    if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
+        logger(JSON.stringify(player.commands))
+    }
+    // while (commands.length > 0) {
+    //     switch (commands[0].type) {
+    //         case "move":
+    //         // if can move - move and delete command
+    //         // else - delay command
+    //         case "drop":
+    //         case "stop":
+    //             // delete all delayed moves
+    //     }
+    // }
 
     // if (otherCommands.length > 0) {
 
     // }
     if (player.commands.length > 0) {
-        console.log(JSON.stringify(player.commands))
-        switch (player.commands[0].command.type) {
+        logger(JSON.stringify(player.commands))
+        const command = player.commands[0].command
+        switch (command.type) {
             case "move":
-                const newPosition = moveBy(player.position, player.commands[0].command.direction)
+                const newPosition = moveBy(player.position, command.direction)
                 const obsjAtNewPosition = map.at(newPosition)
                 if (canMoveOn(obsjAtNewPosition)) {
-                    player.direction = player.commands[0].command.direction
-                    player.commands.pop()
+                    player.direction = command.direction
+                    player.commands.shift()
                 } else {
                 }
                 break
@@ -182,7 +210,16 @@ function processCommands(player: Player, commands: Command[], map: GameMap) {
                 break
             case "drop":
                 handleDrop(player, map)
+                player.commands.shift()
                 break
+            case "use":
+                if (player.item != null) {
+                    useItem(player, player.item!, effects)
+                }
+                player.commands.shift()
+                break
+            default:
+                assertUnreachable(command)
         }
         for (const c of player.commands) {
             c.tact += 1
@@ -191,11 +228,11 @@ function processCommands(player: Player, commands: Command[], map: GameMap) {
         player.commands = player.commands.filter((x) => x.tact < 10)
     }
 }
-export function tick(player: Player, game: Game.t, commands: Command[]): Effect.t[] {
+export function tick(player: Player, game: Game.t, commands: Command.t[]): Effect.t[] {
+    const effects: Effects.t = []
     tickHrTask(player)
-    processCommands(player, commands, game.map)
+    processCommands(player, commands, game.map, effects)
 
-    const result: Effect.t[] = []
     if (player.direction) {
         const newPosition = moveBy(player.position, player.direction)
         const objsAtNewPosition = game.map.at(newPosition)
@@ -206,19 +243,19 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Effect.
                     case "door":
                     case "coffee":
                         if (canPickItem(player)) {
-                            console.log(`Can pick item  ${JSON.stringify(player)}`)
-                            result.push(Effect.showMessage(`Picked a ${obj.type}`, 40))
-                            Effects.append(result, pickItem(player, obj, game))
+                            logger(`Can pick item  ${JSON.stringify(player)}`)
+                            Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40))
+                            Effects.append(effects, pickItem(player, obj, game))
                         }
                         break
                     case "commit":
                         if (canPickItem(player)) {
-                            console.log(`Can pick item  ${JSON.stringify(player)}`)
+                            logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(
-                                result,
+                                effects,
                                 Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
                             )
-                            Effects.append(result, pickItem(player, obj, game))
+                            Effects.append(effects, pickItem(player, obj, game))
                         }
                         break
                     case "story":
@@ -242,5 +279,5 @@ export function tick(player: Player, game: Game.t, commands: Command[]): Effect.
         } else {
         }
     }
-    return result
+    return effects
 }

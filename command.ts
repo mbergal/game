@@ -1,0 +1,27 @@
+import * as Direction from "./geometry/direction"
+
+export namespace Command {
+    export type MoveCommand = {
+        type: "move"
+        direction: Direction.t
+    }
+
+    export function isMoveCommand(command: Command): command is MoveCommand {
+        return command.type == "move"
+    }
+
+    export type StopCommand = {
+        type: "stop"
+    }
+
+    export type DropCommand = {
+        type: "drop"
+    }
+
+    export type UseCommand = {
+        type: "use"
+    }
+
+    export type Command = MoveCommand | StopCommand | DropCommand | UseCommand
+    export type t = Command
+}

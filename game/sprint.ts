@@ -104,10 +104,10 @@ export function* tick(
                 case "sprintDayEnd":
                     break
                 case "sprintDayStart":
-                    yield showMessage(`Sprint day ${event.day}`, 2000)
+                    yield showMessage(`Sprint day ${event.day}`, 3000)
                     break
                 case "sprintEnd":
-                    yield showMessage("Sprint ended", 2000)
+                    yield showMessage("Sprint ended", 3000)
                     const stories = GameObjects.filter(game.map.objects, "story")
                     game.map.remove(stories)
                     if (game.player.task != null) {

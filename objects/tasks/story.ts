@@ -1,6 +1,6 @@
 import config from "../../game/config"
 import * as Effect from "../../game/effect"
-import * as Effects from "../../game/effects"
+import { Effects } from "../../game/effects"
 import * as Commit from "../../objects/commit"
 import * as Player from "../../objects/player"
 import * as Story from "../story"
@@ -25,8 +25,7 @@ export function make(story: Story.t): t {
     }
 }
 
-export function addCommit(player: Player.Player, task: t, commit: Commit.t): Effects.t {
-    const effects: Effects.t = []
+export function addCommit(player: Player.Player, task: t, commit: Commit.t, effects: Effect.t[]) {
     task.appliedCommits += 1
     if (task.appliedCommits == task.neededCommits) {
         Effects.append(effects, Effect.addImpact(task.impact))

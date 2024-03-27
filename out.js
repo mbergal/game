@@ -372,7 +372,7 @@
               return types;
             }
             return freeProcess && freeProcess.binding && freeProcess.binding("util");
-          } catch (e2) {
+          } catch (e) {
           }
         }();
         var nodeIsArrayBuffer = nodeUtil && nodeUtil.isArrayBuffer, nodeIsDate = nodeUtil && nodeUtil.isDate, nodeIsMap = nodeUtil && nodeUtil.isMap, nodeIsRegExp = nodeUtil && nodeUtil.isRegExp, nodeIsSet = nodeUtil && nodeUtil.isSet, nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -595,9 +595,9 @@
           return result;
         }
         __name(baseSum, "baseSum");
-        function baseTimes(n2, iteratee) {
-          var index = -1, result = Array(n2);
-          while (++index < n2) {
+        function baseTimes(n, iteratee) {
+          var index = -1, result = Array(n);
+          while (++index < n) {
             result[index] = iteratee(index);
           }
           return result;
@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _10.defaults(root.Object(), context, _10.pick(root, contextProps));
+          context = context == null ? root : _11.defaults(root.Object(), context, _11.pick(root, contextProps));
           var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -797,7 +797,7 @@
               var func = getNative(Object2, "defineProperty");
               func({}, "", {});
               return func;
-            } catch (e2) {
+            } catch (e) {
             }
           }();
           var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date2 && Date2.now !== root.Date.now && Date2.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
@@ -1185,8 +1185,8 @@
             return length ? array[baseRandom(0, length - 1)] : undefined;
           }
           __name(arraySample, "arraySample");
-          function arraySampleSize(array, n2) {
-            return shuffleSelf(copyArray(array), baseClamp(n2, 0, array.length));
+          function arraySampleSize(array, n) {
+            return shuffleSelf(copyArray(array), baseClamp(n, 0, array.length));
           }
           __name(arraySampleSize, "arraySampleSize");
           function arrayShuffle(array) {
@@ -1801,13 +1801,13 @@
             assignMergeValue(object, key, newValue);
           }
           __name(baseMergeDeep, "baseMergeDeep");
-          function baseNth(array, n2) {
+          function baseNth(array, n) {
             var length = array.length;
             if (!length) {
               return;
             }
-            n2 += n2 < 0 ? length : 0;
-            return isIndex(n2, length) ? array[n2] : undefined;
+            n += n < 0 ? length : 0;
+            return isIndex(n, length) ? array[n] : undefined;
           }
           __name(baseNth, "baseNth");
           function baseOrderBy(collection, iteratees, orders) {
@@ -1908,20 +1908,20 @@
             return result2;
           }
           __name(baseRange, "baseRange");
-          function baseRepeat(string, n2) {
+          function baseRepeat(string, n) {
             var result2 = "";
-            if (!string || n2 < 1 || n2 > MAX_SAFE_INTEGER) {
+            if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
               return result2;
             }
             do {
-              if (n2 % 2) {
+              if (n % 2) {
                 result2 += string;
               }
-              n2 = nativeFloor(n2 / 2);
-              if (n2) {
+              n = nativeFloor(n / 2);
+              if (n) {
                 string += string;
               }
-            } while (n2);
+            } while (n);
             return result2;
           }
           __name(baseRepeat, "baseRepeat");
@@ -1933,9 +1933,9 @@
             return arraySample(values(collection));
           }
           __name(baseSample, "baseSample");
-          function baseSampleSize(collection, n2) {
+          function baseSampleSize(collection, n) {
             var array = values(collection);
-            return shuffleSelf(array, baseClamp(n2, 0, array.length));
+            return shuffleSelf(array, baseClamp(n, 0, array.length));
           }
           __name(baseSampleSize, "baseSampleSize");
           function baseSet(object, path, value, customizer) {
@@ -3009,7 +3009,7 @@
             try {
               value[symToStringTag] = undefined;
               var unmasked = true;
-            } catch (e2) {
+            } catch (e) {
             }
             var result2 = nativeObjectToString.call(value);
             if (unmasked) {
@@ -3396,11 +3396,11 @@
             if (func != null) {
               try {
                 return funcToString.call(func);
-              } catch (e2) {
+              } catch (e) {
               }
               try {
                 return func + "";
-              } catch (e2) {
+              } catch (e) {
               }
             }
             return "";
@@ -3484,23 +3484,23 @@
             }
             return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true), undefined, comparator) : [];
           });
-          function drop(array, n2, guard) {
+          function drop(array, n, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            return baseSlice(array, n2 < 0 ? 0 : n2, length);
+            n = guard || n === undefined ? 1 : toInteger(n);
+            return baseSlice(array, n < 0 ? 0 : n, length);
           }
           __name(drop, "drop");
-          function dropRight(array, n2, guard) {
+          function dropRight(array, n, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            n2 = length - n2;
-            return baseSlice(array, 0, n2 < 0 ? 0 : n2);
+            n = guard || n === undefined ? 1 : toInteger(n);
+            n = length - n;
+            return baseSlice(array, 0, n < 0 ? 0 : n);
           }
           __name(dropRight, "dropRight");
           function dropRightWhile(array, predicate) {
@@ -3640,8 +3640,8 @@
             return value === value ? strictLastIndexOf(array, value, index) : baseFindIndex(array, baseIsNaN, index, true);
           }
           __name(lastIndexOf, "lastIndexOf");
-          function nth(array, n2) {
-            return array && array.length ? baseNth(array, toInteger(n2)) : undefined;
+          function nth(array, n) {
+            return array && array.length ? baseNth(array, toInteger(n)) : undefined;
           }
           __name(nth, "nth");
           var pull2 = baseRest(pullAll);
@@ -3752,22 +3752,22 @@
             return length ? baseSlice(array, 1, length) : [];
           }
           __name(tail, "tail");
-          function take(array, n2, guard) {
+          function take(array, n, guard) {
             if (!(array && array.length)) {
               return [];
             }
-            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            return baseSlice(array, 0, n2 < 0 ? 0 : n2);
+            n = guard || n === undefined ? 1 : toInteger(n);
+            return baseSlice(array, 0, n < 0 ? 0 : n);
           }
           __name(take, "take");
-          function takeRight(array, n2, guard) {
+          function takeRight(array, n, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            n2 = length - n2;
-            return baseSlice(array, n2 < 0 ? 0 : n2, length);
+            n = guard || n === undefined ? 1 : toInteger(n);
+            n = length - n;
+            return baseSlice(array, n < 0 ? 0 : n, length);
           }
           __name(takeRight, "takeRight");
           function takeRightWhile(array, predicate) {
@@ -4078,14 +4078,14 @@
             return func(collection);
           }
           __name(sample, "sample");
-          function sampleSize2(collection, n2, guard) {
-            if (guard ? isIterateeCall(collection, n2, guard) : n2 === undefined) {
-              n2 = 1;
+          function sampleSize2(collection, n, guard) {
+            if (guard ? isIterateeCall(collection, n, guard) : n === undefined) {
+              n = 1;
             } else {
-              n2 = toInteger(n2);
+              n = toInteger(n);
             }
             var func = isArray(collection) ? arraySampleSize : baseSampleSize;
-            return func(collection, n2);
+            return func(collection, n);
           }
           __name(sampleSize2, "sampleSize");
           function shuffle(collection) {
@@ -4130,35 +4130,35 @@
           var now = ctxNow || function() {
             return root.Date.now();
           };
-          function after(n2, func) {
+          function after(n, func) {
             if (typeof func != "function") {
               throw new TypeError2(FUNC_ERROR_TEXT);
             }
-            n2 = toInteger(n2);
+            n = toInteger(n);
             return function() {
-              if (--n2 < 1) {
+              if (--n < 1) {
                 return func.apply(this, arguments);
               }
             };
           }
           __name(after, "after");
-          function ary(func, n2, guard) {
-            n2 = guard ? undefined : n2;
-            n2 = func && n2 == null ? func.length : n2;
-            return createWrap(func, WRAP_ARY_FLAG, undefined, undefined, undefined, undefined, n2);
+          function ary(func, n, guard) {
+            n = guard ? undefined : n;
+            n = func && n == null ? func.length : n;
+            return createWrap(func, WRAP_ARY_FLAG, undefined, undefined, undefined, undefined, n);
           }
           __name(ary, "ary");
-          function before(n2, func) {
+          function before(n, func) {
             var result2;
             if (typeof func != "function") {
               throw new TypeError2(FUNC_ERROR_TEXT);
             }
-            n2 = toInteger(n2);
+            n = toInteger(n);
             return function() {
-              if (--n2 > 0) {
+              if (--n > 0) {
                 result2 = func.apply(this, arguments);
               }
-              if (n2 <= 1) {
+              if (n <= 1) {
                 func = undefined;
               }
               return result2;
@@ -5076,13 +5076,13 @@
             return nativeParseInt(toString2(string).replace(reTrimStart, ""), radix || 0);
           }
           __name(parseInt2, "parseInt");
-          function repeat(string, n2, guard) {
-            if (guard ? isIterateeCall(string, n2, guard) : n2 === undefined) {
-              n2 = 1;
+          function repeat(string, n, guard) {
+            if (guard ? isIterateeCall(string, n, guard) : n === undefined) {
+              n = 1;
             } else {
-              n2 = toInteger(n2);
+              n = toInteger(n);
             }
-            return baseRepeat(toString2(string), n2);
+            return baseRepeat(toString2(string), n);
           }
           __name(repeat, "repeat");
           function replace() {
@@ -5284,8 +5284,8 @@
           var attempt = baseRest(function(func, args) {
             try {
               return apply(func, undefined, args);
-            } catch (e2) {
-              return isError(e2) ? e2 : new Error2(e2);
+            } catch (e) {
+              return isError(e) ? e : new Error2(e);
             }
           });
           var bindAll = flatRest(function(object, methodNames) {
@@ -5394,10 +5394,10 @@
           function noop() {
           }
           __name(noop, "noop");
-          function nthArg(n2) {
-            n2 = toInteger(n2);
+          function nthArg(n) {
+            n = toInteger(n);
             return baseRest(function(args) {
-              return baseNth(args, n2);
+              return baseNth(args, n);
             });
           }
           __name(nthArg, "nthArg");
@@ -5436,16 +5436,16 @@
             return true;
           }
           __name(stubTrue, "stubTrue");
-          function times(n2, iteratee2) {
-            n2 = toInteger(n2);
-            if (n2 < 1 || n2 > MAX_SAFE_INTEGER) {
+          function times(n, iteratee2) {
+            n = toInteger(n);
+            if (n < 1 || n > MAX_SAFE_INTEGER) {
               return [];
             }
-            var index = MAX_ARRAY_LENGTH, length = nativeMin(n2, MAX_ARRAY_LENGTH);
+            var index = MAX_ARRAY_LENGTH, length = nativeMin(n, MAX_ARRAY_LENGTH);
             iteratee2 = getIteratee(iteratee2);
-            n2 -= MAX_ARRAY_LENGTH;
+            n -= MAX_ARRAY_LENGTH;
             var result2 = baseTimes(length, iteratee2);
-            while (++index < n2) {
+            while (++index < n) {
               iteratee2(index);
             }
             return result2;
@@ -5830,21 +5830,21 @@
             lodash[methodName].placeholder = lodash;
           });
           arrayEach(["drop", "take"], function(methodName, index) {
-            LazyWrapper.prototype[methodName] = function(n2) {
-              n2 = n2 === undefined ? 1 : nativeMax(toInteger(n2), 0);
+            LazyWrapper.prototype[methodName] = function(n) {
+              n = n === undefined ? 1 : nativeMax(toInteger(n), 0);
               var result2 = this.__filtered__ && !index ? new LazyWrapper(this) : this.clone();
               if (result2.__filtered__) {
-                result2.__takeCount__ = nativeMin(n2, result2.__takeCount__);
+                result2.__takeCount__ = nativeMin(n, result2.__takeCount__);
               } else {
                 result2.__views__.push({
-                  "size": nativeMin(n2, MAX_ARRAY_LENGTH),
+                  "size": nativeMin(n, MAX_ARRAY_LENGTH),
                   "type": methodName + (result2.__dir__ < 0 ? "Right" : "")
                 });
               }
               return result2;
             };
-            LazyWrapper.prototype[methodName + "Right"] = function(n2) {
-              return this.reverse()[methodName](n2).reverse();
+            LazyWrapper.prototype[methodName + "Right"] = function(n) {
+              return this.reverse()[methodName](n).reverse();
             };
           });
           arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
@@ -5985,17 +5985,17 @@
           }
           return lodash;
         }, "runInContext");
-        var _10 = runInContext();
+        var _11 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _10;
+          root._ = _11;
           define(function() {
-            return _10;
+            return _11;
           });
         } else if (freeModule) {
-          (freeModule.exports = _10)._ = _10;
-          freeExports._ = _10;
+          (freeModule.exports = _11)._ = _11;
+          freeExports._ = _11;
         } else {
-          root._ = _10;
+          root._ = _11;
         }
       }).call(exports);
     }
@@ -6040,29 +6040,29 @@
   var all = ["left", "right", "down", "up"];
 
   // geometry/vector.ts
-  var vector_exports = {};
-  __export(vector_exports, {
-    e: () => e,
-    n: () => n,
-    s: () => s,
-    w: () => w
-  });
-  function n(v) {
-    return { x: v.x, y: v.y - 1 };
-  }
-  __name(n, "n");
-  function s(v) {
-    return { x: v.x, y: v.y + 1 };
-  }
-  __name(s, "s");
-  function w(v) {
-    return { x: v.x - 1, y: v.y };
-  }
-  __name(w, "w");
-  function e(v) {
-    return { x: v.x + 1, y: v.y };
-  }
-  __name(e, "e");
+  var Vector;
+  ((Vector5) => {
+    function n(v) {
+      return { x: v.x, y: v.y - 1 };
+    }
+    Vector5.n = n;
+    __name(n, "n");
+    function s(v) {
+      return { x: v.x, y: v.y + 1 };
+    }
+    Vector5.s = s;
+    __name(s, "s");
+    function w(v) {
+      return { x: v.x - 1, y: v.y };
+    }
+    Vector5.w = w;
+    __name(w, "w");
+    function e(v) {
+      return { x: v.x + 1, y: v.y };
+    }
+    Vector5.e = e;
+    __name(e, "e");
+  })(Vector || (Vector = {}));
 
   // geometry/index.ts
   function moveBy(vector, direction) {
@@ -6252,11 +6252,11 @@
     };
     for (let x = 0; x < map.width; x++) {
       const c = { x, y: row };
-      if (map.at(vector_exports.n(c)).length == 0) {
-        currentRoom.doors.push(vector_exports.n(c));
+      if (map.at(Vector.n(c)).length == 0) {
+        currentRoom.doors.push(Vector.n(c));
       }
-      if (map.at(vector_exports.s(c)).length == 0) {
-        currentRoom.doors.push(vector_exports.s(c));
+      if (map.at(Vector.s(c)).length == 0) {
+        currentRoom.doors.push(Vector.s(c));
       }
       if (map.at({ x, y: row }).length > 0) {
         if (currentRoom.length > 0)
@@ -6372,13 +6372,13 @@
       return p;
     }
     toString() {
-      let s2 = "\n";
+      let s = "\n";
       for (const y of _3.range(this.height)) {
         for (const x of _3.range(this.width))
-          s2 += repr(this.cells[y][x]);
-        s2 += "\n";
+          s += repr(this.cells[y][x]);
+        s += "\n";
       }
-      return s2;
+      return s;
     }
     toJson() {
       return {
@@ -6621,7 +6621,7 @@
     for (const i in import_lodash2.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
       const r = generateSprint(startTick);
       append(plan2, r[0]);
-      startTick += r[1];
+      startTick = r[1];
     }
     append(plan2, plan());
     return plan2;
@@ -6788,10 +6788,10 @@
           case "sprintDayEnd":
             break;
           case "sprintDayStart":
-            yield showMessage(`Sprint day ${event.day}`, 2e3);
+            yield showMessage(`Sprint day ${event.day}`, 3e3);
             break;
           case "sprintEnd":
-            yield showMessage("Sprint ended", 2e3);
+            yield showMessage("Sprint ended", 3e3);
             const stories = filter(game.map.objects, "story");
             game.map.remove(stories);
             if (game.player.task != null) {
@@ -6820,7 +6820,33 @@
   }
   __name(tick3, "tick");
 
+  // utils/logging.ts
+  var Logging;
+  ((Logging2) => {
+    function setIsEnabled(f) {
+      isEnabled = f;
+    }
+    Logging2.setIsEnabled = setIsEnabled;
+    __name(setIsEnabled, "setIsEnabled");
+    function setTime(tick10) {
+    }
+    Logging2.setTime = setTime;
+    __name(setTime, "setTime");
+    function make15(name) {
+      return (message2) => {
+        if (isEnabled(name)) {
+          console.log(tick9.toString().padStart(4, "0") + " " + message2);
+        }
+      };
+    }
+    Logging2.make = make15;
+    __name(make15, "make");
+    let isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
+    let tick9 = 0;
+  })(Logging || (Logging = {}));
+
   // game/game.ts
+  var logger = Logging.make("game");
   function make10(size, plan2) {
     return {
       map: new GameMap(size.x, size.y, []),
@@ -6897,7 +6923,7 @@
           case "collapseStart":
           case "dayStarted":
           case "gameEnded":
-            console.log(event);
+            logger(JSON.stringify(event));
             break;
           default:
             assertUnreachable(event);
@@ -6908,7 +6934,7 @@
   __name(tick4, "tick");
   function save(game, storage) {
     storage.save(JSON.stringify(toJson(game)));
-    console.log("Game saved!");
+    logger("Game saved!");
   }
   __name(save, "save");
   function load(storage) {
@@ -6946,7 +6972,7 @@
         collapse
       };
     } else {
-      console.log("There is no saved game.");
+      logger("There is no saved game.");
       return null;
     }
   }
@@ -7206,15 +7232,19 @@
 
   // game/effects.ts
   var import_lodash6 = __toESM(require_lodash());
-  function append2(effects, other) {
-    if (!import_lodash6.default.isArray(other)) {
-      other = [other];
+  var Effects;
+  ((Effects2) => {
+    function append2(effects, other) {
+      if (!import_lodash6.default.isArray(other)) {
+        other = [other];
+      }
+      for (const effect of other) {
+        effects.push(effect);
+      }
     }
-    for (const effect of other) {
-      effects.push(effect);
-    }
-  }
-  __name(append2, "append");
+    Effects2.append = append2;
+    __name(append2, "append");
+  })(Effects || (Effects = {}));
 
   // game/messages.ts
   var startedStory = /* @__PURE__ */ __name((story) => ({
@@ -7238,12 +7268,11 @@
     };
   }
   __name(make13, "make");
-  function addCommit(player, task, commit) {
-    const effects = [];
+  function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
-      append2(effects, addImpact(task.impact));
-      append2(effects, showMessage(`Finished ${task.story.name}`, 30));
+      Effects.append(effects, addImpact(task.impact));
+      Effects.append(effects, showMessage(`Finished ${task.story.name}`, 30));
       player.task = null;
     }
     return effects;
@@ -7251,6 +7280,7 @@
   __name(addCommit, "addCommit");
 
   // objects/player.ts
+  var logger2 = Logging.make("player");
   function make14(position) {
     return {
       type: "player",
@@ -7311,6 +7341,26 @@
     return player.hrTaskTact == null;
   }
   __name(canPickItem, "canPickItem");
+  function useItem(player, newItem, effects) {
+    switch (newItem.type) {
+      case "commit":
+        if (player.task) {
+          const task = player.task;
+          switch (task.type) {
+            case "story":
+              story_exports2.addCommit(player, task, newItem, effects);
+              player.item = null;
+              break;
+          }
+          return true;
+        } else {
+          Effects.append(effects, showMessage("No task to apply commit to", 3e3));
+          return false;
+        }
+    }
+    return false;
+  }
+  __name(useItem, "useItem");
   function pickItem(player, newItem, game) {
     const effects = [];
     game.map.remove(newItem);
@@ -7321,17 +7371,8 @@
         player.item = newItem;
         break;
       case "commit":
-        if (player.task) {
-          const task = player.task;
-          switch (task.type) {
-            case "story":
-              append2(effects, story_exports2.addCommit(player, task, newItem));
-              break;
-          }
-        } else {
-          dropCarriedItem(player, game);
-          player.item = newItem;
-        }
+        dropCarriedItem(player, game);
+        player.item = newItem;
         break;
       case "story":
         player.task = story_exports2.make(newItem);
@@ -7372,17 +7413,24 @@
     player.item = null;
   }
   __name(dropItem, "dropItem");
-  function processCommands(player, commands, map) {
+  function processCommands(player, commands, map, effects) {
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
-      console.log(JSON.stringify(player.commands));
-      switch (player.commands[0].command.type) {
+      logger2(JSON.stringify(player.commands));
+    }
+    if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
+      logger2(JSON.stringify(player.commands));
+    }
+    if (player.commands.length > 0) {
+      logger2(JSON.stringify(player.commands));
+      const command = player.commands[0].command;
+      switch (command.type) {
         case "move":
-          const newPosition = moveBy(player.position, player.commands[0].command.direction);
+          const newPosition = moveBy(player.position, command.direction);
           const obsjAtNewPosition = map.at(newPosition);
           if (canMoveOn(obsjAtNewPosition)) {
-            player.direction = player.commands[0].command.direction;
-            player.commands.pop();
+            player.direction = command.direction;
+            player.commands.shift();
           } else {
           }
           break;
@@ -7392,7 +7440,16 @@
           break;
         case "drop":
           handleDrop(player, map);
+          player.commands.shift();
           break;
+        case "use":
+          if (player.item != null) {
+            useItem(player, player.item, effects);
+          }
+          player.commands.shift();
+          break;
+        default:
+          assertUnreachable(command);
       }
       for (const c of player.commands) {
         c.tact += 1;
@@ -7402,9 +7459,9 @@
   }
   __name(processCommands, "processCommands");
   function tick7(player, game, commands) {
+    const effects = [];
     tickHrTask(player);
-    processCommands(player, commands, game.map);
-    const result = [];
+    processCommands(player, commands, game.map, effects);
     if (player.direction) {
       const newPosition = moveBy(player.position, player.direction);
       const objsAtNewPosition = game.map.at(newPosition);
@@ -7415,19 +7472,19 @@
             case "door":
             case "coffee":
               if (canPickItem(player)) {
-                console.log(`Can pick item  ${JSON.stringify(player)}`);
-                result.push(showMessage(`Picked a ${obj.type}`, 40));
-                append2(result, pickItem(player, obj, game));
+                logger2(`Can pick item  ${JSON.stringify(player)}`);
+                Effects.append(effects, showMessage(`Picked a ${obj.type}`, 40));
+                Effects.append(effects, pickItem(player, obj, game));
               }
               break;
             case "commit":
               if (canPickItem(player)) {
-                console.log(`Can pick item  ${JSON.stringify(player)}`);
-                append2(
-                  result,
+                logger2(`Can pick item  ${JSON.stringify(player)}`);
+                Effects.append(
+                  effects,
                   showMessage(`Picked a commit ${obj.hash}`, 40)
                 );
-                append2(result, pickItem(player, obj, game));
+                Effects.append(effects, pickItem(player, obj, game));
               }
               break;
             case "story":
@@ -7450,7 +7507,7 @@
       } else {
       }
     }
-    return result;
+    return effects;
   }
   __name(tick7, "tick");
 
@@ -7604,19 +7661,19 @@
       return "\u2557";
     } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
       return "\u255D";
-    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
+    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(Vector.w(pos), "wall")) {
       return "\u2562";
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(Vector.e(pos), "wall")) {
       return "\u255F";
     } else if (pos.x == 0 || pos.x == map.width - 1) {
       return "\u2551";
     } else if (pos.y == 0 || pos.y == map.height - 1) {
       return "\u2550";
-    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
+    } else if (map.isAt(Vector.n(pos), "wall") && map.isAt(Vector.s(pos), "wall")) {
       return "\u2502";
-    } else if (map.isAt(vector_exports.s(pos), "wall")) {
+    } else if (map.isAt(Vector.s(pos), "wall")) {
       return "\u252C";
-    } else if (map.isAt(vector_exports.n(pos), "wall")) {
+    } else if (map.isAt(Vector.n(pos), "wall")) {
       return "\u2534";
     } else {
       return "\u2500";
@@ -7625,7 +7682,10 @@
   __name(getWallRepresentation, "getWallRepresentation");
 
   // main.ts
+  var import_lodash8 = __toESM(require_lodash());
   var MAZE_SIZE = { y: 25, x: 80 };
+  var logger3 = Logging.make("main");
+  Logging.setIsEnabled((name) => import_lodash8.default.includes(["main", "player"], name));
   function main() {
     const boss = make12();
     const plan2 = generatePlan(0);
@@ -7636,7 +7696,7 @@
     game.map.add([game.player]);
     game_exports.message(game, {
       text: [
-        "Requiem for a Programmer. ",
+        "Requiem for a Programmer.",
         "You are in Agile hell.",
         "Earn enough money and get out !!!!!",
         "'*' is you. Use arrow keys to move."
@@ -7645,7 +7705,7 @@
     });
     let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
     window.addEventListener("keydown", (event) => {
-      console.log("keydown:", event.key);
+      logger3(`keydown: ${event.key}`);
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
@@ -7697,9 +7757,11 @@
         return { type: "move", direction: "left" };
       case "ArrowRight":
         return { type: "move", direction: "right" };
-      case "Insert":
-        return { type: "stop" };
+      case "Enter":
+        return { type: "use" };
       case " ":
+        return { type: "stop" };
+      case "Delete":
         return { type: "drop" };
     }
   }
