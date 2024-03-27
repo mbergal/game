@@ -1,5 +1,5 @@
 import _ from "lodash"
-import * as Effect from "./effect"
+import { Effect } from "./effect"
 
 export namespace Effects {
     export type t = Array<Effect.t>

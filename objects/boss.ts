@@ -103,7 +103,7 @@ export function possibleMoves(
 
 function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: GameMap.GameMap) {
     obj.state = { type: "moving", direction: new_direction, tact: 0 }
-    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint])
+    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint.t])
     map.move(obj, new_pos)
 }
 

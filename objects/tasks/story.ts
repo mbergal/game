@@ -1,9 +1,9 @@
 import config from "../../game/config"
-import * as Effect from "../../game/effect"
+import { Effect } from "../../game/effect"
 import { Effects } from "../../game/effects"
-import * as Commit from "../../objects/commit"
+import { Commit } from "../../objects/commit"
 import * as Player from "../../objects/player"
-import * as Story from "../story"
+import { Story } from "../story"
 
 export interface t {
     type: "story"

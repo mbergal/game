@@ -1,18 +1,17 @@
 import _ from "lodash"
 import { Command } from "../command"
 import { Game } from "../game"
-import * as Effect from "../game/effect"
+import config from "../game/config"
+import { Effect } from "../game/effect"
 import { Effects } from "../game/effects"
 import { GameMap } from "../game/map"
 import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
-import { assertUnreachable } from "../utils/utils"
-import * as GameObject from "./object"
-import { Item } from "./object"
-import { StoryTask, Task } from "./tasks"
 import { Logging } from "../utils/logging"
-import config from "../game/config"
+import { assertUnreachable } from "../utils/utils"
+import { GameObject } from "./object"
+import { StoryTask, Task } from "./tasks"
 
 const logger = Logging.make("player")
 
@@ -20,9 +19,9 @@ type PlayerFlags = {
     spedUp: false | number
 }
 
-export interface Player {
+export type Player = {
     type: "player"
-    position: Vector.Vector
+    position: Vector.t
     direction: Direction.t | null
     zIndex: number
     tact: number
@@ -33,12 +32,10 @@ export interface Player {
         command: Command.t
         tact: number
     }[]
-    item: Item | null
+    item: GameObject.Item | null
 }
 
-export interface Result {}
-
-export function make(position: Vector.Vector): Player {
+export function make(position: Vector.t): Player {
     return {
         type: "player",
         zIndex: 1000,
@@ -74,6 +71,7 @@ function canMoveOn(objs: GameObject.t[]) {
             }
         }
         const result = _.every(objs, canMoveOnObj)
+
         return result
     } else {
         return true
@@ -97,7 +95,7 @@ function takeTask(player: Player, task: Task, game: Game.t) {
     }
 }
 
-function canPickItem(player: Player, item: Item) {
+function canPickItem(player: Player, item: GameObject.Item) {
     switch (item.type) {
         case "door":
             if (item.placed) {
@@ -107,7 +105,12 @@ function canPickItem(player: Player, item: Item) {
     return player.hrTaskTact == null
 }
 
-function useItem(player: Player, item: Item, map: GameMap, effects: Effect.t[]): boolean {
+function useItem(
+    player: Player,
+    item: GameObject.Item,
+    map: GameMap,
+    effects: Effect.t[]
+): boolean {
     logger(`Using item ${item.type}`)
     switch (item.type) {
         case "commit":
@@ -145,30 +148,33 @@ function useItem(player: Player, item: Item, map: GameMap, effects: Effect.t[]):
     return false
 }
 
-function pickItem(player: Player, newItem: Item, game: Game.t): Effects.t {
-    const effects: Effects.t = []
+function pickItem(
+    player: Player,
+    newItem: GameObject.Item,
+    game: Game.t,
+    effects: Effects.t
+): boolean {
     game.map.remove(newItem)
     switch (newItem.type) {
         case "door":
             newItem.open = true
             dropCarriedItem(player, game)
             player.item = newItem
-            break
+            return true
         case "coffee":
             dropCarriedItem(player, game)
             player.item = newItem
-            break
+            return true
         case "commit":
             dropCarriedItem(player, game)
             player.item = newItem
-            break
+            return true
         case "story":
             player.task = StoryTask.make(newItem)
-            break
+            return false
         default:
             assertUnreachable(newItem)
     }
-    return effects
 }
 
 function dropCarriedItem(player: Player, game: Game.t) {
@@ -212,6 +218,10 @@ function dropItem(player: Player, map: GameMap) {
 }
 
 function processCommands(player: Player, commands: Command.t[], map: GameMap, effects: Effect.t[]) {
+    const removeAllMoves = () => {
+        player.commands = player.commands.filter((x) => x.command.type != "move")
+    }
+
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))]
 
     if (player.commands.length > 0) {
@@ -220,23 +230,15 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
         logger(JSON.stringify(player.commands))
     }
-    // while (commands.length > 0) {
-    //     switch (commands[0].type) {
-    //         case "move":
-    //         // if can move - move and delete command
-    //         // else - delay command
-    //         case "drop":
-    //         case "stop":
-    //             // delete all delayed moves
-    //     }
-    // }
 
-    // if (otherCommands.length > 0) {
-
-    // }
-    if (player.commands.length > 0) {
+    let delayedCommands: {
+        command: Command.t
+        tact: number
+    }[] = []
+    while (player.commands.length > 0) {
         logger(JSON.stringify(player.commands))
         const command = player.commands[0].command
+        logger(`processing: ${JSON.stringify(command)}`)
         switch (command.type) {
             case "move":
                 const newPosition = moveBy(player.position, command.direction)
@@ -244,33 +246,42 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
                 if (canMoveOn(obsjAtNewPosition)) {
                     player.direction = command.direction
                     player.commands.shift()
+                    delayedCommands = []
                 } else {
+                    const delayedCommand = player.commands.shift()!
+                    logger(`delaying ${JSON.stringify(delayedCommand)}`)
+                    delayedCommands.push(delayedCommand)
                 }
                 break
             case "stop":
-                player.commands = []
+                removeAllMoves()
                 player.direction = null
                 break
             case "drop":
                 handleDrop(player, map)
                 player.commands.shift()
+                removeAllMoves()
                 break
             case "use":
                 if (player.item != null) {
                     useItem(player, player.item!, map, effects)
                 }
                 player.commands.shift()
+                removeAllMoves()
                 break
             default:
                 assertUnreachable(command)
         }
-        for (const c of player.commands) {
-            c.tact += 1
-        }
-
-        player.commands = player.commands.filter((x) => x.tact < 10)
     }
+
+    player.commands = delayedCommands
+    for (const c of player.commands) {
+        c.tact += 1
+    }
+
+    player.commands = player.commands.filter((x) => x.tact < 10)
 }
+
 export function tick(
     player: Player,
     game: Game.t,
@@ -278,6 +289,9 @@ export function tick(
     ticksPassed: number
 ): Effect.t[] {
     const effects: Effects.t = []
+    let pickedSomething = false
+    let carriedSomething = player.item != null
+
     tickHrTask(player, ticksPassed)
     processCommands(player, commands, game.map, effects)
 
@@ -293,7 +307,8 @@ export function tick(
                         if (canPickItem(player, obj)) {
                             logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40))
-                            Effects.append(effects, pickItem(player, obj, game))
+                            pickedSomething =
+                                pickedSomething || pickItem(player, obj, game, effects)
                         }
                         break
                     case "commit":
@@ -303,7 +318,8 @@ export function tick(
                                 effects,
                                 Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
                             )
-                            Effects.append(effects, pickItem(player, obj, game))
+                            pickedSomething =
+                                pickedSomething || pickItem(player, obj, game, effects)
                         }
                         break
                     case "story":
@@ -324,6 +340,12 @@ export function tick(
                 }
             }
             game.map.move(player, newPosition)
+            if (
+                game.map.objAt(moveBy(newPosition, player.direction), "commit") &&
+                carriedSomething
+            ) {
+                player.direction = null
+            }
         } else {
         }
     }

@@ -12,8 +12,8 @@ import { Sprint } from "./game/sprint"
 import * as MazeGenerator from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
-import * as Footprint from "./objects/footprint"
-import { t } from "./objects/object"
+import { Footprint } from "./objects/footprint"
+import { GameObject } from "./objects/object"
 import * as Player from "./objects/player"
 import { render } from "./renderer"
 import { Logging } from "./utils/logging"
@@ -23,7 +23,7 @@ const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
 const logger = Logging.make("main")
 
-Logging.setIsEnabled((name: string) => _.includes(["main", "player"], name))
+Logging.setIsEnabled((name: string) => _.includes(["main", "player", "game"], name))
 
 export function main() {
     const boss: Boss.t = Boss.make()
@@ -169,13 +169,13 @@ function processTick(game: Game.t) {
     }
 
     if (!game.player!.flags.spedUp) {
-        game.time.ticks += 1
         fullTick()
+        game.time.ticks += 1
     } else {
-        game.time.ticks += 0.5
         playerTick()
         game.time.ticks += 0.5
         fullTick()
+        game.time.ticks += 0.5
     }
 }
 
@@ -183,7 +183,7 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: t, game: Game.t, commands: Command.t[], ticksPassed: number): Result {
+function tick(obj: GameObject.t, game: Game.t, commands: Command.t[], ticksPassed: number): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":

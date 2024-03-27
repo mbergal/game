@@ -2,11 +2,11 @@ import _ from "lodash"
 import { Plan } from "../game/plan"
 import * as GameObjects from "../objects/objects"
 import * as Player from "../objects/player"
-import * as Story from "../objects/story"
+import { Story } from "../objects/story"
 import * as StorySize from "../objects/story_size"
 import { assertUnreachable } from "../utils/utils"
 import config from "./config"
-import { Effect, showMessage } from "./effect"
+import { Effect } from "./effect"
 import { Event } from "./event"
 import { GameTime } from "./game_time"
 import * as GameMap from "./map"
@@ -14,6 +14,7 @@ import * as GameMap from "./map"
 export namespace Sprint {
     export interface t {
         day: number
+        daysLeft: number
     }
 
     export interface Sprint extends t {}
@@ -21,11 +22,13 @@ export namespace Sprint {
     export function make(): t {
         return {
             day: 0,
+            daysLeft: 0,
         }
     }
 
     export function generateSprint(startTick: number): [Plan.t, number] {
         const DAY = config.dayTicks
+        const SPRINT_DAYS = 10
         const plan = Plan.make()
 
         const addEvent = (event: Event.t) => {
@@ -48,6 +51,14 @@ export namespace Sprint {
             (x, i) => [x, Math.round((DAY / storySizes.length) * i)] as const
         )
 
+        let sprintDay = 1
+        addEvent({
+            type: "sprintDayStart",
+            sprintDay: sprintDay,
+            sprintDaysLeft: SPRINT_DAYS - sprintDay,
+            ...GameTime.make(startTick),
+        })
+
         const groomingStart = startTick
         for (const t of times) {
             startTick = groomingStart + t[1]
@@ -56,15 +67,30 @@ export namespace Sprint {
 
         startTick += DAY - 1
         addEvent({ type: "groomBacklogEnd" })
+        addEvent({
+            type: "sprintDayEnd",
+            sprintDay: sprintDay,
+            sprintDaysLeft: SPRINT_DAYS - sprintDay,
+            ...GameTime.make(startTick),
+        })
         startTick += 1
 
-        let sprintDay = 0
         for (const i of _.range(4)) {
             const day = Math.floor(startTick / DAY)
             sprintDay += 1
-            addEvent({ type: "sprintDayStart", sprintDay: sprintDay, ...GameTime.make(startTick) })
+            addEvent({
+                type: "sprintDayStart",
+                sprintDay: sprintDay,
+                sprintDaysLeft: SPRINT_DAYS - sprintDay,
+                ...GameTime.make(startTick),
+            })
             startTick += DAY - 1
-            addEvent({ type: "sprintDayEnd", sprintDay: sprintDay, ...GameTime.make(startTick) })
+            addEvent({
+                type: "sprintDayEnd",
+                sprintDay: sprintDay,
+                sprintDaysLeft: SPRINT_DAYS - sprintDay,
+                ...GameTime.make(startTick),
+            })
             startTick += 1
         }
         addEvent({ type: "weekendStart" })
@@ -73,9 +99,19 @@ export namespace Sprint {
 
         for (const i of _.range(4)) {
             sprintDay += 1
-            addEvent({ type: "sprintDayStart", sprintDay: sprintDay, ...GameTime.make(startTick) })
+            addEvent({
+                type: "sprintDayStart",
+                sprintDay: sprintDay,
+                sprintDaysLeft: SPRINT_DAYS - sprintDay,
+                ...GameTime.make(startTick),
+            })
             startTick += DAY - 1
-            addEvent({ type: "sprintDayEnd", sprintDay: sprintDay, ...GameTime.make(startTick) })
+            addEvent({
+                type: "sprintDayEnd",
+                sprintDay: sprintDay,
+                sprintDaysLeft: SPRINT_DAYS - sprintDay,
+                ...GameTime.make(startTick),
+            })
             startTick += 1
         }
         addEvent({ type: "sprintEnd" })
@@ -90,7 +126,7 @@ export namespace Sprint {
     export function* tick(
         sprint: t,
         game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.t; player: Player.Player }
-    ): Generator<Effect> {
+    ): Generator<Effect.t> {
         const events = game.plan.get(game.time.ticks)
         if (events) {
             for (const event of events) {
@@ -98,35 +134,40 @@ export namespace Sprint {
                     case "createBacklogIssue":
                         const story = Story.make(game.map.getRandomEmptyLocation(), event.size)
                         game.map.add(story)
-                        yield showMessage(`Moved "${story.name}" to To Do`, 2000)
+                        yield Effect.showMessage(`Moved "${story.name}" to To Do`, 2000)
                         break
                     case "groomBacklogEnd":
                     case "collapseStart":
                         break
                     case "groomBacklogStart":
-                        yield showMessage("Grooming backlog ...", 2000)
+                        yield Effect.showMessage("Grooming backlog ...", 2000)
                         break
                     case "sprintDayEnd":
                         break
                     case "sprintDayStart":
-                        yield showMessage(`Sprint day ${event.sprintDay} ${event.dayOfWeek}`, 3000)
+                        sprint.day = event.sprintDay
+                        sprint.daysLeft = event.sprintDaysLeft
+                        yield Effect.showMessage(
+                            `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+                            3_000
+                        )
                         break
                     case "sprintEnd":
-                        yield showMessage("Sprint ended", 3000)
+                        yield Effect.showMessage("Sprint ended", 3000)
                         const stories = GameObjects.filter(game.map.objects, "story")
                         game.map.remove(stories)
                         if (game.player.task != null) {
-                            yield showMessage(`Abandoned ${game.player.task}`, 2000)
+                            yield Effect.showMessage(`Abandoned ${game.player.task}`, 2000)
                             game.player.task = null
                         }
                         break
                     case "sprintStart":
                         break
                     case "weekendStart":
-                        yield showMessage("Weekend, finally!!!", 30)
+                        yield Effect.showMessage("Weekend, finally!!!", 3_000)
                         break
                     case "weekendEnd":
-                        yield showMessage("End of Weekend :(", 30)
+                        yield Effect.showMessage("End of Weekend :(", 3_000)
                         break
                     case "gameEnded":
                     case "gameStarted":

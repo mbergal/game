@@ -3,7 +3,7 @@ import * as ItemGenerator from "../game/item_generator"
 import { Vector } from "../geometry"
 import * as Player from "../objects/player"
 import { assertUnreachable } from "../utils/utils"
-import * as Effect from "./effect"
+import { Effect } from "./effect"
 import { Effects } from "./effects"
 import { GameTime } from "./game_time"
 import * as GameMap from "./map"
@@ -85,6 +85,7 @@ export function handleEffects(game: t, effects: Generator<Effect.t> | Effects.t)
 export function message(game: t, m: Message | { text: string[]; ttl: number }) {
     if (m.text instanceof Array) {
         for (const text of m.text) {
+            logger("message: " + text)
             game.messages.push({ text: text, ttl: m.ttl })
         }
     } else {

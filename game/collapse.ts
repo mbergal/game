@@ -1,5 +1,5 @@
 import * as Game from "./game"
-import * as Effect from "./effect"
+import { Effect } from "./effect"
 import { Plan } from "./plan"
 import * as random from "../utils/random"
 import config from "./config"

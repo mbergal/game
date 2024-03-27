@@ -6438,7 +6438,7 @@
     Score: () => score_exports,
     handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make7,
+    make: () => make3,
     message: () => message,
     save: () => save,
     tick: () => tick2,
@@ -6446,49 +6446,61 @@
   });
 
   // objects/coffee.ts
-  function make2(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make2, "make");
+  var Coffee;
+  ((Coffee2) => {
+    function make7(position) {
+      return {
+        type: "coffee",
+        position,
+        zIndex: 1,
+        open: false
+      };
+    }
+    Coffee2.make = make7;
+    __name(make7, "make");
+  })(Coffee || (Coffee = {}));
 
   // objects/commit.ts
-  function make3(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false,
-      hash: generateId(8)
-    };
-  }
-  __name(make3, "make");
-  function byteToHex(byte) {
-    return ("0" + byte.toString(16)).slice(-2);
-  }
-  __name(byteToHex, "byteToHex");
-  function generateId(len = 40) {
-    var arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, byteToHex).join("");
-  }
-  __name(generateId, "generateId");
+  var Commit;
+  ((Commit2) => {
+    function make7(position) {
+      return {
+        type: "commit",
+        position,
+        zIndex: 1,
+        open: false,
+        hash: generateId(8)
+      };
+    }
+    Commit2.make = make7;
+    __name(make7, "make");
+    function byteToHex(byte) {
+      return ("0" + byte.toString(16)).slice(-2);
+    }
+    __name(byteToHex, "byteToHex");
+    function generateId(len = 40) {
+      var arr = new Uint8Array(len / 2);
+      window.crypto.getRandomValues(arr);
+      return Array.from(arr, byteToHex).join("");
+    }
+    __name(generateId, "generateId");
+  })(Commit || (Commit = {}));
 
   // objects/door.ts
-  function make4(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false,
-      placed: false
-    };
-  }
-  __name(make4, "make");
+  var Door;
+  ((Door2) => {
+    function make7(position) {
+      return {
+        type: "door",
+        position,
+        zIndex: 1,
+        open: false,
+        placed: false
+      };
+    }
+    Door2.make = make7;
+    __name(make7, "make");
+  })(Door || (Door = {}));
 
   // utils/utils.ts
   function assertUnreachable(x) {
@@ -6504,7 +6516,7 @@
       TACTS_FOR_SINGLE_MOVE: 4 * 3
     },
     totalDays: 14 * 10,
-    dayTicks: 40,
+    dayTicks: 100,
     story: {
       small: { neededCommits: 2, impact: 1 },
       medium: { neededCommits: 5, impact: 2 },
@@ -6526,10 +6538,10 @@
   var config_default = config;
 
   // game/item_generator.ts
-  function make5() {
+  function make2() {
     return { state: { type: "waiting", tact: 0 } };
   }
-  __name(make5, "make");
+  __name(make2, "make");
   function tick(itemGenerator, game) {
     switch (itemGenerator.state.type) {
       case "waiting":
@@ -6548,15 +6560,15 @@
           let item;
           switch (item_type) {
             case "door":
-              item = make4(game.map.getRandomEmptyLocation());
+              item = Door.make(game.map.getRandomEmptyLocation());
               game.map.add([item]);
               break;
             case "commit":
-              item = make3(game.map.getRandomEmptyLocation());
+              item = Commit.make(game.map.getRandomEmptyLocation());
               game.map.add([item]);
               break;
             case "coffee":
-              item = make2(game.map.getRandomEmptyLocation());
+              item = Coffee.make(game.map.getRandomEmptyLocation());
               game.map.add([item]);
               break;
             default:
@@ -6575,11 +6587,11 @@
   // game/collapse.ts
   var Collapse;
   ((Collapse2) => {
-    function make11() {
+    function make7() {
       return {};
     }
-    Collapse2.make = make11;
-    __name(make11, "make");
+    Collapse2.make = make7;
+    __name(make7, "make");
     function plan() {
       const plan2 = Plan.make();
       Plan.addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
@@ -6587,10 +6599,10 @@
     }
     Collapse2.plan = plan;
     __name(plan, "plan");
-    function tick7(game) {
+    function tick6(game) {
       const events = game.plan.get(game.time.ticks);
       if (events && events.some((event) => event.type === "collapseStart")) {
-        game.collapse = make11();
+        game.collapse = make7();
       }
       if (game.collapse) {
         const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
@@ -6603,19 +6615,19 @@
       }
       return [];
     }
-    Collapse2.tick = tick7;
-    __name(tick7, "tick");
+    Collapse2.tick = tick6;
+    __name(tick6, "tick");
   })(Collapse || (Collapse = {}));
 
   // game/plan.ts
   var import_lodash2 = __toESM(require_lodash());
   var Plan;
   ((Plan2) => {
-    function make11() {
+    function make7() {
       return /* @__PURE__ */ new Map();
     }
-    Plan2.make = make11;
-    __name(make11, "make");
+    Plan2.make = make7;
+    __name(make7, "make");
     function addEvent(plan, time, event) {
       if (!plan.has(time)) {
         plan.set(time, []);
@@ -6635,7 +6647,7 @@
     Plan2.append = append;
     __name(append, "append");
     function generatePlan(startDay) {
-      let plan = make11();
+      let plan = make7();
       let startTick = startDay * config_default.dayTicks;
       for (const i in import_lodash2.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
         const r = Sprint.generateSprint(startTick);
@@ -6670,68 +6682,77 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make6(position, size) {
-    return {
-      type: "story",
-      position,
-      size,
-      zIndex: 1,
-      impact: 1,
-      name: choice(storyNames[size])
+  var Story;
+  ((Story2) => {
+    function make7(position, size) {
+      return {
+        type: "story",
+        position,
+        size,
+        zIndex: 1,
+        impact: 1,
+        name: choice(storyNames[size])
+      };
+    }
+    Story2.make = make7;
+    __name(make7, "make");
+    const storyNames = {
+      medium: [
+        "Implement Dark Mode for Night Owls",
+        "Refactor 'Frankencode' Module",
+        "Add Emoji Support for Error Messages",
+        "Address Complaints About Clashing Color Scheme",
+        "Clarify the Meaning of 'Technical Debt'",
+        "Reduce Loading Time for Image-heavy Pages",
+        "Streamline Checkout Process for Mobile Users",
+        "Update Third-party Libraries to Latest Versions",
+        "Resolve Issue with Form Submission Error Handling",
+        "Integrate Social Media Sharing Buttons"
+      ],
+      small: [
+        "Option to Change Font Size",
+        "Fix Typo in Terms of Service Link",
+        "Update README with Installation Instructions",
+        "Add Loading Spinner for AJAX Requests",
+        "Remove Deprecated Function Calls",
+        "Increase Character Limit for Comments",
+        "Adjust Button Placement for Accessibility",
+        "Minify CSS and JavaScript Files",
+        "Implement CSRF Protection on Forms",
+        "Resolve Issue with Broken Image Links"
+      ],
+      large: [
+        "Revamp User Interface for Modern Look and Feel",
+        "Rewrite Monolithic Codebase into Microservices",
+        "Implement Machine Learning Algorithm for Recommendations",
+        "Redesign Navigation Structure for Improved Usability",
+        "Create Comprehensive Developer Guide",
+        "Conduct Full Accessibility Audit and Remediation",
+        "Implement Caching Strategy for Scalability",
+        "Migrate to OAuth2 for Enhanced Authentication",
+        "Transition to Cloud-based Hosting Environment",
+        "Integrate Multi-language Support Across Platform"
+      ]
     };
-  }
-  __name(make6, "make");
-  var storyNames = {
-    medium: [
-      "Implement Dark Mode for Night Owls",
-      "Refactor 'Frankencode' Module",
-      "Add Emoji Support for Error Messages",
-      "Address Complaints About Clashing Color Scheme",
-      "Clarify the Meaning of 'Technical Debt'",
-      "Reduce Loading Time for Image-heavy Pages",
-      "Streamline Checkout Process for Mobile Users",
-      "Update Third-party Libraries to Latest Versions",
-      "Resolve Issue with Form Submission Error Handling",
-      "Integrate Social Media Sharing Buttons"
-    ],
-    small: [
-      "Option to Change Font Size",
-      "Fix Typo in Terms of Service Link",
-      "Update README with Installation Instructions",
-      "Add Loading Spinner for AJAX Requests",
-      "Remove Deprecated Function Calls",
-      "Increase Character Limit for Comments",
-      "Adjust Button Placement for Accessibility",
-      "Minify CSS and JavaScript Files",
-      "Implement CSRF Protection on Forms",
-      "Resolve Issue with Broken Image Links"
-    ],
-    large: [
-      "Revamp User Interface for Modern Look and Feel",
-      "Rewrite Monolithic Codebase into Microservices",
-      "Implement Machine Learning Algorithm for Recommendations",
-      "Redesign Navigation Structure for Improved Usability",
-      "Create Comprehensive Developer Guide",
-      "Conduct Full Accessibility Audit and Remediation",
-      "Implement Caching Strategy for Scalability",
-      "Migrate to OAuth2 for Enhanced Authentication",
-      "Transition to Cloud-based Hosting Environment",
-      "Integrate Multi-language Support Across Platform"
-    ]
-  };
+  })(Story || (Story = {}));
 
   // game/effect.ts
-  function addImpact(impact) {
-    return {
-      type: "addImpact",
-      impact
-    };
-  }
-  __name(addImpact, "addImpact");
-  function showMessage(text, ttl) {
-    return { type: "showMessage", message: { text, ttl } };
-  }
-  __name(showMessage, "showMessage");
+  var Effect;
+  ((Effect2) => {
+    function addImpact(impact) {
+      return {
+        type: "addImpact",
+        impact
+      };
+    }
+    Effect2.addImpact = addImpact;
+    __name(addImpact, "addImpact");
+    function showMessage2(text, ttl) {
+      return { type: "showMessage", message: { text, ttl } };
+    }
+    Effect2.showMessage = showMessage2;
+    __name(showMessage2, "showMessage");
+  })(Effect || (Effect = {}));
 
   // game/day_of_week.ts
   var all2 = [
@@ -6747,7 +6768,7 @@
   // game/game_time.ts
   var GameTime;
   ((GameTime2) => {
-    function make11(ticks) {
+    function make7(ticks) {
       const day = Math.floor(ticks / config_default.dayTicks);
       const dayOfWeek = all2[day % 7];
       return {
@@ -6756,22 +6777,24 @@
         dayOfWeek
       };
     }
-    GameTime2.make = make11;
-    __name(make11, "make");
+    GameTime2.make = make7;
+    __name(make7, "make");
   })(GameTime || (GameTime = {}));
 
   // game/sprint.ts
   var Sprint;
   ((Sprint2) => {
-    function make11() {
+    function make7() {
       return {
-        day: 0
+        day: 0,
+        daysLeft: 0
       };
     }
-    Sprint2.make = make11;
-    __name(make11, "make");
+    Sprint2.make = make7;
+    __name(make7, "make");
     function generateSprint(startTick) {
       const DAY = config_default.dayTicks;
+      const SPRINT_DAYS = 10;
       const plan = Plan.make();
       const addEvent = /* @__PURE__ */ __name((event) => {
         Plan.addEvent(plan, startTick, event);
@@ -6789,6 +6812,13 @@
       const times = storySizes.map(
         (x, i) => [x, Math.round(DAY / storySizes.length * i)]
       );
+      let sprintDay = 1;
+      addEvent({
+        type: "sprintDayStart",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...GameTime.make(startTick)
+      });
       const groomingStart = startTick;
       for (const t of times) {
         startTick = groomingStart + t[1];
@@ -6796,14 +6826,29 @@
       }
       startTick += DAY - 1;
       addEvent({ type: "groomBacklogEnd" });
+      addEvent({
+        type: "sprintDayEnd",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...GameTime.make(startTick)
+      });
       startTick += 1;
-      let sprintDay = 0;
       for (const i of import_lodash4.default.range(4)) {
         const day = Math.floor(startTick / DAY);
         sprintDay += 1;
-        addEvent({ type: "sprintDayStart", sprintDay, ...GameTime.make(startTick) });
+        addEvent({
+          type: "sprintDayStart",
+          sprintDay,
+          sprintDaysLeft: SPRINT_DAYS - sprintDay,
+          ...GameTime.make(startTick)
+        });
         startTick += DAY - 1;
-        addEvent({ type: "sprintDayEnd", sprintDay, ...GameTime.make(startTick) });
+        addEvent({
+          type: "sprintDayEnd",
+          sprintDay,
+          sprintDaysLeft: SPRINT_DAYS - sprintDay,
+          ...GameTime.make(startTick)
+        });
         startTick += 1;
       }
       addEvent({ type: "weekendStart" });
@@ -6811,9 +6856,19 @@
       addEvent({ type: "weekendEnd" });
       for (const i of import_lodash4.default.range(4)) {
         sprintDay += 1;
-        addEvent({ type: "sprintDayStart", sprintDay, ...GameTime.make(startTick) });
+        addEvent({
+          type: "sprintDayStart",
+          sprintDay,
+          sprintDaysLeft: SPRINT_DAYS - sprintDay,
+          ...GameTime.make(startTick)
+        });
         startTick += DAY - 1;
-        addEvent({ type: "sprintDayEnd", sprintDay, ...GameTime.make(startTick) });
+        addEvent({
+          type: "sprintDayEnd",
+          sprintDay,
+          sprintDaysLeft: SPRINT_DAYS - sprintDay,
+          ...GameTime.make(startTick)
+        });
         startTick += 1;
       }
       addEvent({ type: "sprintEnd" });
@@ -6824,43 +6879,48 @@
     }
     Sprint2.generateSprint = generateSprint;
     __name(generateSprint, "generateSprint");
-    function* tick7(sprint, game) {
+    function* tick6(sprint, game) {
       const events = game.plan.get(game.time.ticks);
       if (events) {
         for (const event of events) {
           switch (event.type) {
             case "createBacklogIssue":
-              const story = make6(game.map.getRandomEmptyLocation(), event.size);
+              const story = Story.make(game.map.getRandomEmptyLocation(), event.size);
               game.map.add(story);
-              yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
+              yield Effect.showMessage(`Moved "${story.name}" to To Do`, 2e3);
               break;
             case "groomBacklogEnd":
             case "collapseStart":
               break;
             case "groomBacklogStart":
-              yield showMessage("Grooming backlog ...", 2e3);
+              yield Effect.showMessage("Grooming backlog ...", 2e3);
               break;
             case "sprintDayEnd":
               break;
             case "sprintDayStart":
-              yield showMessage(`Sprint day ${event.sprintDay} ${event.dayOfWeek}`, 3e3);
+              sprint.day = event.sprintDay;
+              sprint.daysLeft = event.sprintDaysLeft;
+              yield Effect.showMessage(
+                `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+                3e3
+              );
               break;
             case "sprintEnd":
-              yield showMessage("Sprint ended", 3e3);
+              yield Effect.showMessage("Sprint ended", 3e3);
               const stories = filter(game.map.objects, "story");
               game.map.remove(stories);
               if (game.player.task != null) {
-                yield showMessage(`Abandoned ${game.player.task}`, 2e3);
+                yield Effect.showMessage(`Abandoned ${game.player.task}`, 2e3);
                 game.player.task = null;
               }
               break;
             case "sprintStart":
               break;
             case "weekendStart":
-              yield showMessage("Weekend, finally!!!", 30);
+              yield Effect.showMessage("Weekend, finally!!!", 3e3);
               break;
             case "weekendEnd":
-              yield showMessage("End of Weekend :(", 30);
+              yield Effect.showMessage("End of Weekend :(", 3e3);
               break;
             case "gameEnded":
             case "gameStarted":
@@ -6873,8 +6933,8 @@
         }
       }
     }
-    Sprint2.tick = tick7;
-    __name(tick7, "tick");
+    Sprint2.tick = tick6;
+    __name(tick6, "tick");
   })(Sprint || (Sprint = {}));
 
   // utils/logging.ts
@@ -6886,30 +6946,30 @@
     Logging2.setIsEnabled = setIsEnabled;
     __name(setIsEnabled, "setIsEnabled");
     function setTime(time) {
-      tick7 = time;
+      tick6 = time;
     }
     Logging2.setTime = setTime;
     __name(setTime, "setTime");
-    function make11(name) {
+    function make7(name) {
       return (message2) => {
         if (isEnabled(name)) {
-          console.log(tick7.toString().padStart(4, "0") + " " + message2);
+          console.log(tick6.toString().padStart(4, "0") + " " + message2);
         }
       };
     }
-    Logging2.make = make11;
-    __name(make11, "make");
+    Logging2.make = make7;
+    __name(make7, "make");
     let isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
-    let tick7 = 0;
+    let tick6 = 0;
   })(Logging || (Logging = {}));
 
   // game/game.ts
   var logger = Logging.make("game");
-  function make7(size, plan) {
+  function make3(size, plan) {
     return {
       map: new GameMap(size.x, size.y, []),
       commands: [],
-      itemGenerator: make5(),
+      itemGenerator: make2(),
       sprint: Sprint.make(),
       score: make(),
       messages: [],
@@ -6924,7 +6984,7 @@
       collapse: null
     };
   }
-  __name(make7, "make");
+  __name(make3, "make");
   function toJson(game) {
     return {
       map: game.map.toJson(),
@@ -6956,6 +7016,7 @@
   function message(game, m) {
     if (m.text instanceof Array) {
       for (const text of m.text) {
+        logger("message: " + text);
         game.messages.push({ text, ttl: m.ttl });
       }
     } else {
@@ -7114,7 +7175,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make8() {
+  function make4() {
     return {
       position: {
         x: 0,
@@ -7125,7 +7186,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make8, "make");
+  __name(make4, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -7255,15 +7316,19 @@
   __name(choose_direction, "choose_direction");
 
   // objects/footprint.ts
-  var LIFETIME = 1e3;
-  function tick4(obj, map) {
-    if (obj.tact > LIFETIME) {
-      map.remove([obj]);
-    } else {
-      obj.tact += 1;
+  var Footprint;
+  ((Footprint2) => {
+    const LIFETIME = 1e3;
+    function tick6(obj, map) {
+      if (obj.tact > LIFETIME) {
+        map.remove([obj]);
+      } else {
+        obj.tact += 1;
+      }
     }
-  }
-  __name(tick4, "tick");
+    Footprint2.tick = tick6;
+    __name(tick6, "tick");
+  })(Footprint || (Footprint = {}));
 
   // objects/player.ts
   var import_lodash7 = __toESM(require_lodash());
@@ -7291,12 +7356,12 @@
   }), "startedStory");
 
   // objects/tasks/story.ts
-  var story_exports2 = {};
-  __export(story_exports2, {
+  var story_exports = {};
+  __export(story_exports, {
     addCommit: () => addCommit,
-    make: () => make9
+    make: () => make5
   });
-  function make9(story) {
+  function make5(story) {
     return {
       type: "story",
       story,
@@ -7305,12 +7370,12 @@
       appliedCommits: 0
     };
   }
-  __name(make9, "make");
+  __name(make5, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
-      Effects.append(effects, addImpact(task.impact));
-      Effects.append(effects, showMessage(`Finished ${task.story.name}`, 30));
+      Effects.append(effects, Effect.addImpact(task.impact));
+      Effects.append(effects, Effect.showMessage(`Finished ${task.story.name}`, 30));
       player.task = null;
     }
     return effects;
@@ -7319,7 +7384,7 @@
 
   // objects/player.ts
   var logger2 = Logging.make("player");
-  function make10(position) {
+  function make6(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7335,7 +7400,7 @@
       }
     };
   }
-  __name(make10, "make");
+  __name(make6, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -7396,22 +7461,22 @@
           const task = player.task;
           switch (task.type) {
             case "story":
-              story_exports2.addCommit(player, task, item, effects);
+              story_exports.addCommit(player, task, item, effects);
               player.item = null;
               break;
           }
           return true;
         } else {
-          Effects.append(effects, showMessage("No task to apply commit to", 3e3));
+          Effects.append(effects, Effect.showMessage("No task to apply commit to", 3e3));
           return false;
         }
       case "coffee":
-        Effects.append(effects, showMessage("Drinking coffee", 3e3));
+        Effects.append(effects, Effect.showMessage("Drinking coffee", 3e3));
         player.flags.spedUp = config_default.items.coffee.speedUpDays;
         player.item = null;
         return true;
       case "door":
-        Effects.append(effects, showMessage("Placing door", 3e3));
+        Effects.append(effects, Effect.showMessage("Placing door", 3e3));
         item.position = player.position;
         map.add(item);
         item.placed = true;
@@ -7425,30 +7490,28 @@
     return false;
   }
   __name(useItem, "useItem");
-  function pickItem(player, newItem, game) {
-    const effects = [];
+  function pickItem(player, newItem, game, effects) {
     game.map.remove(newItem);
     switch (newItem.type) {
       case "door":
         newItem.open = true;
         dropCarriedItem(player, game);
         player.item = newItem;
-        break;
+        return true;
       case "coffee":
         dropCarriedItem(player, game);
         player.item = newItem;
-        break;
+        return true;
       case "commit":
         dropCarriedItem(player, game);
         player.item = newItem;
-        break;
+        return true;
       case "story":
-        player.task = story_exports2.make(newItem);
-        break;
+        player.task = story_exports.make(newItem);
+        return false;
       default:
         assertUnreachable(newItem);
     }
-    return effects;
   }
   __name(pickItem, "pickItem");
   function dropCarriedItem(player, game) {
@@ -7488,6 +7551,9 @@
   }
   __name(dropItem, "dropItem");
   function processCommands(player, commands, map, effects) {
+    const removeAllMoves = /* @__PURE__ */ __name(() => {
+      player.commands = player.commands.filter((x) => x.command.type != "move");
+    }, "removeAllMoves");
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
       logger2(JSON.stringify(player.commands));
@@ -7495,9 +7561,11 @@
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
       logger2(JSON.stringify(player.commands));
     }
-    if (player.commands.length > 0) {
+    let delayedCommands = [];
+    while (player.commands.length > 0) {
       logger2(JSON.stringify(player.commands));
       const command = player.commands[0].command;
+      logger2(`processing: ${JSON.stringify(command)}`);
       switch (command.type) {
         case "move":
           const newPosition = moveBy(player.position, command.direction);
@@ -7505,35 +7573,44 @@
           if (canMoveOn(obsjAtNewPosition)) {
             player.direction = command.direction;
             player.commands.shift();
+            delayedCommands = [];
           } else {
+            const delayedCommand = player.commands.shift();
+            logger2(`delaying ${JSON.stringify(delayedCommand)}`);
+            delayedCommands.push(delayedCommand);
           }
           break;
         case "stop":
-          player.commands = [];
+          removeAllMoves();
           player.direction = null;
           break;
         case "drop":
           handleDrop(player, map);
           player.commands.shift();
+          removeAllMoves();
           break;
         case "use":
           if (player.item != null) {
             useItem(player, player.item, map, effects);
           }
           player.commands.shift();
+          removeAllMoves();
           break;
         default:
           assertUnreachable(command);
       }
-      for (const c of player.commands) {
-        c.tact += 1;
-      }
-      player.commands = player.commands.filter((x) => x.tact < 10);
     }
+    player.commands = delayedCommands;
+    for (const c of player.commands) {
+      c.tact += 1;
+    }
+    player.commands = player.commands.filter((x) => x.tact < 10);
   }
   __name(processCommands, "processCommands");
-  function tick5(player, game, commands, ticksPassed) {
+  function tick4(player, game, commands, ticksPassed) {
     const effects = [];
+    let pickedSomething = false;
+    let carriedSomething = player.item != null;
     tickHrTask(player, ticksPassed);
     processCommands(player, commands, game.map, effects);
     if (player.direction) {
@@ -7547,8 +7624,8 @@
             case "coffee":
               if (canPickItem(player, obj)) {
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
-                Effects.append(effects, showMessage(`Picked a ${obj.type}`, 40));
-                Effects.append(effects, pickItem(player, obj, game));
+                Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40));
+                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "commit":
@@ -7556,13 +7633,13 @@
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
                 Effects.append(
                   effects,
-                  showMessage(`Picked a commit ${obj.hash}`, 40)
+                  Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
                 );
-                Effects.append(effects, pickItem(player, obj, game));
+                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "story":
-              const task = story_exports2.make(obj);
+              const task = story_exports.make(obj);
               if (canTakeTask(task, player)) {
                 takeTask(player, task, game);
                 game.map.remove(obj);
@@ -7578,17 +7655,20 @@
           }
         }
         game.map.move(player, newPosition);
+        if (game.map.objAt(moveBy(newPosition, player.direction), "commit") && carriedSomething) {
+          player.direction = null;
+        }
       } else {
       }
     }
     return effects;
   }
-  __name(tick5, "tick");
+  __name(tick4, "tick");
 
   // renderer.ts
   function render(game) {
     const map = game.map;
-    const buffer = [showMessage2(game).split("")];
+    const buffer = [showMessage(game).split("")];
     for (let y = 0; y < map.height; y++) {
       const row = [];
       for (let x = 0; x < map.width; x++) {
@@ -7598,13 +7678,13 @@
       buffer.push(row);
     }
     buffer.push(
-      (showTicks(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)).split("")
+      (showTime(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)).split("")
     );
     const contentBlock = document.getElementById("content");
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
-  function showMessage2(game) {
+  function showMessage(game) {
     if (game.messages.length > 0) {
       if (game.messageStartTime == null) {
         game.messageStartTime = Date.now();
@@ -7624,15 +7704,15 @@
       return "";
     }
   }
-  __name(showMessage2, "showMessage");
-  function showTicks(game) {
+  __name(showMessage, "showMessage");
+  function showTime(game) {
     return (
       // game.time.ticks.toString().padStart(6, "0") +
       // " " +
-      game.time.day.toString() + " " + game.time.dayOfWeek + " " + game.sprint?.day
+      game.time.day.toString() + " " + game.time.dayOfWeek + " " + (game.sprint ? game.sprint.daysLeft : " ")
     );
   }
-  __name(showTicks, "showTicks");
+  __name(showTime, "showTime");
   function showLevel(game) {
     return " " + EngineeringLevels.all[game.score.level].name;
   }
@@ -7670,11 +7750,11 @@
     return true;
   }
   __name(isVisible, "isVisible");
-  function blink(a, b, tick7) {
-    return tick7 % 10 < 5 ? a : b;
+  function blink(a, b, tick6) {
+    return tick6 % 10 < 5 ? a : b;
   }
   __name(blink, "blink");
-  function getRepresentation(map, objs, tick7) {
+  function getRepresentation(map, objs, tick6) {
     let obj = objs.find(isVisible);
     if (obj) {
       switch (obj.type) {
@@ -7686,17 +7766,17 @@
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return blink("*", "@", tick7);
+            return blink("*", "@", tick6);
           } else {
             if (obj.item != null) {
               const item = obj.item;
               switch (item.type) {
                 case "door":
-                  return blink("]", "*", tick7);
+                  return blink("]", "*", tick6);
                 case "commit":
-                  return blink("\u03B5", "*", tick7);
+                  return blink(";", "*", tick6);
                 case "coffee":
-                  return tick7 % 10 < 5 ? "C" : "*";
+                  return blink("c", "*", tick6);
                 case "story":
                   return "";
                 default:
@@ -7708,7 +7788,7 @@
         case "door":
           return obj.open ? obj.placed ? "]" : "[" : ".";
         case "commit":
-          return obj.open ? "\u03B5" : ".";
+          return obj.open ? ";" : ".";
         case "coffee":
           return obj.open ? "c" : ".";
         case "story":
@@ -7760,14 +7840,14 @@
   // main.ts
   var MAZE_SIZE = { y: 25, x: 80 };
   var logger3 = Logging.make("main");
-  Logging.setIsEnabled((name) => import_lodash8.default.includes(["main", "player"], name));
+  Logging.setIsEnabled((name) => import_lodash8.default.includes(["main", "player", "game"], name));
   function main() {
-    const boss = make8();
+    const boss = make4();
     const plan = Plan.generatePlan(0);
     let game = game_exports.make(MAZE_SIZE, plan);
     maze(MAZE_SIZE, game);
     game.map.add([boss]);
-    game.player = make10(game.map.getRandomEmptyLocation());
+    game.player = make6(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
       text: [
@@ -7873,7 +7953,7 @@
         game_exports.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player }));
       }
       for (const obj of game.map.objects) {
-        const result = tick6(obj, game, game.commands, 1);
+        const result = tick5(obj, game, game.commands, 1);
       }
       game.commands = [];
       render(game);
@@ -7883,32 +7963,32 @@
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
       game.score.money += EngineeringLevels.all[game.score.level].rate;
       game.time = GameTime.make(game.time.ticks);
-      const result = tick6(game.player, game, game.commands, 0.5);
+      const result = tick5(game.player, game, game.commands, 0.5);
       game.commands = [];
       render(game);
     }, "playerTick");
     if (!game.player.flags.spedUp) {
-      game.time.ticks += 1;
       fullTick();
+      game.time.ticks += 1;
     } else {
-      game.time.ticks += 0.5;
       playerTick();
       game.time.ticks += 0.5;
       fullTick();
+      game.time.ticks += 0.5;
     }
   }
   __name(processTick, "processTick");
-  function tick6(obj, game, commands, ticksPassed) {
+  function tick5(obj, game, commands, ticksPassed) {
     let result = { codeBlocks: 0 };
     switch (obj.type) {
       case "boss":
         tick3(obj, game.map);
         break;
       case "footprint":
-        tick4(obj, game.map);
+        Footprint.tick(obj, game.map);
         break;
       case "player":
-        game_exports.handleEffects(game, tick5(obj, game, commands, ticksPassed));
+        game_exports.handleEffects(game, tick4(obj, game, commands, ticksPassed));
         break;
       case "door":
       case "story":
@@ -7921,7 +8001,7 @@
     }
     return result;
   }
-  __name(tick6, "tick");
+  __name(tick5, "tick");
   main();
 })();
 /*! Bundled license information:

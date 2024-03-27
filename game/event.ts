@@ -37,6 +37,7 @@ export namespace Event {
     type SprintDayStart = {
         type: "sprintDayStart"
         sprintDay: number
+        sprintDaysLeft: number
         day: number
         dayOfWeek: DayOfWeek.t
     }
@@ -44,6 +45,7 @@ export namespace Event {
     type SprintDayEnd = {
         type: "sprintDayEnd"
         sprintDay: number
+        sprintDaysLeft: number
     }
 
     type WeekendStart = {

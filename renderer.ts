@@ -3,7 +3,7 @@ import { EngineeringLevels } from "./game/levels"
 import { GameMap } from "./game/map"
 import * as Message from "./game/message"
 import { Vector } from "./geometry"
-import { t } from "./objects/object"
+import { GameObject } from "./objects/object"
 import { assertUnreachable } from "./utils/utils"
 
 export function render(game: Game.t) {
@@ -22,7 +22,7 @@ export function render(game: Game.t) {
 
     buffer.push(
         (
-            showTicks(game) +
+            showTime(game) +
             showLevel(game) +
             " Money: $" +
             game.score.money.toString().padStart(6, "0") +
@@ -65,11 +65,15 @@ export function showMessage(game: {
     }
 }
 
-function showTicks(game: Game.t): string {
+function showTime(game: Game.t): string {
     return (
         // game.time.ticks.toString().padStart(6, "0") +
         // " " +
-        game.time.day.toString() + " " + game.time.dayOfWeek + " " + game.sprint?.day
+        game.time.day.toString() +
+        " " +
+        game.time.dayOfWeek +
+        " " +
+        (game.sprint ? game.sprint.daysLeft : " ")
     )
 }
 
@@ -91,7 +95,7 @@ function showTask(game: Game.t): string {
 function showStockPrice(game: Game.t): string {
     return `🗠: $${game.score.stockPrice.toFixed(2)} ▼`
 }
-function isVisible(obj: t) {
+function isVisible(obj: GameObject.t) {
     switch (obj.type) {
         case "boss":
         case "wall":
@@ -112,7 +116,7 @@ function isVisible(obj: t) {
 function blink(a: string, b: string, tick: number) {
     return tick % 10 < 5 ? a : b
 }
-function getRepresentation(map: GameMap, objs: t[], tick: number): string {
+function getRepresentation(map: GameMap, objs: GameObject.t[], tick: number): string {
     let obj = objs.find(isVisible)
     if (obj) {
         switch (obj.type) {
@@ -132,9 +136,9 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
                             case "door":
                                 return blink("]", "*", tick)
                             case "commit":
-                                return blink("ε", "*", tick)
+                                return blink(";", "*", tick)
                             case "coffee":
-                                return tick % 10 < 5 ? "C" : "*"
+                                return blink("c", "*", tick)
                             case "story":
                                 return ""
                             default:
@@ -146,7 +150,7 @@ function getRepresentation(map: GameMap, objs: t[], tick: number): string {
             case "door":
                 return obj.open ? (obj.placed ? "]" : "[") : "."
             case "commit":
-                return obj.open ? "ε" : "."
+                return obj.open ? ";" : "."
             case "coffee":
                 return obj.open ? "c" : "."
             case "story":
