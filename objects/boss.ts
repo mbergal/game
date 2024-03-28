@@ -3,7 +3,7 @@ import * as Direction from "../geometry/direction"
 import { Vector, moveBy } from "../geometry"
 import { GameMap } from "../game"
 import * as random from "../utils/random"
-import { Footprint } from "./footprint"
+import * as Footprint from "./footprint"
 import { Player } from "./player"
 import config from "../game/config"
 
@@ -13,14 +13,12 @@ type Instructing = { type: "instructing" }
 type Jumping = { type: "jumping"; direction: Direction.t; tact: number }
 type BossState = Stopped | Moving | Instructing | Jumping
 
-export interface t extends LiveObject {
+export interface Boss extends LiveObject {
     type: "boss"
     position: Vector.t
     state: BossState
     zIndex: number
 }
-
-export type Boss = t
 
 let BOSS_WEIGHTS = {
     turn: {
@@ -48,7 +46,7 @@ BOSS_WEIGHTS = {
     jump: 5.0,
 }
 
-export function make(): t {
+export function make(): Boss {
     return {
         position: {
             x: 0,
@@ -103,7 +101,9 @@ export function possibleMoves(
 
 function move(obj: Boss, new_pos: Vector.t, new_direction: Direction.t, map: GameMap.GameMap) {
     obj.state = { type: "moving", direction: new_direction, tact: 0 }
-    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint.t])
+    map.add([
+        { type: "footprint", position: obj.position, zIndex: 1, tact: 0 } as Footprint.Footprint,
+    ])
     map.move(obj, new_pos)
 }
 

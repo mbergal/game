@@ -1,12 +1,9 @@
-import { Game } from "./game"
-import { EngineeringLevels } from "./game/levels"
-import { GameMap } from "./game/map"
-import * as Message from "./game/message"
+import { Game, Message, GameMap } from "./game"
 import { Vector } from "./geometry"
-import { GameObject } from "./objects/object"
+import { GameObject } from "./objects"
 import { assertUnreachable } from "./utils/utils"
 
-export function render(game: Game.t) {
+export function render(game: Game.Game) {
     const map = game.map
     const buffer = [showMessage(game).split("")]
     for (let y = 0; y < map.height; y++) {
@@ -38,7 +35,7 @@ export function render(game: Game.t) {
 }
 
 export function showMessage(game: {
-    messages: Message.t[]
+    messages: Message.Message[]
     messageStartTime: number | null
 }): string {
     if (game.messages.length > 0) {
@@ -65,7 +62,7 @@ export function showMessage(game: {
     }
 }
 
-function showTime(game: Game.t): string {
+function showTime(game: Game.Game): string {
     return (
         // game.time.ticks.toString().padStart(6, "0") +
         // " " +
@@ -77,11 +74,11 @@ function showTime(game: Game.t): string {
     )
 }
 
-function showLevel(game: Game.t): string {
-    return " " + EngineeringLevels.all[game.score.level].name
+function showLevel(game: Game.Game): string {
+    return " " + game.player!.level.name
 }
 
-function showTask(game: Game.t): string {
+function showTask(game: Game.Game): string {
     const task = game.player!.task
     if (task != null) {
         switch (task.type) {
@@ -92,7 +89,7 @@ function showTask(game: Game.t): string {
     return ""
 }
 
-function showStockPrice(game: Game.t): string {
+function showStockPrice(game: Game.Game): string {
     return `🗠: $${game.score.stockPrice.toFixed(2)} ▼`
 }
 function isVisible(obj: GameObject.t) {
@@ -116,7 +113,7 @@ function isVisible(obj: GameObject.t) {
 function blink(a: string, b: string, tick: number) {
     return tick % 10 < 5 ? a : b
 }
-function getRepresentation(map: GameMap, objs: GameObject.t[], tick: number): string {
+function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: number): string {
     let obj = objs.find(isVisible)
     if (obj) {
         switch (obj.type) {
@@ -170,7 +167,7 @@ function getRepresentation(map: GameMap, objs: GameObject.t[], tick: number): st
     }
 }
 
-function getWallRepresentation(map: GameMap, pos: Vector.Vector) {
+function getWallRepresentation(map: GameMap.GameMap, pos: Vector.Vector) {
     if (pos.x == 0 && pos.y == 0) {
         return "╔"
     } else if (pos.x == 0 && pos.y == map.height - 1) {

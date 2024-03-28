@@ -1,6 +1,4 @@
-export interface t {
+export interface Message {
     text: string
     ttl: number
 }
-
-export interface Message extends t {}

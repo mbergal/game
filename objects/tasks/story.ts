@@ -1,13 +1,13 @@
 import config from "../../game/config"
-import { Effect } from "../../game/effect"
-import { Effects } from "../../game/effects"
-import { Commit } from "../../objects/commit"
+import * as Effect from "../../game/effect"
+import * as Effects from "../../game/effects"
+import * as Commit from "../../objects/commit"
 import * as Player from "../../objects/player"
-import { Story } from "../story"
+import * as Story from "../story"
 
 export interface t {
     type: "story"
-    story: Story.t
+    story: Story.Story
     impact: number
     neededCommits: number
     appliedCommits: number
@@ -25,7 +25,12 @@ export function make(story: Story.t): t {
     }
 }
 
-export function addCommit(player: Player.Player, task: t, commit: Commit.t, effects: Effect.t[]) {
+export function addCommit(
+    player: Player.Player,
+    task: t,
+    commit: Commit.t,
+    effects: Effect.Effect[]
+) {
     task.appliedCommits += 1
     if (task.appliedCommits == task.neededCommits) {
         Effects.append(effects, Effect.addImpact(task.impact))

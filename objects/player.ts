@@ -1,17 +1,18 @@
 import _ from "lodash"
-import { Command } from "../command"
+import * as Command from "../command"
 import { Game } from "../game"
 import config from "../game/config"
-import { Effect } from "../game/effect"
-import { Effects } from "../game/effects"
+import * as Effect from "../game/effect"
+import * as Effects from "../game/effects"
 import { GameMap } from "../game/map"
 import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
-import { Logging } from "../utils/logging"
+import * as Logging from "../utils/logging"
 import { assertUnreachable } from "../utils/utils"
-import { GameObject } from "./object"
+import * as GameObject from "./object"
 import { StoryTask, Task } from "./tasks"
+import * as EngineeringLevels from "../game/levels"
 
 const logger = Logging.make("player")
 
@@ -28,8 +29,9 @@ export type Player = {
     hrTaskTact: number | null
     task: Task | null
     flags: PlayerFlags
+    level: EngineeringLevels.EngineeringLevel
     commands: {
-        command: Command.t
+        command: Command.Command
         tact: number
     }[]
     item: GameObject.Item | null
@@ -49,6 +51,7 @@ export function make(position: Vector.t): Player {
         flags: {
             spedUp: false,
         },
+        level: EngineeringLevels.all[0],
     }
 }
 
@@ -82,7 +85,7 @@ function canTakeTask(task: Task, player: Player) {
     return player.task == null
 }
 
-function takeTask(player: Player, task: Task, game: Game.t) {
+function takeTask(player: Player, task: Task, game: Game.Game) {
     player.task = task
     switch (task.type) {
         case "story":
@@ -109,7 +112,7 @@ function useItem(
     player: Player,
     item: GameObject.Item,
     map: GameMap,
-    effects: Effect.t[]
+    effects: Effect.Effect[]
 ): boolean {
     logger(`Using item ${item.type}`)
     switch (item.type) {
@@ -151,8 +154,8 @@ function useItem(
 function pickItem(
     player: Player,
     newItem: GameObject.Item,
-    game: Game.t,
-    effects: Effects.t
+    game: Game.Game,
+    effects: Effects.Effects
 ): boolean {
     game.map.remove(newItem)
     switch (newItem.type) {
@@ -177,7 +180,7 @@ function pickItem(
     }
 }
 
-function dropCarriedItem(player: Player, game: Game.t) {
+function dropCarriedItem(player: Player, game: Game.Game) {
     const carriedItem = player.item
     if (carriedItem != null) {
         // player.item.position = moveBy(
@@ -217,7 +220,12 @@ function dropItem(player: Player, map: GameMap) {
     player.item = null
 }
 
-function processCommands(player: Player, commands: Command.t[], map: GameMap, effects: Effect.t[]) {
+function processCommands(
+    player: Player,
+    commands: Command.Command[],
+    map: GameMap,
+    effects: Effects.Effects
+) {
     const removeAllMoves = () => {
         player.commands = player.commands.filter((x) => x.command.type != "move")
     }
@@ -232,7 +240,7 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
     }
 
     let delayedCommands: {
-        command: Command.t
+        command: Command.Command
         tact: number
     }[] = []
     while (player.commands.length > 0) {
@@ -284,11 +292,11 @@ function processCommands(player: Player, commands: Command.t[], map: GameMap, ef
 
 export function tick(
     player: Player,
-    game: Game.t,
-    commands: Command.t[],
+    game: Game.Game,
+    commands: Command.Command[],
     ticksPassed: number
-): Effect.t[] {
-    const effects: Effects.t = []
+): Effects.Effects {
+    const effects: Effects.Effects = []
     let pickedSomething = false
     let carriedSomething = player.item != null
 

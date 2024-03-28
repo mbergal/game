@@ -10,9 +10,9 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
-  var __export = (target, all3) => {
-    for (var name in all3)
-      __defProp(target, name, { get: all3[name], enumerable: true });
+  var __export = (target, all4) => {
+    for (var name in all4)
+      __defProp(target, name, { get: all4[name], enumerable: true });
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -372,7 +372,7 @@
               return types;
             }
             return freeProcess && freeProcess.binding && freeProcess.binding("util");
-          } catch (e) {
+          } catch (e2) {
           }
         }();
         var nodeIsArrayBuffer = nodeUtil && nodeUtil.isArrayBuffer, nodeIsDate = nodeUtil && nodeUtil.isDate, nodeIsMap = nodeUtil && nodeUtil.isMap, nodeIsRegExp = nodeUtil && nodeUtil.isRegExp, nodeIsSet = nodeUtil && nodeUtil.isSet, nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -595,9 +595,9 @@
           return result;
         }
         __name(baseSum, "baseSum");
-        function baseTimes(n, iteratee) {
-          var index = -1, result = Array(n);
-          while (++index < n) {
+        function baseTimes(n2, iteratee) {
+          var index = -1, result = Array(n2);
+          while (++index < n2) {
             result[index] = iteratee(index);
           }
           return result;
@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _11.defaults(root.Object(), context, _11.pick(root, contextProps));
+          context = context == null ? root : _12.defaults(root.Object(), context, _12.pick(root, contextProps));
           var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -797,7 +797,7 @@
               var func = getNative(Object2, "defineProperty");
               func({}, "", {});
               return func;
-            } catch (e) {
+            } catch (e2) {
             }
           }();
           var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date2 && Date2.now !== root.Date.now && Date2.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
@@ -1185,8 +1185,8 @@
             return length ? array[baseRandom(0, length - 1)] : undefined;
           }
           __name(arraySample, "arraySample");
-          function arraySampleSize(array, n) {
-            return shuffleSelf(copyArray(array), baseClamp(n, 0, array.length));
+          function arraySampleSize(array, n2) {
+            return shuffleSelf(copyArray(array), baseClamp(n2, 0, array.length));
           }
           __name(arraySampleSize, "arraySampleSize");
           function arrayShuffle(array) {
@@ -1801,13 +1801,13 @@
             assignMergeValue(object, key, newValue);
           }
           __name(baseMergeDeep, "baseMergeDeep");
-          function baseNth(array, n) {
+          function baseNth(array, n2) {
             var length = array.length;
             if (!length) {
               return;
             }
-            n += n < 0 ? length : 0;
-            return isIndex(n, length) ? array[n] : undefined;
+            n2 += n2 < 0 ? length : 0;
+            return isIndex(n2, length) ? array[n2] : undefined;
           }
           __name(baseNth, "baseNth");
           function baseOrderBy(collection, iteratees, orders) {
@@ -1908,20 +1908,20 @@
             return result2;
           }
           __name(baseRange, "baseRange");
-          function baseRepeat(string, n) {
+          function baseRepeat(string, n2) {
             var result2 = "";
-            if (!string || n < 1 || n > MAX_SAFE_INTEGER) {
+            if (!string || n2 < 1 || n2 > MAX_SAFE_INTEGER) {
               return result2;
             }
             do {
-              if (n % 2) {
+              if (n2 % 2) {
                 result2 += string;
               }
-              n = nativeFloor(n / 2);
-              if (n) {
+              n2 = nativeFloor(n2 / 2);
+              if (n2) {
                 string += string;
               }
-            } while (n);
+            } while (n2);
             return result2;
           }
           __name(baseRepeat, "baseRepeat");
@@ -1933,9 +1933,9 @@
             return arraySample(values(collection));
           }
           __name(baseSample, "baseSample");
-          function baseSampleSize(collection, n) {
+          function baseSampleSize(collection, n2) {
             var array = values(collection);
-            return shuffleSelf(array, baseClamp(n, 0, array.length));
+            return shuffleSelf(array, baseClamp(n2, 0, array.length));
           }
           __name(baseSampleSize, "baseSampleSize");
           function baseSet(object, path, value, customizer) {
@@ -3009,7 +3009,7 @@
             try {
               value[symToStringTag] = undefined;
               var unmasked = true;
-            } catch (e) {
+            } catch (e2) {
             }
             var result2 = nativeObjectToString.call(value);
             if (unmasked) {
@@ -3396,11 +3396,11 @@
             if (func != null) {
               try {
                 return funcToString.call(func);
-              } catch (e) {
+              } catch (e2) {
               }
               try {
                 return func + "";
-              } catch (e) {
+              } catch (e2) {
               }
             }
             return "";
@@ -3484,23 +3484,23 @@
             }
             return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true), undefined, comparator) : [];
           });
-          function drop(array, n, guard) {
+          function drop(array, n2, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n = guard || n === undefined ? 1 : toInteger(n);
-            return baseSlice(array, n < 0 ? 0 : n, length);
+            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
+            return baseSlice(array, n2 < 0 ? 0 : n2, length);
           }
           __name(drop, "drop");
-          function dropRight(array, n, guard) {
+          function dropRight(array, n2, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n = guard || n === undefined ? 1 : toInteger(n);
-            n = length - n;
-            return baseSlice(array, 0, n < 0 ? 0 : n);
+            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
+            n2 = length - n2;
+            return baseSlice(array, 0, n2 < 0 ? 0 : n2);
           }
           __name(dropRight, "dropRight");
           function dropRightWhile(array, predicate) {
@@ -3640,8 +3640,8 @@
             return value === value ? strictLastIndexOf(array, value, index) : baseFindIndex(array, baseIsNaN, index, true);
           }
           __name(lastIndexOf, "lastIndexOf");
-          function nth(array, n) {
-            return array && array.length ? baseNth(array, toInteger(n)) : undefined;
+          function nth(array, n2) {
+            return array && array.length ? baseNth(array, toInteger(n2)) : undefined;
           }
           __name(nth, "nth");
           var pull2 = baseRest(pullAll);
@@ -3752,22 +3752,22 @@
             return length ? baseSlice(array, 1, length) : [];
           }
           __name(tail, "tail");
-          function take(array, n, guard) {
+          function take(array, n2, guard) {
             if (!(array && array.length)) {
               return [];
             }
-            n = guard || n === undefined ? 1 : toInteger(n);
-            return baseSlice(array, 0, n < 0 ? 0 : n);
+            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
+            return baseSlice(array, 0, n2 < 0 ? 0 : n2);
           }
           __name(take, "take");
-          function takeRight(array, n, guard) {
+          function takeRight(array, n2, guard) {
             var length = array == null ? 0 : array.length;
             if (!length) {
               return [];
             }
-            n = guard || n === undefined ? 1 : toInteger(n);
-            n = length - n;
-            return baseSlice(array, n < 0 ? 0 : n, length);
+            n2 = guard || n2 === undefined ? 1 : toInteger(n2);
+            n2 = length - n2;
+            return baseSlice(array, n2 < 0 ? 0 : n2, length);
           }
           __name(takeRight, "takeRight");
           function takeRightWhile(array, predicate) {
@@ -4078,14 +4078,14 @@
             return func(collection);
           }
           __name(sample, "sample");
-          function sampleSize2(collection, n, guard) {
-            if (guard ? isIterateeCall(collection, n, guard) : n === undefined) {
-              n = 1;
+          function sampleSize2(collection, n2, guard) {
+            if (guard ? isIterateeCall(collection, n2, guard) : n2 === undefined) {
+              n2 = 1;
             } else {
-              n = toInteger(n);
+              n2 = toInteger(n2);
             }
             var func = isArray(collection) ? arraySampleSize : baseSampleSize;
-            return func(collection, n);
+            return func(collection, n2);
           }
           __name(sampleSize2, "sampleSize");
           function shuffle(collection) {
@@ -4130,35 +4130,35 @@
           var now = ctxNow || function() {
             return root.Date.now();
           };
-          function after(n, func) {
+          function after(n2, func) {
             if (typeof func != "function") {
               throw new TypeError2(FUNC_ERROR_TEXT);
             }
-            n = toInteger(n);
+            n2 = toInteger(n2);
             return function() {
-              if (--n < 1) {
+              if (--n2 < 1) {
                 return func.apply(this, arguments);
               }
             };
           }
           __name(after, "after");
-          function ary(func, n, guard) {
-            n = guard ? undefined : n;
-            n = func && n == null ? func.length : n;
-            return createWrap(func, WRAP_ARY_FLAG, undefined, undefined, undefined, undefined, n);
+          function ary(func, n2, guard) {
+            n2 = guard ? undefined : n2;
+            n2 = func && n2 == null ? func.length : n2;
+            return createWrap(func, WRAP_ARY_FLAG, undefined, undefined, undefined, undefined, n2);
           }
           __name(ary, "ary");
-          function before(n, func) {
+          function before(n2, func) {
             var result2;
             if (typeof func != "function") {
               throw new TypeError2(FUNC_ERROR_TEXT);
             }
-            n = toInteger(n);
+            n2 = toInteger(n2);
             return function() {
-              if (--n > 0) {
+              if (--n2 > 0) {
                 result2 = func.apply(this, arguments);
               }
-              if (n <= 1) {
+              if (n2 <= 1) {
                 func = undefined;
               }
               return result2;
@@ -5076,13 +5076,13 @@
             return nativeParseInt(toString2(string).replace(reTrimStart, ""), radix || 0);
           }
           __name(parseInt2, "parseInt");
-          function repeat(string, n, guard) {
-            if (guard ? isIterateeCall(string, n, guard) : n === undefined) {
-              n = 1;
+          function repeat(string, n2, guard) {
+            if (guard ? isIterateeCall(string, n2, guard) : n2 === undefined) {
+              n2 = 1;
             } else {
-              n = toInteger(n);
+              n2 = toInteger(n2);
             }
-            return baseRepeat(toString2(string), n);
+            return baseRepeat(toString2(string), n2);
           }
           __name(repeat, "repeat");
           function replace() {
@@ -5284,8 +5284,8 @@
           var attempt = baseRest(function(func, args) {
             try {
               return apply(func, undefined, args);
-            } catch (e) {
-              return isError(e) ? e : new Error2(e);
+            } catch (e2) {
+              return isError(e2) ? e2 : new Error2(e2);
             }
           });
           var bindAll = flatRest(function(object, methodNames) {
@@ -5394,10 +5394,10 @@
           function noop() {
           }
           __name(noop, "noop");
-          function nthArg(n) {
-            n = toInteger(n);
+          function nthArg(n2) {
+            n2 = toInteger(n2);
             return baseRest(function(args) {
-              return baseNth(args, n);
+              return baseNth(args, n2);
             });
           }
           __name(nthArg, "nthArg");
@@ -5436,16 +5436,16 @@
             return true;
           }
           __name(stubTrue, "stubTrue");
-          function times(n, iteratee2) {
-            n = toInteger(n);
-            if (n < 1 || n > MAX_SAFE_INTEGER) {
+          function times(n2, iteratee2) {
+            n2 = toInteger(n2);
+            if (n2 < 1 || n2 > MAX_SAFE_INTEGER) {
               return [];
             }
-            var index = MAX_ARRAY_LENGTH, length = nativeMin(n, MAX_ARRAY_LENGTH);
+            var index = MAX_ARRAY_LENGTH, length = nativeMin(n2, MAX_ARRAY_LENGTH);
             iteratee2 = getIteratee(iteratee2);
-            n -= MAX_ARRAY_LENGTH;
+            n2 -= MAX_ARRAY_LENGTH;
             var result2 = baseTimes(length, iteratee2);
-            while (++index < n) {
+            while (++index < n2) {
               iteratee2(index);
             }
             return result2;
@@ -5830,21 +5830,21 @@
             lodash[methodName].placeholder = lodash;
           });
           arrayEach(["drop", "take"], function(methodName, index) {
-            LazyWrapper.prototype[methodName] = function(n) {
-              n = n === undefined ? 1 : nativeMax(toInteger(n), 0);
+            LazyWrapper.prototype[methodName] = function(n2) {
+              n2 = n2 === undefined ? 1 : nativeMax(toInteger(n2), 0);
               var result2 = this.__filtered__ && !index ? new LazyWrapper(this) : this.clone();
               if (result2.__filtered__) {
-                result2.__takeCount__ = nativeMin(n, result2.__takeCount__);
+                result2.__takeCount__ = nativeMin(n2, result2.__takeCount__);
               } else {
                 result2.__views__.push({
-                  "size": nativeMin(n, MAX_ARRAY_LENGTH),
+                  "size": nativeMin(n2, MAX_ARRAY_LENGTH),
                   "type": methodName + (result2.__dir__ < 0 ? "Right" : "")
                 });
               }
               return result2;
             };
-            LazyWrapper.prototype[methodName + "Right"] = function(n) {
-              return this.reverse()[methodName](n).reverse();
+            LazyWrapper.prototype[methodName + "Right"] = function(n2) {
+              return this.reverse()[methodName](n2).reverse();
             };
           });
           arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
@@ -5985,102 +5985,32 @@
           }
           return lodash;
         }, "runInContext");
-        var _11 = runInContext();
+        var _12 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _11;
+          root._ = _12;
           define(function() {
-            return _11;
+            return _12;
           });
         } else if (freeModule) {
-          (freeModule.exports = _11)._ = _11;
-          freeExports._ = _11;
+          (freeModule.exports = _12)._ = _12;
+          freeExports._ = _12;
         } else {
-          root._ = _11;
+          root._ = _12;
         }
       }).call(exports);
     }
   });
 
   // main.ts
-  var import_lodash8 = __toESM(require_lodash());
+  var import_lodash9 = __toESM(require_lodash());
 
-  // game/map.ts
-  var map_exports = {};
-  __export(map_exports, {
-    GameMap: () => GameMap,
-    directionTo: () => directionTo
+  // game/collapse.ts
+  var collapse_exports = {};
+  __export(collapse_exports, {
+    make: () => make11,
+    plan: () => plan,
+    tick: () => tick4
   });
-  var _3 = __toESM(require_lodash());
-
-  // geometry/direction.ts
-  var direction_exports = {};
-  __export(direction_exports, {
-    all: () => all,
-    reverse: () => reverse,
-    toRose: () => toRose
-  });
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
-  function toRose(directions) {
-    const rose = {};
-    for (const direction of directions) {
-      rose[direction] = true;
-    }
-    return rose;
-  }
-  __name(toRose, "toRose");
-  var all = ["left", "right", "down", "up"];
-
-  // geometry/vector.ts
-  var Vector;
-  ((Vector5) => {
-    function n(v) {
-      return { x: v.x, y: v.y - 1 };
-    }
-    Vector5.n = n;
-    __name(n, "n");
-    function s(v) {
-      return { x: v.x, y: v.y + 1 };
-    }
-    Vector5.s = s;
-    __name(s, "s");
-    function w(v) {
-      return { x: v.x - 1, y: v.y };
-    }
-    Vector5.w = w;
-    __name(w, "w");
-    function e(v) {
-      return { x: v.x + 1, y: v.y };
-    }
-    Vector5.e = e;
-    __name(e, "e");
-  })(Vector || (Vector = {}));
-
-  // geometry/index.ts
-  function moveBy(vector, direction) {
-    switch (direction) {
-      case "down":
-        return { ...vector, x: vector.x, y: vector.y + 1 };
-      case "up":
-        return { ...vector, x: vector.x, y: vector.y - 1 };
-      case "left":
-        return { ...vector, x: vector.x - 1, y: vector.y };
-      case "right":
-        return { ...vector, x: vector.x + 1, y: vector.y };
-    }
-  }
-  __name(moveBy, "moveBy");
 
   // utils/random.ts
   var _ = __toESM(require_lodash());
@@ -6130,384 +6060,6 @@
   }
   __name(select, "select");
 
-  // generator.ts
-  var import_lodash = __toESM(require_lodash());
-
-  // room.ts
-  function upperDoors(room) {
-    return room.doors.filter((x) => x.y < room.position.y).length;
-  }
-  __name(upperDoors, "upperDoors");
-  function lowerDoors(room) {
-    return room.doors.filter((x) => x.y > room.position.y).length;
-  }
-  __name(lowerDoors, "lowerDoors");
-
-  // generator.ts
-  function check(t, f) {
-    while (true) {
-      const tt = t();
-      if (f(tt))
-        return tt;
-    }
-  }
-  __name(check, "check");
-  function maze(size, game) {
-    const outer_walls = hline({ x: 0, y: 0 }, size.x).concat(vline({ x: 0, y: 0 }, size.y)).concat(vline({ x: size.x - 1, y: 0 }, size.y)).map(
-      (point) => ({
-        position: point,
-        type: "wall",
-        zIndex: 0
-      })
-    );
-    game.map.add(outer_walls);
-    const inner_walls = import_lodash.default.range(0, size.y, 2).map((y) => hline({ x: 0, y }, size.x)).flatMap((x) => x).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(inner_walls);
-    const room_walls = roomWalls({
-      height: size.y,
-      width: size.x,
-      wallsPerRow: { min: 3, max: 7 }
-    }).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(room_walls);
-    generateRoomDoors(game.map);
-  }
-  __name(maze, "maze");
-  function roomWalls(args) {
-    const room_walls = import_lodash.default.flatMap(
-      import_lodash.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash.default.flatMap(
-          check(
-            () => ints(
-              0,
-              args.width,
-              int(args.wallsPerRow.min, args.wallsPerRow.max)
-            ),
-            (x) => proper_distance(x.concat([0, args.width]))
-          ).map((x) => vline({ x, y }, 1))
-        )
-      )
-    );
-    return room_walls;
-  }
-  __name(roomWalls, "roomWalls");
-  function generateRoomDoors(map) {
-    for (let row = 3; row <= map.height - 2; row += 2) {
-      const rooms = getRowRooms(map, row);
-      makeRoomDoors(map, rooms);
-      const doors = import_lodash.default.map(rooms, (x) => x.doors).flatMap((x) => x);
-      for (const door of doors) {
-        const objs = map.at(door);
-        map.remove(objs);
-      }
-    }
-  }
-  __name(generateRoomDoors, "generateRoomDoors");
-  function desiredNumOfDoors(room) {
-    const a = [
-      [3, 0, 1],
-      [6, 1, 2],
-      [100, 2, 5]
-    ];
-    const min_max = import_lodash.default.find(a, (x) => x[0] > room.length);
-    return int(min_max[1], min_max[2]);
-  }
-  __name(desiredNumOfDoors, "desiredNumOfDoors");
-  function noWalls(map, xs, y) {
-    for (const x of xs) {
-      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
-        return false;
-      }
-    }
-    return true;
-  }
-  __name(noWalls, "noWalls");
-  function makeRoomDoors(map, rooms) {
-    for (const room of rooms) {
-      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
-      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
-      const xx = check(
-        () => ints(room.position.x, room.position.x + room.length, num_of_lower),
-        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
-      );
-      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
-    }
-    return rooms;
-  }
-  __name(makeRoomDoors, "makeRoomDoors");
-  function getRowRooms(map, row) {
-    const rooms = [];
-    let currentRoom = {
-      position: { x: 0, y: 0 },
-      length: 0,
-      doors: []
-    };
-    for (let x = 0; x < map.width; x++) {
-      const c = { x, y: row };
-      if (map.at(Vector.n(c)).length == 0) {
-        currentRoom.doors.push(Vector.n(c));
-      }
-      if (map.at(Vector.s(c)).length == 0) {
-        currentRoom.doors.push(Vector.s(c));
-      }
-      if (map.at({ x, y: row }).length > 0) {
-        if (currentRoom.length > 0)
-          rooms.push(currentRoom);
-        currentRoom = {
-          position: { x, y: row },
-          length: 1,
-          doors: []
-        };
-      } else {
-        currentRoom.length += 1;
-      }
-    }
-    return rooms;
-  }
-  __name(getRowRooms, "getRowRooms");
-  function proper_distance(walls) {
-    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash.default.sortBy(walls);
-    const distances = import_lodash.default.chain(import_lodash.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
-    const result = import_lodash.default.every(
-      distances.map((x) => x[1] - x[0]),
-      (x) => x > 2
-    );
-    return result;
-  }
-  __name(proper_distance, "proper_distance");
-  function line(start, direction, size) {
-    const line_vector = [];
-    for (let i = 0; i < size; ++i) {
-      line_vector.push({
-        x: start.x + i * direction.x,
-        y: start.y + i * direction.y
-      });
-    }
-    return line_vector;
-  }
-  __name(line, "line");
-  function hline(start, size) {
-    return line(start, { x: 1, y: 0 }, size);
-  }
-  __name(hline, "hline");
-  function vline(start, size) {
-    return line(start, { x: 0, y: 1 }, size);
-  }
-  __name(vline, "vline");
-
-  // game/map.ts
-  var _GameMap = class _GameMap {
-    constructor(width, height, objs) {
-      this.width = width;
-      this.height = height;
-      const a = _3.range(1, 21);
-      this.cells = _3.chunk(
-        _3.range(width * height).map((x) => []),
-        width
-      );
-      this.objects = [];
-      this.add(objs);
-    }
-    add(objs) {
-      const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.concat(objs_);
-      for (const obj of objs_) {
-        const objs2 = this.cells[obj.position.y][obj.position.x];
-        objs2.push(obj);
-        this.cells[obj.position.y][obj.position.x] = _3.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
-      }
-    }
-    remove(objs) {
-      const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.filter((x) => _3.indexOf(objs_, x) == -1);
-      for (const obj of objs_) {
-        this.cells[obj.position.y][obj.position.x] = _3.pull(
-          this.cells[obj.position.y][obj.position.x],
-          obj
-        );
-      }
-    }
-    move(obj, pos) {
-      this.remove([obj]);
-      obj.position = pos;
-      this.add([obj]);
-    }
-    getRandomEmptyLocation() {
-      const [x, y] = check(
-        () => [int(0, this.width), int(0, this.height)],
-        ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
-      );
-      return { x, y };
-    }
-    at(v) {
-      return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
-    }
-    objAt(v, type) {
-      const objs = this.at(v);
-      const objOfType = objs.find((x) => x.type == type) ?? null;
-      return objOfType;
-    }
-    isAt(v, type) {
-      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
-        return false;
-      const objs = this.cells[v.y][v.x];
-      return objs != null ? _3.some(objs, (x) => x.type == type) : false;
-    }
-    possibleDirections(position, type) {
-      const p = [];
-      for (const d of direction_exports.all) {
-        const newPos = moveBy(position, d);
-        if (this.isAt(newPos, type))
-          p.push(d);
-      }
-      return p;
-    }
-    toString() {
-      let s = "\n";
-      for (const y of _3.range(this.height)) {
-        for (const x of _3.range(this.width))
-          s += repr(this.cells[y][x]);
-        s += "\n";
-      }
-      return s;
-    }
-    toJson() {
-      return {
-        height: this.height,
-        width: this.width,
-        objects: this.objects
-      };
-    }
-    static fromJson(json) {
-      const { width, height, objects } = json;
-      return new _GameMap(width, height, objects);
-    }
-  };
-  __name(_GameMap, "GameMap");
-  var GameMap = _GameMap;
-  function directionTo(position, map, objType) {
-    const dd = _3.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
-    return dd.length ? dd[0] : null;
-  }
-  __name(directionTo, "directionTo");
-  function repr(objs) {
-    if (objs.length > 0) {
-      switch (objs[0].type) {
-        case "wall":
-          return "~";
-        default:
-          return ".";
-      }
-    } else {
-      return " ";
-    }
-  }
-  __name(repr, "repr");
-
-  // game/score.ts
-  var score_exports = {};
-  __export(score_exports, {
-    make: () => make
-  });
-  function make() {
-    return {
-      money: 0,
-      level: 0,
-      impact: 0,
-      stockPrice: 0
-    };
-  }
-  __name(make, "make");
-
-  // game/game.ts
-  var game_exports = {};
-  __export(game_exports, {
-    GameMap: () => map_exports,
-    Score: () => score_exports,
-    handleEffects: () => handleEffects,
-    load: () => load,
-    make: () => make3,
-    message: () => message,
-    save: () => save,
-    tick: () => tick2,
-    toJson: () => toJson
-  });
-
-  // objects/coffee.ts
-  var Coffee;
-  ((Coffee2) => {
-    function make7(position) {
-      return {
-        type: "coffee",
-        position,
-        zIndex: 1,
-        open: false
-      };
-    }
-    Coffee2.make = make7;
-    __name(make7, "make");
-  })(Coffee || (Coffee = {}));
-
-  // objects/commit.ts
-  var Commit;
-  ((Commit2) => {
-    function make7(position) {
-      return {
-        type: "commit",
-        position,
-        zIndex: 1,
-        open: false,
-        hash: generateId(8)
-      };
-    }
-    Commit2.make = make7;
-    __name(make7, "make");
-    function byteToHex(byte) {
-      return ("0" + byte.toString(16)).slice(-2);
-    }
-    __name(byteToHex, "byteToHex");
-    function generateId(len = 40) {
-      var arr = new Uint8Array(len / 2);
-      window.crypto.getRandomValues(arr);
-      return Array.from(arr, byteToHex).join("");
-    }
-    __name(generateId, "generateId");
-  })(Commit || (Commit = {}));
-
-  // objects/door.ts
-  var Door;
-  ((Door2) => {
-    function make7(position) {
-      return {
-        type: "door",
-        position,
-        zIndex: 1,
-        open: false,
-        placed: false
-      };
-    }
-    Door2.make = make7;
-    __name(make7, "make");
-  })(Door || (Door = {}));
-
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
-
   // game/config.ts
   var config = {
     tickInterval: 100,
@@ -6537,136 +6089,180 @@
   };
   var config_default = config;
 
-  // game/item_generator.ts
-  function make2() {
-    return { state: { type: "waiting", tact: 0 } };
-  }
-  __name(make2, "make");
-  function tick(itemGenerator, game) {
-    switch (itemGenerator.state.type) {
-      case "waiting":
-        if (itemGenerator.state.tact > config_default.itemGenerator.start)
-          itemGenerator.state = { type: "generating", tact: 0 };
-        else {
-          itemGenerator.state.tact += 1;
-        }
-      case "generating":
-        if (itemGenerator.state.tact > config_default.itemGenerator.interval) {
-          itemGenerator.state.tact = 0;
-          const item_type = choice(
-            ["door", "commit", "coffee"],
-            [1, 90, 10]
-          );
-          let item;
-          switch (item_type) {
-            case "door":
-              item = Door.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            case "commit":
-              item = Commit.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            case "coffee":
-              item = Coffee.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            default:
-              assertUnreachable(item_type);
-          }
-        } else {
-          itemGenerator.state.tact += 1;
-        }
+  // game/plan.ts
+  var plan_exports = {};
+  __export(plan_exports, {
+    addEvent: () => addEvent,
+    append: () => append2,
+    generatePlan: () => generatePlan2,
+    make: () => make2
+  });
+
+  // game/effects.ts
+  var import_lodash = __toESM(require_lodash());
+  function append(effects, other) {
+    if (!import_lodash.default.isArray(other)) {
+      other = [other];
+    }
+    for (const effect of other) {
+      effects.push(effect);
     }
   }
-  __name(tick, "tick");
+  __name(append, "append");
 
-  // game/sprint.ts
-  var import_lodash4 = __toESM(require_lodash());
+  // game/effect.ts
+  function addImpact(impact) {
+    return {
+      type: "addImpact",
+      impact
+    };
+  }
+  __name(addImpact, "addImpact");
+  function showMessage(text, ttl) {
+    return { type: "showMessage", message: { text, ttl } };
+  }
+  __name(showMessage, "showMessage");
 
-  // game/collapse.ts
-  var Collapse;
-  ((Collapse2) => {
-    function make7() {
+  // utils/logging.ts
+  function setIsEnabled(f) {
+    isEnabled = f;
+  }
+  __name(setIsEnabled, "setIsEnabled");
+  function setTime(time) {
+    tick = time;
+  }
+  __name(setTime, "setTime");
+  function make(name) {
+    return (message2) => {
+      if (isEnabled(name)) {
+        console.log(tick.toString().padStart(4, "0") + " " + message2);
+      }
+    };
+  }
+  __name(make, "make");
+  var isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
+  var tick = 0;
+
+  // game/levels.ts
+  var import_lodash2 = __toESM(require_lodash());
+  var all = [
+    {
+      name: "Engineer I",
+      rate: 5,
+      impact: 2
+    },
+    {
+      name: "Engineer II",
+      rate: 30,
+      impact: 3
+    },
+    {
+      name: "Engineer III",
+      rate: 40,
+      impact: 4
+    },
+    {
+      name: "Senior Engineer I",
+      rate: 40,
+      impact: 5
+    },
+    {
+      name: "Senior Engineer II",
+      rate: 40,
+      impact: 6
+    },
+    {
+      name: "Engineering Lead",
+      rate: 40,
+      impact: 7
+    },
+    {
+      name: "Staff Engineer I",
+      rate: 40,
+      impact: 8
+    },
+    {
+      name: "Staff Engineer II",
+      rate: 40,
+      impact: 9
+    },
+    {
+      name: "Principal Engineer",
+      rate: 40,
+      impact: 10
+    }
+  ];
+  function level(impact) {
+    let total = 0;
+    for (const level2 of all) {
+      total += level2.impact;
+      if (total >= impact) {
+        return level2;
+      }
+    }
+    return import_lodash2.default.last(all);
+  }
+  __name(level, "level");
+
+  // game/performance_review.ts
+  var logger = make("performance_review");
+  var PerformanceReview;
+  ((PerformanceReview2) => {
+    function make16() {
       return {};
     }
-    Collapse2.make = make7;
-    __name(make7, "make");
-    function plan() {
-      const plan2 = Plan.make();
-      Plan.addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
+    PerformanceReview2.make = make16;
+    __name(make16, "make");
+    function generatePlan3(startTick) {
+      const plan2 = make2();
+      addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
       return plan2;
     }
-    Collapse2.plan = plan;
-    __name(plan, "plan");
-    function tick6(game) {
+    PerformanceReview2.generatePlan = generatePlan3;
+    __name(generatePlan3, "generatePlan");
+    function tick10(game) {
+      const effects = [];
       const events = game.plan.get(game.time.ticks);
-      if (events && events.some((event) => event.type === "collapseStart")) {
-        game.collapse = make7();
-      }
-      if (game.collapse) {
-        const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
-          (obj) => obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
-        );
-        const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
-        const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
-        const removeWalls = select(walls, removeTicks);
-        game.map.remove(removeWalls);
-      }
-      return [];
-    }
-    Collapse2.tick = tick6;
-    __name(tick6, "tick");
-  })(Collapse || (Collapse = {}));
-
-  // game/plan.ts
-  var import_lodash2 = __toESM(require_lodash());
-  var Plan;
-  ((Plan2) => {
-    function make7() {
-      return /* @__PURE__ */ new Map();
-    }
-    Plan2.make = make7;
-    __name(make7, "make");
-    function addEvent(plan, time, event) {
-      if (!plan.has(time)) {
-        plan.set(time, []);
-      }
-      plan.get(time).push(event);
-    }
-    Plan2.addEvent = addEvent;
-    __name(addEvent, "addEvent");
-    function append(plan, other) {
-      for (const time of other.keys()) {
-        for (const event of other.get(time)) {
-          addEvent(plan, time, event);
+      if (events) {
+        for (const event of events) {
+          switch (event.type) {
+            case "performanceReview":
+              logger("Performance review");
+              game.player.level = level(game.score.impact);
+              append(effects, showMessage("Performance review", 3e3));
+          }
         }
       }
-      return plan;
+      return effects;
     }
-    Plan2.append = append;
-    __name(append, "append");
-    function generatePlan(startDay) {
-      let plan = make7();
-      let startTick = startDay * config_default.dayTicks;
-      for (const i in import_lodash2.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-        const r = Sprint.generateSprint(startTick);
-        append(plan, r[0]);
-        startTick = r[1];
-      }
-      append(plan, Collapse.plan());
-      return plan;
-    }
-    Plan2.generatePlan = generatePlan;
-    __name(generatePlan, "generatePlan");
-  })(Plan || (Plan = {}));
+    PerformanceReview2.tick = tick10;
+    __name(tick10, "tick");
+  })(PerformanceReview || (PerformanceReview = {}));
 
-  // objects/objects.ts
-  var import_lodash3 = __toESM(require_lodash());
-  function filter(objs, type) {
-    return import_lodash3.default.filter(objs, (x) => x.type == type);
+  // game/sprint.ts
+  var sprint_exports = {};
+  __export(sprint_exports, {
+    generatePlan: () => generatePlan,
+    make: () => make10,
+    tick: () => tick3
+  });
+  var import_lodash5 = __toESM(require_lodash());
+
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make3
+  });
+  function make3(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false,
+      placed: false
+    };
   }
-  __name(filter, "filter");
+  __name(make3, "make");
 
   // objects/story_size.ts
   function toString(size) {
@@ -6682,672 +6278,110 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  var Story;
-  ((Story2) => {
-    function make7(position, size) {
-      return {
-        type: "story",
-        position,
-        size,
-        zIndex: 1,
-        impact: 1,
-        name: choice(storyNames[size])
-      };
-    }
-    Story2.make = make7;
-    __name(make7, "make");
-    const storyNames = {
-      medium: [
-        "Implement Dark Mode for Night Owls",
-        "Refactor 'Frankencode' Module",
-        "Add Emoji Support for Error Messages",
-        "Address Complaints About Clashing Color Scheme",
-        "Clarify the Meaning of 'Technical Debt'",
-        "Reduce Loading Time for Image-heavy Pages",
-        "Streamline Checkout Process for Mobile Users",
-        "Update Third-party Libraries to Latest Versions",
-        "Resolve Issue with Form Submission Error Handling",
-        "Integrate Social Media Sharing Buttons"
-      ],
-      small: [
-        "Option to Change Font Size",
-        "Fix Typo in Terms of Service Link",
-        "Update README with Installation Instructions",
-        "Add Loading Spinner for AJAX Requests",
-        "Remove Deprecated Function Calls",
-        "Increase Character Limit for Comments",
-        "Adjust Button Placement for Accessibility",
-        "Minify CSS and JavaScript Files",
-        "Implement CSRF Protection on Forms",
-        "Resolve Issue with Broken Image Links"
-      ],
-      large: [
-        "Revamp User Interface for Modern Look and Feel",
-        "Rewrite Monolithic Codebase into Microservices",
-        "Implement Machine Learning Algorithm for Recommendations",
-        "Redesign Navigation Structure for Improved Usability",
-        "Create Comprehensive Developer Guide",
-        "Conduct Full Accessibility Audit and Remediation",
-        "Implement Caching Strategy for Scalability",
-        "Migrate to OAuth2 for Enhanced Authentication",
-        "Transition to Cloud-based Hosting Environment",
-        "Integrate Multi-language Support Across Platform"
-      ]
-    };
-  })(Story || (Story = {}));
-
-  // game/effect.ts
-  var Effect;
-  ((Effect2) => {
-    function addImpact(impact) {
-      return {
-        type: "addImpact",
-        impact
-      };
-    }
-    Effect2.addImpact = addImpact;
-    __name(addImpact, "addImpact");
-    function showMessage2(text, ttl) {
-      return { type: "showMessage", message: { text, ttl } };
-    }
-    Effect2.showMessage = showMessage2;
-    __name(showMessage2, "showMessage");
-  })(Effect || (Effect = {}));
-
-  // game/day_of_week.ts
-  var all2 = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
-  // game/game_time.ts
-  var GameTime;
-  ((GameTime2) => {
-    function make7(ticks) {
-      const day = Math.floor(ticks / config_default.dayTicks);
-      const dayOfWeek = all2[day % 7];
-      return {
-        ticks,
-        day,
-        dayOfWeek
-      };
-    }
-    GameTime2.make = make7;
-    __name(make7, "make");
-  })(GameTime || (GameTime = {}));
-
-  // game/sprint.ts
-  var Sprint;
-  ((Sprint2) => {
-    function make7() {
-      return {
-        day: 0,
-        daysLeft: 0
-      };
-    }
-    Sprint2.make = make7;
-    __name(make7, "make");
-    function generateSprint(startTick) {
-      const DAY = config_default.dayTicks;
-      const SPRINT_DAYS = 10;
-      const plan = Plan.make();
-      const addEvent = /* @__PURE__ */ __name((event) => {
-        Plan.addEvent(plan, startTick, event);
-      }, "addEvent");
-      addEvent({ type: "sprintStart" });
-      addEvent({ type: "groomBacklogStart" });
-      const storySizes = [
-        "small",
-        "small",
-        "small",
-        "medium",
-        "medium",
-        "large"
-      ];
-      const times = storySizes.map(
-        (x, i) => [x, Math.round(DAY / storySizes.length * i)]
-      );
-      let sprintDay = 1;
-      addEvent({
-        type: "sprintDayStart",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...GameTime.make(startTick)
-      });
-      const groomingStart = startTick;
-      for (const t of times) {
-        startTick = groomingStart + t[1];
-        addEvent({ type: "createBacklogIssue", size: t[0] });
-      }
-      startTick += DAY - 1;
-      addEvent({ type: "groomBacklogEnd" });
-      addEvent({
-        type: "sprintDayEnd",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...GameTime.make(startTick)
-      });
-      startTick += 1;
-      for (const i of import_lodash4.default.range(4)) {
-        const day = Math.floor(startTick / DAY);
-        sprintDay += 1;
-        addEvent({
-          type: "sprintDayStart",
-          sprintDay,
-          sprintDaysLeft: SPRINT_DAYS - sprintDay,
-          ...GameTime.make(startTick)
-        });
-        startTick += DAY - 1;
-        addEvent({
-          type: "sprintDayEnd",
-          sprintDay,
-          sprintDaysLeft: SPRINT_DAYS - sprintDay,
-          ...GameTime.make(startTick)
-        });
-        startTick += 1;
-      }
-      addEvent({ type: "weekendStart" });
-      startTick += 2 * DAY + 1;
-      addEvent({ type: "weekendEnd" });
-      for (const i of import_lodash4.default.range(4)) {
-        sprintDay += 1;
-        addEvent({
-          type: "sprintDayStart",
-          sprintDay,
-          sprintDaysLeft: SPRINT_DAYS - sprintDay,
-          ...GameTime.make(startTick)
-        });
-        startTick += DAY - 1;
-        addEvent({
-          type: "sprintDayEnd",
-          sprintDay,
-          sprintDaysLeft: SPRINT_DAYS - sprintDay,
-          ...GameTime.make(startTick)
-        });
-        startTick += 1;
-      }
-      addEvent({ type: "sprintEnd" });
-      addEvent({ type: "weekendStart" });
-      startTick += 2 * DAY + 1;
-      addEvent({ type: "weekendEnd" });
-      return [plan, startTick];
-    }
-    Sprint2.generateSprint = generateSprint;
-    __name(generateSprint, "generateSprint");
-    function* tick6(sprint, game) {
-      const events = game.plan.get(game.time.ticks);
-      if (events) {
-        for (const event of events) {
-          switch (event.type) {
-            case "createBacklogIssue":
-              const story = Story.make(game.map.getRandomEmptyLocation(), event.size);
-              game.map.add(story);
-              yield Effect.showMessage(`Moved "${story.name}" to To Do`, 2e3);
-              break;
-            case "groomBacklogEnd":
-            case "collapseStart":
-              break;
-            case "groomBacklogStart":
-              yield Effect.showMessage("Grooming backlog ...", 2e3);
-              break;
-            case "sprintDayEnd":
-              break;
-            case "sprintDayStart":
-              sprint.day = event.sprintDay;
-              sprint.daysLeft = event.sprintDaysLeft;
-              yield Effect.showMessage(
-                `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
-                3e3
-              );
-              break;
-            case "sprintEnd":
-              yield Effect.showMessage("Sprint ended", 3e3);
-              const stories = filter(game.map.objects, "story");
-              game.map.remove(stories);
-              if (game.player.task != null) {
-                yield Effect.showMessage(`Abandoned ${game.player.task}`, 2e3);
-                game.player.task = null;
-              }
-              break;
-            case "sprintStart":
-              break;
-            case "weekendStart":
-              yield Effect.showMessage("Weekend, finally!!!", 3e3);
-              break;
-            case "weekendEnd":
-              yield Effect.showMessage("End of Weekend :(", 3e3);
-              break;
-            case "gameEnded":
-            case "gameStarted":
-              break;
-            case "dayStarted":
-              break;
-            default:
-              assertUnreachable(event);
-          }
-        }
-      }
-    }
-    Sprint2.tick = tick6;
-    __name(tick6, "tick");
-  })(Sprint || (Sprint = {}));
-
-  // utils/logging.ts
-  var Logging;
-  ((Logging2) => {
-    function setIsEnabled(f) {
-      isEnabled = f;
-    }
-    Logging2.setIsEnabled = setIsEnabled;
-    __name(setIsEnabled, "setIsEnabled");
-    function setTime(time) {
-      tick6 = time;
-    }
-    Logging2.setTime = setTime;
-    __name(setTime, "setTime");
-    function make7(name) {
-      return (message2) => {
-        if (isEnabled(name)) {
-          console.log(tick6.toString().padStart(4, "0") + " " + message2);
-        }
-      };
-    }
-    Logging2.make = make7;
-    __name(make7, "make");
-    let isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
-    let tick6 = 0;
-  })(Logging || (Logging = {}));
-
-  // game/game.ts
-  var logger = Logging.make("game");
-  function make3(size, plan) {
+  function make4(position, size) {
     return {
-      map: new GameMap(size.x, size.y, []),
-      commands: [],
-      itemGenerator: make2(),
-      sprint: Sprint.make(),
-      score: make(),
-      messages: [],
-      messageTact: 0,
-      time: {
-        ticks: 0,
-        day: 0,
-        dayOfWeek: "Sunday"
-      },
-      plan,
-      messageStartTime: null,
-      collapse: null
-    };
-  }
-  __name(make3, "make");
-  function toJson(game) {
-    return {
-      map: game.map.toJson(),
-      score: game.score,
-      itemGenerator: game.itemGenerator,
-      commands: game.commands,
-      messages: game.messages,
-      messageTact: game.messageTact
-    };
-  }
-  __name(toJson, "toJson");
-  function handleEffects(game, effects) {
-    for (const effect of effects) {
-      switch (effect.type) {
-        case "null":
-          break;
-        case "addImpact":
-          game.score.impact += effect.impact;
-          break;
-        case "showMessage":
-          message(game, effect.message);
-          break;
-        default:
-          assertUnreachable(effect);
-      }
-    }
-  }
-  __name(handleEffects, "handleEffects");
-  function message(game, m) {
-    if (m.text instanceof Array) {
-      for (const text of m.text) {
-        logger("message: " + text);
-        game.messages.push({ text, ttl: m.ttl });
-      }
-    } else {
-      game.messages.push({ text: m.text, ttl: m.ttl });
-    }
-  }
-  __name(message, "message");
-  function tick2(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "createBacklogIssue":
-          case "groomBacklogEnd":
-          case "groomBacklogStart":
-          case "sprintDayEnd":
-          case "sprintDayStart":
-          case "sprintStart":
-          case "sprintEnd":
-          case "weekendStart":
-          case "weekendEnd":
-          case "gameStarted":
-          case "collapseStart":
-          case "dayStarted":
-          case "gameEnded":
-            logger(JSON.stringify(event));
-            break;
-          default:
-            assertUnreachable(event);
-        }
-      }
-    }
-  }
-  __name(tick2, "tick");
-  function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
-    logger("Game saved!");
-  }
-  __name(save, "save");
-  function load(storage) {
-    const objectsStorage = storage.load();
-    if (objectsStorage != null) {
-      const {
-        commands,
-        itemGenerator,
-        score,
-        sprint,
-        messages,
-        messageTact,
-        map,
-        time,
-        plan,
-        messageStartTime,
-        collapse
-      } = JSON.parse(objectsStorage);
-      const map_ = GameMap.fromJson(map);
-      const player = map_.objects.find(
-        (x) => x.type === "player"
-      );
-      return {
-        time,
-        score,
-        itemGenerator,
-        sprint,
-        messages,
-        messageTact,
-        commands,
-        map: map_,
-        player,
-        plan,
-        messageStartTime,
-        collapse
-      };
-    } else {
-      logger("There is no saved game.");
-      return null;
-    }
-  }
-  __name(load, "load");
-
-  // game/levels.ts
-  var EngineeringLevels;
-  ((EngineeringLevels2) => {
-    EngineeringLevels2.all = [
-      {
-        name: "Engineer I",
-        rate: 5,
-        impact: 2
-      },
-      {
-        name: "Engineer II",
-        rate: 30,
-        impact: 3
-      },
-      {
-        name: "Engineer III",
-        rate: 40,
-        impact: 4
-      },
-      {
-        name: "Senior Engineer I",
-        rate: 40,
-        impact: 5
-      },
-      {
-        name: "Senior Engineer II",
-        rate: 40,
-        impact: 6
-      },
-      {
-        name: "Engineering Lead",
-        rate: 40,
-        impact: 7
-      },
-      {
-        name: "Staff Engineer I",
-        rate: 40,
-        impact: 8
-      },
-      {
-        name: "Staff Engineer II",
-        rate: 40,
-        impact: 9
-      },
-      {
-        name: "Principal Engineer",
-        rate: 40,
-        impact: 10
-      }
-    ];
-  })(EngineeringLevels || (EngineeringLevels = {}));
-
-  // objects/boss.ts
-  var import_lodash5 = __toESM(require_lodash());
-  var BOSS_WEIGHTS = {
-    turn: {
-      visited: 0.2,
-      notVisited: 1
-    },
-    straight: {
-      visited: 0.2,
-      notVisited: 3
-    },
-    back: 1,
-    jump: 5
-  };
-  BOSS_WEIGHTS = {
-    turn: {
-      visited: 1e-6,
-      notVisited: 1
-    },
-    straight: {
-      visited: 1e-7,
-      notVisited: 3
-    },
-    back: 1e-7,
-    jump: 5
-  };
-  function make4() {
-    return {
-      position: {
-        x: 0,
-        y: 0
-      },
-      type: "boss",
-      zIndex: 10,
-      state: { type: "stopped", previous_direction: null }
+      type: "story",
+      position,
+      size,
+      zIndex: 1,
+      impact: 1,
+      name: choice(storyNames[size])
     };
   }
   __name(make4, "make");
-  function possibleMoves(pos, currentDirection, map) {
-    const result = {};
-    const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash5.default.difference(possible, [
-      currentDirection,
-      reverse(currentDirection)
-    ]);
-    if (turns.length > 0) {
-      result.turn = { directions: turns };
-    }
-    if (import_lodash5.default.includes(possible, currentDirection)) {
-      result.straight = { direction: currentDirection };
-    }
-    if (!import_lodash5.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
-      result.jump = { directions: [currentDirection] };
-    }
-    if (import_lodash5.default.includes(possible, reverse(currentDirection))) {
-      result.back = {};
-    }
-    return result;
-  }
-  __name(possibleMoves, "possibleMoves");
-  function move(obj, new_pos, new_direction, map) {
-    obj.state = { type: "moving", direction: new_direction, tact: 0 };
-    map.add([{ type: "footprint", position: obj.position, zIndex: 1, tact: 0 }]);
-    map.move(obj, new_pos);
-  }
-  __name(move, "move");
-  function pipPlayer(obj, player) {
-    player.hrTaskTact = 0;
-  }
-  __name(pipPlayer, "pipPlayer");
-  function tick3(boss, map) {
-    switch (boss.state.type) {
-      case "instructing":
-        break;
-      case "moving":
-        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
-        if (directionToPlayer) {
-          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
-          if (player)
-            pipPlayer(boss, player);
-        }
-        boss.state.tact += 1;
-        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
-          return;
-        }
-        const moves = possibleMoves(boss.position, boss.state.direction, map);
-        if (moves.turn || moves.straight) {
-          const move_types = [
-            moves.turn ? "turn" : null,
-            moves.straight ? "straight" : null
-          ];
-          const move_weights = [
-            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
-            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
-          ];
-          if (moves.turn) {
-            console.log(JSON.stringify({ move_types, move_weights }));
-          }
-          const move_choice = choice(
-            import_lodash5.default.compact(move_types),
-            import_lodash5.default.compact(move_weights)
-          );
-          switch (move_choice) {
-            case "turn":
-              const weights = moves.turn.directions.map(
-                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
-              );
-              const chosen = choice(moves.turn.directions, weights);
-              boss.state.direction = chosen;
-            case "straight":
-              const new_pos = moveBy(boss.position, boss.state.direction);
-              move(boss, new_pos, boss.state.direction, map);
-          }
-          return;
-        }
-        if (moves.back || moves.jump) {
-          const move_choice = choice(
-            import_lodash5.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash5.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
-          );
-          switch (move_choice) {
-            case "back":
-              boss.state.direction = reverse(boss.state.direction);
-              break;
-            case "jump":
-              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
-              break;
-          }
-        }
-        break;
-      case "jumping":
-        boss.state = {
-          type: "jumping",
-          direction: boss.state.direction,
-          tact: boss.state.tact + 1
-        };
-        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
-          move(
-            boss,
-            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
-            boss.state.direction,
-            map
-          );
-        }
-        break;
-      case "stopped": {
-        const direction = choose_direction(boss.position, null, map);
-        if (direction != null)
-          boss.state = { type: "moving", direction, tact: 0 };
-        break;
-      }
-    }
-  }
-  __name(tick3, "tick");
-  function choose_direction(pos, least_preferred, map) {
-    const forks = map.possibleDirections(pos, "wall");
-    const b = forks.filter((x) => x[0] != least_preferred);
-    if (b.length != 0) {
-      const direction = choice(b);
-      return direction;
-    } else {
-      return least_preferred;
-    }
-  }
-  __name(choose_direction, "choose_direction");
+  var storyNames = {
+    medium: [
+      "Implement Dark Mode for Night Owls",
+      "Refactor 'Frankencode' Module",
+      "Add Emoji Support for Error Messages",
+      "Address Complaints About Clashing Color Scheme",
+      "Clarify the Meaning of 'Technical Debt'",
+      "Reduce Loading Time for Image-heavy Pages",
+      "Streamline Checkout Process for Mobile Users",
+      "Update Third-party Libraries to Latest Versions",
+      "Resolve Issue with Form Submission Error Handling",
+      "Integrate Social Media Sharing Buttons"
+    ],
+    small: [
+      "Option to Change Font Size",
+      "Fix Typo in Terms of Service Link",
+      "Update README with Installation Instructions",
+      "Add Loading Spinner for AJAX Requests",
+      "Remove Deprecated Function Calls",
+      "Increase Character Limit for Comments",
+      "Adjust Button Placement for Accessibility",
+      "Minify CSS and JavaScript Files",
+      "Implement CSRF Protection on Forms",
+      "Resolve Issue with Broken Image Links"
+    ],
+    large: [
+      "Revamp User Interface for Modern Look and Feel",
+      "Rewrite Monolithic Codebase into Microservices",
+      "Implement Machine Learning Algorithm for Recommendations",
+      "Redesign Navigation Structure for Improved Usability",
+      "Create Comprehensive Developer Guide",
+      "Conduct Full Accessibility Audit and Remediation",
+      "Implement Caching Strategy for Scalability",
+      "Migrate to OAuth2 for Enhanced Authentication",
+      "Transition to Cloud-based Hosting Environment",
+      "Integrate Multi-language Support Across Platform"
+    ]
+  };
 
-  // objects/footprint.ts
-  var Footprint;
-  ((Footprint2) => {
-    const LIFETIME = 1e3;
-    function tick6(obj, map) {
-      if (obj.tact > LIFETIME) {
-        map.remove([obj]);
-      } else {
-        obj.tact += 1;
-      }
-    }
-    Footprint2.tick = tick6;
-    __name(tick6, "tick");
-  })(Footprint || (Footprint = {}));
+  // objects/commit.ts
+  var commit_exports = {};
+  __export(commit_exports, {
+    make: () => make5
+  });
+  function make5(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false,
+      hash: generateId(8)
+    };
+  }
+  __name(make5, "make");
+  function byteToHex(byte) {
+    return ("0" + byte.toString(16)).slice(-2);
+  }
+  __name(byteToHex, "byteToHex");
+  function generateId(len = 40) {
+    var arr = new Uint8Array(len / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, byteToHex).join("");
+  }
+  __name(generateId, "generateId");
+
+  // objects/coffee.ts
+  var coffee_exports = {};
+  __export(coffee_exports, {
+    make: () => make6
+  });
+  function make6(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make6, "make");
+
+  // objects/objects.ts
+  var objects_exports = {};
+  __export(objects_exports, {
+    filter: () => filter
+  });
+  var import_lodash3 = __toESM(require_lodash());
+  function filter(objs, type) {
+    return import_lodash3.default.filter(objs, (x) => x.type == type);
+  }
+  __name(filter, "filter");
 
   // objects/player.ts
-  var import_lodash7 = __toESM(require_lodash());
-
-  // game/effects.ts
-  var import_lodash6 = __toESM(require_lodash());
-  var Effects;
-  ((Effects2) => {
-    function append(effects, other) {
-      if (!import_lodash6.default.isArray(other)) {
-        other = [other];
-      }
-      for (const effect of other) {
-        effects.push(effect);
-      }
-    }
-    Effects2.append = append;
-    __name(append, "append");
-  })(Effects || (Effects = {}));
+  var import_lodash4 = __toESM(require_lodash());
 
   // game/messages.ts
   var startedStory = /* @__PURE__ */ __name((story) => ({
@@ -7355,13 +6389,89 @@
     ttl: 100
   }), "startedStory");
 
-  // objects/tasks/story.ts
-  var story_exports = {};
-  __export(story_exports, {
-    addCommit: () => addCommit,
-    make: () => make5
+  // geometry/direction.ts
+  var direction_exports = {};
+  __export(direction_exports, {
+    all: () => all2,
+    reverse: () => reverse,
+    toRose: () => toRose
   });
-  function make5(story) {
+  function reverse(direction) {
+    switch (direction) {
+      case "down":
+        return "up";
+      case "up":
+        return "down";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
+  }
+  __name(reverse, "reverse");
+  function toRose(directions) {
+    const rose = {};
+    for (const direction of directions) {
+      rose[direction] = true;
+    }
+    return rose;
+  }
+  __name(toRose, "toRose");
+  var all2 = ["left", "right", "down", "up"];
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    n: () => n,
+    s: () => s,
+    w: () => w
+  });
+  function n(v) {
+    return { x: v.x, y: v.y - 1 };
+  }
+  __name(n, "n");
+  function s(v) {
+    return { x: v.x, y: v.y + 1 };
+  }
+  __name(s, "s");
+  function w(v) {
+    return { x: v.x - 1, y: v.y };
+  }
+  __name(w, "w");
+  function e(v) {
+    return { x: v.x + 1, y: v.y };
+  }
+  __name(e, "e");
+
+  // geometry/index.ts
+  function moveBy(vector, direction) {
+    switch (direction) {
+      case "down":
+        return { ...vector, x: vector.x, y: vector.y + 1 };
+      case "up":
+        return { ...vector, x: vector.x, y: vector.y - 1 };
+      case "left":
+        return { ...vector, x: vector.x - 1, y: vector.y };
+      case "right":
+        return { ...vector, x: vector.x + 1, y: vector.y };
+    }
+  }
+  __name(moveBy, "moveBy");
+
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
+
+  // objects/tasks/story.ts
+  var story_exports2 = {};
+  __export(story_exports2, {
+    addCommit: () => addCommit,
+    make: () => make7
+  });
+  function make7(story) {
     return {
       type: "story",
       story,
@@ -7370,12 +6480,12 @@
       appliedCommits: 0
     };
   }
-  __name(make5, "make");
+  __name(make7, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
-      Effects.append(effects, Effect.addImpact(task.impact));
-      Effects.append(effects, Effect.showMessage(`Finished ${task.story.name}`, 30));
+      append(effects, addImpact(task.impact));
+      append(effects, showMessage(`Finished ${task.story.name}`, 30));
       player.task = null;
     }
     return effects;
@@ -7383,8 +6493,8 @@
   __name(addCommit, "addCommit");
 
   // objects/player.ts
-  var logger2 = Logging.make("player");
-  function make6(position) {
+  var logger2 = make("player");
+  function make8(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7397,10 +6507,11 @@
       task: null,
       flags: {
         spedUp: false
-      }
+      },
+      level: all[0]
     };
   }
-  __name(make6, "make");
+  __name(make8, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -7419,7 +6530,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash7.default.every(objs, canMoveOnObj);
+      const result = import_lodash4.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -7461,22 +6572,22 @@
           const task = player.task;
           switch (task.type) {
             case "story":
-              story_exports.addCommit(player, task, item, effects);
+              story_exports2.addCommit(player, task, item, effects);
               player.item = null;
               break;
           }
           return true;
         } else {
-          Effects.append(effects, Effect.showMessage("No task to apply commit to", 3e3));
+          append(effects, showMessage("No task to apply commit to", 3e3));
           return false;
         }
       case "coffee":
-        Effects.append(effects, Effect.showMessage("Drinking coffee", 3e3));
+        append(effects, showMessage("Drinking coffee", 3e3));
         player.flags.spedUp = config_default.items.coffee.speedUpDays;
         player.item = null;
         return true;
       case "door":
-        Effects.append(effects, Effect.showMessage("Placing door", 3e3));
+        append(effects, showMessage("Placing door", 3e3));
         item.position = player.position;
         map.add(item);
         item.placed = true;
@@ -7507,7 +6618,7 @@
         player.item = newItem;
         return true;
       case "story":
-        player.task = story_exports.make(newItem);
+        player.task = story_exports2.make(newItem);
         return false;
       default:
         assertUnreachable(newItem);
@@ -7607,7 +6718,7 @@
     player.commands = player.commands.filter((x) => x.tact < 10);
   }
   __name(processCommands, "processCommands");
-  function tick4(player, game, commands, ticksPassed) {
+  function tick2(player, game, commands, ticksPassed) {
     const effects = [];
     let pickedSomething = false;
     let carriedSomething = player.item != null;
@@ -7624,22 +6735,22 @@
             case "coffee":
               if (canPickItem(player, obj)) {
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
-                Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40));
+                append(effects, showMessage(`Picked a ${obj.type}`, 40));
                 pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "commit":
               if (canPickItem(player, obj)) {
                 logger2(`Can pick item  ${JSON.stringify(player)}`);
-                Effects.append(
+                append(
                   effects,
-                  Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
+                  showMessage(`Picked a commit ${obj.hash}`, 40)
                 );
                 pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "story":
-              const task = story_exports.make(obj);
+              const task = story_exports2.make(obj);
               if (canTakeTask(task, player)) {
                 takeTask(player, task, game);
                 game.map.remove(obj);
@@ -7663,12 +6774,941 @@
     }
     return effects;
   }
+  __name(tick2, "tick");
+
+  // game/game_time.ts
+  var game_time_exports = {};
+  __export(game_time_exports, {
+    make: () => make9
+  });
+
+  // game/day_of_week.ts
+  var all3 = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  // game/game_time.ts
+  function make9(ticks) {
+    const day = Math.floor(ticks / config_default.dayTicks);
+    const dayOfWeek = all3[day % 7];
+    return {
+      ticks,
+      day,
+      dayOfWeek
+    };
+  }
+  __name(make9, "make");
+
+  // game/sprint.ts
+  function make10() {
+    return {
+      day: 0,
+      daysLeft: 0
+    };
+  }
+  __name(make10, "make");
+  function generatePlan(startTick) {
+    const DAY = config_default.dayTicks;
+    const SPRINT_DAYS = 10;
+    const plan2 = make2();
+    const addEvent2 = /* @__PURE__ */ __name((event) => {
+      addEvent(plan2, startTick, event);
+    }, "addEvent");
+    addEvent2({ type: "sprintStart" });
+    addEvent2({ type: "groomBacklogStart" });
+    const storySizes = [
+      "small",
+      "small",
+      "small",
+      "medium",
+      "medium",
+      "large"
+    ];
+    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
+    let sprintDay = 1;
+    addEvent2({
+      type: "sprintDayStart",
+      sprintDay,
+      sprintDaysLeft: SPRINT_DAYS - sprintDay,
+      ...make9(startTick)
+    });
+    const groomingStart = startTick;
+    for (const t of times) {
+      startTick = groomingStart + t[1];
+      addEvent2({ type: "createBacklogIssue", size: t[0] });
+    }
+    startTick += DAY - 1;
+    addEvent2({ type: "groomBacklogEnd" });
+    addEvent2({
+      type: "sprintDayEnd",
+      sprintDay,
+      sprintDaysLeft: SPRINT_DAYS - sprintDay,
+      ...make9(startTick)
+    });
+    startTick += 1;
+    for (const i of import_lodash5.default.range(4)) {
+      const day = Math.floor(startTick / DAY);
+      sprintDay += 1;
+      addEvent2({
+        type: "sprintDayStart",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make9(startTick)
+      });
+      startTick += DAY - 1;
+      addEvent2({
+        type: "sprintDayEnd",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make9(startTick)
+      });
+      startTick += 1;
+    }
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    for (const i of import_lodash5.default.range(4)) {
+      sprintDay += 1;
+      addEvent2({
+        type: "sprintDayStart",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make9(startTick)
+      });
+      startTick += DAY - 1;
+      addEvent2({
+        type: "sprintDayEnd",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make9(startTick)
+      });
+      startTick += 1;
+    }
+    addEvent2({ type: "sprintEnd" });
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    return [plan2, startTick];
+  }
+  __name(generatePlan, "generatePlan");
+  function* tick3(sprint, game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "createBacklogIssue":
+            const story = make4(game.map.getRandomEmptyLocation(), event.size);
+            game.map.add(story);
+            yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
+            break;
+          case "groomBacklogEnd":
+          case "collapseStart":
+            break;
+          case "groomBacklogStart":
+            yield showMessage("Grooming backlog ...", 2e3);
+            break;
+          case "sprintDayEnd":
+            break;
+          case "sprintDayStart":
+            sprint.day = event.sprintDay;
+            sprint.daysLeft = event.sprintDaysLeft;
+            yield showMessage(
+              `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+              3e3
+            );
+            break;
+          case "sprintEnd":
+            yield showMessage("Sprint ended", 3e3);
+            const stories = objects_exports.filter(game.map.objects, "story");
+            game.map.remove(stories);
+            if (game.player.task != null) {
+              yield showMessage(`Abandoned ${game.player.task}`, 2e3);
+              game.player.task = null;
+            }
+            break;
+          case "sprintStart":
+            break;
+          case "weekendStart":
+            yield showMessage("Weekend, finally!!!", 3e3);
+            break;
+          case "weekendEnd":
+            yield showMessage("End of Weekend :(", 3e3);
+            break;
+          case "gameEnded":
+          case "gameStarted":
+            break;
+          case "dayStarted":
+            break;
+          case "performanceReview":
+            break;
+          default:
+            assertUnreachable(event);
+        }
+      }
+    }
+  }
+  __name(tick3, "tick");
+
+  // game/plan.ts
+  var import_lodash6 = __toESM(require_lodash());
+  function make2() {
+    return /* @__PURE__ */ new Map();
+  }
+  __name(make2, "make");
+  function addEvent(plan2, time, event) {
+    if (!plan2.has(time)) {
+      plan2.set(time, []);
+    }
+    plan2.get(time).push(event);
+  }
+  __name(addEvent, "addEvent");
+  function append2(plan2, other) {
+    for (const time of other.keys()) {
+      for (const event of other.get(time)) {
+        addEvent(plan2, time, event);
+      }
+    }
+    return plan2;
+  }
+  __name(append2, "append");
+  function generatePlan2(startDay) {
+    let plan2 = make2();
+    let startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const r = generatePlan(startTick);
+      append2(plan2, r[0]);
+      startTick = r[1];
+    }
+    startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const pplan = PerformanceReview.generatePlan(startTick);
+      append2(plan2, pplan);
+      startTick += 28;
+    }
+    append2(plan2, plan());
+    return plan2;
+  }
+  __name(generatePlan2, "generatePlan");
+
+  // game/collapse.ts
+  function make11() {
+    return {};
+  }
+  __name(make11, "make");
+  function plan() {
+    const plan2 = make2();
+    addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
+    return plan2;
+  }
+  __name(plan, "plan");
+  function tick4(game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events && events.some((event) => event.type === "collapseStart")) {
+      game.collapse = make11();
+    }
+    if (game.collapse) {
+      const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
+        (obj) => obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
+      );
+      const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
+      const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
+      const removeWalls = select(walls, removeTicks);
+      game.map.remove(removeWalls);
+    }
+    return [];
+  }
   __name(tick4, "tick");
+
+  // game/game.ts
+  var game_exports = {};
+  __export(game_exports, {
+    GameMap: () => map_exports,
+    Score: () => score_exports,
+    handleEffects: () => handleEffects,
+    load: () => load,
+    make: () => make14,
+    message: () => message,
+    save: () => save,
+    tick: () => tick6,
+    toJson: () => toJson
+  });
+
+  // game/item_generator.ts
+  function make12() {
+    return { state: { type: "waiting", tact: 0 } };
+  }
+  __name(make12, "make");
+  function tick5(itemGenerator, game) {
+    switch (itemGenerator.state.type) {
+      case "waiting":
+        if (itemGenerator.state.tact > config_default.itemGenerator.start)
+          itemGenerator.state = { type: "generating", tact: 0 };
+        else {
+          itemGenerator.state.tact += 1;
+        }
+      case "generating":
+        if (itemGenerator.state.tact > config_default.itemGenerator.interval) {
+          itemGenerator.state.tact = 0;
+          const item_type = choice(
+            ["door", "commit", "coffee"],
+            [1, 90, 10]
+          );
+          let item;
+          switch (item_type) {
+            case "door":
+              item = door_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "commit":
+              item = commit_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "coffee":
+              item = coffee_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            default:
+              assertUnreachable(item_type);
+          }
+        } else {
+          itemGenerator.state.tact += 1;
+        }
+    }
+  }
+  __name(tick5, "tick");
+
+  // game/map.ts
+  var map_exports = {};
+  __export(map_exports, {
+    GameMap: () => GameMap,
+    directionTo: () => directionTo
+  });
+  var _9 = __toESM(require_lodash());
+
+  // generator.ts
+  var import_lodash7 = __toESM(require_lodash());
+
+  // room.ts
+  function upperDoors(room) {
+    return room.doors.filter((x) => x.y < room.position.y).length;
+  }
+  __name(upperDoors, "upperDoors");
+  function lowerDoors(room) {
+    return room.doors.filter((x) => x.y > room.position.y).length;
+  }
+  __name(lowerDoors, "lowerDoors");
+
+  // generator.ts
+  function check(t, f) {
+    while (true) {
+      const tt = t();
+      if (f(tt))
+        return tt;
+    }
+  }
+  __name(check, "check");
+  function maze(size, game) {
+    const outer_walls = hline({ x: 0, y: 0 }, size.x).concat(vline({ x: 0, y: 0 }, size.y)).concat(vline({ x: size.x - 1, y: 0 }, size.y)).map(
+      (point) => ({
+        position: point,
+        type: "wall",
+        zIndex: 0
+      })
+    );
+    game.map.add(outer_walls);
+    const inner_walls = import_lodash7.default.range(0, size.y, 2).map((y) => hline({ x: 0, y }, size.x)).flatMap((x) => x).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(inner_walls);
+    const room_walls = roomWalls({
+      height: size.y,
+      width: size.x,
+      wallsPerRow: { min: 3, max: 7 }
+    }).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(room_walls);
+    generateRoomDoors(game.map);
+  }
+  __name(maze, "maze");
+  function roomWalls(args) {
+    const room_walls = import_lodash7.default.flatMap(
+      import_lodash7.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash7.default.flatMap(
+          check(
+            () => ints(
+              0,
+              args.width,
+              int(args.wallsPerRow.min, args.wallsPerRow.max)
+            ),
+            (x) => proper_distance(x.concat([0, args.width]))
+          ).map((x) => vline({ x, y }, 1))
+        )
+      )
+    );
+    return room_walls;
+  }
+  __name(roomWalls, "roomWalls");
+  function generateRoomDoors(map) {
+    for (let row = 3; row <= map.height - 2; row += 2) {
+      const rooms = getRowRooms(map, row);
+      makeRoomDoors(map, rooms);
+      const doors = import_lodash7.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      for (const door of doors) {
+        const objs = map.at(door);
+        map.remove(objs);
+      }
+    }
+  }
+  __name(generateRoomDoors, "generateRoomDoors");
+  function desiredNumOfDoors(room) {
+    const a = [
+      [3, 0, 1],
+      [6, 1, 2],
+      [100, 2, 5]
+    ];
+    const min_max = import_lodash7.default.find(a, (x) => x[0] > room.length);
+    return int(min_max[1], min_max[2]);
+  }
+  __name(desiredNumOfDoors, "desiredNumOfDoors");
+  function noWalls(map, xs, y) {
+    for (const x of xs) {
+      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
+        return false;
+      }
+    }
+    return true;
+  }
+  __name(noWalls, "noWalls");
+  function makeRoomDoors(map, rooms) {
+    for (const room of rooms) {
+      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
+      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
+      const xx = check(
+        () => ints(room.position.x, room.position.x + room.length, num_of_lower),
+        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
+      );
+      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
+    }
+    return rooms;
+  }
+  __name(makeRoomDoors, "makeRoomDoors");
+  function getRowRooms(map, row) {
+    const rooms = [];
+    let currentRoom = {
+      position: { x: 0, y: 0 },
+      length: 0,
+      doors: []
+    };
+    for (let x = 0; x < map.width; x++) {
+      const c = { x, y: row };
+      if (map.at(vector_exports.n(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.n(c));
+      }
+      if (map.at(vector_exports.s(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.s(c));
+      }
+      if (map.at({ x, y: row }).length > 0) {
+        if (currentRoom.length > 0)
+          rooms.push(currentRoom);
+        currentRoom = {
+          position: { x, y: row },
+          length: 1,
+          doors: []
+        };
+      } else {
+        currentRoom.length += 1;
+      }
+    }
+    return rooms;
+  }
+  __name(getRowRooms, "getRowRooms");
+  function proper_distance(walls) {
+    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
+    const sorted_walls = import_lodash7.default.sortBy(walls);
+    const distances = import_lodash7.default.chain(import_lodash7.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash7.default.every(
+      distances.map((x) => x[1] - x[0]),
+      (x) => x > 2
+    );
+    return result;
+  }
+  __name(proper_distance, "proper_distance");
+  function line(start, direction, size) {
+    const line_vector = [];
+    for (let i = 0; i < size; ++i) {
+      line_vector.push({
+        x: start.x + i * direction.x,
+        y: start.y + i * direction.y
+      });
+    }
+    return line_vector;
+  }
+  __name(line, "line");
+  function hline(start, size) {
+    return line(start, { x: 1, y: 0 }, size);
+  }
+  __name(hline, "hline");
+  function vline(start, size) {
+    return line(start, { x: 0, y: 1 }, size);
+  }
+  __name(vline, "vline");
+
+  // game/map.ts
+  var _GameMap = class _GameMap {
+    constructor(width, height, objs) {
+      this.width = width;
+      this.height = height;
+      const a = _9.range(1, 21);
+      this.cells = _9.chunk(
+        _9.range(width * height).map((x) => []),
+        width
+      );
+      this.objects = [];
+      this.add(objs);
+    }
+    add(objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.concat(objs_);
+      for (const obj of objs_) {
+        const objs2 = this.cells[obj.position.y][obj.position.x];
+        objs2.push(obj);
+        this.cells[obj.position.y][obj.position.x] = _9.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+      }
+    }
+    remove(objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.filter((x) => _9.indexOf(objs_, x) == -1);
+      for (const obj of objs_) {
+        this.cells[obj.position.y][obj.position.x] = _9.pull(
+          this.cells[obj.position.y][obj.position.x],
+          obj
+        );
+      }
+    }
+    move(obj, pos) {
+      this.remove([obj]);
+      obj.position = pos;
+      this.add([obj]);
+    }
+    getRandomEmptyLocation() {
+      const [x, y] = check(
+        () => [int(0, this.width), int(0, this.height)],
+        ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
+      );
+      return { x, y };
+    }
+    at(v) {
+      return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
+    }
+    objAt(v, type) {
+      const objs = this.at(v);
+      const objOfType = objs.find((x) => x.type == type) ?? null;
+      return objOfType;
+    }
+    isAt(v, type) {
+      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
+        return false;
+      const objs = this.cells[v.y][v.x];
+      return objs != null ? _9.some(objs, (x) => x.type == type) : false;
+    }
+    possibleDirections(position, type) {
+      const p = [];
+      for (const d of direction_exports.all) {
+        const newPos = moveBy(position, d);
+        if (this.isAt(newPos, type))
+          p.push(d);
+      }
+      return p;
+    }
+    toString() {
+      let s2 = "\n";
+      for (const y of _9.range(this.height)) {
+        for (const x of _9.range(this.width))
+          s2 += repr(this.cells[y][x]);
+        s2 += "\n";
+      }
+      return s2;
+    }
+    toJson() {
+      return {
+        height: this.height,
+        width: this.width,
+        objects: this.objects
+      };
+    }
+    static fromJson(json) {
+      const { width, height, objects } = json;
+      return new _GameMap(width, height, objects);
+    }
+  };
+  __name(_GameMap, "GameMap");
+  var GameMap = _GameMap;
+  function directionTo(position, map, objType) {
+    const dd = _9.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
+    return dd.length ? dd[0] : null;
+  }
+  __name(directionTo, "directionTo");
+  function repr(objs) {
+    if (objs.length > 0) {
+      switch (objs[0].type) {
+        case "wall":
+          return "~";
+        default:
+          return ".";
+      }
+    } else {
+      return " ";
+    }
+  }
+  __name(repr, "repr");
+
+  // game/score.ts
+  var score_exports = {};
+  __export(score_exports, {
+    make: () => make13
+  });
+  function make13() {
+    return {
+      money: 0,
+      impact: 0,
+      stockPrice: 0
+    };
+  }
+  __name(make13, "make");
+
+  // game/game.ts
+  var logger3 = make("game");
+  function make14(size, plan2) {
+    return {
+      map: new GameMap(size.x, size.y, []),
+      commands: [],
+      itemGenerator: make12(),
+      sprint: make10(),
+      score: make13(),
+      messages: [],
+      messageTact: 0,
+      time: {
+        ticks: 0,
+        day: 0,
+        dayOfWeek: "Sunday"
+      },
+      plan: plan2,
+      messageStartTime: null,
+      collapse: null
+    };
+  }
+  __name(make14, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
+  function message(game, m) {
+    if (m.text instanceof Array) {
+      for (const text of m.text) {
+        logger3("message: " + text);
+        game.messages.push({ text, ttl: m.ttl });
+      }
+    } else {
+      game.messages.push({ text: m.text, ttl: m.ttl });
+    }
+  }
+  __name(message, "message");
+  function tick6(game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "createBacklogIssue":
+          case "groomBacklogEnd":
+          case "groomBacklogStart":
+          case "sprintDayEnd":
+          case "sprintDayStart":
+          case "sprintStart":
+          case "sprintEnd":
+          case "weekendStart":
+          case "weekendEnd":
+          case "gameStarted":
+          case "collapseStart":
+          case "dayStarted":
+          case "performanceReview":
+          case "gameEnded":
+            logger3(JSON.stringify(event));
+            break;
+          default:
+            assertUnreachable(event);
+        }
+      }
+    }
+  }
+  __name(tick6, "tick");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    logger3("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        commands,
+        itemGenerator,
+        score,
+        sprint,
+        messages,
+        messageTact,
+        map,
+        time,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find(
+        (x) => x.type === "player"
+      );
+      return {
+        time,
+        score,
+        itemGenerator,
+        sprint,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      };
+    } else {
+      logger3("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
+  // objects/boss.ts
+  var import_lodash8 = __toESM(require_lodash());
+  var BOSS_WEIGHTS = {
+    turn: {
+      visited: 0.2,
+      notVisited: 1
+    },
+    straight: {
+      visited: 0.2,
+      notVisited: 3
+    },
+    back: 1,
+    jump: 5
+  };
+  BOSS_WEIGHTS = {
+    turn: {
+      visited: 1e-6,
+      notVisited: 1
+    },
+    straight: {
+      visited: 1e-7,
+      notVisited: 3
+    },
+    back: 1e-7,
+    jump: 5
+  };
+  function make15() {
+    return {
+      position: {
+        x: 0,
+        y: 0
+      },
+      type: "boss",
+      zIndex: 10,
+      state: { type: "stopped", previous_direction: null }
+    };
+  }
+  __name(make15, "make");
+  function possibleMoves(pos, currentDirection, map) {
+    const result = {};
+    const possible = map.possibleDirections(pos, "wall");
+    const turns = import_lodash8.default.difference(possible, [
+      currentDirection,
+      reverse(currentDirection)
+    ]);
+    if (turns.length > 0) {
+      result.turn = { directions: turns };
+    }
+    if (import_lodash8.default.includes(possible, currentDirection)) {
+      result.straight = { direction: currentDirection };
+    }
+    if (!import_lodash8.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+      result.jump = { directions: [currentDirection] };
+    }
+    if (import_lodash8.default.includes(possible, reverse(currentDirection))) {
+      result.back = {};
+    }
+    return result;
+  }
+  __name(possibleMoves, "possibleMoves");
+  function move(obj, new_pos, new_direction, map) {
+    obj.state = { type: "moving", direction: new_direction, tact: 0 };
+    map.add([
+      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
+    ]);
+    map.move(obj, new_pos);
+  }
+  __name(move, "move");
+  function pipPlayer(obj, player) {
+    player.hrTaskTact = 0;
+  }
+  __name(pipPlayer, "pipPlayer");
+  function tick7(boss, map) {
+    switch (boss.state.type) {
+      case "instructing":
+        break;
+      case "moving":
+        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
+        if (directionToPlayer) {
+          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
+          if (player)
+            pipPlayer(boss, player);
+        }
+        boss.state.tact += 1;
+        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
+          return;
+        }
+        const moves = possibleMoves(boss.position, boss.state.direction, map);
+        if (moves.turn || moves.straight) {
+          const move_types = [
+            moves.turn ? "turn" : null,
+            moves.straight ? "straight" : null
+          ];
+          const move_weights = [
+            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
+            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+          ];
+          if (moves.turn) {
+            console.log(JSON.stringify({ move_types, move_weights }));
+          }
+          const move_choice = choice(
+            import_lodash8.default.compact(move_types),
+            import_lodash8.default.compact(move_weights)
+          );
+          switch (move_choice) {
+            case "turn":
+              const weights = moves.turn.directions.map(
+                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+              );
+              const chosen = choice(moves.turn.directions, weights);
+              boss.state.direction = chosen;
+            case "straight":
+              const new_pos = moveBy(boss.position, boss.state.direction);
+              move(boss, new_pos, boss.state.direction, map);
+          }
+          return;
+        }
+        if (moves.back || moves.jump) {
+          const move_choice = choice(
+            import_lodash8.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash8.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+          );
+          switch (move_choice) {
+            case "back":
+              boss.state.direction = reverse(boss.state.direction);
+              break;
+            case "jump":
+              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
+              break;
+          }
+        }
+        break;
+      case "jumping":
+        boss.state = {
+          type: "jumping",
+          direction: boss.state.direction,
+          tact: boss.state.tact + 1
+        };
+        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
+          move(
+            boss,
+            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+            boss.state.direction,
+            map
+          );
+        }
+        break;
+      case "stopped": {
+        const direction = choose_direction(boss.position, null, map);
+        if (direction != null)
+          boss.state = { type: "moving", direction, tact: 0 };
+        break;
+      }
+    }
+  }
+  __name(tick7, "tick");
+  function choose_direction(pos, least_preferred, map) {
+    const forks = map.possibleDirections(pos, "wall");
+    const b = forks.filter((x) => x[0] != least_preferred);
+    if (b.length != 0) {
+      const direction = choice(b);
+      return direction;
+    } else {
+      return least_preferred;
+    }
+  }
+  __name(choose_direction, "choose_direction");
+
+  // objects/footprint.ts
+  var LIFETIME = 1e3;
+  function tick8(obj, map) {
+    if (obj.tact > LIFETIME) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+  }
+  __name(tick8, "tick");
 
   // renderer.ts
   function render(game) {
     const map = game.map;
-    const buffer = [showMessage(game).split("")];
+    const buffer = [showMessage2(game).split("")];
     for (let y = 0; y < map.height; y++) {
       const row = [];
       for (let x = 0; x < map.width; x++) {
@@ -7684,7 +7724,7 @@
     contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
-  function showMessage(game) {
+  function showMessage2(game) {
     if (game.messages.length > 0) {
       if (game.messageStartTime == null) {
         game.messageStartTime = Date.now();
@@ -7704,7 +7744,7 @@
       return "";
     }
   }
-  __name(showMessage, "showMessage");
+  __name(showMessage2, "showMessage");
   function showTime(game) {
     return (
       // game.time.ticks.toString().padStart(6, "0") +
@@ -7714,7 +7754,7 @@
   }
   __name(showTime, "showTime");
   function showLevel(game) {
-    return " " + EngineeringLevels.all[game.score.level].name;
+    return " " + game.player.level.name;
   }
   __name(showLevel, "showLevel");
   function showTask(game) {
@@ -7750,11 +7790,11 @@
     return true;
   }
   __name(isVisible, "isVisible");
-  function blink(a, b, tick6) {
-    return tick6 % 10 < 5 ? a : b;
+  function blink(a, b, tick10) {
+    return tick10 % 10 < 5 ? a : b;
   }
   __name(blink, "blink");
-  function getRepresentation(map, objs, tick6) {
+  function getRepresentation(map, objs, tick10) {
     let obj = objs.find(isVisible);
     if (obj) {
       switch (obj.type) {
@@ -7766,17 +7806,17 @@
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return blink("*", "@", tick6);
+            return blink("*", "@", tick10);
           } else {
             if (obj.item != null) {
               const item = obj.item;
               switch (item.type) {
                 case "door":
-                  return blink("]", "*", tick6);
+                  return blink("]", "*", tick10);
                 case "commit":
-                  return blink(";", "*", tick6);
+                  return blink(";", "*", tick10);
                 case "coffee":
-                  return blink("c", "*", tick6);
+                  return blink("c", "*", tick10);
                 case "story":
                   return "";
                 default:
@@ -7817,19 +7857,19 @@
       return "\u2557";
     } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
       return "\u255D";
-    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(Vector.w(pos), "wall")) {
+    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
       return "\u2562";
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(Vector.e(pos), "wall")) {
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
       return "\u255F";
     } else if (pos.x == 0 || pos.x == map.width - 1) {
       return "\u2551";
     } else if (pos.y == 0 || pos.y == map.height - 1) {
       return "\u2550";
-    } else if (map.isAt(Vector.n(pos), "wall") && map.isAt(Vector.s(pos), "wall")) {
+    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
       return "\u2502";
-    } else if (map.isAt(Vector.s(pos), "wall")) {
+    } else if (map.isAt(vector_exports.s(pos), "wall")) {
       return "\u252C";
-    } else if (map.isAt(Vector.n(pos), "wall")) {
+    } else if (map.isAt(vector_exports.n(pos), "wall")) {
       return "\u2534";
     } else {
       return "\u2500";
@@ -7839,15 +7879,15 @@
 
   // main.ts
   var MAZE_SIZE = { y: 25, x: 80 };
-  var logger3 = Logging.make("main");
-  Logging.setIsEnabled((name) => import_lodash8.default.includes(["main", "player", "game"], name));
+  var logger4 = make("main");
+  setIsEnabled((name) => import_lodash9.default.includes(["main", "player", "game"], name));
   function main() {
-    const boss = make4();
-    const plan = Plan.generatePlan(0);
-    let game = game_exports.make(MAZE_SIZE, plan);
+    const boss = make15();
+    const plan2 = plan_exports.generatePlan(0);
+    let game = game_exports.make(MAZE_SIZE, plan2);
     maze(MAZE_SIZE, game);
     game.map.add([boss]);
-    game.player = make6(game.map.getRandomEmptyLocation());
+    game.player = make8(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
     game_exports.message(game, {
       text: [
@@ -7860,7 +7900,7 @@
     });
     let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
     window.addEventListener("keydown", (event) => {
-      logger3(`keydown: ${event.key}`);
+      logger4(`keydown: ${event.key}`);
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
@@ -7873,12 +7913,6 @@
           window.clearInterval(interval);
           interval = window.setInterval(() => processTick(game), config_default.tickInterval);
           game_exports.message(game, { text: "Speed decreased", ttl: 2 });
-          break;
-        case "]":
-          game.score.level += 1;
-          break;
-        case "[":
-          game.score.level -= 1;
           break;
         case "s":
           save2(game);
@@ -7942,28 +7976,29 @@
   __name(load2, "load");
   function processTick(game) {
     const fullTick = /* @__PURE__ */ __name(() => {
-      Logging.setTime(game.time.ticks);
+      setTime(game.time.ticks);
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += EngineeringLevels.all[game.score.level].rate;
-      game.time = GameTime.make(game.time.ticks);
+      game.score.money += game.player.level.rate;
+      game.time = game_time_exports.make(game.time.ticks);
       game_exports.tick(game);
-      game_exports.handleEffects(game, Collapse.tick(game));
-      tick(game.itemGenerator, game);
+      game_exports.handleEffects(game, collapse_exports.tick(game));
+      tick5(game.itemGenerator, game);
       if (game.sprint) {
-        game_exports.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player }));
+        game_exports.handleEffects(game, sprint_exports.tick(game.sprint, { ...game, player: game.player }));
       }
+      game_exports.handleEffects(game, PerformanceReview.tick(game));
       for (const obj of game.map.objects) {
-        const result = tick5(obj, game, game.commands, 1);
+        const result = tick9(obj, game, game.commands, 1);
       }
       game.commands = [];
       render(game);
     }, "fullTick");
     const playerTick = /* @__PURE__ */ __name(() => {
-      Logging.setTime(game.time.ticks);
+      setTime(game.time.ticks);
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += EngineeringLevels.all[game.score.level].rate;
-      game.time = GameTime.make(game.time.ticks);
-      const result = tick5(game.player, game, game.commands, 0.5);
+      game.score.money += game.player.level.rate;
+      game.time = game_time_exports.make(game.time.ticks);
+      const result = tick9(game.player, game, game.commands, 0.5);
       game.commands = [];
       render(game);
     }, "playerTick");
@@ -7978,17 +8013,17 @@
     }
   }
   __name(processTick, "processTick");
-  function tick5(obj, game, commands, ticksPassed) {
+  function tick9(obj, game, commands, ticksPassed) {
     let result = { codeBlocks: 0 };
     switch (obj.type) {
       case "boss":
-        tick3(obj, game.map);
+        tick7(obj, game.map);
         break;
       case "footprint":
-        Footprint.tick(obj, game.map);
+        tick8(obj, game.map);
         break;
       case "player":
-        game_exports.handleEffects(game, tick4(obj, game, commands, ticksPassed));
+        game_exports.handleEffects(game, tick2(obj, game, commands, ticksPassed));
         break;
       case "door":
       case "story":
@@ -8001,7 +8036,7 @@
     }
     return result;
   }
-  __name(tick5, "tick");
+  __name(tick9, "tick");
   main();
 })();
 /*! Bundled license information:

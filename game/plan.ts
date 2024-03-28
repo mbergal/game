@@ -1,43 +1,48 @@
+import * as Collapse from "./collapse"
 import { Event } from "./event"
-import { Sprint } from "./sprint"
-import { Collapse } from "./collapse"
+import { PerformanceReview } from "./performance_review"
+import * as Sprint from "./sprint"
 
-import config from "./config"
 import _ from "lodash"
+import config from "./config"
 
-export namespace Plan {
-    export type t = Map<number, Event.t[]>
+export type Plan = Map<number, Event.t[]>
 
-    export function make() {
-        return new Map<number, Event.t[]>()
+export function make() {
+    return new Map<number, Event.t[]>()
+}
+
+export function addEvent(plan: Plan, time: number, event: Event.t) {
+    if (!plan.has(time)) {
+        plan.set(time, [])
     }
+    plan.get(time)!.push(event)
+}
 
-    export function addEvent(plan: t, time: number, event: Event.t) {
-        if (!plan.has(time)) {
-            plan.set(time, [])
+export function append(plan: Plan, other: Plan): Plan {
+    for (const time of other.keys()) {
+        for (const event of other.get(time)!) {
+            addEvent(plan, time, event)
         }
-        plan.get(time)!.push(event)
+    }
+    return plan
+}
+
+export function generatePlan(startDay: number): Plan {
+    let plan = make()
+    let startTick = startDay * config.dayTicks
+    for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
+        const r = Sprint.generatePlan(startTick)
+        append(plan, r[0])
+        startTick = r[1]
+    }
+    startTick = startDay * config.dayTicks
+    for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
+        const pplan = PerformanceReview.generatePlan(startTick)
+        append(plan, pplan)
+        startTick += 28
     }
 
-    export function append(plan: t, other: t): t {
-        for (const time of other.keys()) {
-            for (const event of other.get(time)!) {
-                addEvent(plan, time, event)
-            }
-        }
-        return plan
-    }
-
-    export function generatePlan(startDay: number): t {
-        let plan = make()
-        let startTick = startDay * config.dayTicks
-        for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
-            const r = Sprint.generateSprint(startTick)
-            append(plan, r[0])
-            startTick = r[1]
-        }
-
-        append(plan, Collapse.plan())
-        return plan
-    }
+    append(plan, Collapse.plan())
+    return plan
 }

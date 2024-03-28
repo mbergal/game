@@ -1,0 +1,7 @@
+export * as GameObject from "./object"
+export * as GameObjects from "./objects"
+export * as Coffee from "./coffee"
+export * as Commit from "./commit"
+export * as Door from "./door"
+export * as Player from "./player"
+export * as Story from "./story"

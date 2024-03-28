@@ -1,8 +1,8 @@
 import * as Direction from "./direction"
-import { Vector } from "./vector"
+import * as Vector from "./vector"
 
 export * as Direction from "./direction"
-export { Vector } from "./vector"
+export * as Vector from "./vector"
 
 export function moveBy(vector: Vector.Vector, direction: Direction.t): Vector.Vector {
     switch (direction) {

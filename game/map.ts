@@ -2,9 +2,8 @@ import * as _ from "lodash"
 import { Vector, Direction, moveBy } from "../geometry"
 
 import * as random from "../utils/random"
-import { GameObject } from "../objects/object"
+import { GameObject } from "../objects"
 import { check } from "../generator"
-import { Game } from "."
 
 export class GameMap {
     width: number

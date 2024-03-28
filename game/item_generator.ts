@@ -1,23 +1,19 @@
-import { Coffee } from "../objects/coffee"
-import { Commit } from "../objects/commit"
-import { Door } from "../objects/door"
-import * as random from "../utils/random"
-import { assertUnreachable } from "../utils/utils"
-import * as Game from "./game"
+import { Coffee, Commit, Door } from "@/objects"
+import * as random from "@/utils/random"
+import { assertUnreachable } from "@/utils/utils"
 import config from "./config"
+import * as Game from "./game"
 
 type Waiting = { type: "waiting"; tact: number }
 type Generating = { type: "generating"; tact: number }
 
-export type t = { state: Waiting | Generating }
+export type ItemGenerator = { state: Waiting | Generating }
 
-export interface ItemGenerator extends t {}
-
-export function make(): t {
+export function make(): ItemGenerator {
     return { state: { type: "waiting", tact: 0 } }
 }
 
-export function tick(itemGenerator: t, game: Game.Game) {
+export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
     switch (itemGenerator.state.type) {
         case "waiting":
             if (itemGenerator.state.tact > config.itemGenerator.start)

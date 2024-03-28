@@ -1,23 +1,23 @@
 import _ from "lodash"
-import { Command } from "./command"
-import { Game } from "./game"
-import { Collapse } from "./game/collapse"
+import * as Command from "./command"
+import { Game, Collapse, Plan, Sprint, GameTime } from "./game"
+
 import config from "./game/config"
-import { GameStorage } from "./game/game"
-import { GameTime } from "./game/game_time"
+
 import * as ItemGenerator from "./game/item_generator"
-import { EngineeringLevels } from "./game/levels"
-import { Plan } from "./game/plan"
-import { Sprint } from "./game/sprint"
+import * as EngineeringLevels from "./game/levels"
+import { GameObject } from "./objects"
 import * as MazeGenerator from "./generator"
 import { Vector } from "./geometry"
 import * as Boss from "./objects/boss"
-import { Footprint } from "./objects/footprint"
-import { GameObject } from "./objects/object"
+import * as Footprint from "./objects/footprint"
+
 import * as Player from "./objects/player"
+import { PerformanceReview } from "./game/performance_review"
 import { render } from "./renderer"
-import { Logging } from "./utils/logging"
+import * as Logging from "./utils/logging"
 import { assertUnreachable } from "./utils/utils"
+import { GameStorage } from "./game/game_storage"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
@@ -26,10 +26,10 @@ const logger = Logging.make("main")
 Logging.setIsEnabled((name: string) => _.includes(["main", "player", "game"], name))
 
 export function main() {
-    const boss: Boss.t = Boss.make()
-    const plan: Plan.t = Plan.generatePlan(0)
+    const boss: Boss.Boss = Boss.make()
+    const plan: Plan.Plan = Plan.generatePlan(0)
 
-    let game: Game.t = Game.make(MAZE_SIZE, plan)
+    let game: Game.Game = Game.make(MAZE_SIZE, plan)
     MazeGenerator.maze(MAZE_SIZE, game)
 
     game.map.add([boss])
@@ -64,12 +64,12 @@ export function main() {
                 interval = window.setInterval(() => processTick(game), config.tickInterval)
                 Game.message(game, { text: "Speed decreased", ttl: 2 })
                 break
-            case "]":
-                game.score.level += 1
-                break
-            case "[":
-                game.score.level -= 1
-                break
+            // case "]":
+            //     game.score.level += 1
+            //     break
+            // case "[":
+            //     game.score.level -= 1
+            //     break
             case "s":
                 save(game)
                 break
@@ -94,7 +94,7 @@ export function main() {
     render(game)
 }
 
-function getCommand(key: string): Command.t | null | undefined {
+function getCommand(key: string): Command.Command | null | undefined {
     switch (key) {
         case "ArrowUp":
             return { type: "move", direction: "up" }
@@ -125,21 +125,21 @@ const localStorage: GameStorage = {
     },
 }
 
-export function save(game: Game.t) {
+export function save(game: Game.Game) {
     Game.save(game, localStorage)
     console.log("Game saved!")
 }
 
-export function load(): Game.t | null {
+export function load(): Game.Game | null {
     return Game.load(localStorage)
 }
 
-function processTick(game: Game.t) {
+function processTick(game: Game.Game) {
     const fullTick = () => {
         Logging.setTime(game.time.ticks)
         game.score.stockPrice =
             100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-        game.score.money += EngineeringLevels.all[game.score.level].rate
+        game.score.money += game.player!.level.rate
         game.time = GameTime.make(game.time.ticks)
 
         Game.tick(game)
@@ -149,6 +149,8 @@ function processTick(game: Game.t) {
         if (game.sprint) {
             Game.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
         }
+
+        Game.handleEffects(game, PerformanceReview.tick(game))
 
         for (const obj of game.map.objects) {
             const result = tick(obj, game, game.commands, 1)
@@ -161,7 +163,7 @@ function processTick(game: Game.t) {
         Logging.setTime(game.time.ticks)
         game.score.stockPrice =
             100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-        game.score.money += EngineeringLevels.all[game.score.level].rate
+        game.score.money += game.player!.level.rate
         game.time = GameTime.make(game.time.ticks)
         const result = tick(game.player!, game, game.commands, 0.5)
         game.commands = []
@@ -183,7 +185,12 @@ interface Result {
     codeBlocks: number
 }
 
-function tick(obj: GameObject.t, game: Game.t, commands: Command.t[], ticksPassed: number): Result {
+function tick(
+    obj: GameObject.t,
+    game: Game.Game,
+    commands: Command.Command[],
+    ticksPassed: number
+): Result {
     let result = { codeBlocks: 0 }
     switch (obj.type) {
         case "boss":

@@ -1,4 +1,4 @@
-import * as Story from "../objects/story"
+import { Story } from "@/objects"
 import * as DayOfWeek from "./day_of_week"
 
 export namespace Event {
@@ -13,7 +13,11 @@ export namespace Event {
     type DayStarted = {
         type: "dayStarted"
         day: number
-        dayOfWeek: DayOfWeek.t
+        dayOfWeek: DayOfWeek.DayOfWeek
+    }
+
+    type PerformanceReview = {
+        type: "performanceReview"
     }
 
     type SprintStart = {
@@ -39,7 +43,7 @@ export namespace Event {
         sprintDay: number
         sprintDaysLeft: number
         day: number
-        dayOfWeek: DayOfWeek.t
+        dayOfWeek: DayOfWeek.DayOfWeek
     }
 
     type SprintDayEnd = {
@@ -73,6 +77,7 @@ export namespace Event {
         | GameEnded
         | DayStarted
         | CollapseStart
+        | PerformanceReview
 
     export type Event = t
 }

@@ -1,16 +1,13 @@
 import _ from "lodash"
-import { Effect } from "./effect"
+import * as Effect from "./effect"
 
-export namespace Effects {
-    export type t = Array<Effect.t>
-    export type Effects = t
+export type Effects = Array<Effect.Effect>
 
-    export function append(effects: t, other: t | Effect.t) {
-        if (!_.isArray(other)) {
-            other = [other]
-        }
-        for (const effect of other) {
-            effects.push(effect)
-        }
+export function append(effects: Effects, other: Effect.Effect | Effects) {
+    if (!_.isArray(other)) {
+        other = [other]
+    }
+    for (const effect of other) {
+        effects.push(effect)
     }
 }

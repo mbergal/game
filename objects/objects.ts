@@ -1,7 +1,7 @@
 import _ from "lodash"
 import * as GameObject from "./object"
 
-export type t = GameObject.t[]
+export type t = GameObject.GameObject[]
 
 export function filter<
     T extends GameObject.GameObjectType,

@@ -2,6 +2,6 @@ import { Vector } from "../geometry"
 
 export interface Wall {
     type: "wall"
-    position: Vector
+    position: Vector.Vector
     zIndex: number
 }
