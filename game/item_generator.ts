@@ -1,4 +1,4 @@
-import { Coffee, Commit, Door } from "@/objects"
+import { Coffee, Commit, Door, Item } from "@/objects"
 import * as random from "@/utils/random"
 import { assertUnreachable } from "@/utils/utils"
 import config from "./config"
@@ -22,14 +22,17 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
                 itemGenerator.state.tact += 1
             }
         case "generating":
-            if (itemGenerator.state.tact > config.itemGenerator.interval) {
+            if (
+                itemGenerator.state.tact > config.itemGenerator.interval &&
+                game.map.objects.filter(Item.isItem).length < config.itemGenerator.maxItems
+            ) {
                 itemGenerator.state.tact = 0
-                const item_type = random.choice(
+                const itemType = random.choice(
                     ["door" as const, "commit" as const, "coffee" as const],
                     [1, 90, 10]
                 )
                 let item
-                switch (item_type) {
+                switch (itemType) {
                     case "door":
                         item = Door.make(game.map.getRandomEmptyLocation())
                         game.map.add([item])
@@ -43,7 +46,7 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
                         game.map.add([item])
                         break
                     default:
-                        assertUnreachable(item_type)
+                        assertUnreachable(itemType)
                 }
             } else {
                 itemGenerator.state.tact += 1

@@ -6080,7 +6080,7 @@
     performanceReview: {
       interval: 28
     },
-    itemGenerator: { start: 0, interval: 40 },
+    itemGenerator: { start: 0, interval: 40, maxItems: 20 },
     items: {
       coffee: {
         speedUpDays: 1
@@ -6163,32 +6163,32 @@
     },
     {
       name: "Senior Engineer I",
-      rate: 40,
+      rate: 50,
       impact: 5
     },
     {
       name: "Senior Engineer II",
-      rate: 40,
+      rate: 60,
       impact: 6
     },
     {
       name: "Engineering Lead",
-      rate: 40,
+      rate: 70,
       impact: 7
     },
     {
       name: "Staff Engineer I",
-      rate: 40,
+      rate: 80,
       impact: 8
     },
     {
       name: "Staff Engineer II",
-      rate: 40,
+      rate: 90,
       impact: 9
     },
     {
       name: "Principal Engineer",
-      rate: 40,
+      rate: 100,
       impact: 10
     }
   ];
@@ -6248,12 +6248,53 @@
   });
   var import_lodash5 = __toESM(require_lodash());
 
-  // objects/door.ts
-  var door_exports = {};
-  __export(door_exports, {
+  // objects/coffee.ts
+  var coffee_exports = {};
+  __export(coffee_exports, {
     make: () => make3
   });
   function make3(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make3, "make");
+
+  // objects/commit.ts
+  var commit_exports = {};
+  __export(commit_exports, {
+    make: () => make4
+  });
+  function make4(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false,
+      hash: generateId(8)
+    };
+  }
+  __name(make4, "make");
+  function byteToHex(byte) {
+    return ("0" + byte.toString(16)).slice(-2);
+  }
+  __name(byteToHex, "byteToHex");
+  function generateId(len = 40) {
+    var arr = new Uint8Array(len / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, byteToHex).join("");
+  }
+  __name(generateId, "generateId");
+
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make5
+  });
+  function make5(position) {
     return {
       type: "door",
       position,
@@ -6262,7 +6303,38 @@
       placed: false
     };
   }
-  __name(make3, "make");
+  __name(make5, "make");
+
+  // objects/item.ts
+  var item_exports = {};
+  __export(item_exports, {
+    isItem: () => isItem
+  });
+
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
+
+  // objects/item.ts
+  function isItem(obj) {
+    switch (obj.type) {
+      case "door":
+      case "commit":
+      case "story":
+      case "coffee":
+        return true;
+      case "wall":
+      case "boss":
+      case "footprint":
+      case "player":
+        return false;
+      default:
+        assertUnreachable(obj);
+    }
+  }
+  __name(isItem, "isItem");
 
   // objects/story_size.ts
   function toString(size) {
@@ -6278,7 +6350,7 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make4(position, size) {
+  function make6(position, size) {
     return {
       type: "story",
       position,
@@ -6288,7 +6360,7 @@
       name: choice(storyNames[size])
     };
   }
-  __name(make4, "make");
+  __name(make6, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6327,47 +6399,6 @@
       "Integrate Multi-language Support Across Platform"
     ]
   };
-
-  // objects/commit.ts
-  var commit_exports = {};
-  __export(commit_exports, {
-    make: () => make5
-  });
-  function make5(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false,
-      hash: generateId(8)
-    };
-  }
-  __name(make5, "make");
-  function byteToHex(byte) {
-    return ("0" + byte.toString(16)).slice(-2);
-  }
-  __name(byteToHex, "byteToHex");
-  function generateId(len = 40) {
-    var arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, byteToHex).join("");
-  }
-  __name(generateId, "generateId");
-
-  // objects/coffee.ts
-  var coffee_exports = {};
-  __export(coffee_exports, {
-    make: () => make6
-  });
-  function make6(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make6, "make");
 
   // objects/objects.ts
   var objects_exports = {};
@@ -6458,12 +6489,6 @@
     }
   }
   __name(moveBy, "moveBy");
-
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
 
   // objects/tasks/story.ts
   var story_exports2 = {};
@@ -6903,7 +6928,7 @@
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make4(game.map.getRandomEmptyLocation(), event.size);
+            const story = make6(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
             yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
             break;
@@ -7053,14 +7078,14 @@
           itemGenerator.state.tact += 1;
         }
       case "generating":
-        if (itemGenerator.state.tact > config_default.itemGenerator.interval) {
+        if (itemGenerator.state.tact > config_default.itemGenerator.interval && game.map.objects.filter(item_exports.isItem).length < config_default.itemGenerator.maxItems) {
           itemGenerator.state.tact = 0;
-          const item_type = choice(
+          const itemType = choice(
             ["door", "commit", "coffee"],
             [1, 90, 10]
           );
           let item;
-          switch (item_type) {
+          switch (itemType) {
             case "door":
               item = door_exports.make(game.map.getRandomEmptyLocation());
               game.map.add([item]);
@@ -7074,7 +7099,7 @@
               game.map.add([item]);
               break;
             default:
-              assertUnreachable(item_type);
+              assertUnreachable(itemType);
           }
         } else {
           itemGenerator.state.tact += 1;

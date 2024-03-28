@@ -24,32 +24,32 @@ export const all: EngineeringLevel[] = [
     },
     {
         name: "Senior Engineer I",
-        rate: 40,
+        rate: 50,
         impact: 5,
     },
     {
         name: "Senior Engineer II",
-        rate: 40,
+        rate: 60,
         impact: 6,
     },
     {
         name: "Engineering Lead",
-        rate: 40,
+        rate: 70,
         impact: 7,
     },
     {
         name: "Staff Engineer I",
-        rate: 40,
+        rate: 80,
         impact: 8,
     },
     {
         name: "Staff Engineer II",
-        rate: 40,
+        rate: 90,
         impact: 9,
     },
     {
         name: "Principal Engineer",
-        rate: 40,
+        rate: 100,
         impact: 10,
     },
 ]

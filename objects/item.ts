@@ -1,6 +1,25 @@
-import { Direction, Vector } from "../geometry"
+import * as Door from "./door"
+import * as Commit from "./commit"
+import * as Story from "./story"
+import * as Coffee from "./coffee"
+import * as GameObject from "./object"
+import { assertUnreachable } from "@/utils/utils"
 
-export interface t {
-    open: boolean
+export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee
+
+export function isItem(obj: GameObject.GameObject): obj is Item {
+    switch (obj.type) {
+        case "door":
+        case "commit":
+        case "story":
+        case "coffee":
+            return true
+        case "wall":
+        case "boss":
+        case "footprint":
+        case "player":
+            return false
+        default:
+            assertUnreachable(obj)
+    }
 }
-

@@ -23,4 +23,14 @@ export type t =
 
 export type GameObject = t
 export type GameObjectType = t["type"]
+
 export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee
+
+export function isItem(obj: GameObject): obj is Item {
+    return (
+        obj.type === "door" ||
+        obj.type === "commit" ||
+        obj.type === "story" ||
+        obj.type === "coffee"
+    )
+}
