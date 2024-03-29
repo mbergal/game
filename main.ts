@@ -1,53 +1,38 @@
+import { Boss, Footprint, GameObject, Player } from "@/objects"
 import _ from "lodash"
 import * as Command from "./command"
-import { Game, Collapse, Plan, Sprint, GameTime } from "./game"
+import {
+    Collapse,
+    Game,
+    GameStorage,
+    GameTime,
+    ItemGenerator,
+    PerformanceReview,
+    Plan,
+    Sprint,
+    Renderer,
+    Intro,
+} from "./game"
+
+import { Vector } from "./geometry"
 
 import config from "./game/config"
 
-import * as ItemGenerator from "./game/item_generator"
-import * as EngineeringLevels from "./game/levels"
-import { GameObject } from "./objects"
 import * as MazeGenerator from "./generator"
-import { Vector } from "./geometry"
-import * as Boss from "./objects/boss"
-import * as Footprint from "./objects/footprint"
 
-import * as Player from "./objects/player"
-import { PerformanceReview } from "./game/performance_review"
-import { render } from "./renderer"
-import * as Logging from "./utils/logging"
+import { TextWindow, Windows } from "@/ui"
+import * as Logging from "@/utils/logging"
+
 import { assertUnreachable } from "./utils/utils"
-import { GameStorage } from "./game/game_storage"
-import * as Windows from "./ui/windows"
+import { GameWindow } from "./game_window"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
-const logger = Logging.make("main")
+export const logger = Logging.make("main")
 
 Logging.setIsEnabled((name: string) => _.includes(["main", "player", "game"], name))
 
 export function main() {
-    Windows.show(
-        Windows.center(
-            new Windows.TextWindow(
-                [
-                    "        REQUIEM FOR A PROGRAMMER.",
-                    "                                   ",
-                    "       You ('*') are in Agile hell.",
-                    "Earn enough money and get out (if you can)!",
-                    "",
-                    "Keys",
-                    "----",
-                    "",
-                    "Move - arrows",
-                    "Drop item - space",
-                    "Use item - enter",
-                    "stop - end",
-                ].join("\n")
-            )
-        )
-    )
-
     const boss: Boss.Boss = Boss.make()
     const plan: Plan.Plan = Plan.generatePlan(0)
 
@@ -59,84 +44,20 @@ export function main() {
     game.player = Player.make(game.map.getRandomEmptyLocation())
     game.map.add([game.player])
 
-    Game.message(game, {
-        text: [
-            "Requiem for a Programmer.",
-            "You are in Agile hell.",
-            "Earn enough money and get out !!!!!",
-            "'*' is you. Use arrow keys to move.",
-        ],
-        ttl: 3_000,
-    })
-
-    let interval = window.setInterval(() => processTick(game), config.tickInterval)
+    // let interval = window.setInterval(() => processTick(game), config.tickInterval)
 
     window.addEventListener("keydown", (event) => {
-        logger(`keydown: ${event.key}`)
-        switch (event.key) {
-            case "+":
-                config.tickInterval -= 5
-                window.clearInterval(interval)
-                interval = window.setInterval(() => processTick(game), config.tickInterval)
-                Game.message(game, { text: `Speed increased to ${config.tickInterval}`, ttl: 2 })
-                break
-            case "-":
-                config.tickInterval += 5
-                window.clearInterval(interval)
-                interval = window.setInterval(() => processTick(game), config.tickInterval)
-                Game.message(game, { text: "Speed decreased", ttl: 2 })
-                break
-            // case "]":
-            //     game.score.level += 1
-            //     break
-            // case "[":
-            //     game.score.level -= 1
-            //     break
-            case "s":
-                save(game)
-                break
-            case "l": {
-                const loaded = load()
-                if (loaded != null) {
-                    game = loaded
-                }
-                break
-            }
-
-            default: {
-                const command = getCommand(event.key)
-                if (command != null) {
-                    game.commands.push(command)
-                }
-                break
-            }
+        const focused = Windows.focused()
+        if (focused && focused.keydown) {
+            focused.keydown(focused, event)
         }
     })
 
-    render(game)
+    Windows.show(new GameWindow(game, localStorage))
+    Windows.show(Windows.center(new Intro.Window()))
 }
 
-function getCommand(key: string): Command.Command | null | undefined {
-    switch (key) {
-        case "ArrowUp":
-            return { type: "move", direction: "up" }
-        case "ArrowDown":
-            return { type: "move", direction: "down" }
-        case "ArrowLeft":
-            return { type: "move", direction: "left" }
-        case "ArrowRight":
-            return { type: "move", direction: "right" }
-        case "Enter":
-            return { type: "use" }
-        case "End":
-        case "Delete":
-            return { type: "stop" }
-        case " ":
-            return { type: "drop" }
-    }
-}
-
-const localStorage: GameStorage = {
+const localStorage: GameStorage.GameStorage = {
     save(json: string): void {
         window.localStorage.setItem("map", json)
     },
@@ -147,16 +68,7 @@ const localStorage: GameStorage = {
     },
 }
 
-export function save(game: Game.Game) {
-    Game.save(game, localStorage)
-    console.log("Game saved!")
-}
-
-export function load(): Game.Game | null {
-    return Game.load(localStorage)
-}
-
-function processTick(game: Game.Game) {
+export function processTick(game: Game.Game) {
     const fullTick = () => {
         Logging.setTime(game.time.ticks)
         game.score.stockPrice =
@@ -178,7 +90,7 @@ function processTick(game: Game.Game) {
             const result = tick(obj, game, game.commands, 1)
         }
         game.commands = []
-        render(game)
+        Renderer.render(game)
     }
 
     const playerTick = () => {
@@ -189,7 +101,7 @@ function processTick(game: Game.Game) {
         game.time = GameTime.make(game.time.ticks)
         const result = tick(game.player!, game, game.commands, 0.5)
         game.commands = []
-        render(game)
+        Renderer.render(game)
     }
 
     if (!game.player!.flags.spedUp) {

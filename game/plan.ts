@@ -1,6 +1,6 @@
 import * as Collapse from "./collapse"
 import { Event } from "./event"
-import { PerformanceReview } from "./performance_review"
+import * as PerformanceReview from "./performance_review"
 import * as Sprint from "./sprint"
 
 import _ from "lodash"

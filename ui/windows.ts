@@ -1,14 +1,31 @@
+import _ from "lodash"
 import { Vector } from "../geometry"
 import * as Composition from "./composition"
 import * as Screen from "./screens"
 
-export interface Window {
+export class Window {
     position: Vector.Vector
     size: Vector.Vector
-    render(): string[]
+
+    constructor() {
+        this.position = Vector.zero
+        this.size = Vector.zero
+    }
+
+    hide(): void {}
+    show(): void {}
+    render(): string[] {
+        return []
+    }
+
+    keydown: ((window: Window, event: KeyboardEvent) => void) | null = null
 }
 
-export const windows: Window[] = []
+export let windows: Window[] = []
+
+export function focused(): Window | null {
+    return _.last(windows) ?? null
+}
 
 export function show(window: Window): Window {
     windows.push(window)
@@ -18,8 +35,9 @@ export function show(window: Window): Window {
 }
 
 export function hide(window: Window) {
-    windows.splice(windows.indexOf(window), 1)
     window.hide()
+    windows.splice(windows.indexOf(window), 1)
+    Composition.render(windows)
 }
 
 export function move(position: Vector.Vector, window: Window): Window {
@@ -37,40 +55,4 @@ export function center(window: Window): Window {
         window
     )
     return window
-}
-
-export class TextWindow implements Window {
-    contents: string[]
-    position: Vector.Vector
-    size: Vector.Vector
-
-    constructor(text: string) {
-        this.position = { x: 0, y: 0 }
-        const splitText = formatText(text)
-        const width = splitText[0].length
-        const height = splitText.length
-        const topLine = "┏━" + "━".repeat(width) + "━┓"
-        const bottomLine = "┗━" + "━".repeat(width) + "━┛"
-
-        this.contents = [topLine].concat(splitText.map((x) => "┃ " + x + " ┃")).concat([bottomLine])
-        this.size = { x: this.contents[0].length, y: this.contents.length }
-    }
-
-    show() {}
-
-    render(): string[] {
-        return this.contents
-    }
-
-    hide() {}
-
-    keydown(event: KeyboardEvent) {}
-
-    interval() {}
-}
-
-function formatText(text: string) {
-    const lines = text.split("\n")
-    const maxLength = Math.max(...lines.map((x) => x.length))
-    return lines.map((x) => x.padEnd(maxLength, " "))
 }

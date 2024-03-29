@@ -2,7 +2,7 @@ import { Vector } from "../geometry"
 
 const buffer = []
 
-export function render(position: Vector.Vector, chars: string[][]) {
+export function render(chars: string[][]) {
     const contentBlock = document.getElementById("content")
     contentBlock!.innerHTML = chars.map((x) => x.join("")).join("\n")
 }

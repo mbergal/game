@@ -1,8 +1,8 @@
-import { Game, Message, GameMap } from "./game"
-import { Vector } from "./geometry"
-import { GameObject } from "./objects"
-import { assertUnreachable } from "./utils/utils"
-import * as Screen from "./ui/screens"
+import { Game, Message, GameMap } from "."
+import { Vector } from "../geometry"
+import { GameObject } from "../objects"
+import { assertUnreachable } from "../utils/utils"
+import * as Screen from "../ui/screens"
 
 export function render(game: Game.Game) {
     const map = game.map
@@ -29,7 +29,7 @@ export function render(game: Game.Game) {
             " " +
             showStockPrice(game)
     )
-    Screen.render(buffer)
+    return buffer.map((x) => x)
 }
 
 export function showMessage(game: {

@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _12.defaults(root.Object(), context, _12.pick(root, contextProps));
+          context = context == null ? root : _13.defaults(root.Object(), context, _13.pick(root, contextProps));
           var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -5985,29 +5985,107 @@
           }
           return lodash;
         }, "runInContext");
-        var _12 = runInContext();
+        var _13 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _12;
+          root._ = _13;
           define(function() {
-            return _12;
+            return _13;
           });
         } else if (freeModule) {
-          (freeModule.exports = _12)._ = _12;
-          freeExports._ = _12;
+          (freeModule.exports = _13)._ = _13;
+          freeExports._ = _13;
         } else {
-          root._ = _12;
+          root._ = _13;
         }
       }).call(exports);
     }
   });
 
-  // main.ts
-  var import_lodash9 = __toESM(require_lodash());
+  // objects/boss.ts
+  var boss_exports = {};
+  __export(boss_exports, {
+    make: () => make12,
+    possibleMoves: () => possibleMoves,
+    tick: () => tick7
+  });
+  var import_lodash7 = __toESM(require_lodash());
+
+  // geometry/direction.ts
+  var direction_exports = {};
+  __export(direction_exports, {
+    all: () => all,
+    reverse: () => reverse,
+    toRose: () => toRose
+  });
+  function reverse(direction) {
+    switch (direction) {
+      case "down":
+        return "up";
+      case "up":
+        return "down";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
+  }
+  __name(reverse, "reverse");
+  function toRose(directions) {
+    const rose = {};
+    for (const direction of directions) {
+      rose[direction] = true;
+    }
+    return rose;
+  }
+  __name(toRose, "toRose");
+  var all = ["left", "right", "down", "up"];
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    n: () => n,
+    s: () => s,
+    w: () => w,
+    zero: () => zero
+  });
+  function n(v) {
+    return { x: v.x, y: v.y - 1 };
+  }
+  __name(n, "n");
+  function s(v) {
+    return { x: v.x, y: v.y + 1 };
+  }
+  __name(s, "s");
+  function w(v) {
+    return { x: v.x - 1, y: v.y };
+  }
+  __name(w, "w");
+  function e(v) {
+    return { x: v.x + 1, y: v.y };
+  }
+  __name(e, "e");
+  var zero = { x: 0, y: 0 };
+
+  // geometry/index.ts
+  function moveBy(vector, direction) {
+    switch (direction) {
+      case "down":
+        return { ...vector, x: vector.x, y: vector.y + 1 };
+      case "up":
+        return { ...vector, x: vector.x, y: vector.y - 1 };
+      case "left":
+        return { ...vector, x: vector.x - 1, y: vector.y };
+      case "right":
+        return { ...vector, x: vector.x + 1, y: vector.y };
+    }
+  }
+  __name(moveBy, "moveBy");
 
   // game/collapse.ts
   var collapse_exports = {};
   __export(collapse_exports, {
-    make: () => make11,
+    make: () => make7,
     plan: () => plan,
     tick: () => tick4
   });
@@ -6103,8 +6181,16 @@
   __export(plan_exports, {
     addEvent: () => addEvent,
     append: () => append2,
-    generatePlan: () => generatePlan2,
+    generatePlan: () => generatePlan3,
     make: () => make2
+  });
+
+  // game/performance_review.ts
+  var performance_review_exports = {};
+  __export(performance_review_exports, {
+    generatePlan: () => generatePlan,
+    make: () => make3,
+    tick: () => tick2
   });
 
   // game/effects.ts
@@ -6164,11 +6250,11 @@
   // game/levels.ts
   var levels_exports = {};
   __export(levels_exports, {
-    all: () => all,
+    all: () => all2,
     level: () => level
   });
   var import_lodash2 = __toESM(require_lodash());
-  var all = [
+  var all2 = [
     {
       name: "Engineer I",
       rate: 5,
@@ -6217,161 +6303,53 @@
   ];
   function level(impact) {
     let total = 0;
-    for (const level2 of all) {
+    for (const level2 of all2) {
       total += level2.impact;
       if (total >= impact) {
         return level2;
       }
     }
-    return import_lodash2.default.last(all);
+    return import_lodash2.default.last(all2);
   }
   __name(level, "level");
 
   // game/performance_review.ts
   var logger = make("performance_review");
-  var PerformanceReview;
-  ((PerformanceReview2) => {
-    function make17() {
-      return {};
-    }
-    PerformanceReview2.make = make17;
-    __name(make17, "make");
-    function generatePlan3(startTick) {
-      const plan2 = make2();
-      addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
-      return plan2;
-    }
-    PerformanceReview2.generatePlan = generatePlan3;
-    __name(generatePlan3, "generatePlan");
-    function tick10(game) {
-      const effects = [];
-      const events = game.plan.get(game.time.ticks);
-      if (events) {
-        for (const event of events) {
-          switch (event.type) {
-            case "performanceReview":
-              logger("Performance review");
-              game.player.level = level(game.score.impact);
-              append(effects, showMessage("Performance review", 3e3));
-          }
+  function make3() {
+    return {};
+  }
+  __name(make3, "make");
+  function generatePlan(startTick) {
+    const plan2 = make2();
+    addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
+    return plan2;
+  }
+  __name(generatePlan, "generatePlan");
+  function tick2(game) {
+    const effects = [];
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "performanceReview":
+            logger("Performance review");
+            game.player.level = level(game.score.impact);
+            append(effects, showMessage("Performance review", 3e3));
         }
       }
-      return effects;
     }
-    PerformanceReview2.tick = tick10;
-    __name(tick10, "tick");
-  })(PerformanceReview || (PerformanceReview = {}));
+    return effects;
+  }
+  __name(tick2, "tick");
 
   // game/sprint.ts
   var sprint_exports = {};
   __export(sprint_exports, {
-    generatePlan: () => generatePlan,
-    make: () => make10,
+    generatePlan: () => generatePlan2,
+    make: () => make6,
     tick: () => tick3
   });
-  var import_lodash5 = __toESM(require_lodash());
-
-  // objects/coffee.ts
-  var coffee_exports = {};
-  __export(coffee_exports, {
-    make: () => make3
-  });
-  function make3(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make3, "make");
-
-  // objects/commit.ts
-  var commit_exports = {};
-  __export(commit_exports, {
-    make: () => make4
-  });
-  function make4(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false,
-      hash: generateId(8)
-    };
-  }
-  __name(make4, "make");
-  function byteToHex(byte) {
-    return ("0" + byte.toString(16)).slice(-2);
-  }
-  __name(byteToHex, "byteToHex");
-  function generateId(len = 40) {
-    var arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, byteToHex).join("");
-  }
-  __name(generateId, "generateId");
-
-  // objects/door.ts
-  var door_exports = {};
-  __export(door_exports, {
-    make: () => make5
-  });
-  function make5(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false,
-      placed: false
-    };
-  }
-  __name(make5, "make");
-
-  // objects/item.ts
-  var item_exports = {};
-  __export(item_exports, {
-    description: () => description,
-    isItem: () => isItem
-  });
-
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
-
-  // objects/item.ts
-  function isItem(obj) {
-    switch (obj.type) {
-      case "door":
-      case "commit":
-      case "story":
-      case "coffee":
-        return true;
-      case "wall":
-      case "boss":
-      case "footprint":
-      case "player":
-        return false;
-      default:
-        assertUnreachable(obj);
-    }
-  }
-  __name(isItem, "isItem");
-  function description(item) {
-    switch (item.type) {
-      case "door":
-        return "door";
-      case "commit":
-        return `commit ${item.hash}`;
-      case "coffee":
-        return `cup of coffee`;
-      case "story":
-        return `story "${item.name}"`;
-    }
-  }
-  __name(description, "description");
+  var import_lodash3 = __toESM(require_lodash());
 
   // objects/story_size.ts
   function toString(size2) {
@@ -6387,7 +6365,7 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make6(position, size2) {
+  function make4(position, size2) {
     return {
       type: "story",
       position,
@@ -6397,7 +6375,7 @@
       name: choice(storyNames[size2])
     };
   }
-  __name(make6, "make");
+  __name(make4, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6437,99 +6415,1451 @@
     ]
   };
 
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
+
+  // game/game_time.ts
+  var game_time_exports = {};
+  __export(game_time_exports, {
+    make: () => make5
+  });
+
+  // game/day_of_week.ts
+  var all3 = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  // game/game_time.ts
+  function make5(ticks) {
+    const day = Math.floor(ticks / config_default.dayTicks);
+    const dayOfWeek = all3[day % 7];
+    return {
+      ticks,
+      day,
+      dayOfWeek
+    };
+  }
+  __name(make5, "make");
+
+  // game/sprint.ts
+  function make6() {
+    return {
+      day: 0,
+      daysLeft: 0
+    };
+  }
+  __name(make6, "make");
+  function generatePlan2(startTick) {
+    const DAY = config_default.dayTicks;
+    const SPRINT_DAYS = 10;
+    const plan2 = make2();
+    const addEvent2 = /* @__PURE__ */ __name((event) => {
+      addEvent(plan2, startTick, event);
+    }, "addEvent");
+    addEvent2({ type: "sprintStart" });
+    addEvent2({ type: "groomBacklogStart" });
+    const storySizes = [
+      "small",
+      "small",
+      "small",
+      "medium",
+      "medium",
+      "large"
+    ];
+    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
+    let sprintDay = 1;
+    addEvent2({
+      type: "sprintDayStart",
+      sprintDay,
+      sprintDaysLeft: SPRINT_DAYS - sprintDay,
+      ...make5(startTick)
+    });
+    const groomingStart = startTick;
+    for (const t of times) {
+      startTick = groomingStart + t[1];
+      addEvent2({ type: "createBacklogIssue", size: t[0] });
+    }
+    startTick += DAY - 1;
+    addEvent2({ type: "groomBacklogEnd" });
+    addEvent2({
+      type: "sprintDayEnd",
+      sprintDay,
+      sprintDaysLeft: SPRINT_DAYS - sprintDay,
+      ...make5(startTick)
+    });
+    startTick += 1;
+    for (const i of import_lodash3.default.range(4)) {
+      const day = Math.floor(startTick / DAY);
+      sprintDay += 1;
+      addEvent2({
+        type: "sprintDayStart",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make5(startTick)
+      });
+      startTick += DAY - 1;
+      addEvent2({
+        type: "sprintDayEnd",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make5(startTick)
+      });
+      startTick += 1;
+    }
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    for (const i of import_lodash3.default.range(4)) {
+      sprintDay += 1;
+      addEvent2({
+        type: "sprintDayStart",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make5(startTick)
+      });
+      startTick += DAY - 1;
+      addEvent2({
+        type: "sprintDayEnd",
+        sprintDay,
+        sprintDaysLeft: SPRINT_DAYS - sprintDay,
+        ...make5(startTick)
+      });
+      startTick += 1;
+    }
+    addEvent2({ type: "sprintEnd" });
+    addEvent2({ type: "weekendStart" });
+    startTick += 2 * DAY + 1;
+    addEvent2({ type: "weekendEnd" });
+    return [plan2, startTick];
+  }
+  __name(generatePlan2, "generatePlan");
+  function* tick3(sprint, game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "createBacklogIssue":
+            const story = make4(game.map.getRandomEmptyLocation(), event.size);
+            game.map.add(story);
+            yield showMessage(`Moved "${story.name}" to To Do`, 500);
+            break;
+          case "groomBacklogEnd":
+          case "collapseStart":
+            break;
+          case "groomBacklogStart":
+            yield showMessage("Grooming backlog ...", 2e3);
+            break;
+          case "sprintDayEnd":
+            break;
+          case "sprintDayStart":
+            sprint.day = event.sprintDay;
+            sprint.daysLeft = event.sprintDaysLeft;
+            yield showMessage(
+              `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+              3e3
+            );
+            break;
+          case "sprintEnd":
+            yield showMessage("Sprint ended", 3e3);
+            const stories = objects_exports.filter(game.map.objects, "story");
+            game.map.remove(stories);
+            if (game.player.task != null) {
+              yield showMessage(`Abandoned ${game.player.task}`, 2e3);
+              game.player.task = null;
+            }
+            break;
+          case "sprintStart":
+            break;
+          case "weekendStart":
+            yield showMessage("Weekend, finally!!!", 3e3);
+            break;
+          case "weekendEnd":
+            yield showMessage("End of Weekend :(", 3e3);
+            break;
+          case "gameEnded":
+          case "gameStarted":
+            break;
+          case "dayStarted":
+            break;
+          case "performanceReview":
+            break;
+          default:
+            assertUnreachable(event);
+        }
+      }
+    }
+  }
+  __name(tick3, "tick");
+
+  // game/plan.ts
+  var import_lodash4 = __toESM(require_lodash());
+  function make2() {
+    return /* @__PURE__ */ new Map();
+  }
+  __name(make2, "make");
+  function addEvent(plan2, time, event) {
+    if (!plan2.has(time)) {
+      plan2.set(time, []);
+    }
+    plan2.get(time).push(event);
+  }
+  __name(addEvent, "addEvent");
+  function append2(plan2, other) {
+    for (const time of other.keys()) {
+      for (const event of other.get(time)) {
+        addEvent(plan2, time, event);
+      }
+    }
+    return plan2;
+  }
+  __name(append2, "append");
+  function generatePlan3(startDay) {
+    let plan2 = make2();
+    let startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const r = generatePlan2(startTick);
+      append2(plan2, r[0]);
+      startTick = r[1];
+    }
+    startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const pplan = generatePlan(startTick);
+      append2(plan2, pplan);
+      startTick += 14;
+    }
+    append2(plan2, plan());
+    return plan2;
+  }
+  __name(generatePlan3, "generatePlan");
+
+  // game/collapse.ts
+  function make7() {
+    return {};
+  }
+  __name(make7, "make");
+  function plan() {
+    const plan2 = make2();
+    addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
+    return plan2;
+  }
+  __name(plan, "plan");
+  function tick4(game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events && events.some((event) => event.type === "collapseStart")) {
+      game.collapse = make7();
+    }
+    if (game.collapse) {
+      const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
+        (obj) => obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
+      );
+      const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
+      const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
+      const removeWalls = select(walls, removeTicks);
+      game.map.remove(removeWalls);
+    }
+    return [];
+  }
+  __name(tick4, "tick");
+
+  // game/game.ts
+  var game_exports = {};
+  __export(game_exports, {
+    GameMap: () => map_exports,
+    Score: () => score_exports,
+    handleEffects: () => handleEffects,
+    load: () => load,
+    make: () => make10,
+    message: () => message,
+    save: () => save,
+    tick: () => tick6,
+    toJson: () => toJson
+  });
+
+  // game/item_generator.ts
+  var item_generator_exports = {};
+  __export(item_generator_exports, {
+    make: () => make8,
+    tick: () => tick5
+  });
+  function make8() {
+    return { state: { type: "waiting", tact: 0 } };
+  }
+  __name(make8, "make");
+  function tick5(itemGenerator, game) {
+    switch (itemGenerator.state.type) {
+      case "waiting":
+        if (itemGenerator.state.tact > config_default.itemGenerator.start)
+          itemGenerator.state = { type: "generating", tact: 0 };
+        else {
+          itemGenerator.state.tact += 1;
+        }
+      case "generating":
+        if (itemGenerator.state.tact > config_default.itemGenerator.interval && game.map.objects.filter(item_exports.isItem).length < config_default.itemGenerator.maxItems) {
+          itemGenerator.state.tact = 0;
+          const itemType = choice(
+            ["door", "commit", "coffee"],
+            [
+              config_default.itemGenerator.frequencies.door,
+              config_default.itemGenerator.frequencies.commit,
+              config_default.itemGenerator.frequencies.coffee
+            ]
+          );
+          let item;
+          switch (itemType) {
+            case "door":
+              item = door_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "commit":
+              item = commit_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            case "coffee":
+              item = coffee_exports.make(game.map.getRandomEmptyLocation());
+              game.map.add([item]);
+              break;
+            default:
+              assertUnreachable(itemType);
+          }
+        } else {
+          itemGenerator.state.tact += 1;
+        }
+    }
+  }
+  __name(tick5, "tick");
+
+  // game/map.ts
+  var map_exports = {};
+  __export(map_exports, {
+    GameMap: () => GameMap,
+    directionTo: () => directionTo
+  });
+  var _7 = __toESM(require_lodash());
+
+  // generator.ts
+  var import_lodash5 = __toESM(require_lodash());
+
+  // room.ts
+  function upperDoors(room) {
+    return room.doors.filter((x) => x.y < room.position.y).length;
+  }
+  __name(upperDoors, "upperDoors");
+  function lowerDoors(room) {
+    return room.doors.filter((x) => x.y > room.position.y).length;
+  }
+  __name(lowerDoors, "lowerDoors");
+
+  // generator.ts
+  function check(t, f) {
+    while (true) {
+      const tt = t();
+      if (f(tt))
+        return tt;
+    }
+  }
+  __name(check, "check");
+  function maze(size2, game) {
+    const outer_walls = hline({ x: 0, y: 0 }, size2.x).concat(vline({ x: 0, y: 0 }, size2.y)).concat(vline({ x: size2.x - 1, y: 0 }, size2.y)).map(
+      (point) => ({
+        position: point,
+        type: "wall",
+        zIndex: 0
+      })
+    );
+    game.map.add(outer_walls);
+    const inner_walls = import_lodash5.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(inner_walls);
+    const room_walls = roomWalls({
+      height: size2.y,
+      width: size2.x,
+      wallsPerRow: { min: 3, max: 7 }
+    }).map(
+      (point) => ({
+        type: "wall",
+        position: point,
+        zIndex: 0
+      })
+    );
+    game.map.add(room_walls);
+    generateRoomDoors(game.map);
+  }
+  __name(maze, "maze");
+  function roomWalls(args) {
+    const room_walls = import_lodash5.default.flatMap(
+      import_lodash5.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash5.default.flatMap(
+          check(
+            () => ints(
+              0,
+              args.width,
+              int(args.wallsPerRow.min, args.wallsPerRow.max)
+            ),
+            (x) => proper_distance(x.concat([0, args.width]))
+          ).map((x) => vline({ x, y }, 1))
+        )
+      )
+    );
+    return room_walls;
+  }
+  __name(roomWalls, "roomWalls");
+  function generateRoomDoors(map) {
+    for (let row = 3; row <= map.height - 2; row += 2) {
+      const rooms = getRowRooms(map, row);
+      makeRoomDoors(map, rooms);
+      const doors = import_lodash5.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      for (const door of doors) {
+        const objs = map.at(door);
+        map.remove(objs);
+      }
+    }
+  }
+  __name(generateRoomDoors, "generateRoomDoors");
+  function desiredNumOfDoors(room) {
+    const a = [
+      [3, 0, 1],
+      [6, 1, 2],
+      [100, 2, 5]
+    ];
+    const min_max = import_lodash5.default.find(a, (x) => x[0] > room.length);
+    return int(min_max[1], min_max[2]);
+  }
+  __name(desiredNumOfDoors, "desiredNumOfDoors");
+  function noWalls(map, xs, y) {
+    for (const x of xs) {
+      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
+        return false;
+      }
+    }
+    return true;
+  }
+  __name(noWalls, "noWalls");
+  function makeRoomDoors(map, rooms) {
+    for (const room of rooms) {
+      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
+      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
+      const xx = check(
+        () => ints(room.position.x, room.position.x + room.length, num_of_lower),
+        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
+      );
+      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
+    }
+    return rooms;
+  }
+  __name(makeRoomDoors, "makeRoomDoors");
+  function getRowRooms(map, row) {
+    const rooms = [];
+    let currentRoom = {
+      position: { x: 0, y: 0 },
+      length: 0,
+      doors: []
+    };
+    for (let x = 0; x < map.width; x++) {
+      const c = { x, y: row };
+      if (map.at(vector_exports.n(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.n(c));
+      }
+      if (map.at(vector_exports.s(c)).length == 0) {
+        currentRoom.doors.push(vector_exports.s(c));
+      }
+      if (map.at({ x, y: row }).length > 0) {
+        if (currentRoom.length > 0)
+          rooms.push(currentRoom);
+        currentRoom = {
+          position: { x, y: row },
+          length: 1,
+          doors: []
+        };
+      } else {
+        currentRoom.length += 1;
+      }
+    }
+    return rooms;
+  }
+  __name(getRowRooms, "getRowRooms");
+  function proper_distance(walls) {
+    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
+    const sorted_walls = import_lodash5.default.sortBy(walls);
+    const distances = import_lodash5.default.chain(import_lodash5.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash5.default.every(
+      distances.map((x) => x[1] - x[0]),
+      (x) => x > 2
+    );
+    return result;
+  }
+  __name(proper_distance, "proper_distance");
+  function line(start, direction, size2) {
+    const line_vector = [];
+    for (let i = 0; i < size2; ++i) {
+      line_vector.push({
+        x: start.x + i * direction.x,
+        y: start.y + i * direction.y
+      });
+    }
+    return line_vector;
+  }
+  __name(line, "line");
+  function hline(start, size2) {
+    return line(start, { x: 1, y: 0 }, size2);
+  }
+  __name(hline, "hline");
+  function vline(start, size2) {
+    return line(start, { x: 0, y: 1 }, size2);
+  }
+  __name(vline, "vline");
+
+  // game/map.ts
+  var _GameMap = class _GameMap {
+    constructor(width, height, objs) {
+      this.width = width;
+      this.height = height;
+      const a = _7.range(1, 21);
+      this.cells = _7.chunk(
+        _7.range(width * height).map((x) => []),
+        width
+      );
+      this.objects = [];
+      this.add(objs);
+    }
+    add(objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.concat(objs_);
+      for (const obj of objs_) {
+        const objs2 = this.cells[obj.position.y][obj.position.x];
+        objs2.push(obj);
+        this.cells[obj.position.y][obj.position.x] = _7.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+      }
+    }
+    remove(objs) {
+      const objs_ = objs instanceof Array ? objs : [objs];
+      this.objects = this.objects.filter((x) => _7.indexOf(objs_, x) == -1);
+      for (const obj of objs_) {
+        this.cells[obj.position.y][obj.position.x] = _7.pull(
+          this.cells[obj.position.y][obj.position.x],
+          obj
+        );
+      }
+    }
+    move(obj, pos) {
+      this.remove([obj]);
+      obj.position = pos;
+      this.add([obj]);
+    }
+    getRandomEmptyLocation() {
+      const [x, y] = check(
+        () => [int(0, this.width), int(0, this.height)],
+        ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
+      );
+      return { x, y };
+    }
+    at(v) {
+      return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
+    }
+    objAt(v, type) {
+      const objs = this.at(v);
+      const objOfType = objs.find((x) => x.type == type) ?? null;
+      return objOfType;
+    }
+    isAt(v, type) {
+      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
+        return false;
+      const objs = this.cells[v.y][v.x];
+      return objs != null ? _7.some(objs, (x) => x.type == type) : false;
+    }
+    possibleDirections(position, type) {
+      const p = [];
+      for (const d of direction_exports.all) {
+        const newPos = moveBy(position, d);
+        if (this.isAt(newPos, type))
+          p.push(d);
+      }
+      return p;
+    }
+    toString() {
+      let s2 = "\n";
+      for (const y of _7.range(this.height)) {
+        for (const x of _7.range(this.width))
+          s2 += repr(this.cells[y][x]);
+        s2 += "\n";
+      }
+      return s2;
+    }
+    toJson() {
+      return {
+        height: this.height,
+        width: this.width,
+        objects: this.objects
+      };
+    }
+    static fromJson(json) {
+      const { width, height, objects } = json;
+      return new _GameMap(width, height, objects);
+    }
+  };
+  __name(_GameMap, "GameMap");
+  var GameMap = _GameMap;
+  function directionTo(position, map, objType) {
+    const dd = _7.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
+    return dd.length ? dd[0] : null;
+  }
+  __name(directionTo, "directionTo");
+  function repr(objs) {
+    if (objs.length > 0) {
+      switch (objs[0].type) {
+        case "wall":
+          return "~";
+        default:
+          return ".";
+      }
+    } else {
+      return " ";
+    }
+  }
+  __name(repr, "repr");
+
+  // game/score.ts
+  var score_exports = {};
+  __export(score_exports, {
+    make: () => make9
+  });
+  function make9() {
+    return {
+      money: 0,
+      impact: 0,
+      stockPrice: 0
+    };
+  }
+  __name(make9, "make");
+
+  // game/game.ts
+  var logger2 = make("game");
+  function make10(size2, plan2) {
+    return {
+      map: new GameMap(size2.x, size2.y, []),
+      commands: [],
+      itemGenerator: make8(),
+      sprint: make6(),
+      score: make9(),
+      messages: [],
+      messageTact: 0,
+      time: {
+        ticks: 0,
+        day: 0,
+        dayOfWeek: "Sunday"
+      },
+      plan: plan2,
+      messageStartTime: null,
+      collapse: null
+    };
+  }
+  __name(make10, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
+  function message(game, m) {
+    if (m.text instanceof Array) {
+      for (const text of m.text) {
+        logger2("message: " + text);
+        game.messages.push({ text, ttl: m.ttl });
+      }
+    } else {
+      game.messages.push({ text: m.text, ttl: m.ttl });
+    }
+  }
+  __name(message, "message");
+  function tick6(game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "createBacklogIssue":
+          case "groomBacklogEnd":
+          case "groomBacklogStart":
+          case "sprintDayEnd":
+          case "sprintDayStart":
+          case "sprintStart":
+          case "sprintEnd":
+          case "weekendStart":
+          case "weekendEnd":
+          case "gameStarted":
+          case "collapseStart":
+          case "dayStarted":
+          case "performanceReview":
+          case "gameEnded":
+            logger2(JSON.stringify(event));
+            break;
+          default:
+            assertUnreachable(event);
+        }
+      }
+    }
+  }
+  __name(tick6, "tick");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    logger2("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        commands,
+        itemGenerator,
+        score,
+        sprint,
+        messages,
+        messageTact,
+        map,
+        time,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find(
+        (x) => x.type === "player"
+      );
+      return {
+        time,
+        score,
+        itemGenerator,
+        sprint,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      };
+    } else {
+      logger2("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
+  // game/messages.ts
+  var messages_exports = {};
+  __export(messages_exports, {
+    itemDropped: () => itemDropped,
+    startedStory: () => startedStory
+  });
+  var startedStory = /* @__PURE__ */ __name((story) => ({
+    text: `You started on ${toString(story.size)} ${story.name}`,
+    ttl: 100
+  }), "startedStory");
+  var itemDropped = /* @__PURE__ */ __name((item) => ({
+    text: `You droppped on ${item.type}`,
+    ttl: 5
+  }), "itemDropped");
+
+  // game/renderer.ts
+  var renderer_exports = {};
+  __export(renderer_exports, {
+    render: () => render,
+    showMessage: () => showMessage2
+  });
+  function render(game) {
+    const map = game.map;
+    const buffer = [showMessage2(game)];
+    for (let y = 0; y < map.height; y++) {
+      const row = [];
+      for (let x = 0; x < map.width; x++) {
+        const objs = map.cells[y][x];
+        row.push(getRepresentation(map, objs, game.time.ticks));
+      }
+      buffer.push(row.join(""));
+    }
+    buffer.push(
+      showTime(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)
+    );
+    return buffer.map((x) => x);
+  }
+  __name(render, "render");
+  function showMessage2(game) {
+    if (game.messages.length > 0) {
+      if (game.messageStartTime == null) {
+        game.messageStartTime = Date.now();
+      }
+      let text = game.messages[0].text;
+      if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
+        game.messageStartTime = Date.now();
+        game.messages.shift();
+      } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > 3e3 && game.messages.length > 1) {
+        game.messageStartTime = Date.now();
+        game.messages.shift();
+      } else {
+        return text;
+      }
+      return game.messages.length > 0 ? game.messages[0].text : "";
+    } else {
+      return "";
+    }
+  }
+  __name(showMessage2, "showMessage");
+  function showTime(game) {
+    return (
+      // game.time.ticks.toString().padStart(6, "0") +
+      // " " +
+      game.time.day.toString() + " " + game.time.dayOfWeek + " " + (game.sprint ? game.sprint.daysLeft : " ")
+    );
+  }
+  __name(showTime, "showTime");
+  function showLevel(game) {
+    return " " + game.player.level.name;
+  }
+  __name(showLevel, "showLevel");
+  function showTask(game) {
+    const task = game.player.task;
+    if (task != null) {
+      switch (task.type) {
+        case "story":
+          return `Story ${task.appliedCommits}/${task.neededCommits}`;
+      }
+    }
+    return "";
+  }
+  __name(showTask, "showTask");
+  function showStockPrice(game) {
+    return `\u{1F5E0}: $${game.score.stockPrice.toFixed(2)} \u25BC`;
+  }
+  __name(showStockPrice, "showStockPrice");
+  function isVisible(obj) {
+    switch (obj.type) {
+      case "boss":
+      case "wall":
+      case "player":
+      case "coffee":
+      case "story":
+      case "commit":
+      case "door":
+        return true;
+      case "footprint":
+        return false;
+      default:
+        assertUnreachable(obj);
+    }
+    return true;
+  }
+  __name(isVisible, "isVisible");
+  function blink(a, b, tick11) {
+    return tick11 % 10 < 5 ? a : b;
+  }
+  __name(blink, "blink");
+  function getRepresentation(map, objs, tick11) {
+    let obj = objs.find(isVisible);
+    if (obj) {
+      switch (obj.type) {
+        case "wall":
+          return getWallRepresentation(map, obj.position);
+        case "boss":
+          return "+";
+        case "footprint":
+          return "\u25A0";
+        case "player":
+          if (obj.hrTaskTact) {
+            return blink("*", "@", tick11);
+          } else {
+            if (obj.item != null) {
+              const item = obj.item;
+              switch (item.type) {
+                case "door":
+                  return blink("]", "*", tick11);
+                case "commit":
+                  return blink(";", "*", tick11);
+                case "coffee":
+                  return blink("c", "*", tick11);
+                case "story":
+                  return "";
+                default:
+                  return assertUnreachable(item);
+              }
+            }
+            return "*";
+          }
+        case "door":
+          return obj.open ? obj.placed ? "]" : "[" : ".";
+        case "commit":
+          return obj.open ? ";" : ".";
+        case "coffee":
+          return obj.open ? "c" : ".";
+        case "story":
+          switch (obj.size) {
+            case "small":
+              return "s";
+            case "medium":
+              return "m";
+            case "large":
+              return "l";
+          }
+        default:
+          assertUnreachable(obj);
+      }
+    } else {
+      return " ";
+    }
+  }
+  __name(getRepresentation, "getRepresentation");
+  function getWallRepresentation(map, pos) {
+    if (pos.x == 0 && pos.y == 0) {
+      return "\u2554";
+    } else if (pos.x == 0 && pos.y == map.height - 1) {
+      return "\u255A";
+    } else if (pos.x == map.width - 1 && pos.y == 0) {
+      return "\u2557";
+    } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
+      return "\u255D";
+    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
+      return "\u2562";
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
+      return "\u255F";
+    } else if (pos.x == 0 || pos.x == map.width - 1) {
+      return "\u2551";
+    } else if (pos.y == 0 || pos.y == map.height - 1) {
+      return "\u2550";
+    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
+      return "\u2502";
+    } else if (map.isAt(vector_exports.s(pos), "wall")) {
+      return "\u252C";
+    } else if (map.isAt(vector_exports.n(pos), "wall")) {
+      return "\u2534";
+    } else {
+      return "\u2500";
+    }
+  }
+  __name(getWallRepresentation, "getWallRepresentation");
+
+  // game/intro.ts
+  var intro_exports = {};
+  __export(intro_exports, {
+    Window: () => Window2
+  });
+
+  // ui/text_window.ts
+  var text_window_exports = {};
+  __export(text_window_exports, {
+    TextWindow: () => TextWindow
+  });
+  var _TextWindow = class _TextWindow {
+    constructor(text) {
+      this.keydown = null;
+      this.position = { x: 0, y: 0 };
+      const splitText = formatText(text);
+      const width = splitText[0].length;
+      const height = splitText.length;
+      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
+      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
+      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
+      this.size = { x: this.contents[0].length, y: this.contents.length };
+    }
+    show() {
+    }
+    render() {
+      return this.contents;
+    }
+    onKeyPress(callback) {
+      this.keydown = callback;
+      return this;
+    }
+    hide() {
+    }
+    interval() {
+    }
+  };
+  __name(_TextWindow, "TextWindow");
+  var TextWindow = _TextWindow;
+  function formatText(text) {
+    const lines = text.split("\n");
+    const maxLength = Math.max(...lines.map((x) => x.length));
+    return lines.map((x) => x.padEnd(maxLength, " "));
+  }
+  __name(formatText, "formatText");
+
+  // ui/windows.ts
+  var windows_exports = {};
+  __export(windows_exports, {
+    Window: () => Window,
+    center: () => center,
+    focused: () => focused,
+    hide: () => hide,
+    move: () => move,
+    show: () => show,
+    windows: () => windows
+  });
+  var import_lodash6 = __toESM(require_lodash());
+
+  // ui/screens.ts
+  function render2(chars) {
+    const contentBlock = document.getElementById("content");
+    contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
+  }
+  __name(render2, "render");
+  var size = { x: 80, y: 24 };
+
+  // ui/composition.ts
+  function make11(size2) {
+    const composition = [];
+    for (let y = 0; y < size.y; y++) {
+      composition[y] = [];
+      for (let x = 0; x < size.x; x++) {
+        composition[y][x] = " ";
+      }
+    }
+    return composition;
+  }
+  __name(make11, "make");
+  function compose(composition, position, window2) {
+    for (let y = 0; y < window2.length; y++) {
+      for (let x = 0; x < window2[y].length; x++) {
+        const t_y = position.y + y;
+        const t_x = position.x + x;
+        if (t_y < 0 || t_y >= size.y || t_x < 0 || t_x >= size.x) {
+          continue;
+        }
+        composition[position.y + y][position.x + x] = window2[y][x];
+      }
+    }
+    return composition;
+  }
+  __name(compose, "compose");
+  function render3(windows2) {
+    let composition = make11(size);
+    for (const window2 of windows2) {
+      composition = compose(
+        composition,
+        window2.position,
+        window2.render().map((x) => x.split(""))
+      );
+    }
+    render2(composition);
+  }
+  __name(render3, "render");
+
+  // ui/windows.ts
+  var _Window = class _Window {
+    constructor() {
+      this.keydown = null;
+      this.position = vector_exports.zero;
+      this.size = vector_exports.zero;
+    }
+    hide() {
+    }
+    show() {
+    }
+    render() {
+      return [];
+    }
+  };
+  __name(_Window, "Window");
+  var Window = _Window;
+  var windows = [];
+  function focused() {
+    return import_lodash6.default.last(windows) ?? null;
+  }
+  __name(focused, "focused");
+  function show(window2) {
+    windows.push(window2);
+    window2.show();
+    render3(windows);
+    return window2;
+  }
+  __name(show, "show");
+  function hide(window2) {
+    window2.hide();
+    windows.splice(windows.indexOf(window2), 1);
+    render3(windows);
+  }
+  __name(hide, "hide");
+  function move(position, window2) {
+    window2.position = position;
+    render3(windows);
+    return window2;
+  }
+  __name(move, "move");
+  function center(window2) {
+    move(
+      {
+        x: Math.floor((size.x - window2.size.x) / 2),
+        y: Math.floor((size.y - window2.size.y) / 2)
+      },
+      window2
+    );
+    return window2;
+  }
+  __name(center, "center");
+
+  // game/intro.ts
+  var _Window2 = class _Window2 extends text_window_exports.TextWindow {
+    constructor() {
+      super(
+        [
+          "        REQUIEM FOR A PROGRAMMER.",
+          "                                   ",
+          "       You ('*') are in Agile hell.",
+          "Earn enough money and get out (if you can)!",
+          "",
+          "Keys",
+          "----",
+          "",
+          "Move - arrows",
+          "Drop item - space",
+          "Use item - enter",
+          "Stop - end"
+        ].join("\n")
+      );
+      this.onKeyPress((window2, event) => {
+        windows_exports.hide(window2);
+      });
+    }
+  };
+  __name(_Window2, "Window");
+  var Window2 = _Window2;
+
+  // objects/boss.ts
+  var BOSS_WEIGHTS = {
+    turn: {
+      visited: 0.2,
+      notVisited: 1
+    },
+    straight: {
+      visited: 0.2,
+      notVisited: 3
+    },
+    back: 1,
+    jump: 5
+  };
+  BOSS_WEIGHTS = {
+    turn: {
+      visited: 1e-6,
+      notVisited: 1
+    },
+    straight: {
+      visited: 1e-7,
+      notVisited: 3
+    },
+    back: 1e-7,
+    jump: 5
+  };
+  function make12() {
+    return {
+      position: {
+        x: 0,
+        y: 0
+      },
+      type: "boss",
+      zIndex: 10,
+      state: { type: "stopped", previous_direction: null }
+    };
+  }
+  __name(make12, "make");
+  function possibleMoves(pos, currentDirection, map) {
+    const result = {};
+    const possible = map.possibleDirections(pos, "wall");
+    const turns = import_lodash7.default.difference(possible, [
+      currentDirection,
+      reverse(currentDirection)
+    ]);
+    if (turns.length > 0) {
+      result.turn = { directions: turns };
+    }
+    if (import_lodash7.default.includes(possible, currentDirection)) {
+      result.straight = { direction: currentDirection };
+    }
+    if (!import_lodash7.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+      result.jump = { directions: [currentDirection] };
+    }
+    if (import_lodash7.default.includes(possible, reverse(currentDirection))) {
+      result.back = {};
+    }
+    return result;
+  }
+  __name(possibleMoves, "possibleMoves");
+  function move2(obj, new_pos, new_direction, map) {
+    obj.state = { type: "moving", direction: new_direction, tact: 0 };
+    map.add([
+      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
+    ]);
+    map.move(obj, new_pos);
+  }
+  __name(move2, "move");
+  function pipPlayer(obj, player) {
+    player.hrTaskTact = 0;
+  }
+  __name(pipPlayer, "pipPlayer");
+  function tick7(boss, map) {
+    switch (boss.state.type) {
+      case "instructing":
+        break;
+      case "moving":
+        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
+        if (directionToPlayer) {
+          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
+          if (player)
+            pipPlayer(boss, player);
+        }
+        boss.state.tact += 1;
+        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
+          return;
+        }
+        const moves = possibleMoves(boss.position, boss.state.direction, map);
+        if (moves.turn || moves.straight) {
+          const move_types = [
+            moves.turn ? "turn" : null,
+            moves.straight ? "straight" : null
+          ];
+          const move_weights = [
+            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
+            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+          ];
+          if (moves.turn) {
+            console.log(JSON.stringify({ move_types, move_weights }));
+          }
+          const move_choice = choice(
+            import_lodash7.default.compact(move_types),
+            import_lodash7.default.compact(move_weights)
+          );
+          switch (move_choice) {
+            case "turn":
+              const weights = moves.turn.directions.map(
+                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+              );
+              const chosen = choice(moves.turn.directions, weights);
+              boss.state.direction = chosen;
+            case "straight":
+              const new_pos = moveBy(boss.position, boss.state.direction);
+              move2(boss, new_pos, boss.state.direction, map);
+          }
+          return;
+        }
+        if (moves.back || moves.jump) {
+          const move_choice = choice(
+            import_lodash7.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash7.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+          );
+          switch (move_choice) {
+            case "back":
+              boss.state.direction = reverse(boss.state.direction);
+              break;
+            case "jump":
+              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
+              break;
+          }
+        }
+        break;
+      case "jumping":
+        boss.state = {
+          type: "jumping",
+          direction: boss.state.direction,
+          tact: boss.state.tact + 1
+        };
+        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
+          move2(
+            boss,
+            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+            boss.state.direction,
+            map
+          );
+        }
+        break;
+      case "stopped": {
+        const direction = choose_direction(boss.position, null, map);
+        if (direction != null)
+          boss.state = { type: "moving", direction, tact: 0 };
+        break;
+      }
+    }
+  }
+  __name(tick7, "tick");
+  function choose_direction(pos, least_preferred, map) {
+    const forks = map.possibleDirections(pos, "wall");
+    const b = forks.filter((x) => x[0] != least_preferred);
+    if (b.length != 0) {
+      const direction = choice(b);
+      return direction;
+    } else {
+      return least_preferred;
+    }
+  }
+  __name(choose_direction, "choose_direction");
+
+  // objects/coffee.ts
+  var coffee_exports = {};
+  __export(coffee_exports, {
+    make: () => make13
+  });
+  function make13(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make13, "make");
+
+  // objects/commit.ts
+  var commit_exports = {};
+  __export(commit_exports, {
+    make: () => make14
+  });
+  function make14(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false,
+      hash: generateId(8)
+    };
+  }
+  __name(make14, "make");
+  function byteToHex(byte) {
+    return ("0" + byte.toString(16)).slice(-2);
+  }
+  __name(byteToHex, "byteToHex");
+  function generateId(len = 40) {
+    var arr = new Uint8Array(len / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, byteToHex).join("");
+  }
+  __name(generateId, "generateId");
+
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make15
+  });
+  function make15(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false,
+      placed: false
+    };
+  }
+  __name(make15, "make");
+
+  // objects/footprint.ts
+  var footprint_exports = {};
+  __export(footprint_exports, {
+    tick: () => tick8
+  });
+  var LIFETIME = 1e3;
+  function tick8(obj, map) {
+    if (obj.tact > LIFETIME) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+    return [];
+  }
+  __name(tick8, "tick");
+
+  // objects/item.ts
+  var item_exports = {};
+  __export(item_exports, {
+    description: () => description,
+    isItem: () => isItem
+  });
+  function isItem(obj) {
+    switch (obj.type) {
+      case "door":
+      case "commit":
+      case "story":
+      case "coffee":
+        return true;
+      case "wall":
+      case "boss":
+      case "footprint":
+      case "player":
+        return false;
+      default:
+        assertUnreachable(obj);
+    }
+  }
+  __name(isItem, "isItem");
+  function description(item) {
+    switch (item.type) {
+      case "door":
+        return "door";
+      case "commit":
+        return `commit ${item.hash}`;
+      case "coffee":
+        return `cup of coffee`;
+      case "story":
+        return `story "${item.name}"`;
+    }
+  }
+  __name(description, "description");
+
   // objects/objects.ts
   var objects_exports = {};
   __export(objects_exports, {
     filter: () => filter
   });
-  var import_lodash3 = __toESM(require_lodash());
+  var import_lodash8 = __toESM(require_lodash());
   function filter(objs, type) {
-    return import_lodash3.default.filter(objs, (x) => x.type == type);
+    return import_lodash8.default.filter(objs, (x) => x.type == type);
   }
   __name(filter, "filter");
 
   // objects/player.ts
-  var import_lodash4 = __toESM(require_lodash());
-
-  // geometry/direction.ts
-  var direction_exports = {};
-  __export(direction_exports, {
-    all: () => all2,
-    reverse: () => reverse,
-    toRose: () => toRose
+  var player_exports = {};
+  __export(player_exports, {
+    make: () => make17,
+    tick: () => tick9
   });
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
-  function toRose(directions) {
-    const rose = {};
-    for (const direction of directions) {
-      rose[direction] = true;
-    }
-    return rose;
-  }
-  __name(toRose, "toRose");
-  var all2 = ["left", "right", "down", "up"];
-
-  // geometry/vector.ts
-  var vector_exports = {};
-  __export(vector_exports, {
-    e: () => e,
-    n: () => n,
-    s: () => s,
-    w: () => w,
-    zero: () => zero
-  });
-  function n(v) {
-    return { x: v.x, y: v.y - 1 };
-  }
-  __name(n, "n");
-  function s(v) {
-    return { x: v.x, y: v.y + 1 };
-  }
-  __name(s, "s");
-  function w(v) {
-    return { x: v.x - 1, y: v.y };
-  }
-  __name(w, "w");
-  function e(v) {
-    return { x: v.x + 1, y: v.y };
-  }
-  __name(e, "e");
-  var zero = { x: 0, y: 0 };
-
-  // geometry/index.ts
-  function moveBy(vector, direction) {
-    switch (direction) {
-      case "down":
-        return { ...vector, x: vector.x, y: vector.y + 1 };
-      case "up":
-        return { ...vector, x: vector.x, y: vector.y - 1 };
-      case "left":
-        return { ...vector, x: vector.x - 1, y: vector.y };
-      case "right":
-        return { ...vector, x: vector.x + 1, y: vector.y };
-    }
-  }
-  __name(moveBy, "moveBy");
+  var import_lodash9 = __toESM(require_lodash());
 
   // objects/tasks/story.ts
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make7
+    make: () => make16
   });
-  function make7(story) {
+  function make16(story) {
     return {
       type: "story",
       story,
@@ -6538,7 +7868,7 @@
       appliedCommits: 0
     };
   }
-  __name(make7, "make");
+  __name(make16, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -6551,8 +7881,8 @@
   __name(addCommit, "addCommit");
 
   // objects/player.ts
-  var logger2 = make("player");
-  function make8(position) {
+  var logger3 = make("player");
+  function make17(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -6569,7 +7899,7 @@
       level: levels_exports.all[0]
     };
   }
-  __name(make8, "make");
+  __name(make17, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -6588,7 +7918,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash4.default.every(objs, canMoveOnObj);
+      const result = import_lodash9.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -6623,7 +7953,7 @@
   }
   __name(canPickItem, "canPickItem");
   function useItem(player, item, map, effects) {
-    logger2(`Using item ${item.type}`);
+    logger3(`Using item ${item.type}`);
     switch (item.type) {
       case "commit":
         if (player.task) {
@@ -6742,16 +8072,16 @@
     }, "removeAllMoves");
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
-      logger2(JSON.stringify(player.commands));
+      logger3(JSON.stringify(player.commands));
     }
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
-      logger2(JSON.stringify(player.commands));
+      logger3(JSON.stringify(player.commands));
     }
     let delayedCommands = [];
     while (player.commands.length > 0) {
-      logger2(JSON.stringify(player.commands));
+      logger3(JSON.stringify(player.commands));
       const command = player.commands[0].command;
-      logger2(`processing: ${JSON.stringify(command)}`);
+      logger3(`processing: ${JSON.stringify(command)}`);
       switch (command.type) {
         case "move":
           const newPosition = moveBy(player.position, command.direction);
@@ -6762,7 +8092,7 @@
             delayedCommands = [];
           } else {
             const delayedCommand = player.commands.shift();
-            logger2(`delaying ${JSON.stringify(delayedCommand)}`);
+            logger3(`delaying ${JSON.stringify(delayedCommand)}`);
             delayedCommands.push(delayedCommand);
           }
           break;
@@ -6793,7 +8123,7 @@
     player.commands = player.commands.filter((x) => x.tact < 10);
   }
   __name(processCommands, "processCommands");
-  function tick2(player, game, commands, ticksPassed) {
+  function tick9(player, game, commands, ticksPassed) {
     const effects = [];
     let pickedSomething = false;
     let carriedSomething = player.item != null;
@@ -6810,14 +8140,14 @@
             case "door":
             case "coffee":
               if (canPickItem(player, obj)) {
-                logger2(`Can pick item  ${JSON.stringify(player)}`);
+                logger3(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(effects, effect_exports.showMessage(`Picked a ${obj.type}`, 40));
                 pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "commit":
               if (canPickItem(player, obj)) {
-                logger2(`Can pick item  ${JSON.stringify(player)}`);
+                logger3(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(
                   effects,
                   effect_exports.showMessage(`Picked a commit ${obj.hash}`, 40)
@@ -6850,1307 +8180,65 @@
     }
     return effects;
   }
-  __name(tick2, "tick");
-
-  // game/game_time.ts
-  var game_time_exports = {};
-  __export(game_time_exports, {
-    make: () => make9
-  });
-
-  // game/day_of_week.ts
-  var all3 = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
-  // game/game_time.ts
-  function make9(ticks) {
-    const day = Math.floor(ticks / config_default.dayTicks);
-    const dayOfWeek = all3[day % 7];
-    return {
-      ticks,
-      day,
-      dayOfWeek
-    };
-  }
-  __name(make9, "make");
-
-  // game/sprint.ts
-  function make10() {
-    return {
-      day: 0,
-      daysLeft: 0
-    };
-  }
-  __name(make10, "make");
-  function generatePlan(startTick) {
-    const DAY = config_default.dayTicks;
-    const SPRINT_DAYS = 10;
-    const plan2 = make2();
-    const addEvent2 = /* @__PURE__ */ __name((event) => {
-      addEvent(plan2, startTick, event);
-    }, "addEvent");
-    addEvent2({ type: "sprintStart" });
-    addEvent2({ type: "groomBacklogStart" });
-    const storySizes = [
-      "small",
-      "small",
-      "small",
-      "medium",
-      "medium",
-      "large"
-    ];
-    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
-    let sprintDay = 1;
-    addEvent2({
-      type: "sprintDayStart",
-      sprintDay,
-      sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make9(startTick)
-    });
-    const groomingStart = startTick;
-    for (const t of times) {
-      startTick = groomingStart + t[1];
-      addEvent2({ type: "createBacklogIssue", size: t[0] });
-    }
-    startTick += DAY - 1;
-    addEvent2({ type: "groomBacklogEnd" });
-    addEvent2({
-      type: "sprintDayEnd",
-      sprintDay,
-      sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make9(startTick)
-    });
-    startTick += 1;
-    for (const i of import_lodash5.default.range(4)) {
-      const day = Math.floor(startTick / DAY);
-      sprintDay += 1;
-      addEvent2({
-        type: "sprintDayStart",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
-      });
-      startTick += DAY - 1;
-      addEvent2({
-        type: "sprintDayEnd",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
-      });
-      startTick += 1;
-    }
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    for (const i of import_lodash5.default.range(4)) {
-      sprintDay += 1;
-      addEvent2({
-        type: "sprintDayStart",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
-      });
-      startTick += DAY - 1;
-      addEvent2({
-        type: "sprintDayEnd",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
-      });
-      startTick += 1;
-    }
-    addEvent2({ type: "sprintEnd" });
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    return [plan2, startTick];
-  }
-  __name(generatePlan, "generatePlan");
-  function* tick3(sprint, game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "createBacklogIssue":
-            const story = make6(game.map.getRandomEmptyLocation(), event.size);
-            game.map.add(story);
-            yield showMessage(`Moved "${story.name}" to To Do`, 500);
-            break;
-          case "groomBacklogEnd":
-          case "collapseStart":
-            break;
-          case "groomBacklogStart":
-            yield showMessage("Grooming backlog ...", 2e3);
-            break;
-          case "sprintDayEnd":
-            break;
-          case "sprintDayStart":
-            sprint.day = event.sprintDay;
-            sprint.daysLeft = event.sprintDaysLeft;
-            yield showMessage(
-              `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
-              3e3
-            );
-            break;
-          case "sprintEnd":
-            yield showMessage("Sprint ended", 3e3);
-            const stories = objects_exports.filter(game.map.objects, "story");
-            game.map.remove(stories);
-            if (game.player.task != null) {
-              yield showMessage(`Abandoned ${game.player.task}`, 2e3);
-              game.player.task = null;
-            }
-            break;
-          case "sprintStart":
-            break;
-          case "weekendStart":
-            yield showMessage("Weekend, finally!!!", 3e3);
-            break;
-          case "weekendEnd":
-            yield showMessage("End of Weekend :(", 3e3);
-            break;
-          case "gameEnded":
-          case "gameStarted":
-            break;
-          case "dayStarted":
-            break;
-          case "performanceReview":
-            break;
-          default:
-            assertUnreachable(event);
-        }
-      }
-    }
-  }
-  __name(tick3, "tick");
-
-  // game/plan.ts
-  var import_lodash6 = __toESM(require_lodash());
-  function make2() {
-    return /* @__PURE__ */ new Map();
-  }
-  __name(make2, "make");
-  function addEvent(plan2, time, event) {
-    if (!plan2.has(time)) {
-      plan2.set(time, []);
-    }
-    plan2.get(time).push(event);
-  }
-  __name(addEvent, "addEvent");
-  function append2(plan2, other) {
-    for (const time of other.keys()) {
-      for (const event of other.get(time)) {
-        addEvent(plan2, time, event);
-      }
-    }
-    return plan2;
-  }
-  __name(append2, "append");
-  function generatePlan2(startDay) {
-    let plan2 = make2();
-    let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const r = generatePlan(startTick);
-      append2(plan2, r[0]);
-      startTick = r[1];
-    }
-    startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const pplan = PerformanceReview.generatePlan(startTick);
-      append2(plan2, pplan);
-      startTick += 14;
-    }
-    append2(plan2, plan());
-    return plan2;
-  }
-  __name(generatePlan2, "generatePlan");
-
-  // game/collapse.ts
-  function make11() {
-    return {};
-  }
-  __name(make11, "make");
-  function plan() {
-    const plan2 = make2();
-    addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
-    return plan2;
-  }
-  __name(plan, "plan");
-  function tick4(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make11();
-    }
-    if (game.collapse) {
-      const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
-        (obj) => obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
-      );
-      const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
-      const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
-      const removeWalls = select(walls, removeTicks);
-      game.map.remove(removeWalls);
-    }
-    return [];
-  }
-  __name(tick4, "tick");
-
-  // game/game.ts
-  var game_exports = {};
-  __export(game_exports, {
-    GameMap: () => map_exports,
-    Score: () => score_exports,
-    handleEffects: () => handleEffects,
-    load: () => load,
-    make: () => make14,
-    message: () => message,
-    save: () => save,
-    tick: () => tick6,
-    toJson: () => toJson
-  });
-
-  // game/item_generator.ts
-  function make12() {
-    return { state: { type: "waiting", tact: 0 } };
-  }
-  __name(make12, "make");
-  function tick5(itemGenerator, game) {
-    switch (itemGenerator.state.type) {
-      case "waiting":
-        if (itemGenerator.state.tact > config_default.itemGenerator.start)
-          itemGenerator.state = { type: "generating", tact: 0 };
-        else {
-          itemGenerator.state.tact += 1;
-        }
-      case "generating":
-        if (itemGenerator.state.tact > config_default.itemGenerator.interval && game.map.objects.filter(item_exports.isItem).length < config_default.itemGenerator.maxItems) {
-          itemGenerator.state.tact = 0;
-          const itemType = choice(
-            ["door", "commit", "coffee"],
-            [
-              config_default.itemGenerator.frequencies.door,
-              config_default.itemGenerator.frequencies.commit,
-              config_default.itemGenerator.frequencies.coffee
-            ]
-          );
-          let item;
-          switch (itemType) {
-            case "door":
-              item = door_exports.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            case "commit":
-              item = commit_exports.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            case "coffee":
-              item = coffee_exports.make(game.map.getRandomEmptyLocation());
-              game.map.add([item]);
-              break;
-            default:
-              assertUnreachable(itemType);
-          }
-        } else {
-          itemGenerator.state.tact += 1;
-        }
-    }
-  }
-  __name(tick5, "tick");
-
-  // game/map.ts
-  var map_exports = {};
-  __export(map_exports, {
-    GameMap: () => GameMap2,
-    directionTo: () => directionTo
-  });
-  var _9 = __toESM(require_lodash());
-
-  // generator.ts
-  var import_lodash7 = __toESM(require_lodash());
-
-  // room.ts
-  function upperDoors(room) {
-    return room.doors.filter((x) => x.y < room.position.y).length;
-  }
-  __name(upperDoors, "upperDoors");
-  function lowerDoors(room) {
-    return room.doors.filter((x) => x.y > room.position.y).length;
-  }
-  __name(lowerDoors, "lowerDoors");
-
-  // generator.ts
-  function check(t, f) {
-    while (true) {
-      const tt = t();
-      if (f(tt))
-        return tt;
-    }
-  }
-  __name(check, "check");
-  function maze(size2, game) {
-    const outer_walls = hline({ x: 0, y: 0 }, size2.x).concat(vline({ x: 0, y: 0 }, size2.y)).concat(vline({ x: size2.x - 1, y: 0 }, size2.y)).map(
-      (point) => ({
-        position: point,
-        type: "wall",
-        zIndex: 0
-      })
-    );
-    game.map.add(outer_walls);
-    const inner_walls = import_lodash7.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(inner_walls);
-    const room_walls = roomWalls({
-      height: size2.y,
-      width: size2.x,
-      wallsPerRow: { min: 3, max: 7 }
-    }).map(
-      (point) => ({
-        type: "wall",
-        position: point,
-        zIndex: 0
-      })
-    );
-    game.map.add(room_walls);
-    generateRoomDoors(game.map);
-  }
-  __name(maze, "maze");
-  function roomWalls(args) {
-    const room_walls = import_lodash7.default.flatMap(
-      import_lodash7.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash7.default.flatMap(
-          check(
-            () => ints(
-              0,
-              args.width,
-              int(args.wallsPerRow.min, args.wallsPerRow.max)
-            ),
-            (x) => proper_distance(x.concat([0, args.width]))
-          ).map((x) => vline({ x, y }, 1))
-        )
-      )
-    );
-    return room_walls;
-  }
-  __name(roomWalls, "roomWalls");
-  function generateRoomDoors(map) {
-    for (let row = 3; row <= map.height - 2; row += 2) {
-      const rooms = getRowRooms(map, row);
-      makeRoomDoors(map, rooms);
-      const doors = import_lodash7.default.map(rooms, (x) => x.doors).flatMap((x) => x);
-      for (const door of doors) {
-        const objs = map.at(door);
-        map.remove(objs);
-      }
-    }
-  }
-  __name(generateRoomDoors, "generateRoomDoors");
-  function desiredNumOfDoors(room) {
-    const a = [
-      [3, 0, 1],
-      [6, 1, 2],
-      [100, 2, 5]
-    ];
-    const min_max = import_lodash7.default.find(a, (x) => x[0] > room.length);
-    return int(min_max[1], min_max[2]);
-  }
-  __name(desiredNumOfDoors, "desiredNumOfDoors");
-  function noWalls(map, xs, y) {
-    for (const x of xs) {
-      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
-        return false;
-      }
-    }
-    return true;
-  }
-  __name(noWalls, "noWalls");
-  function makeRoomDoors(map, rooms) {
-    for (const room of rooms) {
-      const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
-      const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
-      const xx = check(
-        () => ints(room.position.x, room.position.x + room.length, num_of_lower),
-        (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
-      );
-      room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })));
-    }
-    return rooms;
-  }
-  __name(makeRoomDoors, "makeRoomDoors");
-  function getRowRooms(map, row) {
-    const rooms = [];
-    let currentRoom = {
-      position: { x: 0, y: 0 },
-      length: 0,
-      doors: []
-    };
-    for (let x = 0; x < map.width; x++) {
-      const c = { x, y: row };
-      if (map.at(vector_exports.n(c)).length == 0) {
-        currentRoom.doors.push(vector_exports.n(c));
-      }
-      if (map.at(vector_exports.s(c)).length == 0) {
-        currentRoom.doors.push(vector_exports.s(c));
-      }
-      if (map.at({ x, y: row }).length > 0) {
-        if (currentRoom.length > 0)
-          rooms.push(currentRoom);
-        currentRoom = {
-          position: { x, y: row },
-          length: 1,
-          doors: []
-        };
-      } else {
-        currentRoom.length += 1;
-      }
-    }
-    return rooms;
-  }
-  __name(getRowRooms, "getRowRooms");
-  function proper_distance(walls) {
-    const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash7.default.sortBy(walls);
-    const distances = import_lodash7.default.chain(import_lodash7.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
-    const result = import_lodash7.default.every(
-      distances.map((x) => x[1] - x[0]),
-      (x) => x > 2
-    );
-    return result;
-  }
-  __name(proper_distance, "proper_distance");
-  function line(start, direction, size2) {
-    const line_vector = [];
-    for (let i = 0; i < size2; ++i) {
-      line_vector.push({
-        x: start.x + i * direction.x,
-        y: start.y + i * direction.y
-      });
-    }
-    return line_vector;
-  }
-  __name(line, "line");
-  function hline(start, size2) {
-    return line(start, { x: 1, y: 0 }, size2);
-  }
-  __name(hline, "hline");
-  function vline(start, size2) {
-    return line(start, { x: 0, y: 1 }, size2);
-  }
-  __name(vline, "vline");
-
-  // game/map.ts
-  var _GameMap = class _GameMap {
-    constructor(width, height, objs) {
-      this.width = width;
-      this.height = height;
-      const a = _9.range(1, 21);
-      this.cells = _9.chunk(
-        _9.range(width * height).map((x) => []),
-        width
-      );
-      this.objects = [];
-      this.add(objs);
-    }
-    add(objs) {
-      const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.concat(objs_);
-      for (const obj of objs_) {
-        const objs2 = this.cells[obj.position.y][obj.position.x];
-        objs2.push(obj);
-        this.cells[obj.position.y][obj.position.x] = _9.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
-      }
-    }
-    remove(objs) {
-      const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.filter((x) => _9.indexOf(objs_, x) == -1);
-      for (const obj of objs_) {
-        this.cells[obj.position.y][obj.position.x] = _9.pull(
-          this.cells[obj.position.y][obj.position.x],
-          obj
-        );
-      }
-    }
-    move(obj, pos) {
-      this.remove([obj]);
-      obj.position = pos;
-      this.add([obj]);
-    }
-    getRandomEmptyLocation() {
-      const [x, y] = check(
-        () => [int(0, this.width), int(0, this.height)],
-        ([x2, y2]) => this.at({ x: x2, y: y2 }).length == 0
-      );
-      return { x, y };
-    }
-    at(v) {
-      return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
-    }
-    objAt(v, type) {
-      const objs = this.at(v);
-      const objOfType = objs.find((x) => x.type == type) ?? null;
-      return objOfType;
-    }
-    isAt(v, type) {
-      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
-        return false;
-      const objs = this.cells[v.y][v.x];
-      return objs != null ? _9.some(objs, (x) => x.type == type) : false;
-    }
-    possibleDirections(position, type) {
-      const p = [];
-      for (const d of direction_exports.all) {
-        const newPos = moveBy(position, d);
-        if (this.isAt(newPos, type))
-          p.push(d);
-      }
-      return p;
-    }
-    toString() {
-      let s2 = "\n";
-      for (const y of _9.range(this.height)) {
-        for (const x of _9.range(this.width))
-          s2 += repr(this.cells[y][x]);
-        s2 += "\n";
-      }
-      return s2;
-    }
-    toJson() {
-      return {
-        height: this.height,
-        width: this.width,
-        objects: this.objects
-      };
-    }
-    static fromJson(json) {
-      const { width, height, objects } = json;
-      return new _GameMap(width, height, objects);
-    }
-  };
-  __name(_GameMap, "GameMap");
-  var GameMap2 = _GameMap;
-  function directionTo(position, map, objType) {
-    const dd = _9.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
-    return dd.length ? dd[0] : null;
-  }
-  __name(directionTo, "directionTo");
-  function repr(objs) {
-    if (objs.length > 0) {
-      switch (objs[0].type) {
-        case "wall":
-          return "~";
-        default:
-          return ".";
-      }
-    } else {
-      return " ";
-    }
-  }
-  __name(repr, "repr");
-
-  // game/score.ts
-  var score_exports = {};
-  __export(score_exports, {
-    make: () => make13
-  });
-  function make13() {
-    return {
-      money: 0,
-      impact: 0,
-      stockPrice: 0
-    };
-  }
-  __name(make13, "make");
-
-  // game/game.ts
-  var logger3 = make("game");
-  function make14(size2, plan2) {
-    return {
-      map: new GameMap2(size2.x, size2.y, []),
-      commands: [],
-      itemGenerator: make12(),
-      sprint: make10(),
-      score: make13(),
-      messages: [],
-      messageTact: 0,
-      time: {
-        ticks: 0,
-        day: 0,
-        dayOfWeek: "Sunday"
-      },
-      plan: plan2,
-      messageStartTime: null,
-      collapse: null
-    };
-  }
-  __name(make14, "make");
-  function toJson(game) {
-    return {
-      map: game.map.toJson(),
-      score: game.score,
-      itemGenerator: game.itemGenerator,
-      commands: game.commands,
-      messages: game.messages,
-      messageTact: game.messageTact
-    };
-  }
-  __name(toJson, "toJson");
-  function handleEffects(game, effects) {
-    for (const effect of effects) {
-      switch (effect.type) {
-        case "null":
-          break;
-        case "addImpact":
-          game.score.impact += effect.impact;
-          break;
-        case "showMessage":
-          message(game, effect.message);
-          break;
-        default:
-          assertUnreachable(effect);
-      }
-    }
-  }
-  __name(handleEffects, "handleEffects");
-  function message(game, m) {
-    if (m.text instanceof Array) {
-      for (const text of m.text) {
-        logger3("message: " + text);
-        game.messages.push({ text, ttl: m.ttl });
-      }
-    } else {
-      game.messages.push({ text: m.text, ttl: m.ttl });
-    }
-  }
-  __name(message, "message");
-  function tick6(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "createBacklogIssue":
-          case "groomBacklogEnd":
-          case "groomBacklogStart":
-          case "sprintDayEnd":
-          case "sprintDayStart":
-          case "sprintStart":
-          case "sprintEnd":
-          case "weekendStart":
-          case "weekendEnd":
-          case "gameStarted":
-          case "collapseStart":
-          case "dayStarted":
-          case "performanceReview":
-          case "gameEnded":
-            logger3(JSON.stringify(event));
-            break;
-          default:
-            assertUnreachable(event);
-        }
-      }
-    }
-  }
-  __name(tick6, "tick");
-  function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
-    logger3("Game saved!");
-  }
-  __name(save, "save");
-  function load(storage) {
-    const objectsStorage = storage.load();
-    if (objectsStorage != null) {
-      const {
-        commands,
-        itemGenerator,
-        score,
-        sprint,
-        messages,
-        messageTact,
-        map,
-        time,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      } = JSON.parse(objectsStorage);
-      const map_ = GameMap2.fromJson(map);
-      const player = map_.objects.find(
-        (x) => x.type === "player"
-      );
-      return {
-        time,
-        score,
-        itemGenerator,
-        sprint,
-        messages,
-        messageTact,
-        commands,
-        map: map_,
-        player,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      };
-    } else {
-      logger3("There is no saved game.");
-      return null;
-    }
-  }
-  __name(load, "load");
-
-  // game/messages.ts
-  var messages_exports = {};
-  __export(messages_exports, {
-    itemDropped: () => itemDropped,
-    startedStory: () => startedStory
-  });
-  var startedStory = /* @__PURE__ */ __name((story) => ({
-    text: `You started on ${toString(story.size)} ${story.name}`,
-    ttl: 100
-  }), "startedStory");
-  var itemDropped = /* @__PURE__ */ __name((item) => ({
-    text: `You droppped on ${item.type}`,
-    ttl: 5
-  }), "itemDropped");
-
-  // objects/boss.ts
-  var import_lodash8 = __toESM(require_lodash());
-  var BOSS_WEIGHTS = {
-    turn: {
-      visited: 0.2,
-      notVisited: 1
-    },
-    straight: {
-      visited: 0.2,
-      notVisited: 3
-    },
-    back: 1,
-    jump: 5
-  };
-  BOSS_WEIGHTS = {
-    turn: {
-      visited: 1e-6,
-      notVisited: 1
-    },
-    straight: {
-      visited: 1e-7,
-      notVisited: 3
-    },
-    back: 1e-7,
-    jump: 5
-  };
-  function make15() {
-    return {
-      position: {
-        x: 0,
-        y: 0
-      },
-      type: "boss",
-      zIndex: 10,
-      state: { type: "stopped", previous_direction: null }
-    };
-  }
-  __name(make15, "make");
-  function possibleMoves(pos, currentDirection, map) {
-    const result = {};
-    const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash8.default.difference(possible, [
-      currentDirection,
-      reverse(currentDirection)
-    ]);
-    if (turns.length > 0) {
-      result.turn = { directions: turns };
-    }
-    if (import_lodash8.default.includes(possible, currentDirection)) {
-      result.straight = { direction: currentDirection };
-    }
-    if (!import_lodash8.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
-      result.jump = { directions: [currentDirection] };
-    }
-    if (import_lodash8.default.includes(possible, reverse(currentDirection))) {
-      result.back = {};
-    }
-    return result;
-  }
-  __name(possibleMoves, "possibleMoves");
-  function move(obj, new_pos, new_direction, map) {
-    obj.state = { type: "moving", direction: new_direction, tact: 0 };
-    map.add([
-      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
-    ]);
-    map.move(obj, new_pos);
-  }
-  __name(move, "move");
-  function pipPlayer(obj, player) {
-    player.hrTaskTact = 0;
-  }
-  __name(pipPlayer, "pipPlayer");
-  function tick7(boss, map) {
-    switch (boss.state.type) {
-      case "instructing":
-        break;
-      case "moving":
-        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
-        if (directionToPlayer) {
-          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
-          if (player)
-            pipPlayer(boss, player);
-        }
-        boss.state.tact += 1;
-        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
-          return;
-        }
-        const moves = possibleMoves(boss.position, boss.state.direction, map);
-        if (moves.turn || moves.straight) {
-          const move_types = [
-            moves.turn ? "turn" : null,
-            moves.straight ? "straight" : null
-          ];
-          const move_weights = [
-            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
-            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
-          ];
-          if (moves.turn) {
-            console.log(JSON.stringify({ move_types, move_weights }));
-          }
-          const move_choice = choice(
-            import_lodash8.default.compact(move_types),
-            import_lodash8.default.compact(move_weights)
-          );
-          switch (move_choice) {
-            case "turn":
-              const weights = moves.turn.directions.map(
-                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
-              );
-              const chosen = choice(moves.turn.directions, weights);
-              boss.state.direction = chosen;
-            case "straight":
-              const new_pos = moveBy(boss.position, boss.state.direction);
-              move(boss, new_pos, boss.state.direction, map);
-          }
-          return;
-        }
-        if (moves.back || moves.jump) {
-          const move_choice = choice(
-            import_lodash8.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash8.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
-          );
-          switch (move_choice) {
-            case "back":
-              boss.state.direction = reverse(boss.state.direction);
-              break;
-            case "jump":
-              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
-              break;
-          }
-        }
-        break;
-      case "jumping":
-        boss.state = {
-          type: "jumping",
-          direction: boss.state.direction,
-          tact: boss.state.tact + 1
-        };
-        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
-          move(
-            boss,
-            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
-            boss.state.direction,
-            map
-          );
-        }
-        break;
-      case "stopped": {
-        const direction = choose_direction(boss.position, null, map);
-        if (direction != null)
-          boss.state = { type: "moving", direction, tact: 0 };
-        break;
-      }
-    }
-  }
-  __name(tick7, "tick");
-  function choose_direction(pos, least_preferred, map) {
-    const forks = map.possibleDirections(pos, "wall");
-    const b = forks.filter((x) => x[0] != least_preferred);
-    if (b.length != 0) {
-      const direction = choice(b);
-      return direction;
-    } else {
-      return least_preferred;
-    }
-  }
-  __name(choose_direction, "choose_direction");
-
-  // objects/footprint.ts
-  var LIFETIME = 1e3;
-  function tick8(obj, map) {
-    if (obj.tact > LIFETIME) {
-      map.remove([obj]);
-    } else {
-      obj.tact += 1;
-    }
-    return [];
-  }
-  __name(tick8, "tick");
-
-  // ui/screens.ts
-  function render(position, chars) {
-    const contentBlock = document.getElementById("content");
-    contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
-  }
-  __name(render, "render");
-  var size = { x: 80, y: 24 };
-
-  // renderer.ts
-  function render2(game) {
-    const map = game.map;
-    const buffer = [showMessage2(game)];
-    for (let y = 0; y < map.height; y++) {
-      const row = [];
-      for (let x = 0; x < map.width; x++) {
-        const objs = map.cells[y][x];
-        row.push(getRepresentation(map, objs, game.time.ticks));
-      }
-      buffer.push(row.join(""));
-    }
-    buffer.push(
-      showTime(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)
-    );
-    render(buffer);
-  }
-  __name(render2, "render");
-  function showMessage2(game) {
-    if (game.messages.length > 0) {
-      if (game.messageStartTime == null) {
-        game.messageStartTime = Date.now();
-      }
-      let text = game.messages[0].text;
-      if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
-        game.messageStartTime = Date.now();
-        game.messages.shift();
-      } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > 3e3 && game.messages.length > 1) {
-        game.messageStartTime = Date.now();
-        game.messages.shift();
-      } else {
-        return text;
-      }
-      return game.messages.length > 0 ? game.messages[0].text : "";
-    } else {
-      return "";
-    }
-  }
-  __name(showMessage2, "showMessage");
-  function showTime(game) {
-    return (
-      // game.time.ticks.toString().padStart(6, "0") +
-      // " " +
-      game.time.day.toString() + " " + game.time.dayOfWeek + " " + (game.sprint ? game.sprint.daysLeft : " ")
-    );
-  }
-  __name(showTime, "showTime");
-  function showLevel(game) {
-    return " " + game.player.level.name;
-  }
-  __name(showLevel, "showLevel");
-  function showTask(game) {
-    const task = game.player.task;
-    if (task != null) {
-      switch (task.type) {
-        case "story":
-          return `Story ${task.appliedCommits}/${task.neededCommits}`;
-      }
-    }
-    return "";
-  }
-  __name(showTask, "showTask");
-  function showStockPrice(game) {
-    return `\u{1F5E0}: $${game.score.stockPrice.toFixed(2)} \u25BC`;
-  }
-  __name(showStockPrice, "showStockPrice");
-  function isVisible(obj) {
-    switch (obj.type) {
-      case "boss":
-      case "wall":
-      case "player":
-      case "coffee":
-      case "story":
-      case "commit":
-      case "door":
-        return true;
-      case "footprint":
-        return false;
-      default:
-        assertUnreachable(obj);
-    }
-    return true;
-  }
-  __name(isVisible, "isVisible");
-  function blink(a, b, tick10) {
-    return tick10 % 10 < 5 ? a : b;
-  }
-  __name(blink, "blink");
-  function getRepresentation(map, objs, tick10) {
-    let obj = objs.find(isVisible);
-    if (obj) {
-      switch (obj.type) {
-        case "wall":
-          return getWallRepresentation(map, obj.position);
-        case "boss":
-          return "+";
-        case "footprint":
-          return "\u25A0";
-        case "player":
-          if (obj.hrTaskTact) {
-            return blink("*", "@", tick10);
-          } else {
-            if (obj.item != null) {
-              const item = obj.item;
-              switch (item.type) {
-                case "door":
-                  return blink("]", "*", tick10);
-                case "commit":
-                  return blink(";", "*", tick10);
-                case "coffee":
-                  return blink("c", "*", tick10);
-                case "story":
-                  return "";
-                default:
-                  return assertUnreachable(item);
-              }
-            }
-            return "*";
-          }
-        case "door":
-          return obj.open ? obj.placed ? "]" : "[" : ".";
-        case "commit":
-          return obj.open ? ";" : ".";
-        case "coffee":
-          return obj.open ? "c" : ".";
-        case "story":
-          switch (obj.size) {
-            case "small":
-              return "s";
-            case "medium":
-              return "m";
-            case "large":
-              return "l";
-          }
-        default:
-          assertUnreachable(obj);
-      }
-    } else {
-      return " ";
-    }
-  }
-  __name(getRepresentation, "getRepresentation");
-  function getWallRepresentation(map, pos) {
-    if (pos.x == 0 && pos.y == 0) {
-      return "\u2554";
-    } else if (pos.x == 0 && pos.y == map.height - 1) {
-      return "\u255A";
-    } else if (pos.x == map.width - 1 && pos.y == 0) {
-      return "\u2557";
-    } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
-      return "\u255D";
-    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
-      return "\u2562";
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
-      return "\u255F";
-    } else if (pos.x == 0 || pos.x == map.width - 1) {
-      return "\u2551";
-    } else if (pos.y == 0 || pos.y == map.height - 1) {
-      return "\u2550";
-    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
-      return "\u2502";
-    } else if (map.isAt(vector_exports.s(pos), "wall")) {
-      return "\u252C";
-    } else if (map.isAt(vector_exports.n(pos), "wall")) {
-      return "\u2534";
-    } else {
-      return "\u2500";
-    }
-  }
-  __name(getWallRepresentation, "getWallRepresentation");
-
-  // ui/composition.ts
-  function make16(size2) {
-    const composition = [];
-    for (let y = 0; y < size.y; y++) {
-      composition[y] = [];
-      for (let x = 0; x < size.x; x++) {
-        composition[y][x] = " ";
-      }
-    }
-    return composition;
-  }
-  __name(make16, "make");
-  function compose(composition, position, window2) {
-    for (let y = 0; y < window2.length; y++) {
-      for (let x = 0; x < window2[y].length; x++) {
-        composition[position.y + y][position.x + x] = window2[y][x];
-      }
-    }
-    return composition;
-  }
-  __name(compose, "compose");
-  function render3(windows2) {
-    let composition = make16(size);
-    for (const window2 of windows2) {
-      composition = compose(
-        composition,
-        window2.position,
-        window2.render().map((x) => x.split(""))
-      );
-    }
-    render(vector_exports.zero, composition);
-  }
-  __name(render3, "render");
-
-  // ui/windows.ts
-  var windows = [];
-  function show(window2) {
-    windows.push(window2);
-    window2.show();
-    render3(windows);
-    return window2;
-  }
-  __name(show, "show");
-  function move2(position, window2) {
-    window2.position = position;
-    render3(windows);
-    return window2;
-  }
-  __name(move2, "move");
-  function center(window2) {
-    move2(
-      {
-        x: Math.floor((size.x - window2.size.x) / 2),
-        y: Math.floor((size.y - window2.size.y) / 2)
-      },
-      window2
-    );
-    return window2;
-  }
-  __name(center, "center");
-  var _TextWindow = class _TextWindow {
-    constructor(text) {
-      this.position = { x: 0, y: 0 };
-      const splitText = formatText(text);
-      const width = splitText[0].length;
-      const height = splitText.length;
-      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
-      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
-      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
-      this.size = { x: this.contents[0].length, y: this.contents.length };
-    }
-    show() {
-    }
-    render() {
-      return this.contents;
-    }
-    hide() {
-    }
-    keydown(event) {
-    }
-    interval() {
-    }
-  };
-  __name(_TextWindow, "TextWindow");
-  var TextWindow = _TextWindow;
-  function formatText(text) {
-    const lines = text.split("\n");
-    const maxLength = Math.max(...lines.map((x) => x.length));
-    return lines.map((x) => x.padEnd(maxLength, " "));
-  }
-  __name(formatText, "formatText");
+  __name(tick9, "tick");
 
   // main.ts
-  var MAZE_SIZE = { y: 25, x: 80 };
-  var logger4 = make("main");
-  setIsEnabled((name) => import_lodash9.default.includes(["main", "player", "game"], name));
-  function main() {
-    show(
-      center(
-        new TextWindow(
-          [
-            "        REQUIEM FOR A PROGRAMMER.",
-            "                                   ",
-            "       You ('*') are in Agile hell.",
-            "Earn enough money and get out (if you can)!",
-            "",
-            "Keys",
-            "----",
-            "",
-            "Move - arrows",
-            "Drop item - space",
-            "Use item - enter",
-            "stop - end"
-          ].join("\n")
-        )
-      )
-    );
-    const boss = make15();
-    const plan2 = plan_exports.generatePlan(0);
-    let game = game_exports.make(MAZE_SIZE, plan2);
-    maze(MAZE_SIZE, game);
-    game.map.add([boss]);
-    game.player = make8(game.map.getRandomEmptyLocation());
-    game.map.add([game.player]);
-    game_exports.message(game, {
-      text: [
-        "Requiem for a Programmer.",
-        "You are in Agile hell.",
-        "Earn enough money and get out !!!!!",
-        "'*' is you. Use arrow keys to move."
-      ],
-      ttl: 3e3
-    });
-    let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-    window.addEventListener("keydown", (event) => {
+  var import_lodash10 = __toESM(require_lodash());
+
+  // game_window.ts
+  var _GameWindow = class _GameWindow extends windows_exports.Window {
+    constructor(game, storage) {
+      super();
+      this.game = game;
+      this.storage = storage;
+      this.keydown = (window2, event) => {
+        this.processKey(event);
+      };
+    }
+    render() {
+      return renderer_exports.render(this.game);
+    }
+    processKey(event) {
       logger4(`keydown: ${event.key}`);
+      let interval = 1e3 / config_default.tickInterval;
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
           window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-          game_exports.message(game, { text: `Speed increased to ${config_default.tickInterval}`, ttl: 2 });
+          interval = window.setInterval(() => processTick(this.game), config_default.tickInterval);
+          game_exports.message(this.game, {
+            text: `Speed increased to ${config_default.tickInterval}`,
+            ttl: 2
+          });
           break;
         case "-":
           config_default.tickInterval += 5;
           window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-          game_exports.message(game, { text: "Speed decreased", ttl: 2 });
+          interval = window.setInterval(() => processTick(this.game), config_default.tickInterval);
+          game_exports.message(this.game, { text: "Speed decreased", ttl: 2 });
           break;
         case "s":
-          save2(game);
+          save2(this.game, this.storage);
           break;
         case "l": {
-          const loaded = load2();
+          const loaded = load2(this.storage);
           if (loaded != null) {
-            game = loaded;
+            this.game = loaded;
           }
           break;
         }
         default: {
           const command = getCommand(event.key);
           if (command != null) {
-            game.commands.push(command);
+            this.game.commands.push(command);
           }
           break;
         }
       }
-    });
-    render2(game);
-  }
-  __name(main, "main");
+    }
+  };
+  __name(_GameWindow, "GameWindow");
+  var GameWindow = _GameWindow;
   function getCommand(key) {
     switch (key) {
       case "ArrowUp":
@@ -8171,6 +8259,38 @@
     }
   }
   __name(getCommand, "getCommand");
+  function save2(game, storage) {
+    game_exports.save(game, storage);
+    console.log("Game saved!");
+  }
+  __name(save2, "save");
+  function load2(storage) {
+    return game_exports.load(storage);
+  }
+  __name(load2, "load");
+
+  // main.ts
+  var MAZE_SIZE = { y: 25, x: 80 };
+  var logger4 = make("main");
+  setIsEnabled((name) => import_lodash10.default.includes(["main", "player", "game"], name));
+  function main() {
+    const boss = boss_exports.make();
+    const plan2 = plan_exports.generatePlan(0);
+    let game = game_exports.make(MAZE_SIZE, plan2);
+    maze(MAZE_SIZE, game);
+    game.map.add([boss]);
+    game.player = player_exports.make(game.map.getRandomEmptyLocation());
+    game.map.add([game.player]);
+    window.addEventListener("keydown", (event) => {
+      const focused2 = windows_exports.focused();
+      if (focused2 && focused2.keydown) {
+        focused2.keydown(focused2, event);
+      }
+    });
+    windows_exports.show(new GameWindow(game, localStorage));
+    windows_exports.show(windows_exports.center(new intro_exports.Window()));
+  }
+  __name(main, "main");
   var localStorage = {
     save(json) {
       window.localStorage.setItem("map", json);
@@ -8180,15 +8300,6 @@
       return objectsStorage;
     }
   };
-  function save2(game) {
-    game_exports.save(game, localStorage);
-    console.log("Game saved!");
-  }
-  __name(save2, "save");
-  function load2() {
-    return game_exports.load(localStorage);
-  }
-  __name(load2, "load");
   function processTick(game) {
     const fullTick = /* @__PURE__ */ __name(() => {
       setTime(game.time.ticks);
@@ -8197,25 +8308,25 @@
       game.time = game_time_exports.make(game.time.ticks);
       game_exports.tick(game);
       game_exports.handleEffects(game, collapse_exports.tick(game));
-      tick5(game.itemGenerator, game);
+      item_generator_exports.tick(game.itemGenerator, game);
       if (game.sprint) {
         game_exports.handleEffects(game, sprint_exports.tick(game.sprint, { ...game, player: game.player }));
       }
-      game_exports.handleEffects(game, PerformanceReview.tick(game));
+      game_exports.handleEffects(game, performance_review_exports.tick(game));
       for (const obj of game.map.objects) {
-        const result = tick9(obj, game, game.commands, 1);
+        const result = tick10(obj, game, game.commands, 1);
       }
       game.commands = [];
-      render2(game);
+      renderer_exports.render(game);
     }, "fullTick");
     const playerTick = /* @__PURE__ */ __name(() => {
       setTime(game.time.ticks);
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
       game.score.money += game.player.level.rate;
       game.time = game_time_exports.make(game.time.ticks);
-      const result = tick9(game.player, game, game.commands, 0.5);
+      const result = tick10(game.player, game, game.commands, 0.5);
       game.commands = [];
-      render2(game);
+      renderer_exports.render(game);
     }, "playerTick");
     if (!game.player.flags.spedUp) {
       fullTick();
@@ -8228,16 +8339,16 @@
     }
   }
   __name(processTick, "processTick");
-  function tick9(obj, game, commands, ticksPassed) {
+  function tick10(obj, game, commands, ticksPassed) {
     switch (obj.type) {
       case "boss":
-        tick7(obj, game.map);
+        boss_exports.tick(obj, game.map);
         break;
       case "footprint":
-        game_exports.handleEffects(game, tick8(obj, game.map));
+        game_exports.handleEffects(game, footprint_exports.tick(obj, game.map));
         break;
       case "player":
-        game_exports.handleEffects(game, tick2(obj, game, commands, ticksPassed));
+        game_exports.handleEffects(game, player_exports.tick(obj, game, commands, ticksPassed));
         break;
       case "door":
       case "story":
@@ -8249,7 +8360,7 @@
         assertUnreachable(obj);
     }
   }
-  __name(tick9, "tick");
+  __name(tick10, "tick");
   main();
 })();
 /*! Bundled license information:
