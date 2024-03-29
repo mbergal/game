@@ -6004,7 +6004,7 @@
   // objects/boss.ts
   var boss_exports = {};
   __export(boss_exports, {
-    make: () => make12,
+    make: () => make11,
     possibleMoves: () => possibleMoves,
     tick: () => tick7
   });
@@ -6081,14 +6081,6 @@
     }
   }
   __name(moveBy, "moveBy");
-
-  // game/collapse.ts
-  var collapse_exports = {};
-  __export(collapse_exports, {
-    make: () => make7,
-    plan: () => plan,
-    tick: () => tick4
-  });
 
   // utils/random.ts
   var _ = __toESM(require_lodash());
@@ -6183,14 +6175,6 @@
     append: () => append2,
     generatePlan: () => generatePlan3,
     make: () => make2
-  });
-
-  // game/performance_review.ts
-  var performance_review_exports = {};
-  __export(performance_review_exports, {
-    generatePlan: () => generatePlan,
-    make: () => make3,
-    tick: () => tick2
   });
 
   // game/effects.ts
@@ -6315,10 +6299,6 @@
 
   // game/performance_review.ts
   var logger = make("performance_review");
-  function make3() {
-    return {};
-  }
-  __name(make3, "make");
   function generatePlan(startTick) {
     const plan2 = make2();
     addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
@@ -6343,12 +6323,6 @@
   __name(tick2, "tick");
 
   // game/sprint.ts
-  var sprint_exports = {};
-  __export(sprint_exports, {
-    generatePlan: () => generatePlan2,
-    make: () => make6,
-    tick: () => tick3
-  });
   var import_lodash3 = __toESM(require_lodash());
 
   // objects/story_size.ts
@@ -6365,7 +6339,7 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make4(position, size2) {
+  function make3(position, size2) {
     return {
       type: "story",
       position,
@@ -6375,7 +6349,7 @@
       name: choice(storyNames[size2])
     };
   }
-  __name(make4, "make");
+  __name(make3, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6421,12 +6395,6 @@
   }
   __name(assertUnreachable, "assertUnreachable");
 
-  // game/game_time.ts
-  var game_time_exports = {};
-  __export(game_time_exports, {
-    make: () => make5
-  });
-
   // game/day_of_week.ts
   var all3 = [
     "Monday",
@@ -6439,7 +6407,7 @@
   ];
 
   // game/game_time.ts
-  function make5(ticks) {
+  function make4(ticks) {
     const day = Math.floor(ticks / config_default.dayTicks);
     const dayOfWeek = all3[day % 7];
     return {
@@ -6448,16 +6416,16 @@
       dayOfWeek
     };
   }
-  __name(make5, "make");
+  __name(make4, "make");
 
   // game/sprint.ts
-  function make6() {
+  function make5() {
     return {
       day: 0,
       daysLeft: 0
     };
   }
-  __name(make6, "make");
+  __name(make5, "make");
   function generatePlan2(startTick) {
     const DAY = config_default.dayTicks;
     const SPRINT_DAYS = 10;
@@ -6481,7 +6449,7 @@
       type: "sprintDayStart",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make5(startTick)
+      ...make4(startTick)
     });
     const groomingStart = startTick;
     for (const t of times) {
@@ -6494,7 +6462,7 @@
       type: "sprintDayEnd",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make5(startTick)
+      ...make4(startTick)
     });
     startTick += 1;
     for (const i of import_lodash3.default.range(4)) {
@@ -6504,14 +6472,14 @@
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make5(startTick)
+        ...make4(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make5(startTick)
+        ...make4(startTick)
       });
       startTick += 1;
     }
@@ -6524,14 +6492,14 @@
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make5(startTick)
+        ...make4(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make5(startTick)
+        ...make4(startTick)
       });
       startTick += 1;
     }
@@ -6548,7 +6516,7 @@
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make4(game.map.getRandomEmptyLocation(), event.size);
+            const story = make3(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
             yield showMessage(`Moved "${story.name}" to To Do`, 500);
             break;
@@ -6642,10 +6610,10 @@
   __name(generatePlan3, "generatePlan");
 
   // game/collapse.ts
-  function make7() {
+  function make6() {
     return {};
   }
-  __name(make7, "make");
+  __name(make6, "make");
   function plan() {
     const plan2 = make2();
     addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
@@ -6655,7 +6623,7 @@
   function tick4(game) {
     const events = game.plan.get(game.time.ticks);
     if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make7();
+      game.collapse = make6();
     }
     if (game.collapse) {
       const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
@@ -6675,9 +6643,8 @@
   __export(game_exports, {
     GameMap: () => map_exports,
     Score: () => score_exports,
-    handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make10,
+    make: () => make9,
     message: () => message,
     save: () => save,
     tick: () => tick6,
@@ -6685,15 +6652,10 @@
   });
 
   // game/item_generator.ts
-  var item_generator_exports = {};
-  __export(item_generator_exports, {
-    make: () => make8,
-    tick: () => tick5
-  });
-  function make8() {
+  function make7() {
     return { state: { type: "waiting", tact: 0 } };
   }
-  __name(make8, "make");
+  __name(make7, "make");
   function tick5(itemGenerator, game) {
     switch (itemGenerator.state.type) {
       case "waiting":
@@ -7031,170 +6993,6 @@
   }
   __name(repr, "repr");
 
-  // game/score.ts
-  var score_exports = {};
-  __export(score_exports, {
-    make: () => make9
-  });
-  function make9() {
-    return {
-      money: 0,
-      impact: 0,
-      stockPrice: 0
-    };
-  }
-  __name(make9, "make");
-
-  // game/game.ts
-  var logger2 = make("game");
-  function make10(size2, plan2) {
-    return {
-      map: new GameMap(size2.x, size2.y, []),
-      commands: [],
-      itemGenerator: make8(),
-      sprint: make6(),
-      score: make9(),
-      messages: [],
-      messageTact: 0,
-      time: {
-        ticks: 0,
-        day: 0,
-        dayOfWeek: "Sunday"
-      },
-      plan: plan2,
-      messageStartTime: null,
-      collapse: null
-    };
-  }
-  __name(make10, "make");
-  function toJson(game) {
-    return {
-      map: game.map.toJson(),
-      score: game.score,
-      itemGenerator: game.itemGenerator,
-      commands: game.commands,
-      messages: game.messages,
-      messageTact: game.messageTact
-    };
-  }
-  __name(toJson, "toJson");
-  function handleEffects(game, effects) {
-    for (const effect of effects) {
-      switch (effect.type) {
-        case "null":
-          break;
-        case "addImpact":
-          game.score.impact += effect.impact;
-          break;
-        case "showMessage":
-          message(game, effect.message);
-          break;
-        default:
-          assertUnreachable(effect);
-      }
-    }
-  }
-  __name(handleEffects, "handleEffects");
-  function message(game, m) {
-    if (m.text instanceof Array) {
-      for (const text of m.text) {
-        logger2("message: " + text);
-        game.messages.push({ text, ttl: m.ttl });
-      }
-    } else {
-      game.messages.push({ text: m.text, ttl: m.ttl });
-    }
-  }
-  __name(message, "message");
-  function tick6(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "createBacklogIssue":
-          case "groomBacklogEnd":
-          case "groomBacklogStart":
-          case "sprintDayEnd":
-          case "sprintDayStart":
-          case "sprintStart":
-          case "sprintEnd":
-          case "weekendStart":
-          case "weekendEnd":
-          case "gameStarted":
-          case "collapseStart":
-          case "dayStarted":
-          case "performanceReview":
-          case "gameEnded":
-            logger2(JSON.stringify(event));
-            break;
-          default:
-            assertUnreachable(event);
-        }
-      }
-    }
-  }
-  __name(tick6, "tick");
-  function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
-    logger2("Game saved!");
-  }
-  __name(save, "save");
-  function load(storage) {
-    const objectsStorage = storage.load();
-    if (objectsStorage != null) {
-      const {
-        commands,
-        itemGenerator,
-        score,
-        sprint,
-        messages,
-        messageTact,
-        map,
-        time,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      } = JSON.parse(objectsStorage);
-      const map_ = GameMap.fromJson(map);
-      const player = map_.objects.find(
-        (x) => x.type === "player"
-      );
-      return {
-        time,
-        score,
-        itemGenerator,
-        sprint,
-        messages,
-        messageTact,
-        commands,
-        map: map_,
-        player,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      };
-    } else {
-      logger2("There is no saved game.");
-      return null;
-    }
-  }
-  __name(load, "load");
-
-  // game/messages.ts
-  var messages_exports = {};
-  __export(messages_exports, {
-    itemDropped: () => itemDropped,
-    startedStory: () => startedStory
-  });
-  var startedStory = /* @__PURE__ */ __name((story) => ({
-    text: `You started on ${toString(story.size)} ${story.name}`,
-    ttl: 100
-  }), "startedStory");
-  var itemDropped = /* @__PURE__ */ __name((item) => ({
-    text: `You droppped on ${item.type}`,
-    ttl: 5
-  }), "itemDropped");
-
   // game/renderer.ts
   var renderer_exports = {};
   __export(renderer_exports, {
@@ -7284,11 +7082,11 @@
     return true;
   }
   __name(isVisible, "isVisible");
-  function blink(a, b, tick11) {
-    return tick11 % 10 < 5 ? a : b;
+  function blink(a, b, tick10) {
+    return tick10 % 10 < 5 ? a : b;
   }
   __name(blink, "blink");
-  function getRepresentation(map, objs, tick11) {
+  function getRepresentation(map, objs, tick10) {
     let obj = objs.find(isVisible);
     if (obj) {
       switch (obj.type) {
@@ -7300,17 +7098,17 @@
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return blink("*", "@", tick11);
+            return blink("*", "@", tick10);
           } else {
             if (obj.item != null) {
               const item = obj.item;
               switch (item.type) {
                 case "door":
-                  return blink("]", "*", tick11);
+                  return blink("]", "*", tick10);
                 case "commit":
-                  return blink(";", "*", tick11);
+                  return blink(";", "*", tick10);
                 case "coffee":
-                  return blink("c", "*", tick11);
+                  return blink("c", "*", tick10);
                 case "story":
                   return "";
                 default:
@@ -7370,6 +7168,202 @@
     }
   }
   __name(getWallRepresentation, "getWallRepresentation");
+
+  // game/score.ts
+  var score_exports = {};
+  __export(score_exports, {
+    make: () => make8
+  });
+  function make8() {
+    return {
+      money: 0,
+      impact: 0,
+      stockPrice: 0
+    };
+  }
+  __name(make8, "make");
+
+  // game/game.ts
+  var logger2 = make("game");
+  function make9(size2, plan2) {
+    return {
+      map: new GameMap(size2.x, size2.y, []),
+      commands: [],
+      itemGenerator: make7(),
+      sprint: make5(),
+      score: make8(),
+      messages: [],
+      messageTact: 0,
+      time: {
+        ticks: 0,
+        day: 0,
+        dayOfWeek: "Sunday"
+      },
+      plan: plan2,
+      messageStartTime: null,
+      collapse: null
+    };
+  }
+  __name(make9, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
+  function message(game, m) {
+    if (m.text instanceof Array) {
+      for (const text of m.text) {
+        logger2("message: " + text);
+        game.messages.push({ text, ttl: m.ttl });
+      }
+    } else {
+      game.messages.push({ text: m.text, ttl: m.ttl });
+    }
+  }
+  __name(message, "message");
+  function tick6(game) {
+    const fullTick = /* @__PURE__ */ __name(() => {
+      setTime(game.time.ticks);
+      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
+      game.score.money += game.player.level.rate;
+      game.time = make4(game.time.ticks);
+      handleEffects(game, tick4(game));
+      tick5(game.itemGenerator, game);
+      if (game.sprint) {
+        handleEffects(game, tick3(game.sprint, { ...game, player: game.player }));
+      }
+      handleEffects(game, tick2(game));
+      for (const obj of game.map.objects) {
+        const result = objTick(obj, game, game.commands, 1);
+      }
+      game.commands = [];
+      render(game);
+    }, "fullTick");
+    const playerTick = /* @__PURE__ */ __name(() => {
+      setTime(game.time.ticks);
+      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
+      game.score.money += game.player.level.rate;
+      game.time = make4(game.time.ticks);
+      const result = objTick(game.player, game, game.commands, 0.5);
+      game.commands = [];
+      render(game);
+    }, "playerTick");
+    if (!game.player.flags.spedUp) {
+      fullTick();
+      game.time.ticks += 1;
+    } else {
+      playerTick();
+      game.time.ticks += 0.5;
+      fullTick();
+      game.time.ticks += 0.5;
+    }
+  }
+  __name(tick6, "tick");
+  function objTick(obj, game, commands, ticksPassed) {
+    switch (obj.type) {
+      case "boss":
+        boss_exports.tick(obj, game.map);
+        break;
+      case "footprint":
+        handleEffects(game, footprint_exports.tick(obj, game.map));
+        break;
+      case "player":
+        handleEffects(game, player_exports.tick(obj, game, commands, ticksPassed));
+        break;
+      case "door":
+      case "story":
+      case "commit":
+      case "coffee":
+      case "wall":
+        break;
+      default:
+        assertUnreachable(obj);
+    }
+  }
+  __name(objTick, "objTick");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    logger2("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        commands,
+        itemGenerator,
+        score,
+        sprint,
+        messages,
+        messageTact,
+        map,
+        time,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find(
+        (x) => x.type === "player"
+      );
+      return {
+        time,
+        score,
+        itemGenerator,
+        sprint,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      };
+    } else {
+      logger2("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
+  // game/messages.ts
+  var messages_exports = {};
+  __export(messages_exports, {
+    itemDropped: () => itemDropped,
+    startedStory: () => startedStory
+  });
+  var startedStory = /* @__PURE__ */ __name((story) => ({
+    text: `You started on ${toString(story.size)} ${story.name}`,
+    ttl: 100
+  }), "startedStory");
+  var itemDropped = /* @__PURE__ */ __name((item) => ({
+    text: `You droppped on ${item.type}`,
+    ttl: 5
+  }), "itemDropped");
 
   // game/intro.ts
   var intro_exports = {};
@@ -7439,7 +7433,7 @@
   var size = { x: 80, y: 24 };
 
   // ui/composition.ts
-  function make11(size2) {
+  function make10(size2) {
     const composition = [];
     for (let y = 0; y < size.y; y++) {
       composition[y] = [];
@@ -7449,7 +7443,7 @@
     }
     return composition;
   }
-  __name(make11, "make");
+  __name(make10, "make");
   function compose(composition, position, window2) {
     for (let y = 0; y < window2.length; y++) {
       for (let x = 0; x < window2[y].length; x++) {
@@ -7465,7 +7459,7 @@
   }
   __name(compose, "compose");
   function render3(windows2) {
-    let composition = make11(size);
+    let composition = make10(size);
     for (const window2 of windows2) {
       composition = compose(
         composition,
@@ -7582,7 +7576,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make12() {
+  function make11() {
     return {
       position: {
         x: 0,
@@ -7593,7 +7587,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make12, "make");
+  __name(make11, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -7727,9 +7721,9 @@
   // objects/coffee.ts
   var coffee_exports = {};
   __export(coffee_exports, {
-    make: () => make13
+    make: () => make12
   });
-  function make13(position) {
+  function make12(position) {
     return {
       type: "coffee",
       position,
@@ -7737,14 +7731,14 @@
       open: false
     };
   }
-  __name(make13, "make");
+  __name(make12, "make");
 
   // objects/commit.ts
   var commit_exports = {};
   __export(commit_exports, {
-    make: () => make14
+    make: () => make13
   });
-  function make14(position) {
+  function make13(position) {
     return {
       type: "commit",
       position,
@@ -7753,7 +7747,7 @@
       hash: generateId(8)
     };
   }
-  __name(make14, "make");
+  __name(make13, "make");
   function byteToHex(byte) {
     return ("0" + byte.toString(16)).slice(-2);
   }
@@ -7768,9 +7762,9 @@
   // objects/door.ts
   var door_exports = {};
   __export(door_exports, {
-    make: () => make15
+    make: () => make14
   });
-  function make15(position) {
+  function make14(position) {
     return {
       type: "door",
       position,
@@ -7779,7 +7773,7 @@
       placed: false
     };
   }
-  __name(make15, "make");
+  __name(make14, "make");
 
   // objects/footprint.ts
   var footprint_exports = {};
@@ -7848,7 +7842,7 @@
   // objects/player.ts
   var player_exports = {};
   __export(player_exports, {
-    make: () => make17,
+    make: () => make16,
     tick: () => tick9
   });
   var import_lodash9 = __toESM(require_lodash());
@@ -7857,9 +7851,9 @@
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make16
+    make: () => make15
   });
-  function make16(story) {
+  function make15(story) {
     return {
       type: "story",
       story,
@@ -7868,7 +7862,7 @@
       appliedCommits: 0
     };
   }
-  __name(make16, "make");
+  __name(make15, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -7882,7 +7876,7 @@
 
   // objects/player.ts
   var logger3 = make("player");
-  function make17(position) {
+  function make16(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7899,7 +7893,7 @@
       level: levels_exports.all[0]
     };
   }
-  __name(make17, "make");
+  __name(make16, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -8186,6 +8180,7 @@
   var import_lodash10 = __toESM(require_lodash());
 
   // game_window.ts
+  var logger4 = make("game_window");
   var _GameWindow = class _GameWindow extends windows_exports.Window {
     constructor(game, storage) {
       super();
@@ -8205,7 +8200,7 @@
         case "+":
           config_default.tickInterval -= 5;
           window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(this.game), config_default.tickInterval);
+          interval = window.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
           game_exports.message(this.game, {
             text: `Speed increased to ${config_default.tickInterval}`,
             ttl: 2
@@ -8214,7 +8209,7 @@
         case "-":
           config_default.tickInterval += 5;
           window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(this.game), config_default.tickInterval);
+          interval = window.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
           game_exports.message(this.game, { text: "Speed decreased", ttl: 2 });
           break;
         case "s":
@@ -8271,7 +8266,7 @@
 
   // main.ts
   var MAZE_SIZE = { y: 25, x: 80 };
-  var logger4 = make("main");
+  var logger5 = make("main");
   setIsEnabled((name) => import_lodash10.default.includes(["main", "player", "game"], name));
   function main() {
     const boss = boss_exports.make();
@@ -8300,67 +8295,6 @@
       return objectsStorage;
     }
   };
-  function processTick(game) {
-    const fullTick = /* @__PURE__ */ __name(() => {
-      setTime(game.time.ticks);
-      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += game.player.level.rate;
-      game.time = game_time_exports.make(game.time.ticks);
-      game_exports.tick(game);
-      game_exports.handleEffects(game, collapse_exports.tick(game));
-      item_generator_exports.tick(game.itemGenerator, game);
-      if (game.sprint) {
-        game_exports.handleEffects(game, sprint_exports.tick(game.sprint, { ...game, player: game.player }));
-      }
-      game_exports.handleEffects(game, performance_review_exports.tick(game));
-      for (const obj of game.map.objects) {
-        const result = tick10(obj, game, game.commands, 1);
-      }
-      game.commands = [];
-      renderer_exports.render(game);
-    }, "fullTick");
-    const playerTick = /* @__PURE__ */ __name(() => {
-      setTime(game.time.ticks);
-      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += game.player.level.rate;
-      game.time = game_time_exports.make(game.time.ticks);
-      const result = tick10(game.player, game, game.commands, 0.5);
-      game.commands = [];
-      renderer_exports.render(game);
-    }, "playerTick");
-    if (!game.player.flags.spedUp) {
-      fullTick();
-      game.time.ticks += 1;
-    } else {
-      playerTick();
-      game.time.ticks += 0.5;
-      fullTick();
-      game.time.ticks += 0.5;
-    }
-  }
-  __name(processTick, "processTick");
-  function tick10(obj, game, commands, ticksPassed) {
-    switch (obj.type) {
-      case "boss":
-        boss_exports.tick(obj, game.map);
-        break;
-      case "footprint":
-        game_exports.handleEffects(game, footprint_exports.tick(obj, game.map));
-        break;
-      case "player":
-        game_exports.handleEffects(game, player_exports.tick(obj, game, commands, ticksPassed));
-        break;
-      case "door":
-      case "story":
-      case "commit":
-      case "coffee":
-      case "wall":
-        break;
-      default:
-        assertUnreachable(obj);
-    }
-  }
-  __name(tick10, "tick");
   main();
 })();
 /*! Bundled license information:

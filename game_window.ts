@@ -1,9 +1,10 @@
 import { Windows } from "@/ui"
+import * as Logging from "@/utils/logging"
 import * as Command from "./command"
-import { Game, Renderer, GameStorage } from "./game"
+import { Game, GameStorage, Renderer } from "./game"
 import config from "./game/config"
-import { logger, processTick } from "./main"
 
+const logger = Logging.make("game_window")
 export class GameWindow extends Windows.Window {
     storage: GameStorage.GameStorage
     constructor(private game: Game.Game, storage: GameStorage.GameStorage) {
@@ -25,7 +26,7 @@ export class GameWindow extends Windows.Window {
             case "+":
                 config.tickInterval -= 5
                 window.clearInterval(interval)
-                interval = window.setInterval(() => processTick(this.game), config.tickInterval)
+                interval = window.setInterval(() => Game.tick(this.game), config.tickInterval)
                 Game.message(this.game, {
                     text: `Speed increased to ${config.tickInterval}`,
                     ttl: 2,
@@ -34,7 +35,7 @@ export class GameWindow extends Windows.Window {
             case "-":
                 config.tickInterval += 5
                 window.clearInterval(interval)
-                interval = window.setInterval(() => processTick(this.game), config.tickInterval)
+                interval = window.setInterval(() => Game.tick(this.game), config.tickInterval)
                 Game.message(this.game, { text: "Speed decreased", ttl: 2 })
                 break
             // case "]":

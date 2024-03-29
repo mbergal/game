@@ -6,12 +6,12 @@ import {
     Game,
     GameStorage,
     GameTime,
+    Intro,
     ItemGenerator,
     PerformanceReview,
     Plan,
-    Sprint,
     Renderer,
-    Intro,
+    Sprint,
 } from "./game"
 
 import { Vector } from "./geometry"
@@ -20,15 +20,15 @@ import config from "./game/config"
 
 import * as MazeGenerator from "./generator"
 
-import { TextWindow, Windows } from "@/ui"
+import { Windows } from "@/ui"
 import * as Logging from "@/utils/logging"
 
-import { assertUnreachable } from "./utils/utils"
 import { GameWindow } from "./game_window"
+import { assertUnreachable } from "./utils/utils"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
-export const logger = Logging.make("main")
+const logger = Logging.make("main")
 
 Logging.setIsEnabled((name: string) => _.includes(["main", "player", "game"], name))
 
@@ -66,80 +66,6 @@ const localStorage: GameStorage.GameStorage = {
         const objectsStorage = window.localStorage.getItem("map")
         return objectsStorage
     },
-}
-
-export function processTick(game: Game.Game) {
-    const fullTick = () => {
-        Logging.setTime(game.time.ticks)
-        game.score.stockPrice =
-            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-        game.score.money += game.player!.level.rate
-        game.time = GameTime.make(game.time.ticks)
-
-        Game.tick(game)
-        Game.handleEffects(game, Collapse.tick(game))
-        ItemGenerator.tick(game.itemGenerator, game)
-
-        if (game.sprint) {
-            Game.handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
-        }
-
-        Game.handleEffects(game, PerformanceReview.tick(game))
-
-        for (const obj of game.map.objects) {
-            const result = tick(obj, game, game.commands, 1)
-        }
-        game.commands = []
-        Renderer.render(game)
-    }
-
-    const playerTick = () => {
-        Logging.setTime(game.time.ticks)
-        game.score.stockPrice =
-            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-        game.score.money += game.player!.level.rate
-        game.time = GameTime.make(game.time.ticks)
-        const result = tick(game.player!, game, game.commands, 0.5)
-        game.commands = []
-        Renderer.render(game)
-    }
-
-    if (!game.player!.flags.spedUp) {
-        fullTick()
-        game.time.ticks += 1
-    } else {
-        playerTick()
-        game.time.ticks += 0.5
-        fullTick()
-        game.time.ticks += 0.5
-    }
-}
-
-function tick(
-    obj: GameObject.t,
-    game: Game.Game,
-    commands: Command.Command[],
-    ticksPassed: number
-) {
-    switch (obj.type) {
-        case "boss":
-            Boss.tick(obj, game.map)
-            break
-        case "footprint":
-            Game.handleEffects(game, Footprint.tick(obj, game.map))
-            break
-        case "player":
-            Game.handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
-            break
-        case "door":
-        case "story":
-        case "commit":
-        case "coffee":
-        case "wall":
-            break
-        default:
-            assertUnreachable(obj)
-    }
 }
 
 main()

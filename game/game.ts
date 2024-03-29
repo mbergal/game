@@ -1,17 +1,20 @@
-import { Player } from "@/objects"
+import { Boss, Footprint, GameObject, Player } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import * as Command from "../command"
 import * as ItemGenerator from "../game/item_generator"
 import { Vector } from "../geometry"
 import * as Collapse from "./collapse"
+import config from "./config"
 import * as Effect from "./effect"
 import * as Effects from "./effects"
-import { GameStorage } from "./game_storage"
+import * as GameStorage from "./game_storage"
 import * as GameTime from "./game_time"
 import * as GameMap from "./map"
 import { Message } from "./message"
+import * as PerformanceReview from "./performance_review"
 import * as Plan from "./plan"
+import * as Renderer from "./renderer"
 import * as Score from "./score"
 import * as Sprint from "./sprint"
 export * as GameMap from "./map"
@@ -65,7 +68,7 @@ export function toJson(game: Game): object {
     }
 }
 
-export function handleEffects(game: Game, effects: Generator<Effect.Effect> | Effects.Effects) {
+function handleEffects(game: Game, effects: Generator<Effect.Effect> | Effects.Effects) {
     for (const effect of effects) {
         switch (effect.type) {
             case "null":
@@ -93,39 +96,84 @@ export function message(game: Game, m: Message | { text: string[]; ttl: number }
 }
 
 export function tick(game: Game) {
-    const events = game.plan.get(game.time.ticks)
-    if (events) {
-        for (const event of events) {
-            switch (event.type) {
-                case "createBacklogIssue":
-                case "groomBacklogEnd":
-                case "groomBacklogStart":
-                case "sprintDayEnd":
-                case "sprintDayStart":
-                case "sprintStart":
-                case "sprintEnd":
-                case "weekendStart":
-                case "weekendEnd":
-                case "gameStarted":
-                case "collapseStart":
-                case "dayStarted":
-                case "performanceReview":
-                case "gameEnded":
-                    logger(JSON.stringify(event))
-                    break
-                default:
-                    assertUnreachable(event)
-            }
+    const fullTick = () => {
+        Logging.setTime(game.time.ticks)
+        game.score.stockPrice =
+            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
+        game.score.money += game.player!.level.rate
+        game.time = GameTime.make(game.time.ticks)
+
+        handleEffects(game, Collapse.tick(game))
+        ItemGenerator.tick(game.itemGenerator, game)
+
+        if (game.sprint) {
+            handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))
         }
+
+        handleEffects(game, PerformanceReview.tick(game))
+
+        for (const obj of game.map.objects) {
+            const result = objTick(obj, game, game.commands, 1)
+        }
+        game.commands = []
+        Renderer.render(game)
+    }
+
+    const playerTick = () => {
+        Logging.setTime(game.time.ticks)
+        game.score.stockPrice =
+            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
+        game.score.money += game.player!.level.rate
+        game.time = GameTime.make(game.time.ticks)
+        const result = objTick(game.player!, game, game.commands, 0.5)
+        game.commands = []
+        Renderer.render(game)
+    }
+
+    if (!game.player!.flags.spedUp) {
+        fullTick()
+        game.time.ticks += 1
+    } else {
+        playerTick()
+        game.time.ticks += 0.5
+        fullTick()
+        game.time.ticks += 0.5
     }
 }
 
-export function save(game: Game, storage: GameStorage) {
+function objTick(
+    obj: GameObject.GameObject,
+    game: Game,
+    commands: Command.Command[],
+    ticksPassed: number
+) {
+    switch (obj.type) {
+        case "boss":
+            Boss.tick(obj, game.map)
+            break
+        case "footprint":
+            handleEffects(game, Footprint.tick(obj, game.map))
+            break
+        case "player":
+            handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
+            break
+        case "door":
+        case "story":
+        case "commit":
+        case "coffee":
+        case "wall":
+            break
+        default:
+            assertUnreachable(obj)
+    }
+}
+
+export function save(game: Game, storage: GameStorage.GameStorage) {
     storage.save(JSON.stringify(toJson(game)))
     logger("Game saved!")
 }
 
-export function load(storage: GameStorage): Game | null {
+export function load(storage: GameStorage.GameStorage): Game | null {
     const objectsStorage = storage.load()
     if (objectsStorage != null) {
         const {
