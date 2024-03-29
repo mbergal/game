@@ -213,6 +213,6 @@ function tick(
     }
 }
 
-Windows.show(new Windows.TextWindow("Hello, world!"))
+Windows.show(Windows.move({ x: 5, y: 5 }, new Windows.TextWindow("Hello, world!")))
 
 // main()

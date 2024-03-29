@@ -6231,11 +6231,11 @@
   var logger = make("performance_review");
   var PerformanceReview;
   ((PerformanceReview2) => {
-    function make16() {
+    function make17() {
       return {};
     }
-    PerformanceReview2.make = make16;
-    __name(make16, "make");
+    PerformanceReview2.make = make17;
+    __name(make17, "make");
     function generatePlan3(startTick) {
       const plan2 = make2();
       addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
@@ -7980,46 +7980,70 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
-  // ui/windows.ts
-  var windows = [];
-  function show(window2) {
-    windows.push(window2);
-    window2.show();
-    rerender();
-  }
-  __name(show, "show");
-  function rerender() {
+  // ui/composition.ts
+  function make16(size2) {
+    const composition = [];
     for (let y = 0; y < size.y; y++) {
       composition[y] = [];
       for (let x = 0; x < size.x; x++) {
         composition[y][x] = " ";
       }
     }
-    for (const window2 of windows) {
+    return composition;
+  }
+  __name(make16, "make");
+  function compose(composition, position, window2) {
+    for (let y = 0; y < window2.length; y++) {
+      for (let x = 0; x < window2[y].length; x++) {
+        composition[position.y + y][position.x + x] = window2[y][x];
+      }
+    }
+    return composition;
+  }
+  __name(compose, "compose");
+  function render3(windows2) {
+    let composition = make16(size);
+    for (const window2 of windows2) {
       composition = compose(
         composition,
+        window2.position,
         window2.render().map((x) => x.split(""))
       );
     }
     render(vector_exports.zero, composition);
   }
-  __name(rerender, "rerender");
+  __name(render3, "render");
+
+  // ui/windows.ts
+  var windows = [];
+  function show(window2) {
+    windows.push(window2);
+    window2.show();
+    render3(windows);
+    return window2;
+  }
+  __name(show, "show");
+  function move2(position, window2) {
+    window2.position = position;
+    render3(windows);
+    return window2;
+  }
+  __name(move2, "move");
   var _TextWindow = class _TextWindow {
     constructor(text) {
+      this.position = { x: 0, y: 0 };
       const splitText = formatText(text);
       const width = splitText[0].length;
       const height = splitText.length;
       const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
       const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
       this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
+      this.size = { x: this.contents[0].length, y: this.contents.length };
     }
     show() {
     }
     render() {
       return this.contents;
-    }
-    size() {
-      return { x: this.contents[0].length, y: this.contents.length };
     }
     hide() {
     }
@@ -8195,7 +8219,7 @@
     }
   }
   __name(tick9, "tick");
-  show(new TextWindow("Hello, world!"));
+  show(move2({ x: 5, y: 5 }, new TextWindow("Hello, world!")));
 })();
 /*! Bundled license information:
 
