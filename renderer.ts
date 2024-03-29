@@ -2,10 +2,11 @@ import { Game, Message, GameMap } from "./game"
 import { Vector } from "./geometry"
 import { GameObject } from "./objects"
 import { assertUnreachable } from "./utils/utils"
+import * as Screen from "./screens"
 
 export function render(game: Game.Game) {
     const map = game.map
-    const buffer = [showMessage(game).split("")]
+    const buffer = [showMessage(game)]
     for (let y = 0; y < map.height; y++) {
         const row = []
 
@@ -14,12 +15,11 @@ export function render(game: Game.Game) {
             row.push(getRepresentation(map, objs, game.time.ticks))
         }
 
-        buffer.push(row)
+        buffer.push(row.join(""))
     }
 
     buffer.push(
-        (
-            showTime(game) +
+        showTime(game) +
             showLevel(game) +
             " Money: $" +
             game.score.money.toString().padStart(6, "0") +
@@ -28,10 +28,8 @@ export function render(game: Game.Game) {
             showTask(game) +
             " " +
             showStockPrice(game)
-        ).split("")
     )
-    const contentBlock = document.getElementById("content")
-    contentBlock!.innerText = buffer.map((x) => x.join("")).join("\n")
+    Screen.render(buffer)
 }
 
 export function showMessage(game: {

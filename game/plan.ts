@@ -40,7 +40,7 @@ export function generatePlan(startDay: number): Plan {
     for (const i in _.range(Math.floor((config.totalDays - startDay) / 14))) {
         const pplan = PerformanceReview.generatePlan(startTick)
         append(plan, pplan)
-        startTick += 28
+        startTick += 14
     }
 
     append(plan, Collapse.plan())

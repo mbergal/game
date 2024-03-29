@@ -20,3 +20,5 @@ export function w(v: Vector): Vector {
 export function e(v: Vector): Vector {
     return { x: v.x + 1, y: v.y }
 }
+
+export const zero = { x: 0, y: 0 }

@@ -18,6 +18,7 @@ import { render } from "./renderer"
 import * as Logging from "./utils/logging"
 import { assertUnreachable } from "./utils/utils"
 import { GameStorage } from "./game/game_storage"
+import * as Windows from "./windows"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
@@ -190,14 +191,13 @@ function tick(
     game: Game.Game,
     commands: Command.Command[],
     ticksPassed: number
-): Result {
-    let result = { codeBlocks: 0 }
+) {
     switch (obj.type) {
         case "boss":
             Boss.tick(obj, game.map)
             break
         case "footprint":
-            Footprint.tick(obj, game.map)
+            Game.handleEffects(game, Footprint.tick(obj, game.map))
             break
         case "player":
             Game.handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
@@ -211,7 +211,8 @@ function tick(
         default:
             assertUnreachable(obj)
     }
-    return result
 }
 
-main()
+Windows.show(new Windows.TextWindow("Hello, world!"))
+
+// main()

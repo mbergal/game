@@ -131,7 +131,7 @@ export function* tick(
                 case "createBacklogIssue":
                     const story = Story.make(game.map.getRandomEmptyLocation(), event.size)
                     game.map.add(story)
-                    yield Effect.showMessage(`Moved "${story.name}" to To Do`, 2000)
+                    yield Effect.showMessage(`Moved "${story.name}" to To Do`, 500)
                     break
                 case "groomBacklogEnd":
                 case "collapseStart":
