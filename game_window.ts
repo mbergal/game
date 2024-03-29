@@ -7,26 +7,30 @@ import config from "./game/config"
 const logger = Logging.make("game_window")
 export class GameWindow extends Windows.Window {
     storage: GameStorage.GameStorage
+    interval: number
     constructor(private game: Game.Game, storage: GameStorage.GameStorage) {
         super()
         this.storage = storage
-        this.keydown = (window: Windows.Window, event: KeyboardEvent) => {
+        this.keydown = (window: Windows.Window, event: Windows.KeyboardEvent) => {
             this.processKey(event)
         }
+        this.interval = this.setInterval(() => {
+            Game.tick(game)
+            Windows.updateScreen()
+        }, config.tickInterval)
     }
 
     render() {
         return Renderer.render(this.game)
     }
 
-    processKey(event: KeyboardEvent) {
+    processKey(event: Windows.KeyboardEvent) {
         logger(`keydown: ${event.key}`)
-        let interval = 1000 / config.tickInterval
         switch (event.key) {
             case "+":
                 config.tickInterval -= 5
-                window.clearInterval(interval)
-                interval = window.setInterval(() => Game.tick(this.game), config.tickInterval)
+                this.clearInterval(this.interval)
+                this.interval = this.setInterval(() => Game.tick(this.game), config.tickInterval)
                 Game.message(this.game, {
                     text: `Speed increased to ${config.tickInterval}`,
                     ttl: 2,
@@ -34,8 +38,8 @@ export class GameWindow extends Windows.Window {
                 break
             case "-":
                 config.tickInterval += 5
-                window.clearInterval(interval)
-                interval = window.setInterval(() => Game.tick(this.game), config.tickInterval)
+                this.clearInterval(this.interval)
+                this.interval = this.setInterval(() => Game.tick(this.game), config.tickInterval)
                 Game.message(this.game, { text: "Speed decreased", ttl: 2 })
                 break
             // case "]":
@@ -54,7 +58,6 @@ export class GameWindow extends Windows.Window {
                 }
                 break
             }
-
             default: {
                 const command = getCommand(event.key)
                 if (command != null) {

@@ -7376,40 +7376,6 @@
   __export(text_window_exports, {
     TextWindow: () => TextWindow
   });
-  var _TextWindow = class _TextWindow {
-    constructor(text) {
-      this.keydown = null;
-      this.position = { x: 0, y: 0 };
-      const splitText = formatText(text);
-      const width = splitText[0].length;
-      const height = splitText.length;
-      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
-      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
-      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
-      this.size = { x: this.contents[0].length, y: this.contents.length };
-    }
-    show() {
-    }
-    render() {
-      return this.contents;
-    }
-    onKeyPress(callback) {
-      this.keydown = callback;
-      return this;
-    }
-    hide() {
-    }
-    interval() {
-    }
-  };
-  __name(_TextWindow, "TextWindow");
-  var TextWindow = _TextWindow;
-  function formatText(text) {
-    const lines = text.split("\n");
-    const maxLength = Math.max(...lines.map((x) => x.length));
-    return lines.map((x) => x.padEnd(maxLength, " "));
-  }
-  __name(formatText, "formatText");
 
   // ui/windows.ts
   var windows_exports = {};
@@ -7420,6 +7386,7 @@
     hide: () => hide,
     move: () => move,
     show: () => show,
+    updateScreen: () => updateScreen,
     windows: () => windows
   });
   var import_lodash6 = __toESM(require_lodash());
@@ -7485,30 +7452,48 @@
     render() {
       return [];
     }
+    clearInterval(id) {
+      window.clearInterval(id);
+    }
+    setInterval(handler, timeout) {
+      return window.setInterval(() => {
+        if (isFocused(this)) {
+          handler();
+        }
+      }, timeout);
+    }
   };
   __name(_Window, "Window");
   var Window = _Window;
+  function isFocused(window2) {
+    return import_lodash6.default.last(windows) === window2;
+  }
+  __name(isFocused, "isFocused");
   var windows = [];
   function focused() {
     return import_lodash6.default.last(windows) ?? null;
   }
   __name(focused, "focused");
+  function updateScreen() {
+    render3(windows);
+  }
+  __name(updateScreen, "updateScreen");
   function show(window2) {
     windows.push(window2);
     window2.show();
-    render3(windows);
+    updateScreen();
     return window2;
   }
   __name(show, "show");
   function hide(window2) {
     window2.hide();
     windows.splice(windows.indexOf(window2), 1);
-    render3(windows);
+    updateScreen();
   }
   __name(hide, "hide");
   function move(position, window2) {
     window2.position = position;
-    render3(windows);
+    updateScreen();
     return window2;
   }
   __name(move, "move");
@@ -7523,6 +7508,37 @@
     return window2;
   }
   __name(center, "center");
+
+  // ui/text_window.ts
+  var _TextWindow = class _TextWindow extends Window {
+    constructor(text) {
+      super();
+      this.keydown = null;
+      this.position = { x: 0, y: 0 };
+      const splitText = formatText(text);
+      const width = splitText[0].length;
+      const height = splitText.length;
+      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
+      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
+      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
+      this.size = { x: this.contents[0].length, y: this.contents.length };
+    }
+    render() {
+      return this.contents;
+    }
+    onKeyPress(callback) {
+      this.keydown = callback;
+      return this;
+    }
+  };
+  __name(_TextWindow, "TextWindow");
+  var TextWindow = _TextWindow;
+  function formatText(text) {
+    const lines = text.split("\n");
+    const maxLength = Math.max(...lines.map((x) => x.length));
+    return lines.map((x) => x.padEnd(maxLength, " "));
+  }
+  __name(formatText, "formatText");
 
   // game/intro.ts
   var _Window2 = class _Window2 extends text_window_exports.TextWindow {
@@ -8189,18 +8205,21 @@
       this.keydown = (window2, event) => {
         this.processKey(event);
       };
+      this.interval = this.setInterval(() => {
+        game_exports.tick(game);
+        windows_exports.updateScreen();
+      }, config_default.tickInterval);
     }
     render() {
       return renderer_exports.render(this.game);
     }
     processKey(event) {
       logger4(`keydown: ${event.key}`);
-      let interval = 1e3 / config_default.tickInterval;
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
-          window.clearInterval(interval);
-          interval = window.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
+          this.clearInterval(this.interval);
+          this.interval = this.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
           game_exports.message(this.game, {
             text: `Speed increased to ${config_default.tickInterval}`,
             ttl: 2
@@ -8208,8 +8227,8 @@
           break;
         case "-":
           config_default.tickInterval += 5;
-          window.clearInterval(interval);
-          interval = window.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
+          this.clearInterval(this.interval);
+          this.interval = this.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
           game_exports.message(this.game, { text: "Speed decreased", ttl: 2 });
           break;
         case "s":

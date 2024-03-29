@@ -19,6 +19,25 @@ export class Window {
     }
 
     keydown: ((window: Window, event: KeyboardEvent) => void) | null = null
+
+    clearInterval(id: number | undefined): void {
+        window.clearInterval(id)
+    }
+    setInterval(handler: () => void, timeout: number): number {
+        return window.setInterval(() => {
+            if (isFocused(this)) {
+                handler()
+            }
+        }, timeout)
+    }
+}
+
+export type KeyboardEvent = {
+    key: string
+}
+
+function isFocused(window: Window): boolean {
+    return _.last(windows) === window
 }
 
 export let windows: Window[] = []
@@ -27,22 +46,25 @@ export function focused(): Window | null {
     return _.last(windows) ?? null
 }
 
+export function updateScreen() {
+    Composition.render(windows)
+}
 export function show(window: Window): Window {
     windows.push(window)
     window.show()
-    Composition.render(windows)
+    updateScreen()
     return window
 }
 
 export function hide(window: Window) {
     window.hide()
     windows.splice(windows.indexOf(window), 1)
-    Composition.render(windows)
+    updateScreen()
 }
 
 export function move(position: Vector.Vector, window: Window): Window {
     window.position = position
-    Composition.render(windows)
+    updateScreen()
     return window
 }
 

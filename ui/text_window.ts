@@ -1,13 +1,12 @@
 import { Vector } from "@/geometry"
 import * as Windows from "./windows"
 
-export class TextWindow implements Windows.Window {
+export class TextWindow extends Windows.Window {
     contents: string[]
-    position: Vector.Vector
-    size: Vector.Vector
-    keydown: ((window: Windows.Window, event: KeyboardEvent) => void) | null = null
+    keydown: ((window: Windows.Window, event: Windows.KeyboardEvent) => void) | null = null
 
     constructor(text: string) {
+        super()
         this.position = { x: 0, y: 0 }
         const splitText = formatText(text)
         const width = splitText[0].length
@@ -19,20 +18,14 @@ export class TextWindow implements Windows.Window {
         this.size = { x: this.contents[0].length, y: this.contents.length }
     }
 
-    show() {}
-
     render(): string[] {
         return this.contents
     }
 
-    onKeyPress(callback: (window: Windows.Window, event: KeyboardEvent) => void) {
+    onKeyPress(callback: (window: Windows.Window, event: Windows.KeyboardEvent) => void) {
         this.keydown = callback
         return this
     }
-
-    hide() {}
-
-    interval() {}
 }
 
 function formatText(text: string) {
