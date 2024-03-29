@@ -1,4 +1,4 @@
-import { Vector } from "./geometry"
+import { Vector } from "../geometry"
 import * as Screen from "./screens"
 
 export interface Window {
@@ -6,17 +6,6 @@ export interface Window {
 }
 
 export const windows: Window[] = []
-
-let composition: string[][] = []
-
-function compose(composition: string[][], window: string[][]) {
-    for (let y = 0; y < window.length; y++) {
-        for (let x = 0; x < window[y].length; x++) {
-            composition[y][x] = window[y][x]
-        }
-    }
-    return composition
-}
 
 export function show(window: Window) {
     windows.push(window)

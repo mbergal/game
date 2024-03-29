@@ -7801,10 +7801,10 @@
   }
   __name(tick8, "tick");
 
-  // screens.ts
-  function render(position, lines) {
+  // ui/screens.ts
+  function render(position, chars) {
     const contentBlock = document.getElementById("content");
-    contentBlock.innerHTML = lines.map((x) => x).join("\n");
+    contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
   }
   __name(render, "render");
   var size = { x: 80, y: 24 };
@@ -7980,18 +7980,8 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
-  // windows.ts
+  // ui/windows.ts
   var windows = [];
-  var composition = [];
-  function compose(composition2, window2) {
-    for (let y = 0; y < window2.length; y++) {
-      for (let x = 0; x < window2[y].length; x++) {
-        composition2[y][x] = window2[y][x];
-      }
-    }
-    return composition2;
-  }
-  __name(compose, "compose");
   function show(window2) {
     windows.push(window2);
     window2.show();

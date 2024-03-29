@@ -18,7 +18,7 @@ import { render } from "./renderer"
 import * as Logging from "./utils/logging"
 import { assertUnreachable } from "./utils/utils"
 import { GameStorage } from "./game/game_storage"
-import * as Windows from "./windows"
+import * as Windows from "./ui/windows"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 

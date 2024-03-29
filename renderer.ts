@@ -2,7 +2,7 @@ import { Game, Message, GameMap } from "./game"
 import { Vector } from "./geometry"
 import { GameObject } from "./objects"
 import { assertUnreachable } from "./utils/utils"
-import * as Screen from "./screens"
+import * as Screen from "./ui/screens"
 
 export function render(game: Game.Game) {
     const map = game.map
