@@ -27,6 +27,27 @@ const logger = Logging.make("main")
 Logging.setIsEnabled((name: string) => _.includes(["main", "player", "game"], name))
 
 export function main() {
+    Windows.show(
+        Windows.center(
+            new Windows.TextWindow(
+                [
+                    "        REQUIEM FOR A PROGRAMMER.",
+                    "                                   ",
+                    "       You ('*') are in Agile hell.",
+                    "Earn enough money and get out (if you can)!",
+                    "",
+                    "Keys",
+                    "----",
+                    "",
+                    "Move - arrows",
+                    "Drop item - space",
+                    "Use item - enter",
+                    "stop - end",
+                ].join("\n")
+            )
+        )
+    )
+
     const boss: Boss.Boss = Boss.make()
     const plan: Plan.Plan = Plan.generatePlan(0)
 
@@ -182,10 +203,6 @@ function processTick(game: Game.Game) {
     }
 }
 
-interface Result {
-    codeBlocks: number
-}
-
 function tick(
     obj: GameObject.t,
     game: Game.Game,
@@ -213,6 +230,4 @@ function tick(
     }
 }
 
-Windows.show(Windows.move({ x: 5, y: 5 }, new Windows.TextWindow("Hello, world!")))
-
-// main()
+main()

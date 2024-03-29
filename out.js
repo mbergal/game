@@ -8029,6 +8029,17 @@
     return window2;
   }
   __name(move2, "move");
+  function center(window2) {
+    move2(
+      {
+        x: Math.floor((size.x - window2.size.x) / 2),
+        y: Math.floor((size.y - window2.size.y) / 2)
+      },
+      window2
+    );
+    return window2;
+  }
+  __name(center, "center");
   var _TextWindow = class _TextWindow {
     constructor(text) {
       this.position = { x: 0, y: 0 };
@@ -8066,6 +8077,26 @@
   var logger4 = make("main");
   setIsEnabled((name) => import_lodash9.default.includes(["main", "player", "game"], name));
   function main() {
+    show(
+      center(
+        new TextWindow(
+          [
+            "        REQUIEM FOR A PROGRAMMER.",
+            "                                   ",
+            "       You ('*') are in Agile hell.",
+            "Earn enough money and get out (if you can)!",
+            "",
+            "Keys",
+            "----",
+            "",
+            "Move - arrows",
+            "Drop item - space",
+            "Use item - enter",
+            "stop - end"
+          ].join("\n")
+        )
+      )
+    );
     const boss = make15();
     const plan2 = plan_exports.generatePlan(0);
     let game = game_exports.make(MAZE_SIZE, plan2);
@@ -8219,7 +8250,7 @@
     }
   }
   __name(tick9, "tick");
-  show(move2({ x: 5, y: 5 }, new TextWindow("Hello, world!")));
+  main();
 })();
 /*! Bundled license information:
 
