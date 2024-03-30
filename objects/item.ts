@@ -23,3 +23,16 @@ export function isItem(obj: GameObject.GameObject): obj is Item {
             assertUnreachable(obj)
     }
 }
+
+export function description(item: Item): string {
+    switch (item.type) {
+        case "door":
+            return "door"
+        case "commit":
+            return `commit ${item.hash}`
+        case "coffee":
+            return `cup of coffee`
+        case "story":
+            return `story "${item.name}"`
+    }
+}

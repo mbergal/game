@@ -15,7 +15,16 @@ export type Config = {
     sprint: {
         startDay: number
     }
-    itemGenerator: { start: number; interval: number; maxItems: number }
+    itemGenerator: {
+        start: number
+        interval: number
+        maxItems: number
+        frequencies: {
+            door: number
+            commit: number
+            coffee: number
+        }
+    }
     items: {
         coffee: {
             speedUpDays: number
@@ -42,7 +51,16 @@ const config: Config = {
     performanceReview: {
         interval: 28,
     },
-    itemGenerator: { start: 0, interval: 40, maxItems: 20 },
+    itemGenerator: {
+        start: 0,
+        interval: 40,
+        maxItems: 20,
+        frequencies: {
+            door: 1,
+            commit: 90,
+            coffee: 10,
+        },
+    },
     items: {
         coffee: {
             speedUpDays: 1,

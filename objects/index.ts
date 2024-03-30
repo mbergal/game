@@ -1,6 +1,8 @@
+export * as Boss from "./boss"
 export * as Coffee from "./coffee"
 export * as Commit from "./commit"
 export * as Door from "./door"
+export * as Footprint from "./footprint"
 export * as Item from "./item"
 export * as GameObject from "./object"
 export * as GameObjects from "./objects"

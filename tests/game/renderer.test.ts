@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest"
-import { showMessage } from "../../renderer"
+import { showMessage } from "../../game/renderer"
 
 describe("showMessage", () => {
     test("shows non-expired message", () => {

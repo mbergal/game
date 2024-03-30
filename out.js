@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _12.defaults(root.Object(), context, _12.pick(root, contextProps));
+          context = context == null ? root : _13.defaults(root.Object(), context, _13.pick(root, contextProps));
           var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -1091,9 +1091,9 @@
           }
           __name(mapCacheHas, "mapCacheHas");
           function mapCacheSet(key, value) {
-            var data = getMapData(this, key), size2 = data.size;
+            var data = getMapData(this, key), size3 = data.size;
             data.set(key, value);
-            this.size += data.size == size2 ? 0 : 1;
+            this.size += data.size == size3 ? 0 : 1;
             return this;
           }
           __name(mapCacheSet, "mapCacheSet");
@@ -3063,19 +3063,19 @@
           function getView(start, end, transforms) {
             var index = -1, length = transforms.length;
             while (++index < length) {
-              var data = transforms[index], size2 = data.size;
+              var data = transforms[index], size3 = data.size;
               switch (data.type) {
                 case "drop":
-                  start += size2;
+                  start += size3;
                   break;
                 case "dropRight":
-                  end -= size2;
+                  end -= size3;
                   break;
                 case "take":
-                  end = nativeMin(end, start + size2);
+                  end = nativeMin(end, start + size3);
                   break;
                 case "takeRight":
-                  start = nativeMax(start, end - size2);
+                  start = nativeMax(start, end - size3);
                   break;
               }
             }
@@ -3362,15 +3362,15 @@
             };
           }
           __name(shortOut, "shortOut");
-          function shuffleSelf(array, size2) {
+          function shuffleSelf(array, size3) {
             var index = -1, length = array.length, lastIndex = length - 1;
-            size2 = size2 === undefined ? length : size2;
-            while (++index < size2) {
+            size3 = size3 === undefined ? length : size3;
+            while (++index < size3) {
               var rand = baseRandom(index, lastIndex), value = array[rand];
               array[rand] = array[index];
               array[index] = value;
             }
-            array.length = size2;
+            array.length = size3;
             return array;
           }
           __name(shuffleSelf, "shuffleSelf");
@@ -3427,19 +3427,19 @@
             return result2;
           }
           __name(wrapperClone, "wrapperClone");
-          function chunk2(array, size2, guard) {
-            if (guard ? isIterateeCall(array, size2, guard) : size2 === undefined) {
-              size2 = 1;
+          function chunk2(array, size3, guard) {
+            if (guard ? isIterateeCall(array, size3, guard) : size3 === undefined) {
+              size3 = 1;
             } else {
-              size2 = nativeMax(toInteger(size2), 0);
+              size3 = nativeMax(toInteger(size3), 0);
             }
             var length = array == null ? 0 : array.length;
-            if (!length || size2 < 1) {
+            if (!length || size3 < 1) {
               return [];
             }
-            var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size2));
+            var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size3));
             while (index < length) {
-              result2[resIndex++] = baseSlice(array, index, index += size2);
+              result2[resIndex++] = baseSlice(array, index, index += size3);
             }
             return result2;
           }
@@ -4093,7 +4093,7 @@
             return func(collection);
           }
           __name(shuffle, "shuffle");
-          function size(collection) {
+          function size2(collection) {
             if (collection == null) {
               return 0;
             }
@@ -4106,7 +4106,7 @@
             }
             return baseKeys(collection).length;
           }
-          __name(size, "size");
+          __name(size2, "size");
           function some2(collection, predicate, guard) {
             var func = isArray(collection) ? arraySome : baseSome;
             if (guard && isIterateeCall(collection, predicate, guard)) {
@@ -5781,7 +5781,7 @@
           lodash.round = round;
           lodash.runInContext = runInContext2;
           lodash.sample = sample;
-          lodash.size = size;
+          lodash.size = size2;
           lodash.snakeCase = snakeCase;
           lodash.some = some2;
           lodash.sortedIndex = sortedIndex;
@@ -5985,32 +5985,102 @@
           }
           return lodash;
         }, "runInContext");
-        var _12 = runInContext();
+        var _13 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _12;
+          root._ = _13;
           define(function() {
-            return _12;
+            return _13;
           });
         } else if (freeModule) {
-          (freeModule.exports = _12)._ = _12;
-          freeExports._ = _12;
+          (freeModule.exports = _13)._ = _13;
+          freeExports._ = _13;
         } else {
-          root._ = _12;
+          root._ = _13;
         }
       }).call(exports);
     }
   });
 
-  // main.ts
-  var import_lodash9 = __toESM(require_lodash());
-
-  // game/collapse.ts
-  var collapse_exports = {};
-  __export(collapse_exports, {
+  // objects/boss.ts
+  var boss_exports = {};
+  __export(boss_exports, {
     make: () => make11,
-    plan: () => plan,
-    tick: () => tick4
+    possibleMoves: () => possibleMoves,
+    tick: () => tick7
   });
+  var import_lodash7 = __toESM(require_lodash());
+
+  // geometry/direction.ts
+  var direction_exports = {};
+  __export(direction_exports, {
+    all: () => all,
+    reverse: () => reverse,
+    toRose: () => toRose
+  });
+  function reverse(direction) {
+    switch (direction) {
+      case "down":
+        return "up";
+      case "up":
+        return "down";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
+  }
+  __name(reverse, "reverse");
+  function toRose(directions) {
+    const rose = {};
+    for (const direction of directions) {
+      rose[direction] = true;
+    }
+    return rose;
+  }
+  __name(toRose, "toRose");
+  var all = ["left", "right", "down", "up"];
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    n: () => n,
+    s: () => s,
+    w: () => w,
+    zero: () => zero
+  });
+  function n(v) {
+    return { x: v.x, y: v.y - 1 };
+  }
+  __name(n, "n");
+  function s(v) {
+    return { x: v.x, y: v.y + 1 };
+  }
+  __name(s, "s");
+  function w(v) {
+    return { x: v.x - 1, y: v.y };
+  }
+  __name(w, "w");
+  function e(v) {
+    return { x: v.x + 1, y: v.y };
+  }
+  __name(e, "e");
+  var zero = { x: 0, y: 0 };
+
+  // geometry/index.ts
+  function moveBy(vector, direction) {
+    switch (direction) {
+      case "down":
+        return { ...vector, x: vector.x, y: vector.y + 1 };
+      case "up":
+        return { ...vector, x: vector.x, y: vector.y - 1 };
+      case "left":
+        return { ...vector, x: vector.x - 1, y: vector.y };
+      case "right":
+        return { ...vector, x: vector.x + 1, y: vector.y };
+    }
+  }
+  __name(moveBy, "moveBy");
 
   // utils/random.ts
   var _ = __toESM(require_lodash());
@@ -6080,7 +6150,16 @@
     performanceReview: {
       interval: 28
     },
-    itemGenerator: { start: 0, interval: 40, maxItems: 20 },
+    itemGenerator: {
+      start: 0,
+      interval: 40,
+      maxItems: 20,
+      frequencies: {
+        door: 1,
+        commit: 90,
+        coffee: 10
+      }
+    },
     items: {
       coffee: {
         speedUpDays: 1
@@ -6094,11 +6173,15 @@
   __export(plan_exports, {
     addEvent: () => addEvent,
     append: () => append2,
-    generatePlan: () => generatePlan2,
+    generatePlan: () => generatePlan3,
     make: () => make2
   });
 
   // game/effects.ts
+  var effects_exports = {};
+  __export(effects_exports, {
+    append: () => append
+  });
   var import_lodash = __toESM(require_lodash());
   function append(effects, other) {
     if (!import_lodash.default.isArray(other)) {
@@ -6111,6 +6194,11 @@
   __name(append, "append");
 
   // game/effect.ts
+  var effect_exports = {};
+  __export(effect_exports, {
+    addImpact: () => addImpact,
+    showMessage: () => showMessage
+  });
   function addImpact(impact) {
     return {
       type: "addImpact",
@@ -6144,8 +6232,13 @@
   var tick = 0;
 
   // game/levels.ts
+  var levels_exports = {};
+  __export(levels_exports, {
+    all: () => all2,
+    level: () => level
+  });
   var import_lodash2 = __toESM(require_lodash());
-  var all = [
+  var all2 = [
     {
       name: "Engineer I",
       rate: 5,
@@ -6194,151 +6287,47 @@
   ];
   function level(impact) {
     let total = 0;
-    for (const level2 of all) {
+    for (const level2 of all2) {
       total += level2.impact;
       if (total >= impact) {
         return level2;
       }
     }
-    return import_lodash2.default.last(all);
+    return import_lodash2.default.last(all2);
   }
   __name(level, "level");
 
   // game/performance_review.ts
   var logger = make("performance_review");
-  var PerformanceReview;
-  ((PerformanceReview2) => {
-    function make16() {
-      return {};
-    }
-    PerformanceReview2.make = make16;
-    __name(make16, "make");
-    function generatePlan3(startTick) {
-      const plan2 = make2();
-      addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
-      return plan2;
-    }
-    PerformanceReview2.generatePlan = generatePlan3;
-    __name(generatePlan3, "generatePlan");
-    function tick10(game) {
-      const effects = [];
-      const events = game.plan.get(game.time.ticks);
-      if (events) {
-        for (const event of events) {
-          switch (event.type) {
-            case "performanceReview":
-              logger("Performance review");
-              game.player.level = level(game.score.impact);
-              append(effects, showMessage("Performance review", 3e3));
-          }
+  function generatePlan(startTick) {
+    const plan2 = make2();
+    addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
+    return plan2;
+  }
+  __name(generatePlan, "generatePlan");
+  function tick2(game) {
+    const effects = [];
+    const events = game.plan.get(game.time.ticks);
+    if (events) {
+      for (const event of events) {
+        switch (event.type) {
+          case "performanceReview":
+            logger("Performance review");
+            game.player.level = level(game.score.impact);
+            append(effects, showMessage("Performance review", 3e3));
         }
       }
-      return effects;
     }
-    PerformanceReview2.tick = tick10;
-    __name(tick10, "tick");
-  })(PerformanceReview || (PerformanceReview = {}));
+    return effects;
+  }
+  __name(tick2, "tick");
 
   // game/sprint.ts
-  var sprint_exports = {};
-  __export(sprint_exports, {
-    generatePlan: () => generatePlan,
-    make: () => make10,
-    tick: () => tick3
-  });
-  var import_lodash5 = __toESM(require_lodash());
-
-  // objects/coffee.ts
-  var coffee_exports = {};
-  __export(coffee_exports, {
-    make: () => make3
-  });
-  function make3(position) {
-    return {
-      type: "coffee",
-      position,
-      zIndex: 1,
-      open: false
-    };
-  }
-  __name(make3, "make");
-
-  // objects/commit.ts
-  var commit_exports = {};
-  __export(commit_exports, {
-    make: () => make4
-  });
-  function make4(position) {
-    return {
-      type: "commit",
-      position,
-      zIndex: 1,
-      open: false,
-      hash: generateId(8)
-    };
-  }
-  __name(make4, "make");
-  function byteToHex(byte) {
-    return ("0" + byte.toString(16)).slice(-2);
-  }
-  __name(byteToHex, "byteToHex");
-  function generateId(len = 40) {
-    var arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
-    return Array.from(arr, byteToHex).join("");
-  }
-  __name(generateId, "generateId");
-
-  // objects/door.ts
-  var door_exports = {};
-  __export(door_exports, {
-    make: () => make5
-  });
-  function make5(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false,
-      placed: false
-    };
-  }
-  __name(make5, "make");
-
-  // objects/item.ts
-  var item_exports = {};
-  __export(item_exports, {
-    isItem: () => isItem
-  });
-
-  // utils/utils.ts
-  function assertUnreachable(x) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
-
-  // objects/item.ts
-  function isItem(obj) {
-    switch (obj.type) {
-      case "door":
-      case "commit":
-      case "story":
-      case "coffee":
-        return true;
-      case "wall":
-      case "boss":
-      case "footprint":
-      case "player":
-        return false;
-      default:
-        assertUnreachable(obj);
-    }
-  }
-  __name(isItem, "isItem");
+  var import_lodash3 = __toESM(require_lodash());
 
   // objects/story_size.ts
-  function toString(size) {
-    switch (size) {
+  function toString(size2) {
+    switch (size2) {
       case "small":
         return "small";
       case "medium":
@@ -6350,17 +6339,17 @@
   __name(toString, "toString");
 
   // objects/story.ts
-  function make6(position, size) {
+  function make3(position, size2) {
     return {
       type: "story",
       position,
-      size,
+      size: size2,
       zIndex: 1,
       impact: 1,
-      name: choice(storyNames[size])
+      name: choice(storyNames[size2])
     };
   }
-  __name(make6, "make");
+  __name(make3, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -6400,412 +6389,11 @@
     ]
   };
 
-  // objects/objects.ts
-  var objects_exports = {};
-  __export(objects_exports, {
-    filter: () => filter
-  });
-  var import_lodash3 = __toESM(require_lodash());
-  function filter(objs, type) {
-    return import_lodash3.default.filter(objs, (x) => x.type == type);
+  // utils/utils.ts
+  function assertUnreachable(x) {
+    throw new Error("Didn't expect to get here");
   }
-  __name(filter, "filter");
-
-  // objects/player.ts
-  var import_lodash4 = __toESM(require_lodash());
-
-  // game/messages.ts
-  var startedStory = /* @__PURE__ */ __name((story) => ({
-    text: `You started on ${toString(story.size)} ${story.name}`,
-    ttl: 100
-  }), "startedStory");
-
-  // geometry/direction.ts
-  var direction_exports = {};
-  __export(direction_exports, {
-    all: () => all2,
-    reverse: () => reverse,
-    toRose: () => toRose
-  });
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
-  function toRose(directions) {
-    const rose = {};
-    for (const direction of directions) {
-      rose[direction] = true;
-    }
-    return rose;
-  }
-  __name(toRose, "toRose");
-  var all2 = ["left", "right", "down", "up"];
-
-  // geometry/vector.ts
-  var vector_exports = {};
-  __export(vector_exports, {
-    e: () => e,
-    n: () => n,
-    s: () => s,
-    w: () => w
-  });
-  function n(v) {
-    return { x: v.x, y: v.y - 1 };
-  }
-  __name(n, "n");
-  function s(v) {
-    return { x: v.x, y: v.y + 1 };
-  }
-  __name(s, "s");
-  function w(v) {
-    return { x: v.x - 1, y: v.y };
-  }
-  __name(w, "w");
-  function e(v) {
-    return { x: v.x + 1, y: v.y };
-  }
-  __name(e, "e");
-
-  // geometry/index.ts
-  function moveBy(vector, direction) {
-    switch (direction) {
-      case "down":
-        return { ...vector, x: vector.x, y: vector.y + 1 };
-      case "up":
-        return { ...vector, x: vector.x, y: vector.y - 1 };
-      case "left":
-        return { ...vector, x: vector.x - 1, y: vector.y };
-      case "right":
-        return { ...vector, x: vector.x + 1, y: vector.y };
-    }
-  }
-  __name(moveBy, "moveBy");
-
-  // objects/tasks/story.ts
-  var story_exports2 = {};
-  __export(story_exports2, {
-    addCommit: () => addCommit,
-    make: () => make7
-  });
-  function make7(story) {
-    return {
-      type: "story",
-      story,
-      impact: config_default.story[story.size].impact,
-      neededCommits: config_default.story[story.size].neededCommits,
-      appliedCommits: 0
-    };
-  }
-  __name(make7, "make");
-  function addCommit(player, task, commit, effects) {
-    task.appliedCommits += 1;
-    if (task.appliedCommits == task.neededCommits) {
-      append(effects, addImpact(task.impact));
-      append(effects, showMessage(`Finished ${task.story.name}`, 30));
-      player.task = null;
-    }
-    return effects;
-  }
-  __name(addCommit, "addCommit");
-
-  // objects/player.ts
-  var logger2 = make("player");
-  function make8(position) {
-    return {
-      type: "player",
-      zIndex: 1e3,
-      direction: null,
-      position,
-      tact: 0,
-      commands: [],
-      hrTaskTact: null,
-      item: null,
-      task: null,
-      flags: {
-        spedUp: false
-      },
-      level: all[0]
-    };
-  }
-  __name(make8, "make");
-  function canMoveOn(objs) {
-    if (objs.length > 0) {
-      const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
-        switch (obj.type) {
-          case "door":
-          case "story":
-          case "footprint":
-          case "commit":
-          case "coffee":
-            return true;
-          case "player":
-          case "wall":
-          case "boss":
-            return false;
-          default:
-            assertUnreachable(obj);
-        }
-      }, "canMoveOnObj");
-      const result = import_lodash4.default.every(objs, canMoveOnObj);
-      return result;
-    } else {
-      return true;
-    }
-  }
-  __name(canMoveOn, "canMoveOn");
-  function canTakeTask(task, player) {
-    return player.task == null;
-  }
-  __name(canTakeTask, "canTakeTask");
-  function takeTask(player, task, game) {
-    player.task = task;
-    switch (task.type) {
-      case "story":
-        game_exports.message(game, startedStory(task.story));
-        break;
-      case "null":
-        break;
-      default:
-        assertUnreachable(task);
-    }
-  }
-  __name(takeTask, "takeTask");
-  function canPickItem(player, item) {
-    switch (item.type) {
-      case "door":
-        if (item.placed) {
-          return false;
-        }
-    }
-    return player.hrTaskTact == null;
-  }
-  __name(canPickItem, "canPickItem");
-  function useItem(player, item, map, effects) {
-    logger2(`Using item ${item.type}`);
-    switch (item.type) {
-      case "commit":
-        if (player.task) {
-          const task = player.task;
-          switch (task.type) {
-            case "story":
-              story_exports2.addCommit(player, task, item, effects);
-              player.item = null;
-              break;
-          }
-          return true;
-        } else {
-          append(effects, showMessage("No task to apply commit to", 3e3));
-          return false;
-        }
-      case "coffee":
-        append(effects, showMessage("Drinking coffee", 3e3));
-        player.flags.spedUp = config_default.items.coffee.speedUpDays;
-        player.item = null;
-        return true;
-      case "door":
-        append(effects, showMessage("Placing door", 3e3));
-        item.position = player.position;
-        map.add(item);
-        item.placed = true;
-        player.item = null;
-        return true;
-      case "story":
-        break;
-      default:
-        assertUnreachable(item);
-    }
-    return false;
-  }
-  __name(useItem, "useItem");
-  function pickItem(player, newItem, game, effects) {
-    game.map.remove(newItem);
-    switch (newItem.type) {
-      case "door":
-        newItem.open = true;
-        dropCarriedItem(player, game);
-        player.item = newItem;
-        return true;
-      case "coffee":
-        dropCarriedItem(player, game);
-        player.item = newItem;
-        return true;
-      case "commit":
-        dropCarriedItem(player, game);
-        player.item = newItem;
-        return true;
-      case "story":
-        player.task = story_exports2.make(newItem);
-        return false;
-      default:
-        assertUnreachable(newItem);
-    }
-  }
-  __name(pickItem, "pickItem");
-  function dropCarriedItem(player, game) {
-    const carriedItem = player.item;
-    if (carriedItem != null) {
-      dropItem(player, game.map);
-    }
-  }
-  __name(dropCarriedItem, "dropCarriedItem");
-  function tickHrTask(player, ticksPassed) {
-    if (player.hrTaskTact != null) {
-      player.hrTaskTact += ticksPassed;
-      if (player.hrTaskTact > 200) {
-        player.hrTaskTact = null;
-      }
-    }
-    if (player.flags.spedUp && player.flags.spedUp > 0) {
-      player.flags.spedUp -= ticksPassed;
-      if (player.flags.spedUp <= 0) {
-        player.flags.spedUp = false;
-      }
-    }
-  }
-  __name(tickHrTask, "tickHrTask");
-  function handleDrop(player, map) {
-    if (player.item != null) {
-      dropItem(player, map);
-    }
-  }
-  __name(handleDrop, "handleDrop");
-  function dropItem(player, map) {
-    const droppingItem = player.item;
-    droppingItem.open = true;
-    droppingItem.position = player.position;
-    map.add(droppingItem);
-    player.item = null;
-  }
-  __name(dropItem, "dropItem");
-  function processCommands(player, commands, map, effects) {
-    const removeAllMoves = /* @__PURE__ */ __name(() => {
-      player.commands = player.commands.filter((x) => x.command.type != "move");
-    }, "removeAllMoves");
-    player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
-    if (player.commands.length > 0) {
-      logger2(JSON.stringify(player.commands));
-    }
-    if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
-      logger2(JSON.stringify(player.commands));
-    }
-    let delayedCommands = [];
-    while (player.commands.length > 0) {
-      logger2(JSON.stringify(player.commands));
-      const command = player.commands[0].command;
-      logger2(`processing: ${JSON.stringify(command)}`);
-      switch (command.type) {
-        case "move":
-          const newPosition = moveBy(player.position, command.direction);
-          const obsjAtNewPosition = map.at(newPosition);
-          if (canMoveOn(obsjAtNewPosition)) {
-            player.direction = command.direction;
-            player.commands.shift();
-            delayedCommands = [];
-          } else {
-            const delayedCommand = player.commands.shift();
-            logger2(`delaying ${JSON.stringify(delayedCommand)}`);
-            delayedCommands.push(delayedCommand);
-          }
-          break;
-        case "stop":
-          removeAllMoves();
-          player.direction = null;
-          break;
-        case "drop":
-          handleDrop(player, map);
-          player.commands.shift();
-          removeAllMoves();
-          break;
-        case "use":
-          if (player.item != null) {
-            useItem(player, player.item, map, effects);
-          }
-          player.commands.shift();
-          removeAllMoves();
-          break;
-        default:
-          assertUnreachable(command);
-      }
-    }
-    player.commands = delayedCommands;
-    for (const c of player.commands) {
-      c.tact += 1;
-    }
-    player.commands = player.commands.filter((x) => x.tact < 10);
-  }
-  __name(processCommands, "processCommands");
-  function tick2(player, game, commands, ticksPassed) {
-    const effects = [];
-    let pickedSomething = false;
-    let carriedSomething = player.item != null;
-    tickHrTask(player, ticksPassed);
-    processCommands(player, commands, game.map, effects);
-    if (player.direction) {
-      const newPosition = moveBy(player.position, player.direction);
-      const objsAtNewPosition = game.map.at(newPosition);
-      if (canMoveOn(objsAtNewPosition)) {
-        if (objsAtNewPosition.length > 0) {
-          const obj = objsAtNewPosition[0];
-          switch (obj.type) {
-            case "door":
-            case "coffee":
-              if (canPickItem(player, obj)) {
-                logger2(`Can pick item  ${JSON.stringify(player)}`);
-                append(effects, showMessage(`Picked a ${obj.type}`, 40));
-                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
-              }
-              break;
-            case "commit":
-              if (canPickItem(player, obj)) {
-                logger2(`Can pick item  ${JSON.stringify(player)}`);
-                append(
-                  effects,
-                  showMessage(`Picked a commit ${obj.hash}`, 40)
-                );
-                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
-              }
-              break;
-            case "story":
-              const task = story_exports2.make(obj);
-              if (canTakeTask(task, player)) {
-                takeTask(player, task, game);
-                game.map.remove(obj);
-              }
-              break;
-            case "player":
-            case "wall":
-            case "boss":
-            case "footprint":
-              break;
-            default:
-              assertUnreachable(obj);
-          }
-        }
-        game.map.move(player, newPosition);
-        if (game.map.objAt(moveBy(newPosition, player.direction), "commit") && carriedSomething) {
-          player.direction = null;
-        }
-      } else {
-      }
-    }
-    return effects;
-  }
-  __name(tick2, "tick");
-
-  // game/game_time.ts
-  var game_time_exports = {};
-  __export(game_time_exports, {
-    make: () => make9
-  });
+  __name(assertUnreachable, "assertUnreachable");
 
   // game/day_of_week.ts
   var all3 = [
@@ -6819,7 +6407,7 @@
   ];
 
   // game/game_time.ts
-  function make9(ticks) {
+  function make4(ticks) {
     const day = Math.floor(ticks / config_default.dayTicks);
     const dayOfWeek = all3[day % 7];
     return {
@@ -6828,17 +6416,17 @@
       dayOfWeek
     };
   }
-  __name(make9, "make");
+  __name(make4, "make");
 
   // game/sprint.ts
-  function make10() {
+  function make5() {
     return {
       day: 0,
       daysLeft: 0
     };
   }
-  __name(make10, "make");
-  function generatePlan(startTick) {
+  __name(make5, "make");
+  function generatePlan2(startTick) {
     const DAY = config_default.dayTicks;
     const SPRINT_DAYS = 10;
     const plan2 = make2();
@@ -6861,7 +6449,7 @@
       type: "sprintDayStart",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make9(startTick)
+      ...make4(startTick)
     });
     const groomingStart = startTick;
     for (const t of times) {
@@ -6874,44 +6462,44 @@
       type: "sprintDayEnd",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make9(startTick)
+      ...make4(startTick)
     });
     startTick += 1;
-    for (const i of import_lodash5.default.range(4)) {
+    for (const i of import_lodash3.default.range(4)) {
       const day = Math.floor(startTick / DAY);
       sprintDay += 1;
       addEvent2({
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
+        ...make4(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
+        ...make4(startTick)
       });
       startTick += 1;
     }
     addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
-    for (const i of import_lodash5.default.range(4)) {
+    for (const i of import_lodash3.default.range(4)) {
       sprintDay += 1;
       addEvent2({
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
+        ...make4(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make9(startTick)
+        ...make4(startTick)
       });
       startTick += 1;
     }
@@ -6921,16 +6509,16 @@
     addEvent2({ type: "weekendEnd" });
     return [plan2, startTick];
   }
-  __name(generatePlan, "generatePlan");
+  __name(generatePlan2, "generatePlan");
   function* tick3(sprint, game) {
     const events = game.plan.get(game.time.ticks);
     if (events) {
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make6(game.map.getRandomEmptyLocation(), event.size);
+            const story = make3(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
-            yield showMessage(`Moved "${story.name}" to To Do`, 2e3);
+            yield showMessage(`Moved "${story.name}" to To Do`, 500);
             break;
           case "groomBacklogEnd":
           case "collapseStart":
@@ -6981,7 +6569,7 @@
   __name(tick3, "tick");
 
   // game/plan.ts
-  var import_lodash6 = __toESM(require_lodash());
+  var import_lodash4 = __toESM(require_lodash());
   function make2() {
     return /* @__PURE__ */ new Map();
   }
@@ -7002,30 +6590,30 @@
     return plan2;
   }
   __name(append2, "append");
-  function generatePlan2(startDay) {
+  function generatePlan3(startDay) {
     let plan2 = make2();
     let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const r = generatePlan(startTick);
+    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const r = generatePlan2(startTick);
       append2(plan2, r[0]);
       startTick = r[1];
     }
     startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash6.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const pplan = PerformanceReview.generatePlan(startTick);
+    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const pplan = generatePlan(startTick);
       append2(plan2, pplan);
-      startTick += 28;
+      startTick += 14;
     }
     append2(plan2, plan());
     return plan2;
   }
-  __name(generatePlan2, "generatePlan");
+  __name(generatePlan3, "generatePlan");
 
   // game/collapse.ts
-  function make11() {
+  function make6() {
     return {};
   }
-  __name(make11, "make");
+  __name(make6, "make");
   function plan() {
     const plan2 = make2();
     addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
@@ -7035,7 +6623,7 @@
   function tick4(game) {
     const events = game.plan.get(game.time.ticks);
     if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make11();
+      game.collapse = make6();
     }
     if (game.collapse) {
       const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
@@ -7055,9 +6643,8 @@
   __export(game_exports, {
     GameMap: () => map_exports,
     Score: () => score_exports,
-    handleEffects: () => handleEffects,
     load: () => load,
-    make: () => make14,
+    make: () => make9,
     message: () => message,
     save: () => save,
     tick: () => tick6,
@@ -7065,10 +6652,10 @@
   });
 
   // game/item_generator.ts
-  function make12() {
+  function make7() {
     return { state: { type: "waiting", tact: 0 } };
   }
-  __name(make12, "make");
+  __name(make7, "make");
   function tick5(itemGenerator, game) {
     switch (itemGenerator.state.type) {
       case "waiting":
@@ -7082,7 +6669,11 @@
           itemGenerator.state.tact = 0;
           const itemType = choice(
             ["door", "commit", "coffee"],
-            [1, 90, 10]
+            [
+              config_default.itemGenerator.frequencies.door,
+              config_default.itemGenerator.frequencies.commit,
+              config_default.itemGenerator.frequencies.coffee
+            ]
           );
           let item;
           switch (itemType) {
@@ -7114,10 +6705,10 @@
     GameMap: () => GameMap,
     directionTo: () => directionTo
   });
-  var _9 = __toESM(require_lodash());
+  var _7 = __toESM(require_lodash());
 
   // generator.ts
-  var import_lodash7 = __toESM(require_lodash());
+  var import_lodash5 = __toESM(require_lodash());
 
   // room.ts
   function upperDoors(room) {
@@ -7138,8 +6729,8 @@
     }
   }
   __name(check, "check");
-  function maze(size, game) {
-    const outer_walls = hline({ x: 0, y: 0 }, size.x).concat(vline({ x: 0, y: 0 }, size.y)).concat(vline({ x: size.x - 1, y: 0 }, size.y)).map(
+  function maze(size2, game) {
+    const outer_walls = hline({ x: 0, y: 0 }, size2.x).concat(vline({ x: 0, y: 0 }, size2.y)).concat(vline({ x: size2.x - 1, y: 0 }, size2.y)).map(
       (point) => ({
         position: point,
         type: "wall",
@@ -7147,7 +6738,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = import_lodash7.default.range(0, size.y, 2).map((y) => hline({ x: 0, y }, size.x)).flatMap((x) => x).map(
+    const inner_walls = import_lodash5.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
@@ -7156,8 +6747,8 @@
     );
     game.map.add(inner_walls);
     const room_walls = roomWalls({
-      height: size.y,
-      width: size.x,
+      height: size2.y,
+      width: size2.x,
       wallsPerRow: { min: 3, max: 7 }
     }).map(
       (point) => ({
@@ -7171,9 +6762,9 @@
   }
   __name(maze, "maze");
   function roomWalls(args) {
-    const room_walls = import_lodash7.default.flatMap(
-      import_lodash7.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash7.default.flatMap(
+    const room_walls = import_lodash5.default.flatMap(
+      import_lodash5.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash5.default.flatMap(
           check(
             () => ints(
               0,
@@ -7192,7 +6783,7 @@
     for (let row = 3; row <= map.height - 2; row += 2) {
       const rooms = getRowRooms(map, row);
       makeRoomDoors(map, rooms);
-      const doors = import_lodash7.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      const doors = import_lodash5.default.map(rooms, (x) => x.doors).flatMap((x) => x);
       for (const door of doors) {
         const objs = map.at(door);
         map.remove(objs);
@@ -7206,7 +6797,7 @@
       [6, 1, 2],
       [100, 2, 5]
     ];
-    const min_max = import_lodash7.default.find(a, (x) => x[0] > room.length);
+    const min_max = import_lodash5.default.find(a, (x) => x[0] > room.length);
     return int(min_max[1], min_max[2]);
   }
   __name(desiredNumOfDoors, "desiredNumOfDoors");
@@ -7264,18 +6855,18 @@
   __name(getRowRooms, "getRowRooms");
   function proper_distance(walls) {
     const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash7.default.sortBy(walls);
-    const distances = import_lodash7.default.chain(import_lodash7.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
-    const result = import_lodash7.default.every(
+    const sorted_walls = import_lodash5.default.sortBy(walls);
+    const distances = import_lodash5.default.chain(import_lodash5.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash5.default.every(
       distances.map((x) => x[1] - x[0]),
       (x) => x > 2
     );
     return result;
   }
   __name(proper_distance, "proper_distance");
-  function line(start, direction, size) {
+  function line(start, direction, size2) {
     const line_vector = [];
-    for (let i = 0; i < size; ++i) {
+    for (let i = 0; i < size2; ++i) {
       line_vector.push({
         x: start.x + i * direction.x,
         y: start.y + i * direction.y
@@ -7284,12 +6875,12 @@
     return line_vector;
   }
   __name(line, "line");
-  function hline(start, size) {
-    return line(start, { x: 1, y: 0 }, size);
+  function hline(start, size2) {
+    return line(start, { x: 1, y: 0 }, size2);
   }
   __name(hline, "hline");
-  function vline(start, size) {
-    return line(start, { x: 0, y: 1 }, size);
+  function vline(start, size2) {
+    return line(start, { x: 0, y: 1 }, size2);
   }
   __name(vline, "vline");
 
@@ -7298,9 +6889,9 @@
     constructor(width, height, objs) {
       this.width = width;
       this.height = height;
-      const a = _9.range(1, 21);
-      this.cells = _9.chunk(
-        _9.range(width * height).map((x) => []),
+      const a = _7.range(1, 21);
+      this.cells = _7.chunk(
+        _7.range(width * height).map((x) => []),
         width
       );
       this.objects = [];
@@ -7312,14 +6903,14 @@
       for (const obj of objs_) {
         const objs2 = this.cells[obj.position.y][obj.position.x];
         objs2.push(obj);
-        this.cells[obj.position.y][obj.position.x] = _9.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+        this.cells[obj.position.y][obj.position.x] = _7.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
       }
     }
     remove(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.filter((x) => _9.indexOf(objs_, x) == -1);
+      this.objects = this.objects.filter((x) => _7.indexOf(objs_, x) == -1);
       for (const obj of objs_) {
-        this.cells[obj.position.y][obj.position.x] = _9.pull(
+        this.cells[obj.position.y][obj.position.x] = _7.pull(
           this.cells[obj.position.y][obj.position.x],
           obj
         );
@@ -7349,7 +6940,7 @@
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs != null ? _9.some(objs, (x) => x.type == type) : false;
+      return objs != null ? _7.some(objs, (x) => x.type == type) : false;
     }
     possibleDirections(position, type) {
       const p = [];
@@ -7362,8 +6953,8 @@
     }
     toString() {
       let s2 = "\n";
-      for (const y of _9.range(this.height)) {
-        for (const x of _9.range(this.width))
+      for (const y of _7.range(this.height)) {
+        for (const x of _7.range(this.width))
           s2 += repr(this.cells[y][x]);
         s2 += "\n";
       }
@@ -7384,7 +6975,7 @@
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
   function directionTo(position, map, objType) {
-    const dd = _9.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
+    const dd = _7.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
     return dd.length ? dd[0] : null;
   }
   __name(directionTo, "directionTo");
@@ -7402,351 +6993,27 @@
   }
   __name(repr, "repr");
 
-  // game/score.ts
-  var score_exports = {};
-  __export(score_exports, {
-    make: () => make13
+  // game/renderer.ts
+  var renderer_exports = {};
+  __export(renderer_exports, {
+    render: () => render,
+    showMessage: () => showMessage2
   });
-  function make13() {
-    return {
-      money: 0,
-      impact: 0,
-      stockPrice: 0
-    };
-  }
-  __name(make13, "make");
-
-  // game/game.ts
-  var logger3 = make("game");
-  function make14(size, plan2) {
-    return {
-      map: new GameMap(size.x, size.y, []),
-      commands: [],
-      itemGenerator: make12(),
-      sprint: make10(),
-      score: make13(),
-      messages: [],
-      messageTact: 0,
-      time: {
-        ticks: 0,
-        day: 0,
-        dayOfWeek: "Sunday"
-      },
-      plan: plan2,
-      messageStartTime: null,
-      collapse: null
-    };
-  }
-  __name(make14, "make");
-  function toJson(game) {
-    return {
-      map: game.map.toJson(),
-      score: game.score,
-      itemGenerator: game.itemGenerator,
-      commands: game.commands,
-      messages: game.messages,
-      messageTact: game.messageTact
-    };
-  }
-  __name(toJson, "toJson");
-  function handleEffects(game, effects) {
-    for (const effect of effects) {
-      switch (effect.type) {
-        case "null":
-          break;
-        case "addImpact":
-          game.score.impact += effect.impact;
-          break;
-        case "showMessage":
-          message(game, effect.message);
-          break;
-        default:
-          assertUnreachable(effect);
-      }
-    }
-  }
-  __name(handleEffects, "handleEffects");
-  function message(game, m) {
-    if (m.text instanceof Array) {
-      for (const text of m.text) {
-        logger3("message: " + text);
-        game.messages.push({ text, ttl: m.ttl });
-      }
-    } else {
-      game.messages.push({ text: m.text, ttl: m.ttl });
-    }
-  }
-  __name(message, "message");
-  function tick6(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "createBacklogIssue":
-          case "groomBacklogEnd":
-          case "groomBacklogStart":
-          case "sprintDayEnd":
-          case "sprintDayStart":
-          case "sprintStart":
-          case "sprintEnd":
-          case "weekendStart":
-          case "weekendEnd":
-          case "gameStarted":
-          case "collapseStart":
-          case "dayStarted":
-          case "performanceReview":
-          case "gameEnded":
-            logger3(JSON.stringify(event));
-            break;
-          default:
-            assertUnreachable(event);
-        }
-      }
-    }
-  }
-  __name(tick6, "tick");
-  function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
-    logger3("Game saved!");
-  }
-  __name(save, "save");
-  function load(storage) {
-    const objectsStorage = storage.load();
-    if (objectsStorage != null) {
-      const {
-        commands,
-        itemGenerator,
-        score,
-        sprint,
-        messages,
-        messageTact,
-        map,
-        time,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      } = JSON.parse(objectsStorage);
-      const map_ = GameMap.fromJson(map);
-      const player = map_.objects.find(
-        (x) => x.type === "player"
-      );
-      return {
-        time,
-        score,
-        itemGenerator,
-        sprint,
-        messages,
-        messageTact,
-        commands,
-        map: map_,
-        player,
-        plan: plan2,
-        messageStartTime,
-        collapse
-      };
-    } else {
-      logger3("There is no saved game.");
-      return null;
-    }
-  }
-  __name(load, "load");
-
-  // objects/boss.ts
-  var import_lodash8 = __toESM(require_lodash());
-  var BOSS_WEIGHTS = {
-    turn: {
-      visited: 0.2,
-      notVisited: 1
-    },
-    straight: {
-      visited: 0.2,
-      notVisited: 3
-    },
-    back: 1,
-    jump: 5
-  };
-  BOSS_WEIGHTS = {
-    turn: {
-      visited: 1e-6,
-      notVisited: 1
-    },
-    straight: {
-      visited: 1e-7,
-      notVisited: 3
-    },
-    back: 1e-7,
-    jump: 5
-  };
-  function make15() {
-    return {
-      position: {
-        x: 0,
-        y: 0
-      },
-      type: "boss",
-      zIndex: 10,
-      state: { type: "stopped", previous_direction: null }
-    };
-  }
-  __name(make15, "make");
-  function possibleMoves(pos, currentDirection, map) {
-    const result = {};
-    const possible = map.possibleDirections(pos, "wall");
-    const turns = import_lodash8.default.difference(possible, [
-      currentDirection,
-      reverse(currentDirection)
-    ]);
-    if (turns.length > 0) {
-      result.turn = { directions: turns };
-    }
-    if (import_lodash8.default.includes(possible, currentDirection)) {
-      result.straight = { direction: currentDirection };
-    }
-    if (!import_lodash8.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
-      result.jump = { directions: [currentDirection] };
-    }
-    if (import_lodash8.default.includes(possible, reverse(currentDirection))) {
-      result.back = {};
-    }
-    return result;
-  }
-  __name(possibleMoves, "possibleMoves");
-  function move(obj, new_pos, new_direction, map) {
-    obj.state = { type: "moving", direction: new_direction, tact: 0 };
-    map.add([
-      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
-    ]);
-    map.move(obj, new_pos);
-  }
-  __name(move, "move");
-  function pipPlayer(obj, player) {
-    player.hrTaskTact = 0;
-  }
-  __name(pipPlayer, "pipPlayer");
-  function tick7(boss, map) {
-    switch (boss.state.type) {
-      case "instructing":
-        break;
-      case "moving":
-        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
-        if (directionToPlayer) {
-          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
-          if (player)
-            pipPlayer(boss, player);
-        }
-        boss.state.tact += 1;
-        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
-          return;
-        }
-        const moves = possibleMoves(boss.position, boss.state.direction, map);
-        if (moves.turn || moves.straight) {
-          const move_types = [
-            moves.turn ? "turn" : null,
-            moves.straight ? "straight" : null
-          ];
-          const move_weights = [
-            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
-            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
-          ];
-          if (moves.turn) {
-            console.log(JSON.stringify({ move_types, move_weights }));
-          }
-          const move_choice = choice(
-            import_lodash8.default.compact(move_types),
-            import_lodash8.default.compact(move_weights)
-          );
-          switch (move_choice) {
-            case "turn":
-              const weights = moves.turn.directions.map(
-                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
-              );
-              const chosen = choice(moves.turn.directions, weights);
-              boss.state.direction = chosen;
-            case "straight":
-              const new_pos = moveBy(boss.position, boss.state.direction);
-              move(boss, new_pos, boss.state.direction, map);
-          }
-          return;
-        }
-        if (moves.back || moves.jump) {
-          const move_choice = choice(
-            import_lodash8.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash8.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
-          );
-          switch (move_choice) {
-            case "back":
-              boss.state.direction = reverse(boss.state.direction);
-              break;
-            case "jump":
-              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
-              break;
-          }
-        }
-        break;
-      case "jumping":
-        boss.state = {
-          type: "jumping",
-          direction: boss.state.direction,
-          tact: boss.state.tact + 1
-        };
-        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
-          move(
-            boss,
-            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
-            boss.state.direction,
-            map
-          );
-        }
-        break;
-      case "stopped": {
-        const direction = choose_direction(boss.position, null, map);
-        if (direction != null)
-          boss.state = { type: "moving", direction, tact: 0 };
-        break;
-      }
-    }
-  }
-  __name(tick7, "tick");
-  function choose_direction(pos, least_preferred, map) {
-    const forks = map.possibleDirections(pos, "wall");
-    const b = forks.filter((x) => x[0] != least_preferred);
-    if (b.length != 0) {
-      const direction = choice(b);
-      return direction;
-    } else {
-      return least_preferred;
-    }
-  }
-  __name(choose_direction, "choose_direction");
-
-  // objects/footprint.ts
-  var LIFETIME = 1e3;
-  function tick8(obj, map) {
-    if (obj.tact > LIFETIME) {
-      map.remove([obj]);
-    } else {
-      obj.tact += 1;
-    }
-  }
-  __name(tick8, "tick");
-
-  // renderer.ts
   function render(game) {
     const map = game.map;
-    const buffer = [showMessage2(game).split("")];
+    const buffer = [showMessage2(game)];
     for (let y = 0; y < map.height; y++) {
       const row = [];
       for (let x = 0; x < map.width; x++) {
         const objs = map.cells[y][x];
         row.push(getRepresentation(map, objs, game.time.ticks));
       }
-      buffer.push(row);
+      buffer.push(row.join(""));
     }
     buffer.push(
-      (showTime(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)).split("")
+      showTime(game) + showLevel(game) + " Money: $" + game.score.money.toString().padStart(6, "0") + " Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + " " + showStockPrice(game)
     );
-    const contentBlock = document.getElementById("content");
-    contentBlock.innerText = buffer.map((x) => x.join("")).join("\n");
+    return buffer.map((x) => x);
   }
   __name(render, "render");
   function showMessage2(game) {
@@ -7902,65 +7169,1118 @@
   }
   __name(getWallRepresentation, "getWallRepresentation");
 
+  // game/score.ts
+  var score_exports = {};
+  __export(score_exports, {
+    make: () => make8
+  });
+  function make8() {
+    return {
+      money: 0,
+      impact: 0,
+      stockPrice: 0
+    };
+  }
+  __name(make8, "make");
+
+  // game/game.ts
+  var logger2 = make("game");
+  function make9(size2, plan2) {
+    return {
+      map: new GameMap(size2.x, size2.y, []),
+      commands: [],
+      itemGenerator: make7(),
+      sprint: make5(),
+      score: make8(),
+      messages: [],
+      messageTact: 0,
+      time: {
+        ticks: 0,
+        day: 0,
+        dayOfWeek: "Sunday"
+      },
+      plan: plan2,
+      messageStartTime: null,
+      collapse: null
+    };
+  }
+  __name(make9, "make");
+  function toJson(game) {
+    return {
+      map: game.map.toJson(),
+      score: game.score,
+      itemGenerator: game.itemGenerator,
+      commands: game.commands,
+      messages: game.messages,
+      messageTact: game.messageTact
+    };
+  }
+  __name(toJson, "toJson");
+  function handleEffects(game, effects) {
+    for (const effect of effects) {
+      switch (effect.type) {
+        case "null":
+          break;
+        case "addImpact":
+          game.score.impact += effect.impact;
+          break;
+        case "showMessage":
+          message(game, effect.message);
+          break;
+        default:
+          assertUnreachable(effect);
+      }
+    }
+  }
+  __name(handleEffects, "handleEffects");
+  function message(game, m) {
+    if (m.text instanceof Array) {
+      for (const text of m.text) {
+        logger2("message: " + text);
+        game.messages.push({ text, ttl: m.ttl });
+      }
+    } else {
+      game.messages.push({ text: m.text, ttl: m.ttl });
+    }
+  }
+  __name(message, "message");
+  function tick6(game) {
+    const fullTick = /* @__PURE__ */ __name(() => {
+      setTime(game.time.ticks);
+      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
+      game.score.money += game.player.level.rate;
+      game.time = make4(game.time.ticks);
+      handleEffects(game, tick4(game));
+      tick5(game.itemGenerator, game);
+      if (game.sprint) {
+        handleEffects(game, tick3(game.sprint, { ...game, player: game.player }));
+      }
+      handleEffects(game, tick2(game));
+      for (const obj of game.map.objects) {
+        const result = objTick(obj, game, game.commands, 1);
+      }
+      game.commands = [];
+      render(game);
+    }, "fullTick");
+    const playerTick = /* @__PURE__ */ __name(() => {
+      setTime(game.time.ticks);
+      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
+      game.score.money += game.player.level.rate;
+      game.time = make4(game.time.ticks);
+      const result = objTick(game.player, game, game.commands, 0.5);
+      game.commands = [];
+      render(game);
+    }, "playerTick");
+    if (!game.player.flags.spedUp) {
+      fullTick();
+      game.time.ticks += 1;
+    } else {
+      playerTick();
+      game.time.ticks += 0.5;
+      fullTick();
+      game.time.ticks += 0.5;
+    }
+  }
+  __name(tick6, "tick");
+  function objTick(obj, game, commands, ticksPassed) {
+    switch (obj.type) {
+      case "boss":
+        boss_exports.tick(obj, game.map);
+        break;
+      case "footprint":
+        handleEffects(game, footprint_exports.tick(obj, game.map));
+        break;
+      case "player":
+        handleEffects(game, player_exports.tick(obj, game, commands, ticksPassed));
+        break;
+      case "door":
+      case "story":
+      case "commit":
+      case "coffee":
+      case "wall":
+        break;
+      default:
+        assertUnreachable(obj);
+    }
+  }
+  __name(objTick, "objTick");
+  function save(game, storage) {
+    storage.save(JSON.stringify(toJson(game)));
+    logger2("Game saved!");
+  }
+  __name(save, "save");
+  function load(storage) {
+    const objectsStorage = storage.load();
+    if (objectsStorage != null) {
+      const {
+        commands,
+        itemGenerator,
+        score,
+        sprint,
+        messages,
+        messageTact,
+        map,
+        time,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      } = JSON.parse(objectsStorage);
+      const map_ = GameMap.fromJson(map);
+      const player = map_.objects.find(
+        (x) => x.type === "player"
+      );
+      return {
+        time,
+        score,
+        itemGenerator,
+        sprint,
+        messages,
+        messageTact,
+        commands,
+        map: map_,
+        player,
+        plan: plan2,
+        messageStartTime,
+        collapse
+      };
+    } else {
+      logger2("There is no saved game.");
+      return null;
+    }
+  }
+  __name(load, "load");
+
+  // game/messages.ts
+  var messages_exports = {};
+  __export(messages_exports, {
+    itemDropped: () => itemDropped,
+    startedStory: () => startedStory
+  });
+  var startedStory = /* @__PURE__ */ __name((story) => ({
+    text: `You started on ${toString(story.size)} ${story.name}`,
+    ttl: 100
+  }), "startedStory");
+  var itemDropped = /* @__PURE__ */ __name((item) => ({
+    text: `You droppped on ${item.type}`,
+    ttl: 5
+  }), "itemDropped");
+
+  // game/intro.ts
+  var intro_exports = {};
+  __export(intro_exports, {
+    Window: () => Window2
+  });
+
+  // ui/text_window.ts
+  var text_window_exports = {};
+  __export(text_window_exports, {
+    TextWindow: () => TextWindow
+  });
+
+  // ui/windows.ts
+  var windows_exports = {};
+  __export(windows_exports, {
+    Window: () => Window,
+    center: () => center,
+    focused: () => focused,
+    hide: () => hide,
+    move: () => move,
+    show: () => show,
+    updateScreen: () => updateScreen,
+    windows: () => windows
+  });
+  var import_lodash6 = __toESM(require_lodash());
+
+  // ui/screens.ts
+  function render2(chars) {
+    const contentBlock = document.getElementById("content");
+    contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
+  }
+  __name(render2, "render");
+  var size = { x: 80, y: 27 };
+
+  // ui/composition.ts
+  function make10(size2) {
+    const composition = [];
+    for (let y = 0; y < size.y; y++) {
+      composition[y] = [];
+      for (let x = 0; x < size.x; x++) {
+        composition[y][x] = " ";
+      }
+    }
+    return composition;
+  }
+  __name(make10, "make");
+  function compose(composition, position, window2) {
+    for (let y = 0; y < window2.length; y++) {
+      for (let x = 0; x < window2[y].length; x++) {
+        const t_y = position.y + y;
+        const t_x = position.x + x;
+        if (t_y < 0 || t_y >= size.y || t_x < 0 || t_x >= size.x) {
+          continue;
+        }
+        composition[position.y + y][position.x + x] = window2[y][x];
+      }
+    }
+    return composition;
+  }
+  __name(compose, "compose");
+  function render3(windows2) {
+    let composition = make10(size);
+    for (const window2 of windows2) {
+      composition = compose(
+        composition,
+        window2.position,
+        window2.render().map((x) => x.split(""))
+      );
+    }
+    render2(composition);
+  }
+  __name(render3, "render");
+
+  // ui/windows.ts
+  var _Window = class _Window {
+    constructor() {
+      this.keydown = null;
+      this.position = vector_exports.zero;
+      this.size = vector_exports.zero;
+    }
+    hide() {
+    }
+    show() {
+    }
+    render() {
+      return [];
+    }
+    clearInterval(id) {
+      window.clearInterval(id);
+    }
+    setInterval(handler, timeout) {
+      return window.setInterval(() => {
+        if (isFocused(this)) {
+          handler();
+        }
+      }, timeout);
+    }
+  };
+  __name(_Window, "Window");
+  var Window = _Window;
+  function isFocused(window2) {
+    return import_lodash6.default.last(windows) === window2;
+  }
+  __name(isFocused, "isFocused");
+  var windows = [];
+  function focused() {
+    return import_lodash6.default.last(windows) ?? null;
+  }
+  __name(focused, "focused");
+  function updateScreen() {
+    render3(windows);
+  }
+  __name(updateScreen, "updateScreen");
+  function show(window2) {
+    windows.push(window2);
+    window2.show();
+    updateScreen();
+    return window2;
+  }
+  __name(show, "show");
+  function hide(window2) {
+    window2.hide();
+    windows.splice(windows.indexOf(window2), 1);
+    updateScreen();
+  }
+  __name(hide, "hide");
+  function move(position, window2) {
+    window2.position = position;
+    updateScreen();
+    return window2;
+  }
+  __name(move, "move");
+  function center(window2) {
+    move(
+      {
+        x: Math.floor((size.x - window2.size.x) / 2),
+        y: Math.floor((size.y - window2.size.y) / 2)
+      },
+      window2
+    );
+    return window2;
+  }
+  __name(center, "center");
+
+  // ui/text_window.ts
+  var _TextWindow = class _TextWindow extends Window {
+    constructor(text) {
+      super();
+      this.keydown = null;
+      this.position = { x: 0, y: 0 };
+      const splitText = formatText(text);
+      const width = splitText[0].length;
+      const height = splitText.length;
+      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
+      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
+      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
+      this.size = { x: this.contents[0].length, y: this.contents.length };
+    }
+    render() {
+      return this.contents;
+    }
+    onKeyPress(callback) {
+      this.keydown = callback;
+      return this;
+    }
+  };
+  __name(_TextWindow, "TextWindow");
+  var TextWindow = _TextWindow;
+  function formatText(text) {
+    const lines = text.split("\n");
+    const maxLength = Math.max(...lines.map((x) => x.length));
+    return lines.map((x) => x.padEnd(maxLength, " "));
+  }
+  __name(formatText, "formatText");
+
+  // game/intro.ts
+  var _Window2 = class _Window2 extends text_window_exports.TextWindow {
+    constructor() {
+      super(
+        [
+          "        REQUIEM FOR A PROGRAMMER.",
+          "                                   ",
+          "       You ('*') are in Agile hell.",
+          "Earn enough money and get out (if you can)!",
+          "",
+          "Keys",
+          "----",
+          "",
+          "Move - arrows",
+          "Drop item - space",
+          "Use item - enter",
+          "Stop - end"
+        ].join("\n")
+      );
+      this.onKeyPress((window2, event) => {
+        windows_exports.hide(window2);
+      });
+    }
+  };
+  __name(_Window2, "Window");
+  var Window2 = _Window2;
+
+  // objects/boss.ts
+  var BOSS_WEIGHTS = {
+    turn: {
+      visited: 0.2,
+      notVisited: 1
+    },
+    straight: {
+      visited: 0.2,
+      notVisited: 3
+    },
+    back: 1,
+    jump: 5
+  };
+  BOSS_WEIGHTS = {
+    turn: {
+      visited: 1e-6,
+      notVisited: 1
+    },
+    straight: {
+      visited: 1e-7,
+      notVisited: 3
+    },
+    back: 1e-7,
+    jump: 5
+  };
+  function make11() {
+    return {
+      position: {
+        x: 0,
+        y: 0
+      },
+      type: "boss",
+      zIndex: 10,
+      state: { type: "stopped", previous_direction: null }
+    };
+  }
+  __name(make11, "make");
+  function possibleMoves(pos, currentDirection, map) {
+    const result = {};
+    const possible = map.possibleDirections(pos, "wall");
+    const turns = import_lodash7.default.difference(possible, [
+      currentDirection,
+      reverse(currentDirection)
+    ]);
+    if (turns.length > 0) {
+      result.turn = { directions: turns };
+    }
+    if (import_lodash7.default.includes(possible, currentDirection)) {
+      result.straight = { direction: currentDirection };
+    }
+    if (!import_lodash7.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+      result.jump = { directions: [currentDirection] };
+    }
+    if (import_lodash7.default.includes(possible, reverse(currentDirection))) {
+      result.back = {};
+    }
+    return result;
+  }
+  __name(possibleMoves, "possibleMoves");
+  function move2(obj, new_pos, new_direction, map) {
+    obj.state = { type: "moving", direction: new_direction, tact: 0 };
+    map.add([
+      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
+    ]);
+    map.move(obj, new_pos);
+  }
+  __name(move2, "move");
+  function pipPlayer(obj, player) {
+    player.hrTaskTact = 0;
+  }
+  __name(pipPlayer, "pipPlayer");
+  function tick7(boss, map) {
+    switch (boss.state.type) {
+      case "instructing":
+        break;
+      case "moving":
+        const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
+        if (directionToPlayer) {
+          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
+          if (player)
+            pipPlayer(boss, player);
+        }
+        boss.state.tact += 1;
+        if (boss.state.tact < config_default.boss.TACTS_FOR_SINGLE_MOVE) {
+          return;
+        }
+        const moves = possibleMoves(boss.position, boss.state.direction, map);
+        if (moves.turn || moves.straight) {
+          const move_types = [
+            moves.turn ? "turn" : null,
+            moves.straight ? "straight" : null
+          ];
+          const move_weights = [
+            moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
+            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+          ];
+          if (moves.turn) {
+            console.log(JSON.stringify({ move_types, move_weights }));
+          }
+          const move_choice = choice(
+            import_lodash7.default.compact(move_types),
+            import_lodash7.default.compact(move_weights)
+          );
+          switch (move_choice) {
+            case "turn":
+              const weights = moves.turn.directions.map(
+                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+              );
+              const chosen = choice(moves.turn.directions, weights);
+              boss.state.direction = chosen;
+            case "straight":
+              const new_pos = moveBy(boss.position, boss.state.direction);
+              move2(boss, new_pos, boss.state.direction, map);
+          }
+          return;
+        }
+        if (moves.back || moves.jump) {
+          const move_choice = choice(
+            import_lodash7.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
+            import_lodash7.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+          );
+          switch (move_choice) {
+            case "back":
+              boss.state.direction = reverse(boss.state.direction);
+              break;
+            case "jump":
+              boss.state = { type: "jumping", direction: boss.state.direction, tact: 0 };
+              break;
+          }
+        }
+        break;
+      case "jumping":
+        boss.state = {
+          type: "jumping",
+          direction: boss.state.direction,
+          tact: boss.state.tact + 1
+        };
+        if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
+          move2(
+            boss,
+            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+            boss.state.direction,
+            map
+          );
+        }
+        break;
+      case "stopped": {
+        const direction = choose_direction(boss.position, null, map);
+        if (direction != null)
+          boss.state = { type: "moving", direction, tact: 0 };
+        break;
+      }
+    }
+  }
+  __name(tick7, "tick");
+  function choose_direction(pos, least_preferred, map) {
+    const forks = map.possibleDirections(pos, "wall");
+    const b = forks.filter((x) => x[0] != least_preferred);
+    if (b.length != 0) {
+      const direction = choice(b);
+      return direction;
+    } else {
+      return least_preferred;
+    }
+  }
+  __name(choose_direction, "choose_direction");
+
+  // objects/coffee.ts
+  var coffee_exports = {};
+  __export(coffee_exports, {
+    make: () => make12
+  });
+  function make12(position) {
+    return {
+      type: "coffee",
+      position,
+      zIndex: 1,
+      open: false
+    };
+  }
+  __name(make12, "make");
+
+  // objects/commit.ts
+  var commit_exports = {};
+  __export(commit_exports, {
+    make: () => make13
+  });
+  function make13(position) {
+    return {
+      type: "commit",
+      position,
+      zIndex: 1,
+      open: false,
+      hash: generateId(8)
+    };
+  }
+  __name(make13, "make");
+  function byteToHex(byte) {
+    return ("0" + byte.toString(16)).slice(-2);
+  }
+  __name(byteToHex, "byteToHex");
+  function generateId(len = 40) {
+    var arr = new Uint8Array(len / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, byteToHex).join("");
+  }
+  __name(generateId, "generateId");
+
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make14
+  });
+  function make14(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false,
+      placed: false
+    };
+  }
+  __name(make14, "make");
+
+  // objects/footprint.ts
+  var footprint_exports = {};
+  __export(footprint_exports, {
+    tick: () => tick8
+  });
+  var LIFETIME = 1e3;
+  function tick8(obj, map) {
+    if (obj.tact > LIFETIME) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+    return [];
+  }
+  __name(tick8, "tick");
+
+  // objects/item.ts
+  var item_exports = {};
+  __export(item_exports, {
+    description: () => description,
+    isItem: () => isItem
+  });
+  function isItem(obj) {
+    switch (obj.type) {
+      case "door":
+      case "commit":
+      case "story":
+      case "coffee":
+        return true;
+      case "wall":
+      case "boss":
+      case "footprint":
+      case "player":
+        return false;
+      default:
+        assertUnreachable(obj);
+    }
+  }
+  __name(isItem, "isItem");
+  function description(item) {
+    switch (item.type) {
+      case "door":
+        return "door";
+      case "commit":
+        return `commit ${item.hash}`;
+      case "coffee":
+        return `cup of coffee`;
+      case "story":
+        return `story "${item.name}"`;
+    }
+  }
+  __name(description, "description");
+
+  // objects/objects.ts
+  var objects_exports = {};
+  __export(objects_exports, {
+    filter: () => filter
+  });
+  var import_lodash8 = __toESM(require_lodash());
+  function filter(objs, type) {
+    return import_lodash8.default.filter(objs, (x) => x.type == type);
+  }
+  __name(filter, "filter");
+
+  // objects/player.ts
+  var player_exports = {};
+  __export(player_exports, {
+    make: () => make16,
+    tick: () => tick9
+  });
+  var import_lodash9 = __toESM(require_lodash());
+
+  // objects/tasks/story.ts
+  var story_exports2 = {};
+  __export(story_exports2, {
+    addCommit: () => addCommit,
+    make: () => make15
+  });
+  function make15(story) {
+    return {
+      type: "story",
+      story,
+      impact: config_default.story[story.size].impact,
+      neededCommits: config_default.story[story.size].neededCommits,
+      appliedCommits: 0
+    };
+  }
+  __name(make15, "make");
+  function addCommit(player, task, commit, effects) {
+    task.appliedCommits += 1;
+    if (task.appliedCommits == task.neededCommits) {
+      append(effects, addImpact(task.impact));
+      append(effects, showMessage(`Finished ${task.story.name}`, 30));
+      player.task = null;
+    }
+    return effects;
+  }
+  __name(addCommit, "addCommit");
+
+  // objects/player.ts
+  var logger3 = make("player");
+  function make16(position) {
+    return {
+      type: "player",
+      zIndex: 1e3,
+      direction: null,
+      position,
+      tact: 0,
+      commands: [],
+      hrTaskTact: null,
+      item: null,
+      task: null,
+      flags: {
+        spedUp: false
+      },
+      level: levels_exports.all[0]
+    };
+  }
+  __name(make16, "make");
+  function canMoveOn(objs) {
+    if (objs.length > 0) {
+      const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
+        switch (obj.type) {
+          case "door":
+          case "story":
+          case "footprint":
+          case "commit":
+          case "coffee":
+            return true;
+          case "player":
+          case "wall":
+          case "boss":
+            return false;
+          default:
+            assertUnreachable(obj);
+        }
+      }, "canMoveOnObj");
+      const result = import_lodash9.default.every(objs, canMoveOnObj);
+      return result;
+    } else {
+      return true;
+    }
+  }
+  __name(canMoveOn, "canMoveOn");
+  function canTakeTask(task, player) {
+    return player.task == null;
+  }
+  __name(canTakeTask, "canTakeTask");
+  function takeTask(player, task, game) {
+    player.task = task;
+    switch (task.type) {
+      case "story":
+        game_exports.message(game, messages_exports.startedStory(task.story));
+        break;
+      case "null":
+        break;
+      default:
+        assertUnreachable(task);
+    }
+  }
+  __name(takeTask, "takeTask");
+  function canPickItem(player, item) {
+    switch (item.type) {
+      case "door":
+        if (item.placed) {
+          return false;
+        }
+    }
+    return player.hrTaskTact == null;
+  }
+  __name(canPickItem, "canPickItem");
+  function useItem(player, item, map, effects) {
+    logger3(`Using item ${item.type}`);
+    switch (item.type) {
+      case "commit":
+        if (player.task) {
+          const task = player.task;
+          switch (task.type) {
+            case "story":
+              story_exports2.addCommit(player, task, item, effects);
+              player.item = null;
+              break;
+          }
+          return true;
+        } else {
+          effects_exports.append(effects, effect_exports.showMessage("No task to apply commit to", 3e3));
+          return false;
+        }
+      case "coffee":
+        effects_exports.append(effects, effect_exports.showMessage("Drinking coffee", 3e3));
+        player.flags.spedUp = config_default.items.coffee.speedUpDays * config_default.dayTicks;
+        player.item = null;
+        return true;
+      case "door":
+        effects_exports.append(effects, effect_exports.showMessage("Placing door", 3e3));
+        item.position = player.position;
+        map.add(item);
+        item.placed = true;
+        player.item = null;
+        return true;
+      case "story":
+        break;
+      default:
+        assertUnreachable(item);
+    }
+    return false;
+  }
+  __name(useItem, "useItem");
+  function pickItem(player, newItem, game, effects) {
+    game.map.remove(newItem);
+    switch (newItem.type) {
+      case "door":
+        newItem.open = true;
+        dropCarriedItem(player, game, effects);
+        player.item = newItem;
+        effects.push(effect_exports.showMessage(`Picked ${description(newItem)}`, 3e3));
+        return true;
+      case "coffee":
+        dropCarriedItem(player, game, effects);
+        player.item = newItem;
+        effects.push(effect_exports.showMessage(`Picked ${description(newItem)}`, 3e3));
+        return true;
+      case "commit":
+        dropCarriedItem(player, game, effects);
+        player.item = newItem;
+        effects.push(effect_exports.showMessage(`Picked ${description(newItem)}`, 3e3));
+        return true;
+      case "story":
+        player.task = story_exports2.make(newItem);
+        effects.push(effect_exports.showMessage(`Picked ${description(newItem)}`, 3e3));
+        return false;
+      default:
+        assertUnreachable(newItem);
+    }
+  }
+  __name(pickItem, "pickItem");
+  function dropCarriedItem(player, game, effects) {
+    const carriedItem = player.item;
+    if (carriedItem != null) {
+      dropItem(player, game.map);
+      effects_exports.append(
+        effects,
+        effect_exports.showMessage(`Dropped ${description(carriedItem)}`, 3e3)
+      );
+    }
+  }
+  __name(dropCarriedItem, "dropCarriedItem");
+  function tickHrTask(player, ticksPassed) {
+    if (player.hrTaskTact != null) {
+      player.hrTaskTact += ticksPassed;
+      if (player.hrTaskTact > 200) {
+        player.hrTaskTact = null;
+      }
+    }
+    if (player.flags.spedUp && player.flags.spedUp > 0) {
+      player.flags.spedUp -= ticksPassed;
+      if (player.flags.spedUp <= 0) {
+        player.flags.spedUp = false;
+      }
+    }
+  }
+  __name(tickHrTask, "tickHrTask");
+  function tickFlags(player, ticksPassed) {
+    if (player.flags.spedUp) {
+      player.flags.spedUp -= ticksPassed;
+      if (player.flags.spedUp <= 0) {
+        player.flags.spedUp = false;
+      }
+    }
+  }
+  __name(tickFlags, "tickFlags");
+  function handleDrop(player, map) {
+    if (player.item != null) {
+      dropItem(player, map);
+    }
+  }
+  __name(handleDrop, "handleDrop");
+  function dropItem(player, map) {
+    const droppingItem = player.item;
+    droppingItem.open = true;
+    droppingItem.position = player.position;
+    map.add(droppingItem);
+    player.item = null;
+  }
+  __name(dropItem, "dropItem");
+  function processCommands(player, commands, map, effects) {
+    const removeAllMoves = /* @__PURE__ */ __name(() => {
+      player.commands = player.commands.filter((x) => x.command.type != "move");
+    }, "removeAllMoves");
+    player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
+    if (player.commands.length > 0) {
+      logger3(JSON.stringify(player.commands));
+    }
+    if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
+      logger3(JSON.stringify(player.commands));
+    }
+    let delayedCommands = [];
+    while (player.commands.length > 0) {
+      logger3(JSON.stringify(player.commands));
+      const command = player.commands[0].command;
+      logger3(`processing: ${JSON.stringify(command)}`);
+      switch (command.type) {
+        case "move":
+          const newPosition = moveBy(player.position, command.direction);
+          const obsjAtNewPosition = map.at(newPosition);
+          if (canMoveOn(obsjAtNewPosition)) {
+            player.direction = command.direction;
+            player.commands.shift();
+            delayedCommands = [];
+          } else {
+            const delayedCommand = player.commands.shift();
+            logger3(`delaying ${JSON.stringify(delayedCommand)}`);
+            delayedCommands.push(delayedCommand);
+          }
+          break;
+        case "stop":
+          removeAllMoves();
+          player.direction = null;
+          break;
+        case "drop":
+          handleDrop(player, map);
+          player.commands.shift();
+          removeAllMoves();
+          break;
+        case "use":
+          if (player.item != null) {
+            useItem(player, player.item, map, effects);
+          }
+          player.commands.shift();
+          removeAllMoves();
+          break;
+        default:
+          assertUnreachable(command);
+      }
+    }
+    player.commands = delayedCommands;
+    for (const c of player.commands) {
+      c.tact += 1;
+    }
+    player.commands = player.commands.filter((x) => x.tact < 10);
+  }
+  __name(processCommands, "processCommands");
+  function tick9(player, game, commands, ticksPassed) {
+    const effects = [];
+    let pickedSomething = false;
+    let carriedSomething = player.item != null;
+    tickHrTask(player, ticksPassed);
+    tickFlags(player, ticksPassed);
+    processCommands(player, commands, game.map, effects);
+    if (player.direction) {
+      const newPosition = moveBy(player.position, player.direction);
+      const objsAtNewPosition = game.map.at(newPosition);
+      if (canMoveOn(objsAtNewPosition)) {
+        if (objsAtNewPosition.length > 0) {
+          const obj = objsAtNewPosition[0];
+          switch (obj.type) {
+            case "door":
+            case "coffee":
+              if (canPickItem(player, obj)) {
+                logger3(`Can pick item  ${JSON.stringify(player)}`);
+                effects_exports.append(effects, effect_exports.showMessage(`Picked a ${obj.type}`, 40));
+                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
+              }
+              break;
+            case "commit":
+              if (canPickItem(player, obj)) {
+                logger3(`Can pick item  ${JSON.stringify(player)}`);
+                effects_exports.append(
+                  effects,
+                  effect_exports.showMessage(`Picked a commit ${obj.hash}`, 40)
+                );
+                pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
+              }
+              break;
+            case "story":
+              const task = story_exports2.make(obj);
+              if (canTakeTask(task, player)) {
+                takeTask(player, task, game);
+                game.map.remove(obj);
+              }
+              break;
+            case "player":
+            case "wall":
+            case "boss":
+            case "footprint":
+              break;
+            default:
+              assertUnreachable(obj);
+          }
+        }
+        game.map.move(player, newPosition);
+        if (game.map.objAt(moveBy(newPosition, player.direction), "commit") && carriedSomething) {
+          player.direction = null;
+        }
+      } else {
+      }
+    }
+    return effects;
+  }
+  __name(tick9, "tick");
+
   // main.ts
-  var MAZE_SIZE = { y: 25, x: 80 };
-  var logger4 = make("main");
-  setIsEnabled((name) => import_lodash9.default.includes(["main", "player", "game"], name));
-  function main() {
-    const boss = make15();
-    const plan2 = plan_exports.generatePlan(0);
-    let game = game_exports.make(MAZE_SIZE, plan2);
-    maze(MAZE_SIZE, game);
-    game.map.add([boss]);
-    game.player = make8(game.map.getRandomEmptyLocation());
-    game.map.add([game.player]);
-    game_exports.message(game, {
-      text: [
-        "Requiem for a Programmer.",
-        "You are in Agile hell.",
-        "Earn enough money and get out !!!!!",
-        "'*' is you. Use arrow keys to move."
-      ],
-      ttl: 3e3
-    });
-    let interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-    window.addEventListener("keydown", (event) => {
+  var import_lodash10 = __toESM(require_lodash());
+
+  // help.ts
+  var _Window3 = class _Window3 extends text_window_exports.TextWindow {
+    constructor() {
+      super(
+        [
+          "        HELP.",
+          "",
+          "Move - arrows",
+          "Drop item - space",
+          "Use item - enter",
+          "Stop - end"
+        ].join("\n")
+      );
+      this.onKeyPress((window2, event) => {
+        windows_exports.hide(window2);
+      });
+    }
+  };
+  __name(_Window3, "Window");
+  var Window3 = _Window3;
+
+  // game_window.ts
+  var logger4 = make("game_window");
+  var _GameWindow = class _GameWindow extends windows_exports.Window {
+    constructor(game, storage) {
+      super();
+      this.game = game;
+      this.storage = storage;
+      this.keydown = (window2, event) => {
+        this.processKey(event);
+      };
+      this.interval = this.setInterval(() => {
+        game_exports.tick(game);
+        windows_exports.updateScreen();
+      }, config_default.tickInterval);
+    }
+    render() {
+      return renderer_exports.render(this.game);
+    }
+    processKey(event) {
       logger4(`keydown: ${event.key}`);
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
-          window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-          game_exports.message(game, { text: `Speed increased to ${config_default.tickInterval}`, ttl: 2 });
+          this.clearInterval(this.interval);
+          this.interval = this.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
+          game_exports.message(this.game, {
+            text: `Speed increased to ${config_default.tickInterval}`,
+            ttl: 2
+          });
           break;
         case "-":
           config_default.tickInterval += 5;
-          window.clearInterval(interval);
-          interval = window.setInterval(() => processTick(game), config_default.tickInterval);
-          game_exports.message(game, { text: "Speed decreased", ttl: 2 });
+          this.clearInterval(this.interval);
+          this.interval = this.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
+          game_exports.message(this.game, { text: "Speed decreased", ttl: 2 });
           break;
+        case "?":
+        case "h":
+          help();
         case "s":
-          save2(game);
+          save2(this.game, this.storage);
           break;
         case "l": {
-          const loaded = load2();
+          const loaded = load2(this.storage);
           if (loaded != null) {
-            game = loaded;
+            this.game = loaded;
           }
           break;
         }
         default: {
           const command = getCommand(event.key);
           if (command != null) {
-            game.commands.push(command);
+            this.game.commands.push(command);
           }
           break;
         }
       }
-    });
-    render(game);
+    }
+  };
+  __name(_GameWindow, "GameWindow");
+  var GameWindow = _GameWindow;
+  function help() {
+    windows_exports.show(windows_exports.center(new Window3()));
   }
-  __name(main, "main");
+  __name(help, "help");
   function getCommand(key) {
     switch (key) {
       case "ArrowUp":
@@ -7981,6 +8301,38 @@
     }
   }
   __name(getCommand, "getCommand");
+  function save2(game, storage) {
+    game_exports.save(game, storage);
+    console.log("Game saved!");
+  }
+  __name(save2, "save");
+  function load2(storage) {
+    return game_exports.load(storage);
+  }
+  __name(load2, "load");
+
+  // main.ts
+  var MAZE_SIZE = { y: 25, x: 80 };
+  var logger5 = make("main");
+  setIsEnabled((name) => import_lodash10.default.includes(["main", "player", "game"], name));
+  function main() {
+    const boss = boss_exports.make();
+    const plan2 = plan_exports.generatePlan(0);
+    let game = game_exports.make(MAZE_SIZE, plan2);
+    maze(MAZE_SIZE, game);
+    game.map.add([boss]);
+    game.player = player_exports.make(game.map.getRandomEmptyLocation());
+    game.map.add([game.player]);
+    window.addEventListener("keydown", (event) => {
+      const focused2 = windows_exports.focused();
+      if (focused2 && focused2.keydown) {
+        focused2.keydown(focused2, event);
+      }
+    });
+    windows_exports.show(new GameWindow(game, localStorage));
+    windows_exports.show(windows_exports.center(new intro_exports.Window()));
+  }
+  __name(main, "main");
   var localStorage = {
     save(json) {
       window.localStorage.setItem("map", json);
@@ -7990,78 +8342,6 @@
       return objectsStorage;
     }
   };
-  function save2(game) {
-    game_exports.save(game, localStorage);
-    console.log("Game saved!");
-  }
-  __name(save2, "save");
-  function load2() {
-    return game_exports.load(localStorage);
-  }
-  __name(load2, "load");
-  function processTick(game) {
-    const fullTick = /* @__PURE__ */ __name(() => {
-      setTime(game.time.ticks);
-      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += game.player.level.rate;
-      game.time = game_time_exports.make(game.time.ticks);
-      game_exports.tick(game);
-      game_exports.handleEffects(game, collapse_exports.tick(game));
-      tick5(game.itemGenerator, game);
-      if (game.sprint) {
-        game_exports.handleEffects(game, sprint_exports.tick(game.sprint, { ...game, player: game.player }));
-      }
-      game_exports.handleEffects(game, PerformanceReview.tick(game));
-      for (const obj of game.map.objects) {
-        const result = tick9(obj, game, game.commands, 1);
-      }
-      game.commands = [];
-      render(game);
-    }, "fullTick");
-    const playerTick = /* @__PURE__ */ __name(() => {
-      setTime(game.time.ticks);
-      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += game.player.level.rate;
-      game.time = game_time_exports.make(game.time.ticks);
-      const result = tick9(game.player, game, game.commands, 0.5);
-      game.commands = [];
-      render(game);
-    }, "playerTick");
-    if (!game.player.flags.spedUp) {
-      fullTick();
-      game.time.ticks += 1;
-    } else {
-      playerTick();
-      game.time.ticks += 0.5;
-      fullTick();
-      game.time.ticks += 0.5;
-    }
-  }
-  __name(processTick, "processTick");
-  function tick9(obj, game, commands, ticksPassed) {
-    let result = { codeBlocks: 0 };
-    switch (obj.type) {
-      case "boss":
-        tick7(obj, game.map);
-        break;
-      case "footprint":
-        tick8(obj, game.map);
-        break;
-      case "player":
-        game_exports.handleEffects(game, tick2(obj, game, commands, ticksPassed));
-        break;
-      case "door":
-      case "story":
-      case "commit":
-      case "coffee":
-      case "wall":
-        break;
-      default:
-        assertUnreachable(obj);
-    }
-    return result;
-  }
-  __name(tick9, "tick");
   main();
 })();
 /*! Bundled license information:

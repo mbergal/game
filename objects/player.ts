@@ -1,18 +1,14 @@
+import * as Logging from "@/utils/logging"
+import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
 import * as Command from "../command"
-import { Game } from "../game"
+import { Effect, Effects, EngineeringLevels, Game, Messages, GameMap } from "../game"
 import config from "../game/config"
-import * as Effect from "../game/effect"
-import * as Effects from "../game/effects"
-import { GameMap } from "../game/map"
-import * as Messages from "../game/messages"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
-import * as Logging from "../utils/logging"
-import { assertUnreachable } from "../utils/utils"
+import * as Item from "./item"
 import * as GameObject from "./object"
 import { StoryTask, Task } from "./tasks"
-import * as EngineeringLevels from "../game/levels"
 
 const logger = Logging.make("player")
 
@@ -111,7 +107,7 @@ function canPickItem(player: Player, item: GameObject.Item) {
 function useItem(
     player: Player,
     item: GameObject.Item,
-    map: GameMap,
+    map: GameMap.GameMap,
     effects: Effect.Effect[]
 ): boolean {
     logger(`Using item ${item.type}`)
@@ -132,7 +128,7 @@ function useItem(
             }
         case "coffee":
             Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
-            player.flags.spedUp = config.items.coffee.speedUpDays
+            player.flags.spedUp = config.items.coffee.speedUpDays * config.dayTicks
             player.item = null
             return true
         case "door":
@@ -161,33 +157,37 @@ function pickItem(
     switch (newItem.type) {
         case "door":
             newItem.open = true
-            dropCarriedItem(player, game)
+            dropCarriedItem(player, game, effects)
             player.item = newItem
+            effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return true
         case "coffee":
-            dropCarriedItem(player, game)
+            dropCarriedItem(player, game, effects)
             player.item = newItem
+            effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return true
         case "commit":
-            dropCarriedItem(player, game)
+            dropCarriedItem(player, game, effects)
             player.item = newItem
+            effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return true
         case "story":
             player.task = StoryTask.make(newItem)
+            effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return false
         default:
             assertUnreachable(newItem)
     }
 }
 
-function dropCarriedItem(player: Player, game: Game.Game) {
+function dropCarriedItem(player: Player, game: Game.Game, effects: Effects.Effects) {
     const carriedItem = player.item
     if (carriedItem != null) {
-        // player.item.position = moveBy(
-        //     player.position,
-        //     Direction.reverse(player.direction!)
-        // )
         dropItem(player, game.map)
+        Effects.append(
+            effects,
+            Effect.showMessage(`Dropped ${Item.description(carriedItem)}`, 3_000)
+        )
     }
 }
 
@@ -206,13 +206,22 @@ function tickHrTask(player: Player, ticksPassed: number) {
     }
 }
 
-function handleDrop(player: Player, map: GameMap) {
+function tickFlags(player: Player, ticksPassed: number) {
+    if (player.flags.spedUp) {
+        player.flags.spedUp -= ticksPassed
+        if (player.flags.spedUp <= 0) {
+            player.flags.spedUp = false
+        }
+    }
+}
+
+function handleDrop(player: Player, map: GameMap.GameMap) {
     if (player.item != null) {
         dropItem(player, map)
     }
 }
 
-function dropItem(player: Player, map: GameMap) {
+function dropItem(player: Player, map: GameMap.GameMap) {
     const droppingItem = player.item!
     droppingItem.open = true
     droppingItem.position = player.position
@@ -223,7 +232,7 @@ function dropItem(player: Player, map: GameMap) {
 function processCommands(
     player: Player,
     commands: Command.Command[],
-    map: GameMap,
+    map: GameMap.GameMap,
     effects: Effects.Effects
 ) {
     const removeAllMoves = () => {
@@ -301,6 +310,7 @@ export function tick(
     let carriedSomething = player.item != null
 
     tickHrTask(player, ticksPassed)
+    tickFlags(player, ticksPassed)
     processCommands(player, commands, game.map, effects)
 
     if (player.direction) {

@@ -1,9 +1,9 @@
 import { Vector } from "./geometry"
 
 export type Room = {
-    position: Vector
+    position: Vector.Vector
     length: number
-    doors: Vector[]
+    doors: Vector.Vector[]
 }
 
 export function upperDoors(room: Room) {
