@@ -2,13 +2,13 @@ import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
 import * as Command from "../command"
-import { Effect, Effects, EngineeringLevels, Game, Messages, GameMap } from "../game"
-import config from "../game/config"
+import { Effect, Effects, EngineeringLevels, Game, GameMap, Messages } from "../game"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
 import * as Item from "./item"
 import * as GameObject from "./object"
 import { StoryTask, Task } from "./tasks"
+import config from "../game/config"
 
 const logger = Logging.make("player")
 
