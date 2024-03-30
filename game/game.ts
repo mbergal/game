@@ -145,7 +145,7 @@ function objTick(
     obj: GameObject.GameObject,
     game: Game,
     commands: Command.Command[],
-    ticksPassed: number
+    ticksPassed: number,
 ) {
     switch (obj.type) {
         case "boss":
@@ -203,7 +203,7 @@ export function load(storage: GameStorage.GameStorage): Game | null {
         } = JSON.parse(objectsStorage)
         const map_ = GameMap.GameMap.fromJson(map)
         const player = map_.objects.find<Player.Player>(
-            (x): x is Player.Player => x.type === "player"
+            (x): x is Player.Player => x.type === "player",
         )
         return {
             time: time,

@@ -37,7 +37,7 @@ export function render(windows: Windows.Window[]) {
         composition = compose(
             composition,
             window.position,
-            window.render().map((x) => x.split(""))
+            window.render().map((x) => x.split("")),
         )
     }
     Screen.render(composition)

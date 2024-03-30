@@ -28,7 +28,7 @@ export function render(game: Game.Game) {
             game.score.impact.toString().padStart(3, " ") +
             showTask(game) +
             " " +
-            showStockPrice(game)
+            showStockPrice(game),
     )
     return buffer.map((x) => x)
 }

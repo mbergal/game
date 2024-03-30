@@ -74,7 +74,7 @@ export function center(window: Window): Window {
             x: Math.floor((Screen.size.x - window.size.x) / 2),
             y: Math.floor((Screen.size.y - window.size.y) / 2),
         },
-        window
+        window,
     )
     return window
 }

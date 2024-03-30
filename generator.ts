@@ -22,7 +22,7 @@ export function maze(size: Vector.t, game: Game.t) {
                 position: point,
                 type: "wall",
                 zIndex: 0,
-            })
+            }),
         )
 
     game.map.add(outer_walls)
@@ -35,7 +35,7 @@ export function maze(size: Vector.t, game: Game.t) {
                 type: "wall",
                 position: point,
                 zIndex: 0,
-            })
+            }),
         )
 
     game.map.add(inner_walls)
@@ -49,7 +49,7 @@ export function maze(size: Vector.t, game: Game.t) {
             type: "wall",
             position: point,
             zIndex: 0,
-        })
+        }),
     )
 
     game.map.add(room_walls)
@@ -69,12 +69,12 @@ export function roomWalls(args: {
                         random.ints(
                             0,
                             args.width,
-                            random.int(args.wallsPerRow.min, args.wallsPerRow.max)
+                            random.int(args.wallsPerRow.min, args.wallsPerRow.max),
                         ),
-                    (x) => proper_distance(x.concat([0, args.width]))
-                ).map((x) => vline({ x, y }, 1))
-            )
-        )
+                    (x) => proper_distance(x.concat([0, args.width])),
+                ).map((x) => vline({ x, y }, 1)),
+            ),
+        ),
     )
     return room_walls
 }
@@ -119,7 +119,7 @@ function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
 
         const xx = check(
             () => random.ints(room.position.x, room.position.x + room.length, num_of_lower),
-            (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
+            (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1),
         )
 
         room.doors = room.doors.concat(xx.map((x) => ({ x, y: room.position.y - 1 })))
@@ -172,7 +172,7 @@ function proper_distance(walls: number[]): boolean {
 
     const result = _.every(
         distances.map((x) => x[1] - x[0]),
-        (x) => x > 2
+        (x) => x > 2,
     )
     return result
 }

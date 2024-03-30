@@ -68,7 +68,7 @@ export type MoveActions = {
 export function possibleMoves(
     pos: Vector.t,
     currentDirection: Direction.t,
-    map: GameMap.GameMap
+    map: GameMap.GameMap,
 ): MoveActions {
     const result: MoveActions = {}
     const possible = map.possibleDirections(pos, "wall")
@@ -152,14 +152,14 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
 
                 const move_choice = random.choice<keyof MoveActions>(
                     _.compact(move_types),
-                    _.compact(move_weights)
+                    _.compact(move_weights),
                 )
                 switch (move_choice) {
                     case "turn":
                         const weights = moves.turn!.directions.map((x) =>
                             map.isAt(moveBy(boss.position, x), "footprint")
                                 ? BOSS_WEIGHTS.turn.visited
-                                : BOSS_WEIGHTS.turn.notVisited
+                                : BOSS_WEIGHTS.turn.notVisited,
                         )
                         const chosen = random.choice(moves.turn!.directions, weights)
                         boss.state.direction = chosen
@@ -173,7 +173,10 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             if (moves.back || moves.jump) {
                 const move_choice = random.choice<keyof MoveActions>(
                     _.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-                    _.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+                    _.compact([
+                        moves.back ? BOSS_WEIGHTS.back : null,
+                        BOSS_WEIGHTS.jump ? 5 : null,
+                    ]),
                 )
                 switch (move_choice) {
                     case "back":
@@ -196,7 +199,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                     boss,
                     moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
                     boss.state.direction,
-                    map
+                    map,
                 )
             }
             break
@@ -211,7 +214,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
 function choose_direction(
     pos: Vector.t,
     least_preferred: Direction.t | null,
-    map: GameMap.GameMap
+    map: GameMap.GameMap,
 ): Direction.t | null {
     const forks = map.possibleDirections(pos, "wall")
     const b = forks.filter((x) => x[0] != least_preferred)

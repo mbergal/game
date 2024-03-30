@@ -7706,7 +7706,10 @@
         if (moves.back || moves.jump) {
           const move_choice = choice(
             import_lodash7.default.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
-            import_lodash7.default.compact([moves.back ? BOSS_WEIGHTS.back : null, BOSS_WEIGHTS.jump ? 5 : null])
+            import_lodash7.default.compact([
+              moves.back ? BOSS_WEIGHTS.back : null,
+              BOSS_WEIGHTS.jump ? 5 : null
+            ])
           );
           switch (move_choice) {
             case "back":

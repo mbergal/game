@@ -1,29 +1,24 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--import",
-        "tsx"
-      ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}/main.ts",
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "chrome",
-      "name": "/home/misha/projects/game/index.html",
-      "request": "launch",
-      "url": "file:///home/misha/projects/game/index.html"
-    }
-  ]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["--import", "tsx"],
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/main.ts",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "chrome",
+            "name": "/home/misha/projects/game/index.html",
+            "request": "launch",
+            "url": "file:///home/misha/projects/game/index.html"
+        }
+    ]
 }

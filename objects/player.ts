@@ -108,7 +108,7 @@ function useItem(
     player: Player,
     item: GameObject.Item,
     map: GameMap.GameMap,
-    effects: Effect.Effect[]
+    effects: Effect.Effect[],
 ): boolean {
     logger(`Using item ${item.type}`)
     switch (item.type) {
@@ -123,8 +123,8 @@ function useItem(
                             effects,
                             Effect.showMessage(
                                 `Added commit ${item.hash} to PR "${task.story.name}" `,
-                                3_000
-                            )
+                                3_000,
+                            ),
                         )
                         break
                 }
@@ -159,7 +159,7 @@ function pickItem(
     player: Player,
     newItem: GameObject.Item,
     game: Game.Game,
-    effects: Effects.Effects
+    effects: Effects.Effects,
 ): boolean {
     game.map.remove(newItem)
     switch (newItem.type) {
@@ -194,7 +194,7 @@ function dropCarriedItem(player: Player, game: Game.Game, effects: Effects.Effec
         dropItem(player, game.map)
         Effects.append(
             effects,
-            Effect.showMessage(`Dropped ${Item.description(carriedItem)}`, 3_000)
+            Effect.showMessage(`Dropped ${Item.description(carriedItem)}`, 3_000),
         )
     }
 }
@@ -235,7 +235,7 @@ function processCommands(
     player: Player,
     commands: Command.Command[],
     map: GameMap.GameMap,
-    effects: Effects.Effects
+    effects: Effects.Effects,
 ) {
     const removeAllMoves = () => {
         player.commands = player.commands.filter((x) => x.command.type != "move")
@@ -305,7 +305,7 @@ export function tick(
     player: Player,
     game: Game.Game,
     commands: Command.Command[],
-    ticksPassed: number
+    ticksPassed: number,
 ): Effects.Effects {
     const effects: Effects.Effects = []
     let pickedSomething = false
@@ -336,7 +336,7 @@ export function tick(
                             logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(
                                 effects,
-                                Effect.showMessage(`Picked a commit ${obj.hash}`, 40)
+                                Effect.showMessage(`Picked a commit ${obj.hash}`, 40),
                             )
                             pickedSomething =
                                 pickedSomething || pickItem(player, obj, game, effects)

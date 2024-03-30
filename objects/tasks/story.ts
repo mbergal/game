@@ -29,7 +29,7 @@ export function addCommit(
     player: Player.Player,
     task: t,
     commit: Commit.t,
-    effects: Effect.Effect[]
+    effects: Effect.Effect[],
 ) {
     task.appliedCommits += 1
     if (task.appliedCommits == task.neededCommits) {

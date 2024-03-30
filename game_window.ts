@@ -9,7 +9,10 @@ const logger = Logging.make("game_window")
 export class GameWindow extends Windows.Window {
     storage: GameStorage.GameStorage
     interval: number
-    constructor(private game: Game.Game, storage: GameStorage.GameStorage) {
+    constructor(
+        private game: Game.Game,
+        storage: GameStorage.GameStorage,
+    ) {
         super()
         this.storage = storage
         this.keydown = (window: Windows.Window, event: Windows.KeyboardEvent) => {

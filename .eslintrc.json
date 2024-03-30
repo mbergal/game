@@ -14,10 +14,7 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": [
-        "@typescript-eslint",
-        "sonarjs"
-    ],
+    "plugins": ["@typescript-eslint", "sonarjs"],
     "rules": {
         "sonarjs/no-ignored-return": "error"
     }

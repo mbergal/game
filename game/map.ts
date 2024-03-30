@@ -17,7 +17,7 @@ export class GameMap {
         const a = _.range(1, 21)
         this.cells = _.chunk(
             _.range(width * height).map((x) => []),
-            width
+            width,
         )
         this.objects = []
         this.add(objs)
@@ -42,7 +42,7 @@ export class GameMap {
         for (const obj of objs_) {
             this.cells[obj.position.y][obj.position.x] = _.pull(
                 this.cells[obj.position.y][obj.position.x],
-                obj
+                obj,
             )
         }
     }
@@ -56,7 +56,7 @@ export class GameMap {
     getRandomEmptyLocation(): Vector.t {
         const [x, y] = check(
             () => [random.int(0, this.width), random.int(0, this.height)],
-            ([x, y]) => this.at({ x, y }).length == 0
+            ([x, y]) => this.at({ x, y }).length == 0,
         )
 
         return { x, y }
@@ -70,7 +70,7 @@ export class GameMap {
 
     objAt<T extends GameObject.t["type"]>(
         v: Vector.t,
-        type: T
+        type: T,
     ): (GameObject.t & { type: T }) | null {
         const objs = this.at(v)
         const objOfType = objs.find((x) => x.type == type) ?? null
@@ -118,7 +118,7 @@ export class GameMap {
 export function directionTo(
     position: Vector.t,
     map: GameMap,
-    objType: GameObject.t["type"]
+    objType: GameObject.t["type"],
 ): Direction.t | null {
     const dd = _.compact(Direction.all.filter((x) => map.isAt(moveBy(position, x), objType)))
     return dd.length ? dd[0] : null

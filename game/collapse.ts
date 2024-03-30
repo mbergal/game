@@ -28,7 +28,7 @@ export function tick(game: Game.Game): Effect.Effect[] {
                     obj.position.y !== 0 &&
                     obj.position.y !== game.map.height - 1 &&
                     obj.position.x !== 0 &&
-                    obj.position.x !== game.map.width - 1
+                    obj.position.x !== game.map.width - 1,
             )
         const ticksLeft = config.totalDays * config.dayTicks - game.time.ticks
         const removeTicks = Math.floor(walls.length / ticksLeft) / 2

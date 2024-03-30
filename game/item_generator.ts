@@ -33,7 +33,7 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
                         config.itemGenerator.frequencies.door,
                         config.itemGenerator.frequencies.commit,
                         config.itemGenerator.frequencies.coffee,
-                    ]
+                    ],
                 )
                 let item
                 switch (itemType) {

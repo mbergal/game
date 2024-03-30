@@ -10,7 +10,7 @@ export class Window extends TextWindow.TextWindow {
                 "Drop item - space",
                 "Use item - enter",
                 "Stop - end",
-            ].join("\n")
+            ].join("\n"),
         )
 
         this.onKeyPress((window, event) => {

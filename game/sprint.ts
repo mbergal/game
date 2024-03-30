@@ -122,7 +122,7 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
 
 export function* tick(
     sprint: t,
-    game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player }
+    game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player },
 ): Generator<Effect.Effect> {
     const events = game.plan.get(game.time.ticks)
     if (events) {
@@ -146,7 +146,7 @@ export function* tick(
                     sprint.daysLeft = event.sprintDaysLeft
                     yield Effect.showMessage(
                         `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
-                        3_000
+                        3_000,
                     )
                     break
                 case "sprintEnd":
