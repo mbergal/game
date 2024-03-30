@@ -22,12 +22,12 @@ export function render(game: Game.Game) {
     buffer.push(
         showTime(game) +
             showLevel(game) +
-            " Money: $" +
+            "|Money: $" +
             game.score.money.toString().padStart(6, "0") +
-            " Impact: " +
+            "|Impact: " +
             game.score.impact.toString().padStart(3, " ") +
             showTask(game) +
-            " " +
+            "|" +
             showStockPrice(game),
     )
     return buffer.map((x) => x)
@@ -87,17 +87,17 @@ function shortDay(day: DayOfWeek): string {
 
 function showTime(game: Game.Game): string {
     return (
-        "Day: " +
+        "Day:" +
         (game.time.day + 1).toString() +
-        "(" +
+        "/" +
         shortDay(game.time.dayOfWeek) +
-        ") " +
+        " " +
         (game.sprint ? game.sprint.daysLeft : " ")
     )
 }
 
 function showLevel(game: Game.Game): string {
-    return " " + game.player!.level.name
+    return "|Pos:" + game.player!.level.name
 }
 
 function showTask(game: Game.Game): string {

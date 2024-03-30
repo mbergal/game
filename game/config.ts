@@ -62,7 +62,7 @@ const config: Config = {
         frequencies: {
             door: 1,
             commit: 90,
-            coffee: 10,
+            coffee: 1000,
         },
     },
     items: {

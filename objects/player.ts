@@ -136,7 +136,7 @@ function useItem(
             }
         case "coffee":
             Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
-            player.flags.spedUp = config.items.coffee.speedUpDays * config.dayTicks
+            speedUp(player)
             player.item = null
             return true
         case "door":
@@ -153,6 +153,12 @@ function useItem(
             assertUnreachable(item)
     }
     return false
+}
+
+function speedUp(player: Player) {
+    player.flags.spedUp =
+        (player.flags.spedUp ? player.flags.spedUp : 0) +
+        config.items.coffee.speedUpDays * config.dayTicks
 }
 
 function pickItem(

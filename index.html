@@ -7,33 +7,41 @@
             rel="stylesheet"
         />
 
-        <style role="">
-            .roboto-mono {
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
+            body {
+                margin: 0;
+            }
+            .game {
+                height: 100%;
+
                 font-family: monospace;
                 font-optical-sizing: auto;
                 font-weight: 400;
                 font-style: normal;
-                font-size: 20px;
+                font-size: 18px;
                 white-space: pre;
                 line-height: 1.2;
-                /* color: green; */
-                position: absolute;
-                top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-image: url("vt220.png");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 1200px;
+                color: #00ef00;
             }
         </style>
     </head>
-    <body class="roboto-mono">
+    <body>
         <script src="./out.js" defer></script>
         <!-- <div
             style="
-                background-image: url('vt220.png');
-                background-size: 1200px;
-                background-repeat: no-repeat;
             "
         /> -->
-        <div
-            id="content"
-            style="border: 1px solid salmon; position: relative; top: 30; left: 60"
-        ></div>
+        <div id="content" class="game"></div>
     </body>
 </html>
