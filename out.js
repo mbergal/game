@@ -6138,7 +6138,7 @@
       TACTS_FOR_SINGLE_MOVE: 4 * 3
     },
     totalDays: 14 * 10,
-    dayTicks: 100,
+    dayTicks: 80,
     story: {
       small: { neededCommits: 2, impact: 1 },
       medium: { neededCommits: 5, impact: 2 },
@@ -6147,6 +6147,7 @@
     sprint: {
       startDay: 0
     },
+    messages: { showNextMessageAfter: 500 },
     performanceReview: {
       interval: 28
     },
@@ -6602,7 +6603,7 @@
     for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
       const pplan = generatePlan(startTick);
       append2(plan2, pplan);
-      startTick += 14;
+      startTick += config_default.dayTicks * 14;
     }
     append2(plan2, plan());
     return plan2;
@@ -7025,7 +7026,7 @@
       if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
         game.messageStartTime = Date.now();
         game.messages.shift();
-      } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > 3e3 && game.messages.length > 1) {
+      } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > config_default.messages.showNextMessageAfter && game.messages.length > 1) {
         game.messageStartTime = Date.now();
         game.messages.shift();
       } else {
@@ -7037,12 +7038,31 @@
     }
   }
   __name(showMessage2, "showMessage");
+  function shortDay(day) {
+    switch (day) {
+      case "Sunday":
+        return "Sun";
+      case "Monday":
+        return "Mon";
+      case "Tuesday":
+        return "Tue";
+      case "Wednesday":
+        return "Wed";
+      case "Thursday":
+        return "Thu";
+      case "Friday":
+        return "Fri";
+      case "Saturday":
+        return "Sat";
+      case "Sunday":
+        return "Sun";
+      default:
+        return assertUnreachable(day);
+    }
+  }
+  __name(shortDay, "shortDay");
   function showTime(game) {
-    return (
-      // game.time.ticks.toString().padStart(6, "0") +
-      // " " +
-      game.time.day.toString() + " " + game.time.dayOfWeek + " " + (game.sprint ? game.sprint.daysLeft : " ")
-    );
+    return "Day: " + (game.time.day + 1).toString() + "(" + shortDay(game.time.dayOfWeek) + ") " + (game.sprint ? game.sprint.daysLeft : " ");
   }
   __name(showTime, "showTime");
   function showLevel(game) {
@@ -7972,6 +7992,13 @@
             case "story":
               story_exports2.addCommit(player, task, item, effects);
               player.item = null;
+              effects_exports.append(
+                effects,
+                effect_exports.showMessage(
+                  `Added commit ${item.hash} to PR "${task.story.name}" `,
+                  3e3
+                )
+              );
               break;
           }
           return true;

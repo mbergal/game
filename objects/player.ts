@@ -119,8 +119,16 @@ function useItem(
                     case "story":
                         StoryTask.addCommit(player, task, item, effects)
                         player.item = null
+                        Effects.append(
+                            effects,
+                            Effect.showMessage(
+                                `Added commit ${item.hash} to PR "${task.story.name}" `,
+                                3_000
+                            )
+                        )
                         break
                 }
+
                 return true
             } else {
                 Effects.append(effects, Effect.showMessage("No task to apply commit to", 3_000))

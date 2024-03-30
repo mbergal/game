@@ -12,6 +12,9 @@ export type Config = {
     performanceReview: {
         interval: number
     }
+    messages: {
+        showNextMessageAfter: number
+    }
     sprint: {
         startDay: number
     }
@@ -39,7 +42,7 @@ const config: Config = {
         TACTS_FOR_SINGLE_MOVE: 4 * 3,
     },
     totalDays: 14 * 10,
-    dayTicks: 100,
+    dayTicks: 80,
     story: {
         small: { neededCommits: 2, impact: 1 },
         medium: { neededCommits: 5, impact: 2 },
@@ -48,6 +51,7 @@ const config: Config = {
     sprint: {
         startDay: 0,
     },
+    messages: { showNextMessageAfter: 500 },
     performanceReview: {
         interval: 28,
     },

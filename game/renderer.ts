@@ -1,8 +1,9 @@
-import { Game, Message, GameMap } from "."
+import { Game, GameMap, Message } from "."
 import { Vector } from "../geometry"
 import { GameObject } from "../objects"
 import { assertUnreachable } from "../utils/utils"
-import * as Screen from "../ui/screens"
+import config from "./config"
+import { DayOfWeek } from "./day_of_week"
 
 export function render(game: Game.Game) {
     const map = game.map
@@ -45,7 +46,8 @@ export function showMessage(game: {
             game.messageStartTime = Date.now()
             game.messages.shift()
         } else if (
-            Date.now().valueOf() - game.messageStartTime.valueOf() > 3000 &&
+            Date.now().valueOf() - game.messageStartTime.valueOf() >
+                config.messages.showNextMessageAfter &&
             game.messages.length > 1
         ) {
             game.messageStartTime = Date.now()
@@ -60,14 +62,36 @@ export function showMessage(game: {
     }
 }
 
+function shortDay(day: DayOfWeek): string {
+    switch (day) {
+        case "Sunday":
+            return "Sun"
+        case "Monday":
+            return "Mon"
+        case "Tuesday":
+            return "Tue"
+        case "Wednesday":
+            return "Wed"
+        case "Thursday":
+            return "Thu"
+        case "Friday":
+            return "Fri"
+        case "Saturday":
+            return "Sat"
+        case "Sunday":
+            return "Sun"
+        default:
+            return assertUnreachable(day)
+    }
+}
+
 function showTime(game: Game.Game): string {
     return (
-        // game.time.ticks.toString().padStart(6, "0") +
-        // " " +
-        game.time.day.toString() +
-        " " +
-        game.time.dayOfWeek +
-        " " +
+        "Day: " +
+        (game.time.day + 1).toString() +
+        "(" +
+        shortDay(game.time.dayOfWeek) +
+        ") " +
         (game.sprint ? game.sprint.daysLeft : " ")
     )
 }
