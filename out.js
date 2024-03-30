@@ -8072,12 +8072,6 @@
         player.hrTaskTact = null;
       }
     }
-    if (player.flags.spedUp && player.flags.spedUp > 0) {
-      player.flags.spedUp -= ticksPassed;
-      if (player.flags.spedUp <= 0) {
-        player.flags.spedUp = false;
-      }
-    }
   }
   __name(tickHrTask, "tickHrTask");
   function tickFlags(player, ticksPassed) {

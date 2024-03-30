@@ -206,12 +206,6 @@ function tickHrTask(player: Player, ticksPassed: number) {
             player.hrTaskTact = null
         }
     }
-    if (player.flags.spedUp && player.flags.spedUp > 0) {
-        player.flags.spedUp -= ticksPassed
-        if (player.flags.spedUp <= 0) {
-            player.flags.spedUp = false
-        }
-    }
 }
 
 function tickFlags(player: Player, ticksPassed: number) {
