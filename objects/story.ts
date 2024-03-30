@@ -10,6 +10,7 @@ export interface t {
     impact: number
     zIndex: number
     name: string
+    open: boolean
 }
 
 export interface Story extends t {}
