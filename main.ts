@@ -1,22 +1,8 @@
-import { Boss, Footprint, GameObject, Player } from "@/objects"
+import { Boss, Player } from "@/objects"
 import _ from "lodash"
-import * as Command from "./command"
-import {
-    Collapse,
-    Game,
-    GameStorage,
-    GameTime,
-    Intro,
-    ItemGenerator,
-    PerformanceReview,
-    Plan,
-    Renderer,
-    Sprint,
-} from "./game"
+import { Game, GameStorage, Intro, Plan } from "./game"
 
 import { Vector } from "./geometry"
-
-import config from "./game/config"
 
 import * as MazeGenerator from "./generator"
 
@@ -24,7 +10,6 @@ import { Windows } from "@/ui"
 import * as Logging from "@/utils/logging"
 
 import { GameWindow } from "./game_window"
-import { assertUnreachable } from "./utils/utils"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 

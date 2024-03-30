@@ -7,4 +7,4 @@ export function render(chars: string[][]) {
     contentBlock!.innerHTML = chars.map((x) => x.join("")).join("\n")
 }
 
-export const size = { x: 80, y: 24 }
+export const size = { x: 80, y: 27 }

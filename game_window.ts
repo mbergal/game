@@ -3,6 +3,7 @@ import * as Logging from "@/utils/logging"
 import * as Command from "./command"
 import { Game, GameStorage, Renderer } from "./game"
 import config from "./game/config"
+import { Window } from "./help"
 
 const logger = Logging.make("game_window")
 export class GameWindow extends Windows.Window {
@@ -48,6 +49,9 @@ export class GameWindow extends Windows.Window {
             // case "[":
             //     game.score.level -= 1
             //     break
+            case "?":
+            case "h":
+                help()
             case "s":
                 save(this.game, this.storage)
                 break
@@ -69,7 +73,11 @@ export class GameWindow extends Windows.Window {
     }
 }
 
-export function getCommand(key: string): Command.Command | null | undefined {
+function help() {
+    Windows.show(Windows.center(new Window()))
+}
+
+function getCommand(key: string): Command.Command | null | undefined {
     switch (key) {
         case "ArrowUp":
             return { type: "move", direction: "up" }

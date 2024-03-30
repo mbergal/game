@@ -7397,7 +7397,7 @@
     contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
   }
   __name(render2, "render");
-  var size = { x: 80, y: 24 };
+  var size = { x: 80, y: 27 };
 
   // ui/composition.ts
   function make10(size2) {
@@ -8195,6 +8195,27 @@
   // main.ts
   var import_lodash10 = __toESM(require_lodash());
 
+  // help.ts
+  var _Window3 = class _Window3 extends text_window_exports.TextWindow {
+    constructor() {
+      super(
+        [
+          "        HELP.",
+          "",
+          "Move - arrows",
+          "Drop item - space",
+          "Use item - enter",
+          "Stop - end"
+        ].join("\n")
+      );
+      this.onKeyPress((window2, event) => {
+        windows_exports.hide(window2);
+      });
+    }
+  };
+  __name(_Window3, "Window");
+  var Window3 = _Window3;
+
   // game_window.ts
   var logger4 = make("game_window");
   var _GameWindow = class _GameWindow extends windows_exports.Window {
@@ -8231,6 +8252,9 @@
           this.interval = this.setInterval(() => game_exports.tick(this.game), config_default.tickInterval);
           game_exports.message(this.game, { text: "Speed decreased", ttl: 2 });
           break;
+        case "?":
+        case "h":
+          help();
         case "s":
           save2(this.game, this.storage);
           break;
@@ -8253,6 +8277,10 @@
   };
   __name(_GameWindow, "GameWindow");
   var GameWindow = _GameWindow;
+  function help() {
+    windows_exports.show(windows_exports.center(new Window3()));
+  }
+  __name(help, "help");
   function getCommand(key) {
     switch (key) {
       case "ArrowUp":
