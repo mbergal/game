@@ -4,7 +4,7 @@ import * as FootprintTrait from "../traits/footprint"
 const LIFETIME = 1000
 
 export type Footprint = FootprintTrait.Footprint & {
-    type: "boss_footprint"
+    type: "boss.footprint"
 }
 
 export function tick(obj: Footprint, map: GameMap.GameMap): Effects.Effects {

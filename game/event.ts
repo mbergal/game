@@ -16,6 +16,16 @@ export namespace Event {
         dayOfWeek: DayOfWeek.DayOfWeek
     }
 
+    type WorkWeekStarted = {
+        type: "workWeekStarted"
+        day: number
+    }
+
+    type WorkWeekEnded = {
+        type: "workWeekEnded"
+        day: number
+    }
+
     type PerformanceReview = {
         type: "performanceReview"
     }
@@ -68,6 +78,8 @@ export namespace Event {
         | SprintEnd
         | WeekendEnd
         | WeekendStart
+        | WorkWeekStarted
+        | WorkWeekEnded
         | GroomBacklogStart
         | GroomBacklogEnd
         | SprintDayStart

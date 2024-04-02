@@ -41,19 +41,16 @@ export function showMessage(game: {
         if (game.messageStartTime == null) {
             game.messageStartTime = Date.now()
         }
-        let text = game.messages[0].text
         if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
-            game.messageStartTime = Date.now()
+            game.messageStartTime = null
             game.messages.shift()
         } else if (
             Date.now().valueOf() - game.messageStartTime.valueOf() >
                 config.messages.showNextMessageAfter &&
             game.messages.length > 1
         ) {
-            game.messageStartTime = Date.now()
+            game.messageStartTime = null
             game.messages.shift()
-        } else {
-            return text
         }
 
         return game.messages.length > 0 ? game.messages[0].text : ""
@@ -122,10 +119,10 @@ function isVisible(obj: GameObject.t) {
         case "commit":
         case "door":
         case "developer":
+            return true
+        case "boss.footprint":
         case "developer.footprint":
-            return true
-        case "boss_footprint":
-            return true
+            return false
         default:
             assertUnreachable(obj)
     }
@@ -143,10 +140,10 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                 return getWallRepresentation(map, obj.position)
             case "boss":
                 return "+"
-            case "boss_footprint":
+            case "boss.footprint":
                 return "■"
             case "developer.footprint":
-                return "■"
+                return "◆"
             case "player":
                 if (obj.hrTaskTact) {
                     return blink("*", "@", tick)

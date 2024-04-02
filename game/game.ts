@@ -97,7 +97,7 @@ export function message(game: Game, m: Message | { text: string[]; ttl: number }
 }
 
 export function tick(game: Game) {
-    const fullTick = () => {
+    const fullTick = (timePassed: number) => {
         Logging.setTime(game.time.ticks)
         game.score.stockPrice =
             100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
@@ -114,31 +114,32 @@ export function tick(game: Game) {
         handleEffects(game, PerformanceReview.tick(game))
 
         for (const obj of game.map.objects) {
-            const result = objTick(obj, game, game.commands, 1)
+            objTick(obj, game, game.commands, 1)
         }
         game.commands = []
         Renderer.render(game)
+        game.time.ticks += timePassed
     }
 
-    const playerTick = () => {
+    const halfTick = (timePassed: number) => {
         Logging.setTime(game.time.ticks)
-        game.score.stockPrice =
-            100.0 - (100.0 / config.totalDays) * (game.time.ticks / config.dayTicks)
-        game.score.money += game.player!.level.rate
-        game.time = GameTime.make(game.time.ticks)
-        const result = objTick(game.player!, game, game.commands, 0.5)
+
+        if (game.player!.speedUp) {
+            objTick(game.player!, game, game.commands, 0.5)
+        }
+        if (game.developer!.speedUp) {
+            objTick(game.developer!, game, game.commands, 0.5)
+        }
         game.commands = []
         Renderer.render(game)
+        game.time.ticks += timePassed
     }
 
-    if (!game.player!.speedUp) {
-        fullTick()
-        game.time.ticks += 1
+    if (!game.player!.speedUp && !game.developer!.speedUp) {
+        fullTick(1)
     } else {
-        playerTick()
-        game.time.ticks += 0.5
-        fullTick()
-        game.time.ticks += 0.5
+        halfTick(0.5)
+        fullTick(0.5)
     }
 }
 
@@ -152,7 +153,7 @@ function objTick(
         case "boss":
             Boss.tick(obj, game.map)
             break
-        case "boss_footprint":
+        case "boss.footprint":
             handleEffects(game, Boss.Footprint.tick(obj, game.map))
             break
         case "developer.footprint":
@@ -168,7 +169,7 @@ function objTick(
         case "wall":
             break
         case "developer":
-            handleEffects(game, Developer.tick(obj, game.map))
+            handleEffects(game, Developer.tick(obj, game))
             break
         default:
             assertUnreachable(obj)

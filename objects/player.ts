@@ -13,8 +13,10 @@ import { StoryTask, Task } from "./tasks"
 
 const logger = Logging.make("player")
 
+export const type = "player"
+
 export type Player = Traits.SpeedUp.SpeedUp & {
-    type: "player"
+    type: typeof type
     position: Vector.t
     direction: Direction.t | null
     zIndex: number
@@ -31,7 +33,7 @@ export type Player = Traits.SpeedUp.SpeedUp & {
 
 export function make(position: Vector.t): Player {
     return {
-        type: "player",
+        type: type,
         zIndex: 1000,
         direction: null,
         position: position,
@@ -51,7 +53,7 @@ function canMoveOn(objs: GameObject.t[]) {
             switch (obj.type) {
                 case "door":
                 case "story":
-                case "boss_footprint":
+                case "boss.footprint":
                 case "developer.footprint":
                 case "commit":
                 case "coffee":
@@ -350,7 +352,7 @@ export function tick(
                     case "wall":
                     case "boss":
                     case "developer.footprint":
-                    case "boss_footprint":
+                    case "boss.footprint":
                     case "developer":
                         break
                     default:

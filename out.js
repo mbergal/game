@@ -940,11 +940,11 @@
                 index += dir;
                 var iterIndex = -1, value = array[index];
                 while (++iterIndex < iterLength) {
-                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type3 = data.type, computed = iteratee2(value);
-                  if (type3 == LAZY_MAP_FLAG) {
+                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type4 = data.type, computed = iteratee2(value);
+                  if (type4 == LAZY_MAP_FLAG) {
                     value = computed;
                   } else if (!computed) {
-                    if (type3 == LAZY_FILTER_FLAG) {
+                    if (type4 == LAZY_FILTER_FLAG) {
                       continue outer;
                     } else {
                       break outer;
@@ -3167,17 +3167,17 @@
           }
           __name(isFlattenable, "isFlattenable");
           function isIndex(value, length) {
-            var type3 = typeof value;
+            var type4 = typeof value;
             length = length == null ? MAX_SAFE_INTEGER : length;
-            return !!length && (type3 == "number" || type3 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+            return !!length && (type4 == "number" || type4 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
           }
           __name(isIndex, "isIndex");
           function isIterateeCall(value, index, object) {
             if (!isObject(object)) {
               return false;
             }
-            var type3 = typeof index;
-            if (type3 == "number" ? isArrayLike(object) && isIndex(index, object.length) : type3 == "string" && index in object) {
+            var type4 = typeof index;
+            if (type4 == "number" ? isArrayLike(object) && isIndex(index, object.length) : type4 == "string" && index in object) {
               return eq(object[index], value);
             }
             return false;
@@ -3187,16 +3187,16 @@
             if (isArray(value)) {
               return false;
             }
-            var type3 = typeof value;
-            if (type3 == "number" || type3 == "symbol" || type3 == "boolean" || value == null || isSymbol(value)) {
+            var type4 = typeof value;
+            if (type4 == "number" || type4 == "symbol" || type4 == "boolean" || value == null || isSymbol(value)) {
               return true;
             }
             return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object2(object);
           }
           __name(isKey, "isKey");
           function isKeyable(value) {
-            var type3 = typeof value;
-            return type3 == "string" || type3 == "number" || type3 == "symbol" || type3 == "boolean" ? value !== "__proto__" : value === null;
+            var type4 = typeof value;
+            return type4 == "string" || type4 == "number" || type4 == "symbol" || type4 == "boolean" ? value !== "__proto__" : value === null;
           }
           __name(isKeyable, "isKeyable");
           function isLaziable(func) {
@@ -4530,8 +4530,8 @@
           }
           __name(isLength, "isLength");
           function isObject(value) {
-            var type3 = typeof value;
-            return value != null && (type3 == "object" || type3 == "function");
+            var type4 = typeof value;
+            return value != null && (type4 == "object" || type4 == "function");
           }
           __name(isObject, "isObject");
           function isObjectLike(value) {
@@ -5848,12 +5848,12 @@
             };
           });
           arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
-            var type3 = index + 1, isFilter = type3 == LAZY_FILTER_FLAG || type3 == LAZY_WHILE_FLAG;
+            var type4 = index + 1, isFilter = type4 == LAZY_FILTER_FLAG || type4 == LAZY_WHILE_FLAG;
             LazyWrapper.prototype[methodName] = function(iteratee2) {
               var result2 = this.clone();
               result2.__iteratees__.push({
                 "iteratee": getIteratee(iteratee2, 3),
-                "type": type3
+                "type": type4
               });
               result2.__filtered__ = result2.__filtered__ || isFilter;
               return result2;
@@ -6075,10 +6075,11 @@
           reverseDirection: 1e-3,
           forwardDirection: 3,
           freeSpace: 1500
-        }
+        },
+        ticksPerMove: 2
       }
     },
-    totalDays: 14 * 10,
+    totalDays: 14 * 3,
     dayTicks: 80,
     story: {
       small: { neededCommits: 2, impact: 1 },
@@ -6098,8 +6099,8 @@
       maxItems: 20,
       frequencies: {
         door: 1,
-        commit: 90,
-        coffee: 1e3
+        commit: 10,
+        coffee: 1
       }
     },
     items: {
@@ -6115,7 +6116,9 @@
   __export(plan_exports, {
     addEvent: () => addEvent,
     append: () => append2,
+    daily: () => daily,
     generatePlan: () => generatePlan3,
+    getEvents: () => getEvents,
     make: () => make2
   });
 
@@ -6386,6 +6389,7 @@
       "large"
     ];
     const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
+    addEvent2({ type: "workWeekStarted", ...make4(startTick) });
     let sprintDay = 1;
     addEvent2({
       type: "sprintDayStart",
@@ -6425,9 +6429,11 @@
       });
       startTick += 1;
     }
+    addEvent2({ type: "workWeekEnded", ...make4(startTick) });
     addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
+    addEvent2({ type: "workWeekStarted", ...make4(startTick) });
     for (const i of import_lodash3.default.range(4)) {
       sprintDay += 1;
       addEvent2({
@@ -6446,13 +6452,15 @@
       startTick += 1;
     }
     addEvent2({ type: "sprintEnd" });
+    addEvent2({ type: "workWeekEnded", ...make4(startTick) });
     addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
     return [plan2, startTick];
   }
   __name(generatePlan2, "generatePlan");
-  function* tick3(sprint, game) {
+  function tick3(sprint, game) {
+    const effects = [];
     const events = game.plan.get(game.time.ticks);
     if (events) {
       for (const event of events) {
@@ -6460,40 +6468,52 @@
           case "createBacklogIssue":
             const story = make3(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
-            yield showMessage(`Moved "${story.name}" to To Do`, 500);
+            append(
+              effects,
+              showMessage(`Moved "${story.name}" to To Do`, 500)
+            );
             break;
           case "groomBacklogEnd":
           case "collapseStart":
             break;
           case "groomBacklogStart":
-            yield showMessage("Grooming backlog ...", 2e3);
+            append(effects, showMessage("Grooming backlog ...", 2e3));
             break;
           case "sprintDayEnd":
             break;
           case "sprintDayStart":
             sprint.day = event.sprintDay;
             sprint.daysLeft = event.sprintDaysLeft;
-            yield showMessage(
-              `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
-              3e3
+            append(
+              effects,
+              showMessage(
+                `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+                3e3
+              )
             );
             break;
           case "sprintEnd":
-            yield showMessage("Sprint ended", 3e3);
+            append(effects, showMessage("Sprint ended", 3e3));
             const stories = objects_exports.filter(game.map.objects, "story");
             game.map.remove(stories);
             if (game.player.task != null) {
-              yield showMessage(`Abandoned ${game.player.task}`, 2e3);
+              append(
+                effects,
+                showMessage(`Abandoned ${game.player.task}`, 2e3)
+              );
               game.player.task = null;
             }
             break;
           case "sprintStart":
             break;
+          case "workWeekStarted":
+          case "workWeekEnded":
+            break;
           case "weekendStart":
-            yield showMessage("Weekend, finally!!!", 3e3);
+            append(effects, showMessage("Weekend, finally!!!", 3e3));
             break;
           case "weekendEnd":
-            yield showMessage("End of Weekend :(", 3e3);
+            append(effects, showMessage("End of Weekend :(", 3e3));
             break;
           case "gameEnded":
           case "gameStarted":
@@ -6507,6 +6527,7 @@
         }
       }
     }
+    return effects;
   }
   __name(tick3, "tick");
 
@@ -6523,6 +6544,10 @@
     plan2.get(time).push(event);
   }
   __name(addEvent, "addEvent");
+  function getEvents(plan2, time) {
+    return plan2.get(time) ?? [];
+  }
+  __name(getEvents, "getEvents");
   function append2(plan2, other) {
     for (const time of other.keys()) {
       for (const event of other.get(time)) {
@@ -6550,6 +6575,16 @@
     return plan2;
   }
   __name(generatePlan3, "generatePlan");
+  function daily(plan2) {
+    const result = [...plan2.entries()].map(
+      ([time, events]) => [Math.floor(time / config_default.dayTicks), events]
+    );
+    return result.reduce((acc, [day, events]) => {
+      acc.set(day, [...acc.get(day) ?? [], ...events]);
+      return acc;
+    }, /* @__PURE__ */ new Map());
+  }
+  __name(daily, "daily");
 
   // game/collapse.ts
   function make6() {
@@ -6569,7 +6604,7 @@
     }
     if (game.collapse) {
       const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
-        (obj) => obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
+        (obj) => obj.position != null && obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
       );
       const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
       const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
@@ -6919,19 +6954,23 @@
       const objs_ = objs instanceof Array ? objs : [objs];
       this.objects = this.objects.concat(objs_);
       for (const obj of objs_) {
-        const objs2 = this.cells[obj.position.y][obj.position.x];
-        objs2.push(obj);
-        this.cells[obj.position.y][obj.position.x] = _7.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+        if (obj.position != null) {
+          const objs2 = this.cells[obj.position.y][obj.position.x];
+          objs2.push(obj);
+          this.cells[obj.position.y][obj.position.x] = _7.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+        }
       }
     }
     remove(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
       this.objects = this.objects.filter((x) => _7.indexOf(objs_, x) == -1);
       for (const obj of objs_) {
-        this.cells[obj.position.y][obj.position.x] = _7.pull(
-          this.cells[obj.position.y][obj.position.x],
-          obj
-        );
+        if (obj.position) {
+          this.cells[obj.position.y][obj.position.x] = _7.pull(
+            this.cells[obj.position.y][obj.position.x],
+            obj
+          );
+        }
       }
     }
     move(obj, pos) {
@@ -6949,9 +6988,9 @@
     at(v) {
       return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
     }
-    objAt(v, type3) {
+    objAt(v, type4) {
       const objs = this.at(v);
-      const objOfType = objs.find((x) => x.type == type3) ?? null;
+      const objOfType = objs.find((x) => x.type == type4) ?? null;
       return objOfType;
     }
     someObjectsAt(v, include) {
@@ -7047,15 +7086,12 @@
       if (game.messageStartTime == null) {
         game.messageStartTime = Date.now();
       }
-      let text = game.messages[0].text;
       if (Date.now() - game.messageStartTime.valueOf() > game.messages[0].ttl) {
-        game.messageStartTime = Date.now();
+        game.messageStartTime = null;
         game.messages.shift();
       } else if (Date.now().valueOf() - game.messageStartTime.valueOf() > config_default.messages.showNextMessageAfter && game.messages.length > 1) {
-        game.messageStartTime = Date.now();
+        game.messageStartTime = null;
         game.messages.shift();
-      } else {
-        return text;
       }
       return game.messages.length > 0 ? game.messages[0].text : "";
     } else {
@@ -7117,10 +7153,10 @@
       case "commit":
       case "door":
       case "developer":
+        return true;
+      case "boss.footprint":
       case "developer.footprint":
-        return true;
-      case "boss_footprint":
-        return true;
+        return false;
       default:
         assertUnreachable(obj);
     }
@@ -7139,10 +7175,10 @@
           return getWallRepresentation(map, obj.position);
         case "boss":
           return "+";
-        case "boss_footprint":
+        case "boss.footprint":
           return "\u25A0";
         case "developer.footprint":
-          return "\u25A0";
+          return "\u25C6";
         case "player":
           if (obj.hrTaskTact) {
             return blink("*", "@", tick13);
@@ -7294,7 +7330,7 @@
   }
   __name(message, "message");
   function tick6(game) {
-    const fullTick = /* @__PURE__ */ __name(() => {
+    const fullTick = /* @__PURE__ */ __name((timePassed) => {
       setTime(game.time.ticks);
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
       game.score.money += game.player.level.rate;
@@ -7306,28 +7342,29 @@
       }
       handleEffects(game, tick2(game));
       for (const obj of game.map.objects) {
-        const result = objTick(obj, game, game.commands, 1);
+        objTick(obj, game, game.commands, 1);
       }
       game.commands = [];
       render(game);
+      game.time.ticks += timePassed;
     }, "fullTick");
-    const playerTick = /* @__PURE__ */ __name(() => {
+    const halfTick = /* @__PURE__ */ __name((timePassed) => {
       setTime(game.time.ticks);
-      game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
-      game.score.money += game.player.level.rate;
-      game.time = make4(game.time.ticks);
-      const result = objTick(game.player, game, game.commands, 0.5);
+      if (game.player.speedUp) {
+        objTick(game.player, game, game.commands, 0.5);
+      }
+      if (game.developer.speedUp) {
+        objTick(game.developer, game, game.commands, 0.5);
+      }
       game.commands = [];
       render(game);
-    }, "playerTick");
-    if (!game.player.speedUp) {
-      fullTick();
-      game.time.ticks += 1;
+      game.time.ticks += timePassed;
+    }, "halfTick");
+    if (!game.player.speedUp && !game.developer.speedUp) {
+      fullTick(1);
     } else {
-      playerTick();
-      game.time.ticks += 0.5;
-      fullTick();
-      game.time.ticks += 0.5;
+      halfTick(0.5);
+      fullTick(0.5);
     }
   }
   __name(tick6, "tick");
@@ -7336,7 +7373,7 @@
       case "boss":
         boss_exports.tick(obj, game.map);
         break;
-      case "boss_footprint":
+      case "boss.footprint":
         handleEffects(game, boss_exports.Footprint.tick(obj, game.map));
         break;
       case "developer.footprint":
@@ -7352,7 +7389,7 @@
       case "wall":
         break;
       case "developer":
-        handleEffects(game, developer_exports.tick(obj, game.map));
+        handleEffects(game, developer_exports.tick(obj, game));
         break;
       default:
         assertUnreachable(obj);
@@ -7704,7 +7741,7 @@
     obj.state = { type: "moving", direction: newDirection, tact: 0 };
     map.add([
       {
-        type: "boss_footprint",
+        type: "boss.footprint",
         position: obj.position,
         zIndex: 1,
         tact: 0
@@ -7742,7 +7779,7 @@
             moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
             moves.straight ? map.someObjectsAt(
               moveBy(boss.position, boss.state.direction),
-              "boss_footprint"
+              "boss.footprint"
             ) ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
           ];
           if (moves.turn) {
@@ -7755,7 +7792,7 @@
           switch (move_choice) {
             case "turn":
               const weights = moves.turn.directions.map(
-                (x) => map.someObjectsAt(moveBy(boss.position, x), "boss_footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+                (x) => map.someObjectsAt(moveBy(boss.position, x), "boss.footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
               );
               const chosen = choice(moves.turn.directions, weights);
               boss.state.direction = chosen;
@@ -7864,7 +7901,7 @@
   var developer_exports = {};
   __export(developer_exports, {
     Footprint: () => footprint_exports3,
-    make: () => make16,
+    make: () => make15,
     possibleMoves: () => possibleMoves2,
     tick: () => tick11,
     type: () => type2
@@ -7885,7 +7922,7 @@
         return true;
       case "wall":
       case "boss":
-      case "boss_footprint":
+      case "boss.footprint":
       case "developer.footprint":
       case "player":
       case "developer":
@@ -7972,39 +8009,19 @@
 
   // objects/developer/index.ts
   var import_lodash8 = __toESM(require_lodash());
-
-  // objects/door.ts
-  var door_exports = {};
-  __export(door_exports, {
-    make: () => make15
-  });
-  function make15(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false,
-      placed: false
-    };
-  }
-  __name(make15, "make");
-
-  // objects/developer/index.ts
   var logger3 = make("fellow_developer");
   var type2 = "developer";
-  function make16(position) {
+  function make15() {
     return {
       type: type2,
-      position,
-      state: {
-        tact: 0,
-        direction: null
-      },
+      position: null,
+      tact: 0,
+      direction: null,
       zIndex: 2,
       speedUp: false
     };
   }
-  __name(make16, "make");
+  __name(make15, "make");
   function speedUp2(developer) {
     speedUp_exports.speedUp(developer, config_default.items.coffee.speedUpDays);
   }
@@ -8043,39 +8060,29 @@
     }
   }
   __name(pickDirection, "pickDirection");
-  function tick11(developer, map) {
+  function tick11(developer, game) {
     const effects = [];
-    developer.state.tact += 1;
-    const moves = possibleMoves2(developer.position, developer.state.direction, map);
-    const moveIndexAndFootprint = /* @__PURE__ */ __name((move4, i) => {
-      const footprint = map.objAt(moveBy(developer.position, move4), "developer.footprint");
-      return footprint ? { moveIndex: i, footprint } : null;
-    }, "moveIndexAndFootprint");
-    const footprints = import_lodash8.default.compact(moves.map((move4, i) => moveIndexAndFootprint(move4, i)));
-    const footprintWeights = import_lodash8.default.chain(footprints).map((f) => ({
-      moveIndex: f.moveIndex,
-      tact: f.footprint.tact
-    })).sortBy(footprints, (x) => x.tact).reverse().map((x, i) => ({
-      moveIndex: x.moveIndex,
-      weight: config_default.developer.moves.weights.footprints[i]
-    })).keyBy((x) => x.moveIndex).mapValues((x) => x.weight).value();
-    const moveWeights = moves.map((_14) => 1).map((weight, i) => moves[i] == developer.state.direction ? weight + 3 : weight).map((weight, i) => {
-      return weight + (map.objAt(moveBy(developer.position, moves[i]), developer_exports.Footprint.type) == null ? config_default.developer.moves.weights.freeSpace : 0);
-    }).map((weight, i) => {
-      return weight + (footprintWeights[i] ?? 0);
-    }).map(
-      (weight, i) => developer.state.direction && moves[i] == direction_exports.reverse(developer.state.direction) ? config_default.developer.moves.weights.reverseDirection : weight
-    );
-    if (moves.length > 0) {
-      if (moves.length > 1) {
-        logger3(`moves:      ${moves}`);
-        logger3(`direction:  ${developer.state.direction}`);
-        logger3(`moveWeight: ${moveWeights}`);
+    developer.tact += 1;
+    const events = plan_exports.getEvents(game.plan, game.time.ticks);
+    for (const event of events) {
+      switch (event.type) {
+        case "workWeekStarted":
+          game.map.move(developer, game.map.getRandomEmptyLocation());
+          break;
+        case "workWeekEnded":
+          game.map.move(developer, null);
+          break;
       }
-      const moveChoice = pickDirection(developer.position, developer.state.direction, map);
+    }
+    speedUp_exports.tick(developer, 1);
+    if (developer.tact % config_default.developer.moves.ticksPerMove != 0) {
+      return effects;
+    }
+    if (developer.position != null) {
+      const moveChoice = pickDirection(developer.position, developer.direction, game.map);
       if (moveChoice != null) {
-        developer.state.direction = moveChoice;
-        move3(developer, moveBy(developer.position, moveChoice), moveChoice, map);
+        developer.direction = moveChoice;
+        move3(developer, moveBy(developer.position, moveChoice), moveChoice, game.map);
       }
     }
     return effects;
@@ -8084,7 +8091,7 @@
   function possibleMoves2(pos, currentDirection, map) {
     const possible = map.possibleDirections(
       pos,
-      (obj) => !obj || !["wall", "door"].includes(obj.type)
+      (obj) => !obj || !["wall", "door", "player"].includes(obj.type)
     );
     return possible;
   }
@@ -8130,14 +8137,30 @@
   }
   __name(move3, "move");
 
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make16
+  });
+  function make16(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false,
+      placed: false
+    };
+  }
+  __name(make16, "make");
+
   // objects/objects.ts
   var objects_exports = {};
   __export(objects_exports, {
     filter: () => filter
   });
   var import_lodash9 = __toESM(require_lodash());
-  function filter(objs, type3) {
-    return import_lodash9.default.filter(objs, (x) => x.type == type3);
+  function filter(objs, type4) {
+    return import_lodash9.default.filter(objs, (x) => x.type == type4);
   }
   __name(filter, "filter");
 
@@ -8145,7 +8168,8 @@
   var player_exports = {};
   __export(player_exports, {
     make: () => make18,
-    tick: () => tick12
+    tick: () => tick12,
+    type: () => type3
   });
   var import_lodash10 = __toESM(require_lodash());
 
@@ -8178,9 +8202,10 @@
 
   // objects/player.ts
   var logger4 = make("player");
+  var type3 = "player";
   function make18(position) {
     return {
-      type: "player",
+      type: type3,
       zIndex: 1e3,
       direction: null,
       position,
@@ -8200,7 +8225,7 @@
         switch (obj.type) {
           case "door":
           case "story":
-          case "boss_footprint":
+          case "boss.footprint":
           case "developer.footprint":
           case "commit":
           case "coffee":
@@ -8462,7 +8487,7 @@
             case "wall":
             case "boss":
             case "developer.footprint":
-            case "boss_footprint":
+            case "boss.footprint":
             case "developer":
               break;
             default:
@@ -8614,7 +8639,7 @@
     game.map.add([boss]);
     game.player = player_exports.make(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
-    game.developer = developer_exports.make(game.map.getRandomEmptyLocation());
+    game.developer = developer_exports.make();
     game.map.add([game.developer]);
     window.addEventListener("keydown", (event) => {
       const focused2 = windows_exports.focused();

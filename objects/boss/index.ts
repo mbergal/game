@@ -104,7 +104,7 @@ function move(obj: Boss, newPos: Vector.t, newDirection: Direction.t, map: GameM
     obj.state = { type: "moving", direction: newDirection, tact: 0 }
     map.add([
         {
-            type: "boss_footprint",
+            type: "boss.footprint",
             position: obj.position,
             zIndex: 1,
             tact: 0,
@@ -148,7 +148,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                     moves.straight
                         ? map.someObjectsAt(
                               moveBy(boss.position, boss.state.direction),
-                              "boss_footprint",
+                              "boss.footprint",
                           )
                             ? BOSS_WEIGHTS.straight.visited
                             : BOSS_WEIGHTS.straight.notVisited
@@ -166,7 +166,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                 switch (move_choice) {
                     case "turn":
                         const weights = moves.turn!.directions.map((x) =>
-                            map.someObjectsAt(moveBy(boss.position, x), "boss_footprint")
+                            map.someObjectsAt(moveBy(boss.position, x), "boss.footprint")
                                 ? BOSS_WEIGHTS.turn.visited
                                 : BOSS_WEIGHTS.turn.notVisited,
                         )

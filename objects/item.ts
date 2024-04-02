@@ -16,7 +16,7 @@ export function isItem(obj: GameObject.GameObject): obj is Item {
             return true
         case "wall":
         case "boss":
-        case "boss_footprint":
+        case "boss.footprint":
         case "developer.footprint":
         case "player":
         case "developer":

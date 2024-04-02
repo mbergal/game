@@ -25,6 +25,7 @@ export function tick(game: Game.Game): Effect.Effect[] {
             .filter((obj) => obj.type === "wall")
             .filter(
                 (obj) =>
+                    obj.position != null &&
                     obj.position.y !== 0 &&
                     obj.position.y !== game.map.height - 1 &&
                     obj.position.x !== 0 &&

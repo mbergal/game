@@ -27,12 +27,14 @@ export class GameMap {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.concat(objs_)
         for (const obj of objs_) {
-            const objs = this.cells[obj.position.y][obj.position.x]
-            objs.push(obj)
-            this.cells[obj.position.y][obj.position.x] = _.chain(objs)
-                .push(obj)
-                .orderBy((x) => x.zIndex, "desc")
-                .value()
+            if (obj.position != null) {
+                const objs = this.cells[obj.position.y][obj.position.x]
+                objs.push(obj)
+                this.cells[obj.position.y][obj.position.x] = _.chain(objs)
+                    .push(obj)
+                    .orderBy((x) => x.zIndex, "desc")
+                    .value()
+            }
         }
     }
 
@@ -40,14 +42,16 @@ export class GameMap {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
         for (const obj of objs_) {
-            this.cells[obj.position.y][obj.position.x] = _.pull(
-                this.cells[obj.position.y][obj.position.x],
-                obj,
-            )
+            if (obj.position) {
+                this.cells[obj.position.y][obj.position.x] = _.pull(
+                    this.cells[obj.position.y][obj.position.x],
+                    obj,
+                )
+            }
         }
     }
 
-    move(obj: GameObject.t, pos: Vector.t) {
+    move(obj: GameObject.t, pos: Vector.t | null) {
         this.remove([obj])
         obj.position = pos
         this.add([obj])

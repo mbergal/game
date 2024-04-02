@@ -6,6 +6,7 @@ import * as StorySize from "../objects/story_size"
 import { assertUnreachable } from "../utils/utils"
 import config from "./config"
 import * as Effect from "./effect"
+import * as Effects from "./effects"
 import { Event } from "./event"
 import * as GameTime from "./game_time"
 import * as GameMap from "./map"
@@ -47,6 +48,8 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
     ] as const
 
     const times = storySizes.map((x, i) => [x, Math.round((DAY / storySizes.length) * i)] as const)
+
+    addEvent({ type: "workWeekStarted", ...GameTime.make(startTick) })
 
     let sprintDay = 1
     addEvent({
@@ -90,9 +93,11 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
         })
         startTick += 1
     }
+    addEvent({ type: "workWeekEnded", ...GameTime.make(startTick) })
     addEvent({ type: "weekendStart" })
     startTick += 2 * DAY + 1
     addEvent({ type: "weekendEnd" })
+    addEvent({ type: "workWeekStarted", ...GameTime.make(startTick) })
 
     for (const i of _.range(4)) {
         sprintDay += 1
@@ -112,7 +117,7 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
         startTick += 1
     }
     addEvent({ type: "sprintEnd" })
-
+    addEvent({ type: "workWeekEnded", ...GameTime.make(startTick) })
     addEvent({ type: "weekendStart" })
     startTick += 2 * DAY + 1
     addEvent({ type: "weekendEnd" })
@@ -120,10 +125,11 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
     return [plan, startTick] as const
 }
 
-export function* tick(
+export function tick(
     sprint: t,
     game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player },
-): Generator<Effect.Effect> {
+): Effects.Effects {
+    const effects: Effects.Effects = []
     const events = game.plan.get(game.time.ticks)
     if (events) {
         for (const event of events) {
@@ -131,40 +137,52 @@ export function* tick(
                 case "createBacklogIssue":
                     const story = Story.make(game.map.getRandomEmptyLocation(), event.size)
                     game.map.add(story)
-                    yield Effect.showMessage(`Moved "${story.name}" to To Do`, 500)
+                    Effects.append(
+                        effects,
+                        Effect.showMessage(`Moved "${story.name}" to To Do`, 500),
+                    )
                     break
                 case "groomBacklogEnd":
                 case "collapseStart":
                     break
                 case "groomBacklogStart":
-                    yield Effect.showMessage("Grooming backlog ...", 2000)
+                    Effects.append(effects, Effect.showMessage("Grooming backlog ...", 2000))
                     break
                 case "sprintDayEnd":
                     break
                 case "sprintDayStart":
                     sprint.day = event.sprintDay
                     sprint.daysLeft = event.sprintDaysLeft
-                    yield Effect.showMessage(
-                        `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
-                        3_000,
+                    Effects.append(
+                        effects,
+                        Effect.showMessage(
+                            `Sprint day ${event.sprintDay} ${event.dayOfWeek}`,
+                            3_000,
+                        ),
                     )
                     break
                 case "sprintEnd":
-                    yield Effect.showMessage("Sprint ended", 3000)
+                    Effects.append(effects, Effect.showMessage("Sprint ended", 3000))
                     const stories = GameObjects.filter(game.map.objects, "story")
                     game.map.remove(stories)
                     if (game.player.task != null) {
-                        yield Effect.showMessage(`Abandoned ${game.player.task}`, 2000)
+                        Effects.append(
+                            effects,
+                            Effect.showMessage(`Abandoned ${game.player.task}`, 2000),
+                        )
                         game.player.task = null
                     }
                     break
                 case "sprintStart":
                     break
+                case "workWeekStarted":
+                case "workWeekEnded":
+                    break
                 case "weekendStart":
-                    yield Effect.showMessage("Weekend, finally!!!", 3_000)
+                    Effects.append(effects, Effect.showMessage("Weekend, finally!!!", 3_000))
                     break
                 case "weekendEnd":
-                    yield Effect.showMessage("End of Weekend :(", 3_000)
+                    Effects.append(effects, Effect.showMessage("End of Weekend :(", 3_000))
                     break
                 case "gameEnded":
                 case "gameStarted":
@@ -178,4 +196,5 @@ export function* tick(
             }
         }
     }
+    return effects
 }

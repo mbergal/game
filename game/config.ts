@@ -13,6 +13,7 @@ export type Config = {
                 forwardDirection: number
                 freeSpace: number
             }
+            ticksPerMove: number
         }
     }
     totalDays: number
@@ -59,9 +60,10 @@ const config: Config = {
                 forwardDirection: 3,
                 freeSpace: 1500,
             },
+            ticksPerMove: 2,
         },
     },
-    totalDays: 14 * 10,
+    totalDays: 14 * 3,
     dayTicks: 80,
     story: {
         small: { neededCommits: 2, impact: 1 },
@@ -81,8 +83,8 @@ const config: Config = {
         maxItems: 20,
         frequencies: {
             door: 1,
-            commit: 90,
-            coffee: 1000,
+            commit: 10,
+            coffee: 1,
         },
     },
     items: {

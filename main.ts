@@ -31,10 +31,8 @@ export function main() {
 
     game.player = Player.make(game.map.getRandomEmptyLocation())
     game.map.add([game.player])
-    game.developer = Developer.make(game.map.getRandomEmptyLocation())
+    game.developer = Developer.make()
     game.map.add([game.developer])
-
-    // let interval = window.setInterval(() => processTick(game), config.tickInterval)
 
     window.addEventListener("keydown", (event) => {
         const focused = Windows.focused()
