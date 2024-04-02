@@ -55,6 +55,7 @@ export class GameWindow extends Windows.Window {
             case "?":
             case "h":
                 help()
+                break
             case "s":
                 save(this.game, this.storage)
                 break

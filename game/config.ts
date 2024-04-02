@@ -5,6 +5,16 @@ export type Config = {
         TACTS_FOR_SINGLE_MOVE: number
         TACTS_FOR_JUMP: number
     }
+    developer: {
+        moves: {
+            weights: {
+                footprints: [number, number, number]
+                reverseDirection: number
+                forwardDirection: number
+                freeSpace: number
+            }
+        }
+    }
     totalDays: number
     dayTicks: number
     tickInterval: number
@@ -40,6 +50,16 @@ const config: Config = {
     boss: {
         TACTS_FOR_JUMP: 3,
         TACTS_FOR_SINGLE_MOVE: 4 * 3,
+    },
+    developer: {
+        moves: {
+            weights: {
+                footprints: [40, 10, 1],
+                reverseDirection: 0.001,
+                forwardDirection: 3,
+                freeSpace: 1500,
+            },
+        },
     },
     totalDays: 14 * 10,
     dayTicks: 80,

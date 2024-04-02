@@ -64,8 +64,6 @@ export function showMessage(game: {
 
 function shortDay(day: DayOfWeek): string {
     switch (day) {
-        case "Sunday":
-            return "Sun"
         case "Monday":
             return "Mon"
         case "Tuesday":
@@ -123,9 +121,11 @@ function isVisible(obj: GameObject.t) {
         case "story":
         case "commit":
         case "door":
+        case "developer":
+        case "developer.footprint":
             return true
-        case "footprint":
-            return false
+        case "boss_footprint":
+            return true
         default:
             assertUnreachable(obj)
     }
@@ -143,7 +143,9 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                 return getWallRepresentation(map, obj.position)
             case "boss":
                 return "+"
-            case "footprint":
+            case "boss_footprint":
+                return "■"
+            case "developer.footprint":
                 return "■"
             case "player":
                 if (obj.hrTaskTact) {
@@ -172,6 +174,8 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                 return obj.open ? ";" : "."
             case "coffee":
                 return obj.open ? "c" : "."
+            case "developer":
+                return "D"
             case "story":
                 switch (obj.size) {
                     case "small":
@@ -202,25 +206,28 @@ function getWallRepresentation(map: GameMap.GameMap, pos: Vector.Vector) {
         pos.x == map.width - 1 &&
         pos.y != 0 &&
         pos.y != map.height - 1 &&
-        map.isAt(Vector.w(pos), "wall")
+        map.someObjectsAt(Vector.w(pos), "wall")
     ) {
         return "╢"
     } else if (
         pos.x == 0 &&
         pos.y != 0 &&
         pos.y != map.height - 1 &&
-        map.isAt(Vector.e(pos), "wall")
+        map.someObjectsAt(Vector.e(pos), "wall")
     ) {
         return "╟"
     } else if (pos.x == 0 || pos.x == map.width - 1) {
         return "║"
     } else if (pos.y == 0 || pos.y == map.height - 1) {
         return "═"
-    } else if (map.isAt(Vector.n(pos), "wall") && map.isAt(Vector.s(pos), "wall")) {
+    } else if (
+        map.someObjectsAt(Vector.n(pos), "wall") &&
+        map.someObjectsAt(Vector.s(pos), "wall")
+    ) {
         return "│"
-    } else if (map.isAt(Vector.s(pos), "wall")) {
+    } else if (map.someObjectsAt(Vector.s(pos), "wall")) {
         return "┬"
-    } else if (map.isAt(Vector.n(pos), "wall")) {
+    } else if (map.someObjectsAt(Vector.n(pos), "wall")) {
         return "┴"
     } else {
         return "─"

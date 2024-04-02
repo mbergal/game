@@ -1,4 +1,4 @@
-import { Boss, Footprint, GameObject, Player } from "@/objects"
+import { Boss, Developer, GameObject, Player } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import * as Command from "../command"
@@ -32,6 +32,7 @@ export type Game = {
     messages: Message[]
     messageTact: number
     player?: Player.Player
+    developer?: Developer.Developer
     plan: Plan.Plan
     messageStartTime: number | null
     collapse: Collapse.Collapse | null
@@ -130,7 +131,7 @@ export function tick(game: Game) {
         Renderer.render(game)
     }
 
-    if (!game.player!.flags.spedUp) {
+    if (!game.player!.speedUp) {
         fullTick()
         game.time.ticks += 1
     } else {
@@ -151,8 +152,11 @@ function objTick(
         case "boss":
             Boss.tick(obj, game.map)
             break
-        case "footprint":
-            handleEffects(game, Footprint.tick(obj, game.map))
+        case "boss_footprint":
+            handleEffects(game, Boss.Footprint.tick(obj, game.map))
+            break
+        case "developer.footprint":
+            handleEffects(game, Developer.Footprint.tick(obj, game.map))
             break
         case "player":
             handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
@@ -162,6 +166,9 @@ function objTick(
         case "commit":
         case "coffee":
         case "wall":
+            break
+        case "developer":
+            handleEffects(game, Developer.tick(obj, game.map))
             break
         default:
             assertUnreachable(obj)

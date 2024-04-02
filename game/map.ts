@@ -77,17 +77,40 @@ export class GameMap {
         return objOfType as (GameObject.t & { type: T }) | null
     }
 
-    isAt(v: Vector.t, type: GameObject.t["type"]) {
+    someObjectsAt(
+        v: Vector.t,
+        include: GameObject.Type | ((obj: GameObject.GameObject | null) => boolean),
+    ) {
         if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
-        const objs: GameObject.t[] = this.cells[v.y][v.x]
-        return objs != null ? _.some(objs, (x) => x.type == type) : false
+        const objs: GameObject.GameObject[] = this.cells[v.y][v.x]
+        return objs.length > 0
+            ? _.some(objs, (x) => (include instanceof Function ? include(x) : include == x.type))
+            : include instanceof Function
+              ? include(null)
+              : false
     }
 
-    possibleDirections(position: Vector.t, type: GameObject.GameObjectType): Direction.t[] {
+    everyObjectAt(
+        v: Vector.t,
+        include: GameObject.Type | ((obj: GameObject.GameObject | null) => boolean),
+    ) {
+        if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
+        const objs: GameObject.GameObject[] = this.cells[v.y][v.x]
+        return objs.length > 0
+            ? _.every(objs, (x) => (include instanceof Function ? include(x) : include == x.type))
+            : include instanceof Function
+              ? include(null)
+              : false
+    }
+
+    possibleDirections(
+        position: Vector.t,
+        check: GameObject.Type | ((obj: GameObject.t | null) => boolean),
+    ): Direction.t[] {
         const p: Direction.t[] = []
         for (const d of Direction.all) {
             const newPos = moveBy(position, d)
-            if (this.isAt(newPos, type)) p.push(d)
+            if (this.everyObjectAt(newPos, check)) p.push(d)
         }
         return p
     }
@@ -118,9 +141,11 @@ export class GameMap {
 export function directionTo(
     position: Vector.t,
     map: GameMap,
-    objType: GameObject.t["type"],
+    objType: GameObject.Type,
 ): Direction.t | null {
-    const dd = _.compact(Direction.all.filter((x) => map.isAt(moveBy(position, x), objType)))
+    const dd = _.compact(
+        Direction.all.filter((x) => map.someObjectsAt(moveBy(position, x), objType)),
+    )
     return dd.length ? dd[0] : null
 }
 

@@ -1,5 +1,4 @@
 import * as Boss from "./boss"
-import * as Footprint from "./footprint"
 import * as Player from "./player"
 import * as Wall from "./wall"
 import * as Door from "./door"
@@ -10,19 +9,23 @@ import * as Commit from "./commit"
 export * as Commit from "./commit"
 import * as Coffee from "./coffee"
 export * as Coffee from "./coffee"
+import * as Developer from "./developer"
+export * as Developer from "./developer"
 
 export type t =
     | Wall.Wall
     | Boss.Boss
-    | Footprint.Footprint
+    | Boss.Footprint.Footprint
     | Player.Player
     | Door.Door
     | Story.Story
     | Commit.Commit
     | Coffee.Coffee
+    | Developer.Developer
+    | Developer.Footprint.Footprint
 
 export type GameObject = t
-export type GameObjectType = t["type"]
+export type Type = t["type"]
 
 export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee
 

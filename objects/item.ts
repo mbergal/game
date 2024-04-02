@@ -16,8 +16,10 @@ export function isItem(obj: GameObject.GameObject): obj is Item {
             return true
         case "wall":
         case "boss":
-        case "footprint":
+        case "boss_footprint":
+        case "developer.footprint":
         case "player":
+        case "developer":
             return false
         default:
             assertUnreachable(obj)

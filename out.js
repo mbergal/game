@@ -774,7 +774,7 @@
         }
         __name(unicodeWords, "unicodeWords");
         var runInContext = /* @__PURE__ */ __name(function runInContext2(context) {
-          context = context == null ? root : _13.defaults(root.Object(), context, _13.pick(root, contextProps));
+          context = context == null ? root : _14.defaults(root.Object(), context, _14.pick(root, contextProps));
           var Array2 = context.Array, Date2 = context.Date, Error2 = context.Error, Function2 = context.Function, Math2 = context.Math, Object2 = context.Object, RegExp2 = context.RegExp, String = context.String, TypeError2 = context.TypeError;
           var arrayProto = Array2.prototype, funcProto = Function2.prototype, objectProto = Object2.prototype;
           var coreJsData = context["__core-js_shared__"];
@@ -940,11 +940,11 @@
                 index += dir;
                 var iterIndex = -1, value = array[index];
                 while (++iterIndex < iterLength) {
-                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type = data.type, computed = iteratee2(value);
-                  if (type == LAZY_MAP_FLAG) {
+                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type3 = data.type, computed = iteratee2(value);
+                  if (type3 == LAZY_MAP_FLAG) {
                     value = computed;
                   } else if (!computed) {
-                    if (type == LAZY_FILTER_FLAG) {
+                    if (type3 == LAZY_FILTER_FLAG) {
                       continue outer;
                     } else {
                       break outer;
@@ -3167,17 +3167,17 @@
           }
           __name(isFlattenable, "isFlattenable");
           function isIndex(value, length) {
-            var type = typeof value;
+            var type3 = typeof value;
             length = length == null ? MAX_SAFE_INTEGER : length;
-            return !!length && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+            return !!length && (type3 == "number" || type3 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
           }
           __name(isIndex, "isIndex");
           function isIterateeCall(value, index, object) {
             if (!isObject(object)) {
               return false;
             }
-            var type = typeof index;
-            if (type == "number" ? isArrayLike(object) && isIndex(index, object.length) : type == "string" && index in object) {
+            var type3 = typeof index;
+            if (type3 == "number" ? isArrayLike(object) && isIndex(index, object.length) : type3 == "string" && index in object) {
               return eq(object[index], value);
             }
             return false;
@@ -3187,16 +3187,16 @@
             if (isArray(value)) {
               return false;
             }
-            var type = typeof value;
-            if (type == "number" || type == "symbol" || type == "boolean" || value == null || isSymbol(value)) {
+            var type3 = typeof value;
+            if (type3 == "number" || type3 == "symbol" || type3 == "boolean" || value == null || isSymbol(value)) {
               return true;
             }
             return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object2(object);
           }
           __name(isKey, "isKey");
           function isKeyable(value) {
-            var type = typeof value;
-            return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+            var type3 = typeof value;
+            return type3 == "string" || type3 == "number" || type3 == "symbol" || type3 == "boolean" ? value !== "__proto__" : value === null;
           }
           __name(isKeyable, "isKeyable");
           function isLaziable(func) {
@@ -3969,14 +3969,14 @@
               baseAssignValue(result2, key, 1);
             }
           });
-          function every(collection, predicate, guard) {
+          function every2(collection, predicate, guard) {
             var func = isArray(collection) ? arrayEvery : baseEvery;
             if (guard && isIterateeCall(collection, predicate, guard)) {
               predicate = undefined;
             }
             return func(collection, getIteratee(predicate, 3));
           }
-          __name(every, "every");
+          __name(every2, "every");
           function filter2(collection, predicate) {
             var func = isArray(collection) ? arrayFilter : baseFilter;
             return func(collection, getIteratee(predicate, 3));
@@ -4530,8 +4530,8 @@
           }
           __name(isLength, "isLength");
           function isObject(value) {
-            var type = typeof value;
-            return value != null && (type == "object" || type == "function");
+            var type3 = typeof value;
+            return value != null && (type3 == "object" || type3 == "function");
           }
           __name(isObject, "isObject");
           function isObjectLike(value) {
@@ -5682,7 +5682,7 @@
           lodash.eq = eq;
           lodash.escape = escape;
           lodash.escapeRegExp = escapeRegExp;
-          lodash.every = every;
+          lodash.every = every2;
           lodash.find = find;
           lodash.findIndex = findIndex;
           lodash.findKey = findKey;
@@ -5848,12 +5848,12 @@
             };
           });
           arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
-            var type = index + 1, isFilter = type == LAZY_FILTER_FLAG || type == LAZY_WHILE_FLAG;
+            var type3 = index + 1, isFilter = type3 == LAZY_FILTER_FLAG || type3 == LAZY_WHILE_FLAG;
             LazyWrapper.prototype[methodName] = function(iteratee2) {
               var result2 = this.clone();
               result2.__iteratees__.push({
                 "iteratee": getIteratee(iteratee2, 3),
-                "type": type
+                "type": type3
               });
               result2.__filtered__ = result2.__filtered__ || isFilter;
               return result2;
@@ -5985,102 +5985,31 @@
           }
           return lodash;
         }, "runInContext");
-        var _13 = runInContext();
+        var _14 = runInContext();
         if (typeof define == "function" && typeof define.amd == "object" && define.amd) {
-          root._ = _13;
+          root._ = _14;
           define(function() {
-            return _13;
+            return _14;
           });
         } else if (freeModule) {
-          (freeModule.exports = _13)._ = _13;
-          freeExports._ = _13;
+          (freeModule.exports = _14)._ = _14;
+          freeExports._ = _14;
         } else {
-          root._ = _13;
+          root._ = _14;
         }
       }).call(exports);
     }
   });
 
-  // objects/boss.ts
+  // objects/boss/index.ts
   var boss_exports = {};
   __export(boss_exports, {
+    Footprint: () => footprint_exports,
     make: () => make11,
     possibleMoves: () => possibleMoves,
-    tick: () => tick7
+    tick: () => tick8
   });
   var import_lodash7 = __toESM(require_lodash());
-
-  // geometry/direction.ts
-  var direction_exports = {};
-  __export(direction_exports, {
-    all: () => all,
-    reverse: () => reverse,
-    toRose: () => toRose
-  });
-  function reverse(direction) {
-    switch (direction) {
-      case "down":
-        return "up";
-      case "up":
-        return "down";
-      case "left":
-        return "right";
-      case "right":
-        return "left";
-    }
-  }
-  __name(reverse, "reverse");
-  function toRose(directions) {
-    const rose = {};
-    for (const direction of directions) {
-      rose[direction] = true;
-    }
-    return rose;
-  }
-  __name(toRose, "toRose");
-  var all = ["left", "right", "down", "up"];
-
-  // geometry/vector.ts
-  var vector_exports = {};
-  __export(vector_exports, {
-    e: () => e,
-    n: () => n,
-    s: () => s,
-    w: () => w,
-    zero: () => zero
-  });
-  function n(v) {
-    return { x: v.x, y: v.y - 1 };
-  }
-  __name(n, "n");
-  function s(v) {
-    return { x: v.x, y: v.y + 1 };
-  }
-  __name(s, "s");
-  function w(v) {
-    return { x: v.x - 1, y: v.y };
-  }
-  __name(w, "w");
-  function e(v) {
-    return { x: v.x + 1, y: v.y };
-  }
-  __name(e, "e");
-  var zero = { x: 0, y: 0 };
-
-  // geometry/index.ts
-  function moveBy(vector, direction) {
-    switch (direction) {
-      case "down":
-        return { ...vector, x: vector.x, y: vector.y + 1 };
-      case "up":
-        return { ...vector, x: vector.x, y: vector.y - 1 };
-      case "left":
-        return { ...vector, x: vector.x - 1, y: vector.y };
-      case "right":
-        return { ...vector, x: vector.x + 1, y: vector.y };
-    }
-  }
-  __name(moveBy, "moveBy");
 
   // utils/random.ts
   var _ = __toESM(require_lodash());
@@ -6112,6 +6041,8 @@
   __name(ints, "ints");
   function choice(choices, weights = null) {
     assert(weights == null || choices.length == weights?.length);
+    if (choices.length == 3) {
+    }
     weights = weights ?? _.range(choices.length).map((x) => 1);
     let total = _.sum(weights);
     const threshold = Math.random() * total;
@@ -6136,6 +6067,16 @@
     boss: {
       TACTS_FOR_JUMP: 3,
       TACTS_FOR_SINGLE_MOVE: 4 * 3
+    },
+    developer: {
+      moves: {
+        weights: {
+          footprints: [40, 10, 1],
+          reverseDirection: 1e-3,
+          forwardDirection: 3,
+          freeSpace: 1500
+        }
+      }
     },
     totalDays: 14 * 10,
     dayTicks: 80,
@@ -6235,11 +6176,11 @@
   // game/levels.ts
   var levels_exports = {};
   __export(levels_exports, {
-    all: () => all2,
+    all: () => all,
     level: () => level
   });
   var import_lodash2 = __toESM(require_lodash());
-  var all2 = [
+  var all = [
     {
       name: "Engineer I",
       rate: 5,
@@ -6288,13 +6229,13 @@
   ];
   function level(impact) {
     let total = 0;
-    for (const level2 of all2) {
+    for (const level2 of all) {
       total += level2.impact;
       if (total >= impact) {
         return level2;
       }
     }
-    return import_lodash2.default.last(all2);
+    return import_lodash2.default.last(all);
   }
   __name(level, "level");
 
@@ -6397,7 +6338,7 @@
   __name(assertUnreachable, "assertUnreachable");
 
   // game/day_of_week.ts
-  var all3 = [
+  var all2 = [
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -6410,7 +6351,7 @@
   // game/game_time.ts
   function make4(ticks) {
     const day = Math.floor(ticks / config_default.dayTicks);
-    const dayOfWeek = all3[day % 7];
+    const dayOfWeek = all2[day % 7];
     return {
       ticks,
       day,
@@ -6708,6 +6649,82 @@
   });
   var _7 = __toESM(require_lodash());
 
+  // geometry/direction.ts
+  var direction_exports = {};
+  __export(direction_exports, {
+    all: () => all3,
+    reverse: () => reverse,
+    toRose: () => toRose
+  });
+  function reverse(direction) {
+    switch (direction) {
+      case "down":
+        return "up";
+      case "up":
+        return "down";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
+  }
+  __name(reverse, "reverse");
+  function toRose(directions) {
+    const rose = {};
+    for (const direction of directions) {
+      rose[direction] = true;
+    }
+    return rose;
+  }
+  __name(toRose, "toRose");
+  var all3 = ["left", "right", "down", "up"];
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    n: () => n,
+    s: () => s,
+    w: () => w,
+    zero: () => zero
+  });
+  function n(v) {
+    return { x: v.x, y: v.y - 1 };
+  }
+  __name(n, "n");
+  function s(v) {
+    return { x: v.x, y: v.y + 1 };
+  }
+  __name(s, "s");
+  function w(v) {
+    return { x: v.x - 1, y: v.y };
+  }
+  __name(w, "w");
+  function e(v) {
+    return { x: v.x + 1, y: v.y };
+  }
+  __name(e, "e");
+  var zero = { x: 0, y: 0 };
+
+  // geometry/index.ts
+  function moveBy(vector, direction) {
+    if (direction == null) {
+      return vector;
+    } else {
+      switch (direction) {
+        case "down":
+          return { ...vector, x: vector.x, y: vector.y + 1 };
+        case "up":
+          return { ...vector, x: vector.x, y: vector.y - 1 };
+        case "left":
+          return { ...vector, x: vector.x - 1, y: vector.y };
+        case "right":
+          return { ...vector, x: vector.x + 1, y: vector.y };
+      }
+    }
+  }
+  __name(moveBy, "moveBy");
+
   // generator.ts
   var import_lodash5 = __toESM(require_lodash());
 
@@ -6804,7 +6821,7 @@
   __name(desiredNumOfDoors, "desiredNumOfDoors");
   function noWalls(map, xs, y) {
     for (const x of xs) {
-      if (map.isAt({ x, y: y - 1 }, "wall") || map.isAt({ x, y: y + 1 }, "wall")) {
+      if (map.someObjectsAt({ x, y: y - 1 }, "wall") || map.someObjectsAt({ x, y: y + 1 }, "wall")) {
         return false;
       }
     }
@@ -6932,22 +6949,28 @@
     at(v) {
       return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
     }
-    objAt(v, type) {
+    objAt(v, type3) {
       const objs = this.at(v);
-      const objOfType = objs.find((x) => x.type == type) ?? null;
+      const objOfType = objs.find((x) => x.type == type3) ?? null;
       return objOfType;
     }
-    isAt(v, type) {
+    someObjectsAt(v, include) {
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs != null ? _7.some(objs, (x) => x.type == type) : false;
+      return objs.length > 0 ? _7.some(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
-    possibleDirections(position, type) {
+    everyObjectAt(v, include) {
+      if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
+        return false;
+      const objs = this.cells[v.y][v.x];
+      return objs.length > 0 ? _7.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
+    }
+    possibleDirections(position, check2) {
       const p = [];
       for (const d of direction_exports.all) {
         const newPos = moveBy(position, d);
-        if (this.isAt(newPos, type))
+        if (this.everyObjectAt(newPos, check2))
           p.push(d);
       }
       return p;
@@ -6976,7 +6999,9 @@
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
   function directionTo(position, map, objType) {
-    const dd = _7.compact(direction_exports.all.filter((x) => map.isAt(moveBy(position, x), objType)));
+    const dd = _7.compact(
+      direction_exports.all.filter((x) => map.someObjectsAt(moveBy(position, x), objType))
+    );
     return dd.length ? dd[0] : null;
   }
   __name(directionTo, "directionTo");
@@ -7040,8 +7065,6 @@
   __name(showMessage2, "showMessage");
   function shortDay(day) {
     switch (day) {
-      case "Sunday":
-        return "Sun";
       case "Monday":
         return "Mon";
       case "Tuesday":
@@ -7093,20 +7116,22 @@
       case "story":
       case "commit":
       case "door":
+      case "developer":
+      case "developer.footprint":
         return true;
-      case "footprint":
-        return false;
+      case "boss_footprint":
+        return true;
       default:
         assertUnreachable(obj);
     }
     return true;
   }
   __name(isVisible, "isVisible");
-  function blink(a, b, tick10) {
-    return tick10 % 10 < 5 ? a : b;
+  function blink(a, b, tick13) {
+    return tick13 % 10 < 5 ? a : b;
   }
   __name(blink, "blink");
-  function getRepresentation(map, objs, tick10) {
+  function getRepresentation(map, objs, tick13) {
     let obj = objs.find(isVisible);
     if (obj) {
       switch (obj.type) {
@@ -7114,21 +7139,23 @@
           return getWallRepresentation(map, obj.position);
         case "boss":
           return "+";
-        case "footprint":
+        case "boss_footprint":
+          return "\u25A0";
+        case "developer.footprint":
           return "\u25A0";
         case "player":
           if (obj.hrTaskTact) {
-            return blink("*", "@", tick10);
+            return blink("*", "@", tick13);
           } else {
             if (obj.item != null) {
               const item = obj.item;
               switch (item.type) {
                 case "door":
-                  return blink("]", "*", tick10);
+                  return blink("]", "*", tick13);
                 case "commit":
-                  return blink(";", "*", tick10);
+                  return blink(";", "*", tick13);
                 case "coffee":
-                  return blink("c", "*", tick10);
+                  return blink("c", "*", tick13);
                 case "story":
                   return "";
                 default:
@@ -7143,6 +7170,8 @@
           return obj.open ? ";" : ".";
         case "coffee":
           return obj.open ? "c" : ".";
+        case "developer":
+          return "D";
         case "story":
           switch (obj.size) {
             case "small":
@@ -7169,19 +7198,19 @@
       return "\u2557";
     } else if (pos.x == map.width - 1 && pos.y == map.height - 1) {
       return "\u255D";
-    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.w(pos), "wall")) {
+    } else if (pos.x == map.width - 1 && pos.y != 0 && pos.y != map.height - 1 && map.someObjectsAt(vector_exports.w(pos), "wall")) {
       return "\u2562";
-    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.isAt(vector_exports.e(pos), "wall")) {
+    } else if (pos.x == 0 && pos.y != 0 && pos.y != map.height - 1 && map.someObjectsAt(vector_exports.e(pos), "wall")) {
       return "\u255F";
     } else if (pos.x == 0 || pos.x == map.width - 1) {
       return "\u2551";
     } else if (pos.y == 0 || pos.y == map.height - 1) {
       return "\u2550";
-    } else if (map.isAt(vector_exports.n(pos), "wall") && map.isAt(vector_exports.s(pos), "wall")) {
+    } else if (map.someObjectsAt(vector_exports.n(pos), "wall") && map.someObjectsAt(vector_exports.s(pos), "wall")) {
       return "\u2502";
-    } else if (map.isAt(vector_exports.s(pos), "wall")) {
+    } else if (map.someObjectsAt(vector_exports.s(pos), "wall")) {
       return "\u252C";
-    } else if (map.isAt(vector_exports.n(pos), "wall")) {
+    } else if (map.someObjectsAt(vector_exports.n(pos), "wall")) {
       return "\u2534";
     } else {
       return "\u2500";
@@ -7291,7 +7320,7 @@
       game.commands = [];
       render(game);
     }, "playerTick");
-    if (!game.player.flags.spedUp) {
+    if (!game.player.speedUp) {
       fullTick();
       game.time.ticks += 1;
     } else {
@@ -7307,8 +7336,11 @@
       case "boss":
         boss_exports.tick(obj, game.map);
         break;
-      case "footprint":
-        handleEffects(game, footprint_exports.tick(obj, game.map));
+      case "boss_footprint":
+        handleEffects(game, boss_exports.Footprint.tick(obj, game.map));
+        break;
+      case "developer.footprint":
+        handleEffects(game, developer_exports.Footprint.tick(obj, game.map));
         break;
       case "player":
         handleEffects(game, player_exports.tick(obj, game, commands, ticksPassed));
@@ -7318,6 +7350,9 @@
       case "commit":
       case "coffee":
       case "wall":
+        break;
+      case "developer":
+        handleEffects(game, developer_exports.tick(obj, game.map));
         break;
       default:
         assertUnreachable(obj);
@@ -7414,7 +7449,10 @@
   // ui/screens.ts
   function render2(chars) {
     const contentBlock = document.getElementById("content");
-    contentBlock.innerHTML = chars.map((x) => x.join("")).join("\n");
+    const newInnerHTML = chars.map((x) => x.join("")).join("\n");
+    if (contentBlock.innerHTML != newInnerHTML) {
+      contentBlock.innerHTML = newInnerHTML;
+    }
   }
   __name(render2, "render");
   var size = { x: 80, y: 27 };
@@ -7587,7 +7625,23 @@
   __name(_Window2, "Window");
   var Window2 = _Window2;
 
-  // objects/boss.ts
+  // objects/boss/footprint.ts
+  var footprint_exports = {};
+  __export(footprint_exports, {
+    tick: () => tick7
+  });
+  var LIFETIME = 1e3;
+  function tick7(obj, map) {
+    if (obj.tact > LIFETIME) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+    return [];
+  }
+  __name(tick7, "tick");
+
+  // objects/boss/index.ts
   var BOSS_WEIGHTS = {
     turn: {
       visited: 0.2,
@@ -7637,7 +7691,7 @@
     if (import_lodash7.default.includes(possible, currentDirection)) {
       result.straight = { direction: currentDirection };
     }
-    if (!import_lodash7.default.includes(possible, currentDirection) && !map.isAt(moveBy(pos, currentDirection), "wall")) {
+    if (!import_lodash7.default.includes(possible, currentDirection) && !map.someObjectsAt(moveBy(pos, currentDirection), "wall")) {
       result.jump = { directions: [currentDirection] };
     }
     if (import_lodash7.default.includes(possible, reverse(currentDirection))) {
@@ -7646,19 +7700,24 @@
     return result;
   }
   __name(possibleMoves, "possibleMoves");
-  function move2(obj, new_pos, new_direction, map) {
-    obj.state = { type: "moving", direction: new_direction, tact: 0 };
+  function move2(obj, newPos, newDirection, map) {
+    obj.state = { type: "moving", direction: newDirection, tact: 0 };
     map.add([
-      { type: "footprint", position: obj.position, zIndex: 1, tact: 0 }
+      {
+        type: "boss_footprint",
+        position: obj.position,
+        zIndex: 1,
+        tact: 0
+      }
     ]);
-    map.move(obj, new_pos);
+    map.move(obj, newPos);
   }
   __name(move2, "move");
   function pipPlayer(obj, player) {
     player.hrTaskTact = 0;
   }
   __name(pipPlayer, "pipPlayer");
-  function tick7(boss, map) {
+  function tick8(boss, map) {
     switch (boss.state.type) {
       case "instructing":
         break;
@@ -7681,7 +7740,10 @@
           ];
           const move_weights = [
             moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
-            moves.straight ? map.isAt(moveBy(boss.position, boss.state.direction), "footprint") ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
+            moves.straight ? map.someObjectsAt(
+              moveBy(boss.position, boss.state.direction),
+              "boss_footprint"
+            ) ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
           ];
           if (moves.turn) {
             console.log(JSON.stringify({ move_types, move_weights }));
@@ -7693,7 +7755,7 @@
           switch (move_choice) {
             case "turn":
               const weights = moves.turn.directions.map(
-                (x) => map.isAt(moveBy(boss.position, x), "footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+                (x) => map.someObjectsAt(moveBy(boss.position, x), "boss_footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
               );
               const chosen = choice(moves.turn.directions, weights);
               boss.state.direction = chosen;
@@ -7744,7 +7806,7 @@
       }
     }
   }
-  __name(tick7, "tick");
+  __name(tick8, "tick");
   function choose_direction(pos, least_preferred, map) {
     const forks = map.possibleDirections(pos, "wall");
     const b = forks.filter((x) => x[0] != least_preferred);
@@ -7798,37 +7860,15 @@
   }
   __name(generateId, "generateId");
 
-  // objects/door.ts
-  var door_exports = {};
-  __export(door_exports, {
-    make: () => make14
+  // objects/developer/index.ts
+  var developer_exports = {};
+  __export(developer_exports, {
+    Footprint: () => footprint_exports3,
+    make: () => make16,
+    possibleMoves: () => possibleMoves2,
+    tick: () => tick11,
+    type: () => type2
   });
-  function make14(position) {
-    return {
-      type: "door",
-      position,
-      zIndex: 1,
-      open: false,
-      placed: false
-    };
-  }
-  __name(make14, "make");
-
-  // objects/footprint.ts
-  var footprint_exports = {};
-  __export(footprint_exports, {
-    tick: () => tick8
-  });
-  var LIFETIME = 1e3;
-  function tick8(obj, map) {
-    if (obj.tact > LIFETIME) {
-      map.remove([obj]);
-    } else {
-      obj.tact += 1;
-    }
-    return [];
-  }
-  __name(tick8, "tick");
 
   // objects/item.ts
   var item_exports = {};
@@ -7845,8 +7885,10 @@
         return true;
       case "wall":
       case "boss":
-      case "footprint":
+      case "boss_footprint":
+      case "developer.footprint":
       case "player":
+      case "developer":
         return false;
       default:
         assertUnreachable(obj);
@@ -7867,32 +7909,253 @@
   }
   __name(description, "description");
 
+  // objects/traits/footprint.ts
+  function leaveFootprint(position, map, make19) {
+    const existingFootprint = map.objAt(position, "developer.footprint");
+    if (existingFootprint) {
+      map.remove(existingFootprint);
+    }
+    const footprint = make19(position);
+    map.add([footprint]);
+    return footprint;
+  }
+  __name(leaveFootprint, "leaveFootprint");
+
+  // objects/traits/speedUp.ts
+  var speedUp_exports = {};
+  __export(speedUp_exports, {
+    speedUp: () => speedUp,
+    tick: () => tick9
+  });
+  function speedUp(object, days) {
+    object.speedUp = (object.speedUp ? object.speedUp : 0) + days * config_default.dayTicks;
+  }
+  __name(speedUp, "speedUp");
+  function tick9(object, ticksPassed) {
+    if (object.speedUp) {
+      object.speedUp -= ticksPassed;
+      if (object.speedUp <= 0) {
+        object.speedUp = false;
+      }
+    }
+  }
+  __name(tick9, "tick");
+
+  // objects/developer/footprint.ts
+  var footprint_exports3 = {};
+  __export(footprint_exports3, {
+    make: () => make14,
+    tick: () => tick10,
+    type: () => type
+  });
+  var LIFETIME2 = 1e3;
+  var type = "developer.footprint";
+  function make14(position) {
+    return {
+      type: "developer.footprint",
+      position,
+      zIndex: 1,
+      tact: 0,
+      lifetime: LIFETIME2
+    };
+  }
+  __name(make14, "make");
+  function tick10(obj, map) {
+    if (obj.tact > LIFETIME2) {
+      map.remove([obj]);
+    } else {
+      obj.tact += 1;
+    }
+    return [];
+  }
+  __name(tick10, "tick");
+
+  // objects/developer/index.ts
+  var import_lodash8 = __toESM(require_lodash());
+
+  // objects/door.ts
+  var door_exports = {};
+  __export(door_exports, {
+    make: () => make15
+  });
+  function make15(position) {
+    return {
+      type: "door",
+      position,
+      zIndex: 1,
+      open: false,
+      placed: false
+    };
+  }
+  __name(make15, "make");
+
+  // objects/developer/index.ts
+  var logger3 = make("fellow_developer");
+  var type2 = "developer";
+  function make16(position) {
+    return {
+      type: type2,
+      position,
+      state: {
+        tact: 0,
+        direction: null
+      },
+      zIndex: 2,
+      speedUp: false
+    };
+  }
+  __name(make16, "make");
+  function speedUp2(developer) {
+    speedUp_exports.speedUp(developer, config_default.items.coffee.speedUpDays);
+  }
+  __name(speedUp2, "speedUp");
+  function pickDirection(position, currentDirection, map) {
+    const moves = possibleMoves2(position, currentDirection, map);
+    const moveIndexAndFootprint = /* @__PURE__ */ __name((move4, i) => {
+      const footprint = map.objAt(moveBy(position, move4), "developer.footprint");
+      return footprint ? { moveIndex: i, footprint } : null;
+    }, "moveIndexAndFootprint");
+    const footprints = import_lodash8.default.compact(moves.map((move4, i) => moveIndexAndFootprint(move4, i)));
+    const footprintWeights = import_lodash8.default.chain(footprints).map((f) => ({
+      moveIndex: f.moveIndex,
+      tact: f.footprint.tact
+    })).sortBy(footprints, (x) => x.tact).reverse().map((x, i) => ({
+      moveIndex: x.moveIndex,
+      weight: config_default.developer.moves.weights.footprints[i]
+    })).keyBy((x) => x.moveIndex).mapValues((x) => x.weight).value();
+    const moveWeights = moves.map((_14) => 1).map((weight, i) => moves[i] == currentDirection ? weight + 3 : weight).map((weight, i) => {
+      return weight + (map.objAt(moveBy(position, moves[i]), "developer.footprint") == null ? config_default.developer.moves.weights.freeSpace : 0);
+    }).map((weight, i) => {
+      return weight + (footprintWeights[i] ?? 0);
+    }).map(
+      (weight, i) => currentDirection && moves[i] == direction_exports.reverse(currentDirection) ? config_default.developer.moves.weights.reverseDirection : weight
+    );
+    if (moves.length > 0) {
+      if (moves.length > 1) {
+        logger3(`moves:      ${moves}`);
+        logger3(`direction:  ${currentDirection}`);
+        logger3(`moveWeight: ${moveWeights}`);
+      }
+      const moveChoice = choice(moves, moveWeights);
+      return moveChoice;
+    } else {
+      return null;
+    }
+  }
+  __name(pickDirection, "pickDirection");
+  function tick11(developer, map) {
+    const effects = [];
+    developer.state.tact += 1;
+    const moves = possibleMoves2(developer.position, developer.state.direction, map);
+    const moveIndexAndFootprint = /* @__PURE__ */ __name((move4, i) => {
+      const footprint = map.objAt(moveBy(developer.position, move4), "developer.footprint");
+      return footprint ? { moveIndex: i, footprint } : null;
+    }, "moveIndexAndFootprint");
+    const footprints = import_lodash8.default.compact(moves.map((move4, i) => moveIndexAndFootprint(move4, i)));
+    const footprintWeights = import_lodash8.default.chain(footprints).map((f) => ({
+      moveIndex: f.moveIndex,
+      tact: f.footprint.tact
+    })).sortBy(footprints, (x) => x.tact).reverse().map((x, i) => ({
+      moveIndex: x.moveIndex,
+      weight: config_default.developer.moves.weights.footprints[i]
+    })).keyBy((x) => x.moveIndex).mapValues((x) => x.weight).value();
+    const moveWeights = moves.map((_14) => 1).map((weight, i) => moves[i] == developer.state.direction ? weight + 3 : weight).map((weight, i) => {
+      return weight + (map.objAt(moveBy(developer.position, moves[i]), developer_exports.Footprint.type) == null ? config_default.developer.moves.weights.freeSpace : 0);
+    }).map((weight, i) => {
+      return weight + (footprintWeights[i] ?? 0);
+    }).map(
+      (weight, i) => developer.state.direction && moves[i] == direction_exports.reverse(developer.state.direction) ? config_default.developer.moves.weights.reverseDirection : weight
+    );
+    if (moves.length > 0) {
+      if (moves.length > 1) {
+        logger3(`moves:      ${moves}`);
+        logger3(`direction:  ${developer.state.direction}`);
+        logger3(`moveWeight: ${moveWeights}`);
+      }
+      const moveChoice = pickDirection(developer.position, developer.state.direction, map);
+      if (moveChoice != null) {
+        developer.state.direction = moveChoice;
+        move3(developer, moveBy(developer.position, moveChoice), moveChoice, map);
+      }
+    }
+    return effects;
+  }
+  __name(tick11, "tick");
+  function possibleMoves2(pos, currentDirection, map) {
+    const possible = map.possibleDirections(
+      pos,
+      (obj) => !obj || !["wall", "door"].includes(obj.type)
+    );
+    return possible;
+  }
+  __name(possibleMoves2, "possibleMoves");
+  function canPickup(obj, item, map) {
+    switch (item.type) {
+      case "coffee":
+      case "commit":
+        return true;
+      case "story":
+      case "door":
+        return false;
+      default:
+        assertUnreachable(item);
+    }
+  }
+  __name(canPickup, "canPickup");
+  function pickupItem(obj, item, map) {
+    map.remove(item);
+    switch (item.type) {
+      case "coffee":
+        speedUp2(obj);
+        break;
+      case "commit":
+      case "door":
+      case "story":
+        break;
+      default:
+        assertUnreachable(item);
+    }
+  }
+  __name(pickupItem, "pickupItem");
+  function move3(obj, newPos, newDirection, map) {
+    obj.state = { direction: newDirection, tact: 0 };
+    const item = import_lodash8.default.first(map.at(newPos).filter(isItem));
+    if (item != null) {
+      if (canPickup(obj, item, map)) {
+        pickupItem(obj, item, map);
+      }
+    }
+    leaveFootprint(obj.position, map, make14);
+    map.move(obj, newPos);
+  }
+  __name(move3, "move");
+
   // objects/objects.ts
   var objects_exports = {};
   __export(objects_exports, {
     filter: () => filter
   });
-  var import_lodash8 = __toESM(require_lodash());
-  function filter(objs, type) {
-    return import_lodash8.default.filter(objs, (x) => x.type == type);
+  var import_lodash9 = __toESM(require_lodash());
+  function filter(objs, type3) {
+    return import_lodash9.default.filter(objs, (x) => x.type == type3);
   }
   __name(filter, "filter");
 
   // objects/player.ts
   var player_exports = {};
   __export(player_exports, {
-    make: () => make16,
-    tick: () => tick9
+    make: () => make18,
+    tick: () => tick12
   });
-  var import_lodash9 = __toESM(require_lodash());
+  var import_lodash10 = __toESM(require_lodash());
 
   // objects/tasks/story.ts
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make15
+    make: () => make17
   });
-  function make15(story) {
+  function make17(story) {
     return {
       type: "story",
       story,
@@ -7901,7 +8164,7 @@
       appliedCommits: 0
     };
   }
-  __name(make15, "make");
+  __name(make17, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -7914,8 +8177,8 @@
   __name(addCommit, "addCommit");
 
   // objects/player.ts
-  var logger3 = make("player");
-  function make16(position) {
+  var logger4 = make("player");
+  function make18(position) {
     return {
       type: "player",
       zIndex: 1e3,
@@ -7926,22 +8189,22 @@
       hrTaskTact: null,
       item: null,
       task: null,
-      flags: {
-        spedUp: false
-      },
+      speedUp: false,
       level: levels_exports.all[0]
     };
   }
-  __name(make16, "make");
+  __name(make18, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
         switch (obj.type) {
           case "door":
           case "story":
-          case "footprint":
+          case "boss_footprint":
+          case "developer.footprint":
           case "commit":
           case "coffee":
+          case "developer":
             return true;
           case "player":
           case "wall":
@@ -7951,7 +8214,7 @@
             assertUnreachable(obj);
         }
       }, "canMoveOnObj");
-      const result = import_lodash9.default.every(objs, canMoveOnObj);
+      const result = import_lodash10.default.every(objs, canMoveOnObj);
       return result;
     } else {
       return true;
@@ -7986,7 +8249,7 @@
   }
   __name(canPickItem, "canPickItem");
   function useItem(player, item, map, effects) {
-    logger3(`Using item ${item.type}`);
+    logger4(`Using item ${item.type}`);
     switch (item.type) {
       case "commit":
         if (player.task) {
@@ -8011,7 +8274,7 @@
         }
       case "coffee":
         effects_exports.append(effects, effect_exports.showMessage("Drinking coffee", 3e3));
-        speedUp(player);
+        speedUp3(player);
         player.item = null;
         return true;
       case "door":
@@ -8029,10 +8292,10 @@
     return false;
   }
   __name(useItem, "useItem");
-  function speedUp(player) {
-    player.flags.spedUp = (player.flags.spedUp ? player.flags.spedUp : 0) + config_default.items.coffee.speedUpDays * config_default.dayTicks;
+  function speedUp3(player) {
+    speedUp_exports.speedUp(player, config_default.items.coffee.speedUpDays);
   }
-  __name(speedUp, "speedUp");
+  __name(speedUp3, "speedUp");
   function pickItem(player, newItem, game, effects) {
     game.map.remove(newItem);
     switch (newItem.type) {
@@ -8082,12 +8345,7 @@
   }
   __name(tickHrTask, "tickHrTask");
   function tickFlags(player, ticksPassed) {
-    if (player.flags.spedUp) {
-      player.flags.spedUp -= ticksPassed;
-      if (player.flags.spedUp <= 0) {
-        player.flags.spedUp = false;
-      }
-    }
+    speedUp_exports.tick(player, ticksPassed);
   }
   __name(tickFlags, "tickFlags");
   function handleDrop(player, map) {
@@ -8110,16 +8368,16 @@
     }, "removeAllMoves");
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
-      logger3(JSON.stringify(player.commands));
+      logger4(JSON.stringify(player.commands));
     }
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
-      logger3(JSON.stringify(player.commands));
+      logger4(JSON.stringify(player.commands));
     }
     let delayedCommands = [];
     while (player.commands.length > 0) {
-      logger3(JSON.stringify(player.commands));
+      logger4(JSON.stringify(player.commands));
       const command = player.commands[0].command;
-      logger3(`processing: ${JSON.stringify(command)}`);
+      logger4(`processing: ${JSON.stringify(command)}`);
       switch (command.type) {
         case "move":
           const newPosition = moveBy(player.position, command.direction);
@@ -8130,7 +8388,7 @@
             delayedCommands = [];
           } else {
             const delayedCommand = player.commands.shift();
-            logger3(`delaying ${JSON.stringify(delayedCommand)}`);
+            logger4(`delaying ${JSON.stringify(delayedCommand)}`);
             delayedCommands.push(delayedCommand);
           }
           break;
@@ -8161,7 +8419,7 @@
     player.commands = player.commands.filter((x) => x.tact < 10);
   }
   __name(processCommands, "processCommands");
-  function tick9(player, game, commands, ticksPassed) {
+  function tick12(player, game, commands, ticksPassed) {
     const effects = [];
     let pickedSomething = false;
     let carriedSomething = player.item != null;
@@ -8178,14 +8436,14 @@
             case "door":
             case "coffee":
               if (canPickItem(player, obj)) {
-                logger3(`Can pick item  ${JSON.stringify(player)}`);
+                logger4(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(effects, effect_exports.showMessage(`Picked a ${obj.type}`, 40));
                 pickedSomething = pickedSomething || pickItem(player, obj, game, effects);
               }
               break;
             case "commit":
               if (canPickItem(player, obj)) {
-                logger3(`Can pick item  ${JSON.stringify(player)}`);
+                logger4(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(
                   effects,
                   effect_exports.showMessage(`Picked a commit ${obj.hash}`, 40)
@@ -8203,7 +8461,9 @@
             case "player":
             case "wall":
             case "boss":
-            case "footprint":
+            case "developer.footprint":
+            case "boss_footprint":
+            case "developer":
               break;
             default:
               assertUnreachable(obj);
@@ -8218,10 +8478,10 @@
     }
     return effects;
   }
-  __name(tick9, "tick");
+  __name(tick12, "tick");
 
   // main.ts
-  var import_lodash10 = __toESM(require_lodash());
+  var import_lodash11 = __toESM(require_lodash());
 
   // help.ts
   var _Window3 = class _Window3 extends text_window_exports.TextWindow {
@@ -8245,7 +8505,7 @@
   var Window3 = _Window3;
 
   // game_window.ts
-  var logger4 = make("game_window");
+  var logger5 = make("game_window");
   var _GameWindow = class _GameWindow extends windows_exports.Window {
     constructor(game, storage) {
       super();
@@ -8263,7 +8523,7 @@
       return renderer_exports.render(this.game);
     }
     processKey(event) {
-      logger4(`keydown: ${event.key}`);
+      logger5(`keydown: ${event.key}`);
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
@@ -8283,6 +8543,7 @@
         case "?":
         case "h":
           help();
+          break;
         case "s":
           save2(this.game, this.storage);
           break;
@@ -8341,16 +8602,20 @@
 
   // main.ts
   var MAZE_SIZE = { y: 25, x: 80 };
-  var logger5 = make("main");
-  setIsEnabled((name) => import_lodash10.default.includes(["main", "player", "game"], name));
+  var logger6 = make("main");
+  setIsEnabled(
+    (name) => import_lodash11.default.includes(["main", "player", "game", "fellow_developer"], name)
+  );
   function main() {
-    const boss = boss_exports.make();
     const plan2 = plan_exports.generatePlan(0);
     let game = game_exports.make(MAZE_SIZE, plan2);
+    const boss = boss_exports.make();
     maze(MAZE_SIZE, game);
     game.map.add([boss]);
     game.player = player_exports.make(game.map.getRandomEmptyLocation());
     game.map.add([game.player]);
+    game.developer = developer_exports.make(game.map.getRandomEmptyLocation());
+    game.map.add([game.developer]);
     window.addEventListener("keydown", (event) => {
       const focused2 = windows_exports.focused();
       if (focused2 && focused2.keydown) {

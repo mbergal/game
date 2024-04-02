@@ -17,6 +17,9 @@ export function ints(min: number, max: number, num_of_ints: number): number[] {
 
 export function choice<T>(choices: T[], weights: number[] | null = null): T {
     assert(weights == null || choices.length == weights?.length)
+    if (choices.length == 3) {
+        // debugger
+    }
     weights = weights ?? _.range(choices.length).map((x) => 1)
     let total = _.sum(weights)
 

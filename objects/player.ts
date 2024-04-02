@@ -1,22 +1,19 @@
+import * as Traits from "@/objects/traits"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
 import * as Command from "../command"
 import { Effect, Effects, EngineeringLevels, Game, GameMap, Messages } from "../game"
+import config from "../game/config"
 import { Vector, moveBy } from "../geometry"
 import * as Direction from "../geometry/direction"
 import * as Item from "./item"
 import * as GameObject from "./object"
 import { StoryTask, Task } from "./tasks"
-import config from "../game/config"
 
 const logger = Logging.make("player")
 
-type PlayerFlags = {
-    spedUp: false | number
-}
-
-export type Player = {
+export type Player = Traits.SpeedUp.SpeedUp & {
     type: "player"
     position: Vector.t
     direction: Direction.t | null
@@ -24,7 +21,6 @@ export type Player = {
     tact: number
     hrTaskTact: number | null
     task: Task | null
-    flags: PlayerFlags
     level: EngineeringLevels.EngineeringLevel
     commands: {
         command: Command.Command
@@ -44,9 +40,7 @@ export function make(position: Vector.t): Player {
         hrTaskTact: null,
         item: null,
         task: null,
-        flags: {
-            spedUp: false,
-        },
+        speedUp: false,
         level: EngineeringLevels.all[0],
     }
 }
@@ -57,14 +51,17 @@ function canMoveOn(objs: GameObject.t[]) {
             switch (obj.type) {
                 case "door":
                 case "story":
-                case "footprint":
+                case "boss_footprint":
+                case "developer.footprint":
                 case "commit":
                 case "coffee":
+                case "developer":
                     return true
                 case "player":
                 case "wall":
                 case "boss":
                     return false
+
                 default:
                     assertUnreachable(obj)
             }
@@ -156,9 +153,7 @@ function useItem(
 }
 
 function speedUp(player: Player) {
-    player.flags.spedUp =
-        (player.flags.spedUp ? player.flags.spedUp : 0) +
-        config.items.coffee.speedUpDays * config.dayTicks
+    Traits.SpeedUp.speedUp(player, config.items.coffee.speedUpDays)
 }
 
 function pickItem(
@@ -215,12 +210,7 @@ function tickHrTask(player: Player, ticksPassed: number) {
 }
 
 function tickFlags(player: Player, ticksPassed: number) {
-    if (player.flags.spedUp) {
-        player.flags.spedUp -= ticksPassed
-        if (player.flags.spedUp <= 0) {
-            player.flags.spedUp = false
-        }
-    }
+    Traits.SpeedUp.tick(player, ticksPassed)
 }
 
 function handleDrop(player: Player, map: GameMap.GameMap) {
@@ -359,7 +349,9 @@ export function tick(
                     case "player":
                     case "wall":
                     case "boss":
-                    case "footprint":
+                    case "developer.footprint":
+                    case "boss_footprint":
+                    case "developer":
                         break
                     default:
                         assertUnreachable(obj)
