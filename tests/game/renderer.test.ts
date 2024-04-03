@@ -16,7 +16,7 @@ describe("showMessage", () => {
                 { text: "A", ttl: 1 },
                 { text: "B", ttl: 1 },
             ],
-            messageTact: 1,
+            messageStartTime: null,
         }
         const shown = showMessage(state)
         expect(shown).toEqual("B")
@@ -28,7 +28,7 @@ describe("showMessage", () => {
                 { text: "A", ttl: 10 },
                 { text: "B", ttl: 1 },
             ],
-            messageTact: 4,
+            messageStartTime: null,
         }
         const shown = showMessage(state)
         expect(shown).toEqual("B")

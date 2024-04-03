@@ -25,7 +25,7 @@ export function make(): t {
     }
 }
 
-export function generatePlan(startTick: number): [Plan.Plan, number] {
+export function generatePlan(startTick: number): readonly [Plan.Plan, number] {
     const DAY = config.dayTicks
     const SPRINT_DAYS = 10
     const plan = Plan.make()

@@ -26,7 +26,7 @@ export function pickDirection(
             path: findTarget(x, map, x.position!, target.position!),
         }))
         const path = _.minBy(paths, (x) => (x.path ? x.path.length : Infinity))
-        target.target = path?.target
+        target.target = path?.target ?? null
     }
 
     if (target.target == null) {
@@ -100,12 +100,12 @@ export function bfs(
 
         for (const d of possibleMoves(v)) {
             {
-                const dd = moveTo(v, d)
-                if (!discovered.has(Vector.repr(dd))) {
-                    discovered.add(Vector.repr(dd))
-                    queue.push(dd)
-                    edges.set(Vector.repr(dd), edges.get(Vector.repr(v))! + 1)
-                    predecessors.set(Vector.repr(dd), v)
+                const nextPos = moveTo(v, d)
+                if (!discovered.has(Vector.repr(nextPos))) {
+                    discovered.add(Vector.repr(nextPos))
+                    queue.push(nextPos)
+                    edges.set(Vector.repr(nextPos), edges.get(Vector.repr(v))! + 1)
+                    predecessors.set(Vector.repr(nextPos), v)
                 }
             }
         }

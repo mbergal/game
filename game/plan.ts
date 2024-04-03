@@ -1,5 +1,5 @@
 import * as Collapse from "./collapse"
-import * as Event from "./event"
+import { Event } from "@/game"
 import * as PerformanceReview from "./performance_review"
 import * as Sprint from "./sprint"
 

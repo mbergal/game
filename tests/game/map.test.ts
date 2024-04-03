@@ -10,7 +10,7 @@ export function sum(a: number, b: number) {
 
 describe("forks", () => {
     test("adds 1 + 2 to equal 3", () => {
-        const map = loadMap(`
+        const [map, _] = loadMap(`
         ---------
         |   |   |
         ---------
