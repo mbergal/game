@@ -1,8 +1,8 @@
-import { Game, GameMap } from "@/game"
+import { GameMap } from "@/game"
 import { Coffee, GameObject, Story } from "@/objects"
 
-import { Direction, Vector, moveTo, directionTo } from "@/geometry"
-import path from "path"
+import { Direction, Vector, directionTo, moveTo } from "@/geometry"
+import _ from "lodash"
 
 export type Trait = { position: Vector.Vector | null; target: GameObject.GameObject | null }
 
@@ -21,11 +21,12 @@ export function pickDirection(
             .filter((x) => Story.isStory(x) || Coffee.isCoffee(x))
             .filter((x) => x.position != null)
 
-        const paths = targets.map(
-            (x) => [x, findTarget(x, map, x.position!, target.position!)] as const,
-        )
-        // const path = _.minBy(paths, (x) => (x[1] ? x[1].length : Infinity))
-        target.target = paths[0][0]
+        const paths = targets.map((x) => ({
+            target: x,
+            path: findTarget(x, map, x.position!, target.position!),
+        }))
+        const path = _.minBy(paths, (x) => (x.path ? x.path.length : Infinity))
+        target.target = path?.target
     }
 
     if (target.target == null) {
