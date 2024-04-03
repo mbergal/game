@@ -5,7 +5,7 @@ import _ from "lodash"
 import * as Command from "../command"
 import { Effect, Effects, EngineeringLevels, Game, GameMap, Messages } from "../game"
 import config from "../game/config"
-import { Vector, moveBy } from "../geometry"
+import { Vector, moveTo } from "../geometry"
 import * as Direction from "../geometry/direction"
 import * as Item from "./item"
 import * as GameObject from "./object"
@@ -51,13 +51,14 @@ function canMoveOn(objs: GameObject.t[]) {
     if (objs.length > 0) {
         const canMoveOnObj = (obj: GameObject.t) => {
             switch (obj.type) {
+                case "boss.footprint":
+                case "coffee":
+                case "commit":
+                case "developer.footprint":
+                case "developer.pathlights":
+                case "developer":
                 case "door":
                 case "story":
-                case "boss.footprint":
-                case "developer.footprint":
-                case "commit":
-                case "coffee":
-                case "developer":
                     return true
                 case "player":
                 case "wall":
@@ -258,7 +259,7 @@ function processCommands(
         logger(`processing: ${JSON.stringify(command)}`)
         switch (command.type) {
             case "move":
-                const newPosition = moveBy(player.position, command.direction)
+                const newPosition = moveTo(player.position, command.direction)
                 const obsjAtNewPosition = map.at(newPosition)
                 if (canMoveOn(obsjAtNewPosition)) {
                     player.direction = command.direction
@@ -314,7 +315,7 @@ export function tick(
     processCommands(player, commands, game.map, effects)
 
     if (player.direction) {
-        const newPosition = moveBy(player.position, player.direction)
+        const newPosition = moveTo(player.position, player.direction)
         const objsAtNewPosition = game.map.at(newPosition)
         if (canMoveOn(objsAtNewPosition)) {
             if (objsAtNewPosition.length > 0) {
@@ -352,6 +353,7 @@ export function tick(
                     case "wall":
                     case "boss":
                     case "developer.footprint":
+                    case "developer.pathlights":
                     case "boss.footprint":
                     case "developer":
                         break
@@ -361,7 +363,7 @@ export function tick(
             }
             game.map.move(player, newPosition)
             if (
-                game.map.objAt(moveBy(newPosition, player.direction), "commit") &&
+                game.map.objAt(moveTo(newPosition, player.direction), "commit") &&
                 carriedSomething
             ) {
                 player.direction = null

@@ -167,6 +167,7 @@ function objTick(
         case "commit":
         case "coffee":
         case "wall":
+        case "developer.pathlights":
             break
         case "developer":
             handleEffects(game, Developer.tick(obj, game))

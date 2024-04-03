@@ -1,10 +1,9 @@
 import _ from "lodash"
-import * as Game from "./game/game"
-import { GameMap } from "./game/map"
+import { Game, GameMap } from "@/game"
 import { Vector } from "./geometry"
-import * as GameObject from "./objects/object"
+import { GameObject } from "@/objects"
 import * as Room from "./room"
-import * as random from "./utils/random"
+import * as random from "@/utils/random"
 
 export function check<T>(t: () => T, f: (t: T) => boolean) {
     while (true) {
@@ -13,7 +12,7 @@ export function check<T>(t: () => T, f: (t: T) => boolean) {
     }
 }
 
-export function maze(size: Vector.t, game: Game.t) {
+export function maze(size: Vector.t, game: Game.Game) {
     const outer_walls = hline({ x: 0, y: 0 }, size.x)
         .concat(vline({ x: 0, y: 0 }, size.y))
         .concat(vline({ x: size.x - 1, y: 0 }, size.y))
@@ -79,7 +78,7 @@ export function roomWalls(args: {
     return room_walls
 }
 
-export function generateRoomDoors(map: GameMap): void {
+export function generateRoomDoors(map: GameMap.GameMap): void {
     for (let row = 3; row <= map.height - 2; row += 2) {
         const rooms = getRowRooms(map, row)
         makeRoomDoors(map, rooms)
@@ -103,7 +102,7 @@ function desiredNumOfDoors(room: Room.Room) {
     return random.int(min_max[1], min_max[2])
 }
 
-function noWalls(map: GameMap, xs: number[], y: number): boolean {
+function noWalls(map: GameMap.GameMap, xs: number[], y: number): boolean {
     for (const x of xs) {
         if (
             map.someObjectsAt({ x, y: y - 1 }, "wall") ||
@@ -115,7 +114,7 @@ function noWalls(map: GameMap, xs: number[], y: number): boolean {
     return true
 }
 
-function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
+function makeRoomDoors(map: GameMap.GameMap, rooms: Room.Room[]) {
     for (const room of rooms) {
         const num_of_upper = desiredNumOfDoors(room) / 2 - Room.upperDoors(room)
         const num_of_lower = desiredNumOfDoors(room) / 2 - Room.lowerDoors(room)
@@ -131,7 +130,7 @@ function makeRoomDoors(map: GameMap, rooms: Room.Room[]) {
     return rooms
 }
 
-function getRowRooms(map: GameMap, row: number): Room.Room[] {
+function getRowRooms(map: GameMap.GameMap, row: number): Room.Room[] {
     const rooms = []
     let currentRoom: Room.Room = {
         position: { x: 0, y: 0 },

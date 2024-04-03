@@ -1,5 +1,5 @@
 import * as _ from "lodash"
-import { Vector, Direction, moveBy } from "../geometry"
+import { Vector, Direction, moveTo } from "../geometry"
 
 import * as random from "../utils/random"
 import { GameObject } from "../objects"
@@ -48,6 +48,7 @@ export class GameMap {
                     obj,
                 )
             }
+            obj.position = null
         }
     }
 
@@ -113,7 +114,7 @@ export class GameMap {
     ): Direction.t[] {
         const p: Direction.t[] = []
         for (const d of Direction.all) {
-            const newPos = moveBy(position, d)
+            const newPos = moveTo(position, d)
             if (this.everyObjectAt(newPos, check)) p.push(d)
         }
         return p
@@ -148,7 +149,7 @@ export function directionTo(
     objType: GameObject.Type,
 ): Direction.t | null {
     const dd = _.compact(
-        Direction.all.filter((x) => map.someObjectsAt(moveBy(position, x), objType)),
+        Direction.all.filter((x) => map.someObjectsAt(moveTo(position, x), objType)),
     )
     return dd.length ? dd[0] : null
 }

@@ -1,27 +1,31 @@
-import { Effects, GameMap, Plan, Game } from "@/game"
-import { Direction, Vector, moveBy } from "@/geometry"
-import * as random from "@/utils/random"
+import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
+import { Direction, Vector, moveTo } from "@/geometry"
 import * as Item from "../item"
 import * as Traits from "../traits"
 import * as FootprintTrait from "../traits/footprint"
 import * as Footprint from "./footprint"
 export * as Footprint from "./footprint"
+import * as Pathlights from "./pathlights"
+export * as Pathlights from "./pathlights"
 
-import config from "@/game/config"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
+import { pickDirection } from "./pickDirection"
+import config from "@/game/config"
 
-const logger = Logging.make("fellow_developer")
+export const logger = Logging.make("fellow_developer")
 
 export const type = "developer"
-export type Developer = Traits.SpeedUp.SpeedUp & {
-    type: typeof type
-    position: Vector.Vector | null
-    tact: number
-    zIndex: number
-    direction: Direction.t | null
-}
+
+export type Developer = Traits.SpeedUp.SpeedUp &
+    Traits.Targeting.Trait & {
+        type: typeof type
+        position: Vector.Vector | null
+        tact: number
+        zIndex: number
+        direction: Direction.t | null
+    }
 
 export function make(): Developer {
     return {
@@ -31,6 +35,7 @@ export function make(): Developer {
         direction: null,
         zIndex: 2,
         speedUp: false,
+        target: null,
     }
 }
 
@@ -38,71 +43,12 @@ function speedUp(developer: Developer) {
     Traits.SpeedUp.speedUp(developer, config.items.coffee.speedUpDays)
 }
 
-function pickDirection(
-    position: Vector.Vector,
-    currentDirection: Direction.t | null,
-    map: GameMap.GameMap,
-): Direction.t | null {
-    const moves = possibleMoves(position, currentDirection, map)
-    const moveIndexAndFootprint = (move: Direction.t, i: number) => {
-        const footprint = map.objAt(moveBy(position, move), "developer.footprint")
-        return footprint ? { moveIndex: i, footprint } : null
-    }
-    const footprints = _.compact(moves.map((move, i) => moveIndexAndFootprint(move, i)))
-
-    const footprintWeights = _.chain(footprints)
-        .map((f) => ({
-            moveIndex: f.moveIndex,
-            tact: f.footprint.tact,
-        }))
-        .sortBy(footprints, (x) => x.tact)
-        .reverse()
-        .map((x, i) => ({
-            moveIndex: x.moveIndex,
-            weight: config.developer.moves.weights.footprints[i],
-        }))
-        .keyBy((x) => x.moveIndex)
-        .mapValues((x) => x.weight)
-        .value()
-
-    const moveWeights = moves
-        .map((_) => 1)
-        .map((weight, i) => (moves[i] == currentDirection ? weight + 3 : weight))
-        .map((weight, i) => {
-            return (
-                weight +
-                (map.objAt(moveBy(position, moves[i]), "developer.footprint") == null
-                    ? config.developer.moves.weights.freeSpace
-                    : 0)
-            )
-        })
-        .map((weight, i) => {
-            return weight + (footprintWeights[i] ?? 0)
-        })
-        .map((weight, i) =>
-            currentDirection && moves[i] == Direction.reverse(currentDirection)
-                ? config.developer.moves.weights.reverseDirection
-                : weight,
-        )
-
-    if (moves.length > 0) {
-        if (moves.length > 1) {
-            logger(`moves:      ${moves}`)
-            logger(`direction:  ${currentDirection}`)
-            logger(`moveWeight: ${moveWeights}`)
-        }
-        // First, check if we can move forward
-        const moveChoice = random.choice(moves, moveWeights)
-        return moveChoice
-    } else {
-        return null
-    }
-}
-export function tick(developer: Developer, game: Game.Game): Effects.Effects {
-    const effects: Effects.Effects = []
-    developer.tact += 1
-
-    const events = Plan.getEvents(game.plan, game.time.ticks)
+function processEvents(
+    developer: Developer,
+    events: Event.Event[],
+    game: Game.Game,
+    effects: Effects.Effects,
+) {
     for (const event of events) {
         switch (event.type) {
             case "workWeekStarted":
@@ -110,9 +56,17 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
                 break
             case "workWeekEnded":
                 game.map.move(developer, null)
+                Effects.append(effects, Effect.showMessage("Developer: have a nice weekend!", 1000))
                 break
         }
     }
+}
+export function tick(developer: Developer, game: Game.Game): Effects.Effects {
+    const effects: Effects.Effects = []
+    developer.tact += 1
+
+    const events = Plan.getEvents(game.plan, game.time.ticks)
+    processEvents(developer, events, game, effects)
 
     Traits.SpeedUp.tick(developer, 1)
 
@@ -121,21 +75,21 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     }
 
     if (developer.position != null) {
-        const moveChoice = pickDirection(developer.position, developer.direction, game.map)
+        const moveChoice = Traits.Targeting.pickDirection(developer, game.map, {
+            isPathlight: Pathlights.isPathlights,
+            make: Pathlights.make,
+        })
+        // const moveChoice = pickDirection(developer.position, developer.direction, game.map)
         if (moveChoice != null) {
             developer.direction = moveChoice
-            move(developer, moveBy(developer.position, moveChoice), moveChoice, game.map)
+            move(developer, moveTo(developer.position, moveChoice), moveChoice, game.map)
         }
     }
 
     return effects
 }
 
-export function possibleMoves(
-    pos: Vector.t,
-    currentDirection: Direction.t | null,
-    map: GameMap.GameMap,
-): Direction.t[] {
+export function possibleMoves(pos: Vector.t, map: GameMap.GameMap): Direction.t[] {
     const possible = map.possibleDirections(
         pos,
         (obj) => !obj || !["wall", "door", "player"].includes(obj.type),
@@ -147,8 +101,8 @@ function canPickup(obj: Developer, item: Item.Item, map: GameMap.GameMap): boole
     switch (item.type) {
         case "coffee":
         case "commit":
-            return true
         case "story":
+            return true
         case "door":
             return false
         default:
@@ -157,6 +111,9 @@ function canPickup(obj: Developer, item: Item.Item, map: GameMap.GameMap): boole
 }
 
 function pickupItem(obj: Developer, item: Item.Item, map: GameMap.GameMap) {
+    if (item === obj.target) {
+        obj.target = null
+    }
     map.remove(item)
     switch (item.type) {
         case "coffee":
@@ -172,7 +129,7 @@ function pickupItem(obj: Developer, item: Item.Item, map: GameMap.GameMap) {
 }
 
 function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: GameMap.GameMap) {
-    obj.state = { direction: newDirection, tact: 0 }
+    obj.direction = newDirection
 
     const item = _.first(map.at(newPos).filter(Item.isItem))
     if (item != null)
@@ -180,6 +137,9 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
             pickupItem(obj, item, map)
         }
 
-    FootprintTrait.leaveFootprint(obj.position, map, Footprint.make)
+    if (obj.position != null) {
+        FootprintTrait.leaveFootprint(obj.position, map, Footprint.make)
+    }
+
     map.move(obj, newPos)
 }

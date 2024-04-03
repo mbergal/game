@@ -55,10 +55,10 @@ const config: Config = {
     developer: {
         moves: {
             weights: {
-                footprints: [40, 10, 1],
-                reverseDirection: 0.001,
-                forwardDirection: 3,
-                freeSpace: 1500,
+                reverseDirection: 1,
+                forwardDirection: 10,
+                footprints: [1000, 400, 20],
+                freeSpace: 10000,
             },
             ticksPerMove: 2,
         },

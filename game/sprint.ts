@@ -1,15 +1,14 @@
+import { Event, GameMap } from "@/game"
+import { GameObjects, Player, Story } from "@/objects"
 import _ from "lodash"
-import { GameObjects } from "../objects"
-import * as Player from "../objects/player"
-import * as Story from "../objects/story"
+
 import * as StorySize from "../objects/story_size"
 import { assertUnreachable } from "../utils/utils"
 import config from "./config"
 import * as Effect from "./effect"
 import * as Effects from "./effects"
-import { Event } from "./event"
 import * as GameTime from "./game_time"
-import * as GameMap from "./map"
+
 import * as Plan from "./plan"
 
 export interface t {
@@ -39,13 +38,13 @@ export function generatePlan(startTick: number): [Plan.Plan, number] {
     addEvent({ type: "groomBacklogStart" })
 
     const storySizes: StorySize.Size[] = [
-        "small",
-        "small",
-        "small",
-        "medium",
-        "medium",
-        "large",
-    ] as const
+        "small" as const,
+        "small" as const,
+        "small" as const,
+        "medium" as const,
+        "medium" as const,
+        "large" as const,
+    ]
 
     const times = storySizes.map((x, i) => [x, Math.round((DAY / storySizes.length) * i)] as const)
 

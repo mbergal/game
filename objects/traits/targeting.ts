@@ -1,0 +1,114 @@
+import { Game, GameMap } from "@/game"
+import { Coffee, GameObject, Story } from "@/objects"
+
+import { Direction, Vector, moveTo, directionTo } from "@/geometry"
+import path from "path"
+
+export type Trait = { position: Vector.Vector | null; target: GameObject.GameObject | null }
+
+export interface Pathway {
+    make(position: Vector.Vector): GameObject.GameObject
+    isPathlight(obj: GameObject.GameObject): obj is GameObject.GameObject
+}
+
+export function pickDirection(
+    target: Trait,
+    map: GameMap.GameMap,
+    pathway: Pathway,
+): Direction.t | null {
+    if (target.target == null || target.position == null) {
+        const targets = map.objects
+            .filter((x) => Story.isStory(x) || Coffee.isCoffee(x))
+            .filter((x) => x.position != null)
+
+        const paths = targets.map(
+            (x) => [x, findTarget(x, map, x.position!, target.position!)] as const,
+        )
+        // const path = _.minBy(paths, (x) => (x[1] ? x[1].length : Infinity))
+        target.target = paths[0][0]
+    }
+
+    if (target.target == null) {
+        return null
+    }
+
+    const pathToTarget = findTarget(target.target, map, target.position!, target.target.position!)
+
+    map.remove(map.objects.filter(pathway.isPathlight))
+    if (pathToTarget) {
+        map.add(pathToTarget.map((x) => pathway.make(x)))
+        return pathToTarget.length > 0 ? directionTo(target.position!, pathToTarget[1]) : null
+    } else {
+        return null
+    }
+}
+
+function findTarget(
+    obj: GameObject.GameObject,
+    map: GameMap.GameMap,
+    position: Vector.Vector,
+    target: Vector.Vector,
+): Vector.Vector[] | null {
+    return bfs((v) => map.possibleDirections(v, (obj) => obj?.type != "wall"), position, target)
+}
+
+export function bfs(
+    possibleMoves: (pos: Vector.Vector) => Direction.t[],
+    start: Vector.Vector,
+    target: Vector.Vector,
+) {
+    if (Vector.equals(start, target)) {
+        return []
+    }
+    const queue: Array<Vector.Vector> = [start]
+    const discovered = new Set<Vector.Repr>([Vector.repr(start)])
+
+    const edges = new Map<Vector.Repr, number>()
+    edges.set(Vector.repr(start), 0)
+
+    const predecessors = new Map<Vector.Repr, Vector.Vector | null>()
+    predecessors.set(Vector.repr(start), null)
+
+    const buildPath = (
+        goal: Vector.Vector,
+        root: Vector.Vector,
+        predecessors: Map<Vector.Repr, Vector.Vector | null>,
+    ) => {
+        const stack = [goal]
+
+        let u = predecessors.get(Vector.repr(goal))!
+
+        while (u != root) {
+            stack.push(u)
+            u = predecessors.get(Vector.repr(u))!
+        }
+
+        stack.push(root)
+
+        let path = stack.reverse()
+
+        return path
+    }
+
+    while (queue.length) {
+        let v = queue.shift()!
+
+        if (v.x === target.x && v.y === target.y) {
+            return buildPath(target, start, predecessors)
+        }
+
+        for (const d of possibleMoves(v)) {
+            {
+                const dd = moveTo(v, d)
+                if (!discovered.has(Vector.repr(dd))) {
+                    discovered.add(Vector.repr(dd))
+                    queue.push(dd)
+                    edges.set(Vector.repr(dd), edges.get(Vector.repr(v))! + 1)
+                    predecessors.set(Vector.repr(dd), v)
+                }
+            }
+        }
+    }
+
+    return null
+}

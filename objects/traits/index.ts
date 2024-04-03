@@ -4,4 +4,5 @@ import * as SpeedUp from "./speedUp"
 
 export * as Footprint from "./footprint"
 export * as Person from "./person"
+export * as Targeting from "./targeting"
 export * as SpeedUp from "./speedUp"

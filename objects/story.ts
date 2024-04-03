@@ -1,10 +1,12 @@
 import { Vector } from "../geometry"
 import * as random from "../utils/random"
+import * as GameObject from "./object"
 import * as StorySize from "./story_size"
 export { Size } from "./story_size"
 
+export const type = "story"
 export interface t {
-    type: "story"
+    type: typeof type
     position: Vector.t
     size: StorySize.Size
     impact: number
@@ -15,13 +17,18 @@ export interface t {
 
 export interface Story extends t {}
 
+export function isStory(obj: GameObject.GameObject): obj is Story {
+    return obj.type === type
+}
+
 export function make(position: Vector.t, size: StorySize.Size): Story {
     return {
-        type: "story",
+        type: type,
         position: position,
         size: size,
         zIndex: 1,
         impact: 1,
+        open: false,
         name: random.choice(storyNames[size]),
     }
 }

@@ -23,6 +23,7 @@ export type t =
     | Coffee.Coffee
     | Developer.Developer
     | Developer.Footprint.Footprint
+    | Developer.Pathlights.Pathlights
 
 export type GameObject = t
 export type Type = t["type"]

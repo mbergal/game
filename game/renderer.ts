@@ -119,6 +119,7 @@ function isVisible(obj: GameObject.t) {
         case "commit":
         case "door":
         case "developer":
+        case "developer.pathlights":
             return true
         case "boss.footprint":
         case "developer.footprint":
@@ -144,6 +145,8 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                 return "■"
             case "developer.footprint":
                 return "◆"
+            case "developer.pathlights":
+                return "·"
             case "player":
                 if (obj.hrTaskTact) {
                     return blink("*", "@", tick)

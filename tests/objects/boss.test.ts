@@ -3,13 +3,13 @@ import { loadMap } from "../utils"
 import { possibleMoves } from "../../objects/boss"
 
 test("possibleMoves", () => {
-    const map = loadMap(`
+    const [map, _] = loadMap(`
         ---------
         |   |   |
         ---------
         |   |   |
         ---- ----
-        |   |   |q
+        |   |   |
         ---------
         `)
 

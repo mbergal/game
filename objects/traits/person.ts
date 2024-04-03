@@ -1,8 +1,10 @@
+import { GameMap } from "@/game"
+import { Vector, Direction } from "@/geometry"
 export type Person = {}
 
 export function tryMove(
     position: Vector.Vector,
-    direction: DirectionSetting.t,
+    direction: Direction.t,
     map: GameMap.GameMap,
 ): boolean {
     const obj = map.objAt(position, "wall")

@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { GameMap } from "../../game"
 import config from "../../game/config"
-import { Vector, moveBy } from "../../geometry"
+import { Vector, moveTo } from "../../geometry"
 import * as Direction from "../../geometry/direction"
 import * as random from "../../utils/random"
 import { Player } from "../player"
@@ -88,7 +88,7 @@ export function possibleMoves(
 
     if (
         !_.includes(possible, currentDirection) &&
-        !map.someObjectsAt(moveBy(pos, currentDirection), "wall")
+        !map.someObjectsAt(moveTo(pos, currentDirection), "wall")
     ) {
         result.jump = { directions: [currentDirection] }
     }
@@ -125,7 +125,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             // First check if there is a player to instruct
             const directionToPlayer = GameMap.directionTo(boss.position, map, "player")
             if (directionToPlayer) {
-                const player = map.objAt(moveBy(boss.position, directionToPlayer), "player")!
+                const player = map.objAt(moveTo(boss.position, directionToPlayer), "player")!
 
                 if (player) pipPlayer(boss, player)
             }
@@ -147,7 +147,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                     moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
                     moves.straight
                         ? map.someObjectsAt(
-                              moveBy(boss.position, boss.state.direction),
+                              moveTo(boss.position, boss.state.direction),
                               "boss.footprint",
                           )
                             ? BOSS_WEIGHTS.straight.visited
@@ -166,14 +166,14 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                 switch (move_choice) {
                     case "turn":
                         const weights = moves.turn!.directions.map((x) =>
-                            map.someObjectsAt(moveBy(boss.position, x), "boss.footprint")
+                            map.someObjectsAt(moveTo(boss.position, x), "boss.footprint")
                                 ? BOSS_WEIGHTS.turn.visited
                                 : BOSS_WEIGHTS.turn.notVisited,
                         )
                         const chosen = random.choice(moves.turn!.directions, weights)
                         boss.state.direction = chosen
                     case "straight":
-                        const new_pos = moveBy(boss.position, boss.state.direction)
+                        const new_pos = moveTo(boss.position, boss.state.direction)
                         move(boss, new_pos, boss.state.direction, map)
                 }
                 return
@@ -206,7 +206,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
             if (boss.state.tact > config.boss.TACTS_FOR_JUMP) {
                 move(
                     boss,
-                    moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+                    moveTo(moveTo(boss.position, boss.state.direction), boss.state.direction),
                     boss.state.direction,
                     map,
                 )

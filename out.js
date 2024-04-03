@@ -802,10 +802,10 @@
           }();
           var ctxClearTimeout = context.clearTimeout !== root.clearTimeout && context.clearTimeout, ctxNow = Date2 && Date2.now !== root.Date.now && Date2.now, ctxSetTimeout = context.setTimeout !== root.setTimeout && context.setTimeout;
           var nativeCeil = Math2.ceil, nativeFloor = Math2.floor, nativeGetSymbols = Object2.getOwnPropertySymbols, nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : undefined, nativeIsFinite = context.isFinite, nativeJoin = arrayProto.join, nativeKeys = overArg(Object2.keys, Object2), nativeMax = Math2.max, nativeMin = Math2.min, nativeNow = Date2.now, nativeParseInt = context.parseInt, nativeRandom = Math2.random, nativeReverse = arrayProto.reverse;
-          var DataView = getNative(context, "DataView"), Map2 = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
+          var DataView = getNative(context, "DataView"), Map2 = getNative(context, "Map"), Promise2 = getNative(context, "Promise"), Set2 = getNative(context, "Set"), WeakMap = getNative(context, "WeakMap"), nativeCreate = getNative(Object2, "create");
           var metaMap = WeakMap && new WeakMap();
           var realNames = {};
-          var dataViewCtorString = toSource(DataView), mapCtorString = toSource(Map2), promiseCtorString = toSource(Promise2), setCtorString = toSource(Set), weakMapCtorString = toSource(WeakMap);
+          var dataViewCtorString = toSource(DataView), mapCtorString = toSource(Map2), promiseCtorString = toSource(Promise2), setCtorString = toSource(Set2), weakMapCtorString = toSource(WeakMap);
           var symbolProto = Symbol2 ? Symbol2.prototype : undefined, symbolValueOf = symbolProto ? symbolProto.valueOf : undefined, symbolToString = symbolProto ? symbolProto.toString : undefined;
           function lodash(value) {
             if (isObjectLike(value) && !isArray(value) && !(value instanceof LazyWrapper)) {
@@ -940,11 +940,11 @@
                 index += dir;
                 var iterIndex = -1, value = array[index];
                 while (++iterIndex < iterLength) {
-                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type4 = data.type, computed = iteratee2(value);
-                  if (type4 == LAZY_MAP_FLAG) {
+                  var data = iteratees[iterIndex], iteratee2 = data.iteratee, type7 = data.type, computed = iteratee2(value);
+                  if (type7 == LAZY_MAP_FLAG) {
                     value = computed;
                   } else if (!computed) {
-                    if (type4 == LAZY_FILTER_FLAG) {
+                    if (type7 == LAZY_FILTER_FLAG) {
                       continue outer;
                     } else {
                       break outer;
@@ -2722,8 +2722,8 @@
             };
           }
           __name(createRound, "createRound");
-          var createSet = !(Set && 1 / setToArray(new Set([, -0]))[1] == INFINITY) ? noop : function(values2) {
-            return new Set(values2);
+          var createSet = !(Set2 && 1 / setToArray(new Set2([, -0]))[1] == INFINITY) ? noop : function(values2) {
+            return new Set2(values2);
           };
           function createToPairs(keysFunc) {
             return function(object) {
@@ -3040,7 +3040,7 @@
             return result2;
           };
           var getTag = baseGetTag;
-          if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
+          if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set2 && getTag(new Set2()) != setTag || WeakMap && getTag(new WeakMap()) != weakMapTag) {
             getTag = /* @__PURE__ */ __name(function(value) {
               var result2 = baseGetTag(value), Ctor = result2 == objectTag ? value.constructor : undefined, ctorString = Ctor ? toSource(Ctor) : "";
               if (ctorString) {
@@ -3167,17 +3167,17 @@
           }
           __name(isFlattenable, "isFlattenable");
           function isIndex(value, length) {
-            var type4 = typeof value;
+            var type7 = typeof value;
             length = length == null ? MAX_SAFE_INTEGER : length;
-            return !!length && (type4 == "number" || type4 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+            return !!length && (type7 == "number" || type7 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
           }
           __name(isIndex, "isIndex");
           function isIterateeCall(value, index, object) {
             if (!isObject(object)) {
               return false;
             }
-            var type4 = typeof index;
-            if (type4 == "number" ? isArrayLike(object) && isIndex(index, object.length) : type4 == "string" && index in object) {
+            var type7 = typeof index;
+            if (type7 == "number" ? isArrayLike(object) && isIndex(index, object.length) : type7 == "string" && index in object) {
               return eq(object[index], value);
             }
             return false;
@@ -3187,16 +3187,16 @@
             if (isArray(value)) {
               return false;
             }
-            var type4 = typeof value;
-            if (type4 == "number" || type4 == "symbol" || type4 == "boolean" || value == null || isSymbol(value)) {
+            var type7 = typeof value;
+            if (type7 == "number" || type7 == "symbol" || type7 == "boolean" || value == null || isSymbol(value)) {
               return true;
             }
             return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object2(object);
           }
           __name(isKey, "isKey");
           function isKeyable(value) {
-            var type4 = typeof value;
-            return type4 == "string" || type4 == "number" || type4 == "symbol" || type4 == "boolean" ? value !== "__proto__" : value === null;
+            var type7 = typeof value;
+            return type7 == "string" || type7 == "number" || type7 == "symbol" || type7 == "boolean" ? value !== "__proto__" : value === null;
           }
           __name(isKeyable, "isKeyable");
           function isLaziable(func) {
@@ -4530,8 +4530,8 @@
           }
           __name(isLength, "isLength");
           function isObject(value) {
-            var type4 = typeof value;
-            return value != null && (type4 == "object" || type4 == "function");
+            var type7 = typeof value;
+            return value != null && (type7 == "object" || type7 == "function");
           }
           __name(isObject, "isObject");
           function isObjectLike(value) {
@@ -5848,12 +5848,12 @@
             };
           });
           arrayEach(["filter", "map", "takeWhile"], function(methodName, index) {
-            var type4 = index + 1, isFilter = type4 == LAZY_FILTER_FLAG || type4 == LAZY_WHILE_FLAG;
+            var type7 = index + 1, isFilter = type7 == LAZY_FILTER_FLAG || type7 == LAZY_WHILE_FLAG;
             LazyWrapper.prototype[methodName] = function(iteratee2) {
               var result2 = this.clone();
               result2.__iteratees__.push({
                 "iteratee": getIteratee(iteratee2, 3),
-                "type": type4
+                "type": type7
               });
               result2.__filtered__ = result2.__filtered__ || isFilter;
               return result2;
@@ -6005,7 +6005,7 @@
   var boss_exports = {};
   __export(boss_exports, {
     Footprint: () => footprint_exports,
-    make: () => make11,
+    make: () => make10,
     possibleMoves: () => possibleMoves,
     tick: () => tick8
   });
@@ -6071,10 +6071,10 @@
     developer: {
       moves: {
         weights: {
-          footprints: [40, 10, 1],
-          reverseDirection: 1e-3,
-          forwardDirection: 3,
-          freeSpace: 1500
+          reverseDirection: 1,
+          forwardDirection: 10,
+          footprints: [1e3, 400, 20],
+          freeSpace: 1e4
         },
         ticksPerMove: 2
       }
@@ -6270,70 +6270,6 @@
   // game/sprint.ts
   var import_lodash3 = __toESM(require_lodash());
 
-  // objects/story_size.ts
-  function toString(size2) {
-    switch (size2) {
-      case "small":
-        return "small";
-      case "medium":
-        return "medium";
-      case "large":
-        return "large";
-    }
-  }
-  __name(toString, "toString");
-
-  // objects/story.ts
-  function make3(position, size2) {
-    return {
-      type: "story",
-      position,
-      size: size2,
-      zIndex: 1,
-      impact: 1,
-      name: choice(storyNames[size2])
-    };
-  }
-  __name(make3, "make");
-  var storyNames = {
-    medium: [
-      "Implement Dark Mode for Night Owls",
-      "Refactor 'Frankencode' Module",
-      "Add Emoji Support for Error Messages",
-      "Address Complaints About Clashing Color Scheme",
-      "Clarify the Meaning of 'Technical Debt'",
-      "Reduce Loading Time for Image-heavy Pages",
-      "Streamline Checkout Process for Mobile Users",
-      "Update Third-party Libraries to Latest Versions",
-      "Resolve Issue with Form Submission Error Handling",
-      "Integrate Social Media Sharing Buttons"
-    ],
-    small: [
-      "Option to Change Font Size",
-      "Fix Typo in Terms of Service Link",
-      "Update README with Installation Instructions",
-      "Add Loading Spinner for AJAX Requests",
-      "Remove Deprecated Function Calls",
-      "Increase Character Limit for Comments",
-      "Adjust Button Placement for Accessibility",
-      "Minify CSS and JavaScript Files",
-      "Implement CSRF Protection on Forms",
-      "Resolve Issue with Broken Image Links"
-    ],
-    large: [
-      "Revamp User Interface for Modern Look and Feel",
-      "Rewrite Monolithic Codebase into Microservices",
-      "Implement Machine Learning Algorithm for Recommendations",
-      "Redesign Navigation Structure for Improved Usability",
-      "Create Comprehensive Developer Guide",
-      "Conduct Full Accessibility Audit and Remediation",
-      "Implement Caching Strategy for Scalability",
-      "Migrate to OAuth2 for Enhanced Authentication",
-      "Transition to Cloud-based Hosting Environment",
-      "Integrate Multi-language Support Across Platform"
-    ]
-  };
-
   // utils/utils.ts
   function assertUnreachable(x) {
     throw new Error("Didn't expect to get here");
@@ -6352,7 +6288,7 @@
   ];
 
   // game/game_time.ts
-  function make4(ticks) {
+  function make3(ticks) {
     const day = Math.floor(ticks / config_default.dayTicks);
     const dayOfWeek = all2[day % 7];
     return {
@@ -6361,16 +6297,16 @@
       dayOfWeek
     };
   }
-  __name(make4, "make");
+  __name(make3, "make");
 
   // game/sprint.ts
-  function make5() {
+  function make4() {
     return {
       day: 0,
       daysLeft: 0
     };
   }
-  __name(make5, "make");
+  __name(make4, "make");
   function generatePlan2(startTick) {
     const DAY = config_default.dayTicks;
     const SPRINT_DAYS = 10;
@@ -6389,13 +6325,13 @@
       "large"
     ];
     const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
-    addEvent2({ type: "workWeekStarted", ...make4(startTick) });
+    addEvent2({ type: "workWeekStarted", ...make3(startTick) });
     let sprintDay = 1;
     addEvent2({
       type: "sprintDayStart",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make4(startTick)
+      ...make3(startTick)
     });
     const groomingStart = startTick;
     for (const t of times) {
@@ -6408,7 +6344,7 @@
       type: "sprintDayEnd",
       sprintDay,
       sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make4(startTick)
+      ...make3(startTick)
     });
     startTick += 1;
     for (const i of import_lodash3.default.range(4)) {
@@ -6418,41 +6354,41 @@
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make4(startTick)
+        ...make3(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make4(startTick)
+        ...make3(startTick)
       });
       startTick += 1;
     }
-    addEvent2({ type: "workWeekEnded", ...make4(startTick) });
+    addEvent2({ type: "workWeekEnded", ...make3(startTick) });
     addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
-    addEvent2({ type: "workWeekStarted", ...make4(startTick) });
+    addEvent2({ type: "workWeekStarted", ...make3(startTick) });
     for (const i of import_lodash3.default.range(4)) {
       sprintDay += 1;
       addEvent2({
         type: "sprintDayStart",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make4(startTick)
+        ...make3(startTick)
       });
       startTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
         sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make4(startTick)
+        ...make3(startTick)
       });
       startTick += 1;
     }
     addEvent2({ type: "sprintEnd" });
-    addEvent2({ type: "workWeekEnded", ...make4(startTick) });
+    addEvent2({ type: "workWeekEnded", ...make3(startTick) });
     addEvent2({ type: "weekendStart" });
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
@@ -6466,7 +6402,7 @@
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = make3(game.map.getRandomEmptyLocation(), event.size);
+            const story = story_exports.make(game.map.getRandomEmptyLocation(), event.size);
             game.map.add(story);
             append(
               effects,
@@ -6587,10 +6523,10 @@
   __name(daily, "daily");
 
   // game/collapse.ts
-  function make6() {
+  function make5() {
     return {};
   }
-  __name(make6, "make");
+  __name(make5, "make");
   function plan() {
     const plan2 = make2();
     addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
@@ -6600,7 +6536,7 @@
   function tick4(game) {
     const events = game.plan.get(game.time.ticks);
     if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make6();
+      game.collapse = make5();
     }
     if (game.collapse) {
       const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
@@ -6621,7 +6557,7 @@
     GameMap: () => map_exports,
     Score: () => score_exports,
     load: () => load,
-    make: () => make9,
+    make: () => make8,
     message: () => message,
     save: () => save,
     tick: () => tick6,
@@ -6629,10 +6565,10 @@
   });
 
   // game/item_generator.ts
-  function make7() {
+  function make6() {
     return { state: { type: "waiting", tact: 0 } };
   }
-  __name(make7, "make");
+  __name(make6, "make");
   function tick5(itemGenerator, game) {
     switch (itemGenerator.state.type) {
       case "waiting":
@@ -6680,9 +6616,46 @@
   var map_exports = {};
   __export(map_exports, {
     GameMap: () => GameMap,
-    directionTo: () => directionTo
+    directionTo: () => directionTo2
   });
   var _7 = __toESM(require_lodash());
+
+  // geometry/vector.ts
+  var vector_exports = {};
+  __export(vector_exports, {
+    e: () => e,
+    equals: () => equals,
+    n: () => n,
+    repr: () => repr,
+    s: () => s,
+    w: () => w,
+    zero: () => zero
+  });
+  function n(v) {
+    return { x: v.x, y: v.y - 1 };
+  }
+  __name(n, "n");
+  function s(v) {
+    return { x: v.x, y: v.y + 1 };
+  }
+  __name(s, "s");
+  function w(v) {
+    return { x: v.x - 1, y: v.y };
+  }
+  __name(w, "w");
+  function e(v) {
+    return { x: v.x + 1, y: v.y };
+  }
+  __name(e, "e");
+  function equals(v1, v2) {
+    return v1.x === v2.x && v1.y === v2.y;
+  }
+  __name(equals, "equals");
+  var zero = { x: 0, y: 0 };
+  function repr(v) {
+    return v ? `(${v.x}, ${v.y})` : "null";
+  }
+  __name(repr, "repr");
 
   // geometry/direction.ts
   var direction_exports = {};
@@ -6714,35 +6687,8 @@
   __name(toRose, "toRose");
   var all3 = ["left", "right", "down", "up"];
 
-  // geometry/vector.ts
-  var vector_exports = {};
-  __export(vector_exports, {
-    e: () => e,
-    n: () => n,
-    s: () => s,
-    w: () => w,
-    zero: () => zero
-  });
-  function n(v) {
-    return { x: v.x, y: v.y - 1 };
-  }
-  __name(n, "n");
-  function s(v) {
-    return { x: v.x, y: v.y + 1 };
-  }
-  __name(s, "s");
-  function w(v) {
-    return { x: v.x - 1, y: v.y };
-  }
-  __name(w, "w");
-  function e(v) {
-    return { x: v.x + 1, y: v.y };
-  }
-  __name(e, "e");
-  var zero = { x: 0, y: 0 };
-
   // geometry/index.ts
-  function moveBy(vector, direction) {
+  function moveTo(vector, direction) {
     if (direction == null) {
       return vector;
     } else {
@@ -6758,7 +6704,23 @@
       }
     }
   }
-  __name(moveBy, "moveBy");
+  __name(moveTo, "moveTo");
+  function directionTo(vector, target) {
+    if (equals(vector, target))
+      return null;
+    else if (equals(n(vector), target))
+      return "up";
+    else if (equals(s(vector), target))
+      return "down";
+    else if (equals(w(vector), target))
+      return "left";
+    else if (equals(e(vector), target))
+      return "right";
+    else {
+      return null;
+    }
+  }
+  __name(directionTo, "directionTo");
 
   // generator.ts
   var import_lodash5 = __toESM(require_lodash());
@@ -6971,6 +6933,7 @@
             obj
           );
         }
+        obj.position = null;
       }
     }
     move(obj, pos) {
@@ -6988,9 +6951,9 @@
     at(v) {
       return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height ? this.cells[v.y][v.x] : [];
     }
-    objAt(v, type4) {
+    objAt(v, type7) {
       const objs = this.at(v);
-      const objOfType = objs.find((x) => x.type == type4) ?? null;
+      const objOfType = objs.find((x) => x.type == type7) ?? null;
       return objOfType;
     }
     someObjectsAt(v, include) {
@@ -7008,7 +6971,7 @@
     possibleDirections(position, check2) {
       const p = [];
       for (const d of direction_exports.all) {
-        const newPos = moveBy(position, d);
+        const newPos = moveTo(position, d);
         if (this.everyObjectAt(newPos, check2))
           p.push(d);
       }
@@ -7018,7 +6981,7 @@
       let s2 = "\n";
       for (const y of _7.range(this.height)) {
         for (const x of _7.range(this.width))
-          s2 += repr(this.cells[y][x]);
+          s2 += repr2(this.cells[y][x]);
         s2 += "\n";
       }
       return s2;
@@ -7037,14 +7000,14 @@
   };
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
-  function directionTo(position, map, objType) {
+  function directionTo2(position, map, objType) {
     const dd = _7.compact(
-      direction_exports.all.filter((x) => map.someObjectsAt(moveBy(position, x), objType))
+      direction_exports.all.filter((x) => map.someObjectsAt(moveTo(position, x), objType))
     );
     return dd.length ? dd[0] : null;
   }
-  __name(directionTo, "directionTo");
-  function repr(objs) {
+  __name(directionTo2, "directionTo");
+  function repr2(objs) {
     if (objs.length > 0) {
       switch (objs[0].type) {
         case "wall":
@@ -7056,7 +7019,7 @@
       return " ";
     }
   }
-  __name(repr, "repr");
+  __name(repr2, "repr");
 
   // game/renderer.ts
   var renderer_exports = {};
@@ -7153,6 +7116,7 @@
       case "commit":
       case "door":
       case "developer":
+      case "developer.pathlights":
         return true;
       case "boss.footprint":
       case "developer.footprint":
@@ -7179,6 +7143,8 @@
           return "\u25A0";
         case "developer.footprint":
           return "\u25C6";
+        case "developer.pathlights":
+          return "\xB7";
         case "player":
           if (obj.hrTaskTact) {
             return blink("*", "@", tick13);
@@ -7257,26 +7223,26 @@
   // game/score.ts
   var score_exports = {};
   __export(score_exports, {
-    make: () => make8
+    make: () => make7
   });
-  function make8() {
+  function make7() {
     return {
       money: 0,
       impact: 0,
       stockPrice: 0
     };
   }
-  __name(make8, "make");
+  __name(make7, "make");
 
   // game/game.ts
   var logger2 = make("game");
-  function make9(size2, plan2) {
+  function make8(size2, plan2) {
     return {
       map: new GameMap(size2.x, size2.y, []),
       commands: [],
-      itemGenerator: make7(),
-      sprint: make5(),
-      score: make8(),
+      itemGenerator: make6(),
+      sprint: make4(),
+      score: make7(),
       messages: [],
       messageTact: 0,
       time: {
@@ -7289,7 +7255,7 @@
       collapse: null
     };
   }
-  __name(make9, "make");
+  __name(make8, "make");
   function toJson(game) {
     return {
       map: game.map.toJson(),
@@ -7334,7 +7300,7 @@
       setTime(game.time.ticks);
       game.score.stockPrice = 100 - 100 / config_default.totalDays * (game.time.ticks / config_default.dayTicks);
       game.score.money += game.player.level.rate;
-      game.time = make4(game.time.ticks);
+      game.time = make3(game.time.ticks);
       handleEffects(game, tick4(game));
       tick5(game.itemGenerator, game);
       if (game.sprint) {
@@ -7387,6 +7353,7 @@
       case "commit":
       case "coffee":
       case "wall":
+      case "developer.pathlights":
         break;
       case "developer":
         handleEffects(game, developer_exports.tick(obj, game));
@@ -7442,21 +7409,6 @@
   }
   __name(load, "load");
 
-  // game/messages.ts
-  var messages_exports = {};
-  __export(messages_exports, {
-    itemDropped: () => itemDropped,
-    startedStory: () => startedStory
-  });
-  var startedStory = /* @__PURE__ */ __name((story) => ({
-    text: `You started on ${toString(story.size)} ${story.name}`,
-    ttl: 100
-  }), "startedStory");
-  var itemDropped = /* @__PURE__ */ __name((item) => ({
-    text: `You droppped on ${item.type}`,
-    ttl: 5
-  }), "itemDropped");
-
   // game/intro.ts
   var intro_exports = {};
   __export(intro_exports, {
@@ -7495,7 +7447,7 @@
   var size = { x: 80, y: 27 };
 
   // ui/composition.ts
-  function make10(size2) {
+  function make9(size2) {
     const composition = [];
     for (let y = 0; y < size.y; y++) {
       composition[y] = [];
@@ -7505,7 +7457,7 @@
     }
     return composition;
   }
-  __name(make10, "make");
+  __name(make9, "make");
   function compose(composition, position, window2) {
     for (let y = 0; y < window2.length; y++) {
       for (let x = 0; x < window2[y].length; x++) {
@@ -7521,7 +7473,7 @@
   }
   __name(compose, "compose");
   function render3(windows2) {
-    let composition = make10(size);
+    let composition = make9(size);
     for (const window2 of windows2) {
       composition = compose(
         composition,
@@ -7662,6 +7614,36 @@
   __name(_Window2, "Window");
   var Window2 = _Window2;
 
+  // game/messages.ts
+  var messages_exports = {};
+  __export(messages_exports, {
+    itemDropped: () => itemDropped,
+    startedStory: () => startedStory
+  });
+
+  // objects/story_size.ts
+  function toString(size2) {
+    switch (size2) {
+      case "small":
+        return "small";
+      case "medium":
+        return "medium";
+      case "large":
+        return "large";
+    }
+  }
+  __name(toString, "toString");
+
+  // game/messages.ts
+  var startedStory = /* @__PURE__ */ __name((story) => ({
+    text: `You started on ${toString(story.size)} ${story.name}`,
+    ttl: 100
+  }), "startedStory");
+  var itemDropped = /* @__PURE__ */ __name((item) => ({
+    text: `You droppped on ${item.type}`,
+    ttl: 5
+  }), "itemDropped");
+
   // objects/boss/footprint.ts
   var footprint_exports = {};
   __export(footprint_exports, {
@@ -7703,7 +7685,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make11() {
+  function make10() {
     return {
       position: {
         x: 0,
@@ -7714,7 +7696,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make11, "make");
+  __name(make10, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, "wall");
@@ -7728,7 +7710,7 @@
     if (import_lodash7.default.includes(possible, currentDirection)) {
       result.straight = { direction: currentDirection };
     }
-    if (!import_lodash7.default.includes(possible, currentDirection) && !map.someObjectsAt(moveBy(pos, currentDirection), "wall")) {
+    if (!import_lodash7.default.includes(possible, currentDirection) && !map.someObjectsAt(moveTo(pos, currentDirection), "wall")) {
       result.jump = { directions: [currentDirection] };
     }
     if (import_lodash7.default.includes(possible, reverse(currentDirection))) {
@@ -7761,7 +7743,7 @@
       case "moving":
         const directionToPlayer = map_exports.directionTo(boss.position, map, "player");
         if (directionToPlayer) {
-          const player = map.objAt(moveBy(boss.position, directionToPlayer), "player");
+          const player = map.objAt(moveTo(boss.position, directionToPlayer), "player");
           if (player)
             pipPlayer(boss, player);
         }
@@ -7778,7 +7760,7 @@
           const move_weights = [
             moves.turn ? BOSS_WEIGHTS.turn.notVisited : null,
             moves.straight ? map.someObjectsAt(
-              moveBy(boss.position, boss.state.direction),
+              moveTo(boss.position, boss.state.direction),
               "boss.footprint"
             ) ? BOSS_WEIGHTS.straight.visited : BOSS_WEIGHTS.straight.notVisited : null
           ];
@@ -7792,12 +7774,12 @@
           switch (move_choice) {
             case "turn":
               const weights = moves.turn.directions.map(
-                (x) => map.someObjectsAt(moveBy(boss.position, x), "boss.footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
+                (x) => map.someObjectsAt(moveTo(boss.position, x), "boss.footprint") ? BOSS_WEIGHTS.turn.visited : BOSS_WEIGHTS.turn.notVisited
               );
               const chosen = choice(moves.turn.directions, weights);
               boss.state.direction = chosen;
             case "straight":
-              const new_pos = moveBy(boss.position, boss.state.direction);
+              const new_pos = moveTo(boss.position, boss.state.direction);
               move2(boss, new_pos, boss.state.direction, map);
           }
           return;
@@ -7829,7 +7811,7 @@
         if (boss.state.tact > config_default.boss.TACTS_FOR_JUMP) {
           move2(
             boss,
-            moveBy(moveBy(boss.position, boss.state.direction), boss.state.direction),
+            moveTo(moveTo(boss.position, boss.state.direction), boss.state.direction),
             boss.state.direction,
             map
           );
@@ -7859,24 +7841,31 @@
   // objects/coffee.ts
   var coffee_exports = {};
   __export(coffee_exports, {
-    make: () => make12
+    isCoffee: () => isCoffee,
+    make: () => make11,
+    type: () => type
   });
-  function make12(position) {
+  var type = "coffee";
+  function make11(position) {
     return {
-      type: "coffee",
+      type,
       position,
       zIndex: 1,
       open: false
     };
   }
-  __name(make12, "make");
+  __name(make11, "make");
+  function isCoffee(obj) {
+    return obj.type === type;
+  }
+  __name(isCoffee, "isCoffee");
 
   // objects/commit.ts
   var commit_exports = {};
   __export(commit_exports, {
-    make: () => make13
+    make: () => make12
   });
-  function make13(position) {
+  function make12(position) {
     return {
       type: "commit",
       position,
@@ -7885,7 +7874,7 @@
       hash: generateId(8)
     };
   }
-  __name(make13, "make");
+  __name(make12, "make");
   function byteToHex(byte) {
     return ("0" + byte.toString(16)).slice(-2);
   }
@@ -7901,10 +7890,12 @@
   var developer_exports = {};
   __export(developer_exports, {
     Footprint: () => footprint_exports3,
+    Pathlights: () => pathlights_exports,
+    logger: () => logger3,
     make: () => make15,
     possibleMoves: () => possibleMoves2,
     tick: () => tick11,
-    type: () => type2
+    type: () => type4
   });
 
   // objects/item.ts
@@ -7924,6 +7915,7 @@
       case "boss":
       case "boss.footprint":
       case "developer.footprint":
+      case "developer.pathlights":
       case "player":
       case "developer":
         return false;
@@ -7947,16 +7939,89 @@
   __name(description, "description");
 
   // objects/traits/footprint.ts
-  function leaveFootprint(position, map, make19) {
+  function leaveFootprint(position, map, make20) {
     const existingFootprint = map.objAt(position, "developer.footprint");
     if (existingFootprint) {
       map.remove(existingFootprint);
     }
-    const footprint = make19(position);
+    const footprint = make20(position);
     map.add([footprint]);
     return footprint;
   }
   __name(leaveFootprint, "leaveFootprint");
+
+  // objects/traits/targeting.ts
+  var targeting_exports = {};
+  __export(targeting_exports, {
+    bfs: () => bfs,
+    pickDirection: () => pickDirection
+  });
+  function pickDirection(target, map, pathway) {
+    if (target.target == null || target.position == null) {
+      const targets = map.objects.filter((x) => story_exports.isStory(x) || coffee_exports.isCoffee(x)).filter((x) => x.position != null);
+      const paths = targets.map(
+        (x) => [x, findTarget(x, map, x.position, target.position)]
+      );
+      target.target = paths[0][0];
+    }
+    if (target.target == null) {
+      return null;
+    }
+    const pathToTarget = findTarget(target.target, map, target.position, target.target.position);
+    map.remove(map.objects.filter(pathway.isPathlight));
+    if (pathToTarget) {
+      map.add(pathToTarget.map((x) => pathway.make(x)));
+      return pathToTarget.length > 0 ? directionTo(target.position, pathToTarget[1]) : null;
+    } else {
+      return null;
+    }
+  }
+  __name(pickDirection, "pickDirection");
+  function findTarget(obj, map, position, target) {
+    return bfs((v) => map.possibleDirections(v, (obj2) => obj2?.type != "wall"), position, target);
+  }
+  __name(findTarget, "findTarget");
+  function bfs(possibleMoves3, start, target) {
+    if (vector_exports.equals(start, target)) {
+      return [];
+    }
+    const queue = [start];
+    const discovered = /* @__PURE__ */ new Set([vector_exports.repr(start)]);
+    const edges = /* @__PURE__ */ new Map();
+    edges.set(vector_exports.repr(start), 0);
+    const predecessors = /* @__PURE__ */ new Map();
+    predecessors.set(vector_exports.repr(start), null);
+    const buildPath = /* @__PURE__ */ __name((goal, root, predecessors2) => {
+      const stack = [goal];
+      let u = predecessors2.get(vector_exports.repr(goal));
+      while (u != root) {
+        stack.push(u);
+        u = predecessors2.get(vector_exports.repr(u));
+      }
+      stack.push(root);
+      let path = stack.reverse();
+      return path;
+    }, "buildPath");
+    while (queue.length) {
+      let v = queue.shift();
+      if (v.x === target.x && v.y === target.y) {
+        return buildPath(target, start, predecessors);
+      }
+      for (const d of possibleMoves3(v)) {
+        {
+          const dd = moveTo(v, d);
+          if (!discovered.has(vector_exports.repr(dd))) {
+            discovered.add(vector_exports.repr(dd));
+            queue.push(dd);
+            edges.set(vector_exports.repr(dd), edges.get(vector_exports.repr(v)) + 1);
+            predecessors.set(vector_exports.repr(dd), v);
+          }
+        }
+      }
+    }
+    return null;
+  }
+  __name(bfs, "bfs");
 
   // objects/traits/speedUp.ts
   var speedUp_exports = {};
@@ -7981,13 +8046,13 @@
   // objects/developer/footprint.ts
   var footprint_exports3 = {};
   __export(footprint_exports3, {
-    make: () => make14,
+    make: () => make13,
     tick: () => tick10,
-    type: () => type
+    type: () => type2
   });
   var LIFETIME2 = 1e3;
-  var type = "developer.footprint";
-  function make14(position) {
+  var type2 = "developer.footprint";
+  function make13(position) {
     return {
       type: "developer.footprint",
       position,
@@ -7996,7 +8061,7 @@
       lifetime: LIFETIME2
     };
   }
-  __name(make14, "make");
+  __name(make13, "make");
   function tick10(obj, map) {
     if (obj.tact > LIFETIME2) {
       map.remove([obj]);
@@ -8007,18 +8072,40 @@
   }
   __name(tick10, "tick");
 
+  // objects/developer/pathlights.ts
+  var pathlights_exports = {};
+  __export(pathlights_exports, {
+    isPathlights: () => isPathlights,
+    make: () => make14,
+    type: () => type3
+  });
+  var type3 = "developer.pathlights";
+  function make14(position) {
+    return {
+      type: "developer.pathlights",
+      position,
+      zIndex: 1
+    };
+  }
+  __name(make14, "make");
+  function isPathlights(obj) {
+    return obj.type === type3;
+  }
+  __name(isPathlights, "isPathlights");
+
   // objects/developer/index.ts
   var import_lodash8 = __toESM(require_lodash());
   var logger3 = make("fellow_developer");
-  var type2 = "developer";
+  var type4 = "developer";
   function make15() {
     return {
-      type: type2,
+      type: type4,
       position: null,
       tact: 0,
       direction: null,
       zIndex: 2,
-      speedUp: false
+      speedUp: false,
+      target: null
     };
   }
   __name(make15, "make");
@@ -8026,44 +8113,7 @@
     speedUp_exports.speedUp(developer, config_default.items.coffee.speedUpDays);
   }
   __name(speedUp2, "speedUp");
-  function pickDirection(position, currentDirection, map) {
-    const moves = possibleMoves2(position, currentDirection, map);
-    const moveIndexAndFootprint = /* @__PURE__ */ __name((move4, i) => {
-      const footprint = map.objAt(moveBy(position, move4), "developer.footprint");
-      return footprint ? { moveIndex: i, footprint } : null;
-    }, "moveIndexAndFootprint");
-    const footprints = import_lodash8.default.compact(moves.map((move4, i) => moveIndexAndFootprint(move4, i)));
-    const footprintWeights = import_lodash8.default.chain(footprints).map((f) => ({
-      moveIndex: f.moveIndex,
-      tact: f.footprint.tact
-    })).sortBy(footprints, (x) => x.tact).reverse().map((x, i) => ({
-      moveIndex: x.moveIndex,
-      weight: config_default.developer.moves.weights.footprints[i]
-    })).keyBy((x) => x.moveIndex).mapValues((x) => x.weight).value();
-    const moveWeights = moves.map((_14) => 1).map((weight, i) => moves[i] == currentDirection ? weight + 3 : weight).map((weight, i) => {
-      return weight + (map.objAt(moveBy(position, moves[i]), "developer.footprint") == null ? config_default.developer.moves.weights.freeSpace : 0);
-    }).map((weight, i) => {
-      return weight + (footprintWeights[i] ?? 0);
-    }).map(
-      (weight, i) => currentDirection && moves[i] == direction_exports.reverse(currentDirection) ? config_default.developer.moves.weights.reverseDirection : weight
-    );
-    if (moves.length > 0) {
-      if (moves.length > 1) {
-        logger3(`moves:      ${moves}`);
-        logger3(`direction:  ${currentDirection}`);
-        logger3(`moveWeight: ${moveWeights}`);
-      }
-      const moveChoice = choice(moves, moveWeights);
-      return moveChoice;
-    } else {
-      return null;
-    }
-  }
-  __name(pickDirection, "pickDirection");
-  function tick11(developer, game) {
-    const effects = [];
-    developer.tact += 1;
-    const events = plan_exports.getEvents(game.plan, game.time.ticks);
+  function processEvents(developer, events, game, effects) {
     for (const event of events) {
       switch (event.type) {
         case "workWeekStarted":
@@ -8071,24 +8121,35 @@
           break;
         case "workWeekEnded":
           game.map.move(developer, null);
+          effects_exports.append(effects, effect_exports.showMessage("Developer: have a nice weekend!", 1e3));
           break;
       }
     }
+  }
+  __name(processEvents, "processEvents");
+  function tick11(developer, game) {
+    const effects = [];
+    developer.tact += 1;
+    const events = plan_exports.getEvents(game.plan, game.time.ticks);
+    processEvents(developer, events, game, effects);
     speedUp_exports.tick(developer, 1);
     if (developer.tact % config_default.developer.moves.ticksPerMove != 0) {
       return effects;
     }
     if (developer.position != null) {
-      const moveChoice = pickDirection(developer.position, developer.direction, game.map);
+      const moveChoice = targeting_exports.pickDirection(developer, game.map, {
+        isPathlight: isPathlights,
+        make: make14
+      });
       if (moveChoice != null) {
         developer.direction = moveChoice;
-        move3(developer, moveBy(developer.position, moveChoice), moveChoice, game.map);
+        move3(developer, moveTo(developer.position, moveChoice), moveChoice, game.map);
       }
     }
     return effects;
   }
   __name(tick11, "tick");
-  function possibleMoves2(pos, currentDirection, map) {
+  function possibleMoves2(pos, map) {
     const possible = map.possibleDirections(
       pos,
       (obj) => !obj || !["wall", "door", "player"].includes(obj.type)
@@ -8100,8 +8161,8 @@
     switch (item.type) {
       case "coffee":
       case "commit":
-        return true;
       case "story":
+        return true;
       case "door":
         return false;
       default:
@@ -8110,6 +8171,9 @@
   }
   __name(canPickup, "canPickup");
   function pickupItem(obj, item, map) {
+    if (item === obj.target) {
+      obj.target = null;
+    }
     map.remove(item);
     switch (item.type) {
       case "coffee":
@@ -8125,14 +8189,16 @@
   }
   __name(pickupItem, "pickupItem");
   function move3(obj, newPos, newDirection, map) {
-    obj.state = { direction: newDirection, tact: 0 };
+    obj.direction = newDirection;
     const item = import_lodash8.default.first(map.at(newPos).filter(isItem));
     if (item != null) {
       if (canPickup(obj, item, map)) {
         pickupItem(obj, item, map);
       }
     }
-    leaveFootprint(obj.position, map, make14);
+    if (obj.position != null) {
+      leaveFootprint(obj.position, map, make13);
+    }
     map.move(obj, newPos);
   }
   __name(move3, "move");
@@ -8153,23 +8219,86 @@
   }
   __name(make16, "make");
 
+  // objects/story.ts
+  var story_exports = {};
+  __export(story_exports, {
+    isStory: () => isStory,
+    make: () => make17,
+    type: () => type5
+  });
+  var type5 = "story";
+  function isStory(obj) {
+    return obj.type === type5;
+  }
+  __name(isStory, "isStory");
+  function make17(position, size2) {
+    return {
+      type: type5,
+      position,
+      size: size2,
+      zIndex: 1,
+      impact: 1,
+      open: false,
+      name: choice(storyNames[size2])
+    };
+  }
+  __name(make17, "make");
+  var storyNames = {
+    medium: [
+      "Implement Dark Mode for Night Owls",
+      "Refactor 'Frankencode' Module",
+      "Add Emoji Support for Error Messages",
+      "Address Complaints About Clashing Color Scheme",
+      "Clarify the Meaning of 'Technical Debt'",
+      "Reduce Loading Time for Image-heavy Pages",
+      "Streamline Checkout Process for Mobile Users",
+      "Update Third-party Libraries to Latest Versions",
+      "Resolve Issue with Form Submission Error Handling",
+      "Integrate Social Media Sharing Buttons"
+    ],
+    small: [
+      "Option to Change Font Size",
+      "Fix Typo in Terms of Service Link",
+      "Update README with Installation Instructions",
+      "Add Loading Spinner for AJAX Requests",
+      "Remove Deprecated Function Calls",
+      "Increase Character Limit for Comments",
+      "Adjust Button Placement for Accessibility",
+      "Minify CSS and JavaScript Files",
+      "Implement CSRF Protection on Forms",
+      "Resolve Issue with Broken Image Links"
+    ],
+    large: [
+      "Revamp User Interface for Modern Look and Feel",
+      "Rewrite Monolithic Codebase into Microservices",
+      "Implement Machine Learning Algorithm for Recommendations",
+      "Redesign Navigation Structure for Improved Usability",
+      "Create Comprehensive Developer Guide",
+      "Conduct Full Accessibility Audit and Remediation",
+      "Implement Caching Strategy for Scalability",
+      "Migrate to OAuth2 for Enhanced Authentication",
+      "Transition to Cloud-based Hosting Environment",
+      "Integrate Multi-language Support Across Platform"
+    ]
+  };
+
   // objects/objects.ts
   var objects_exports = {};
   __export(objects_exports, {
     filter: () => filter
   });
   var import_lodash9 = __toESM(require_lodash());
-  function filter(objs, type4) {
-    return import_lodash9.default.filter(objs, (x) => x.type == type4);
+  function filter(objs, type7) {
+    return import_lodash9.default.filter(objs, (x) => x.type == type7);
   }
   __name(filter, "filter");
 
   // objects/player.ts
   var player_exports = {};
   __export(player_exports, {
-    make: () => make18,
+    make: () => make19,
     tick: () => tick12,
-    type: () => type3
+    type: () => type6
   });
   var import_lodash10 = __toESM(require_lodash());
 
@@ -8177,9 +8306,9 @@
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make17
+    make: () => make18
   });
-  function make17(story) {
+  function make18(story) {
     return {
       type: "story",
       story,
@@ -8188,7 +8317,7 @@
       appliedCommits: 0
     };
   }
-  __name(make17, "make");
+  __name(make18, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -8202,10 +8331,10 @@
 
   // objects/player.ts
   var logger4 = make("player");
-  var type3 = "player";
-  function make18(position) {
+  var type6 = "player";
+  function make19(position) {
     return {
-      type: type3,
+      type: type6,
       zIndex: 1e3,
       direction: null,
       position,
@@ -8218,18 +8347,19 @@
       level: levels_exports.all[0]
     };
   }
-  __name(make18, "make");
+  __name(make19, "make");
   function canMoveOn(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
         switch (obj.type) {
+          case "boss.footprint":
+          case "coffee":
+          case "commit":
+          case "developer.footprint":
+          case "developer.pathlights":
+          case "developer":
           case "door":
           case "story":
-          case "boss.footprint":
-          case "developer.footprint":
-          case "commit":
-          case "coffee":
-          case "developer":
             return true;
           case "player":
           case "wall":
@@ -8405,7 +8535,7 @@
       logger4(`processing: ${JSON.stringify(command)}`);
       switch (command.type) {
         case "move":
-          const newPosition = moveBy(player.position, command.direction);
+          const newPosition = moveTo(player.position, command.direction);
           const obsjAtNewPosition = map.at(newPosition);
           if (canMoveOn(obsjAtNewPosition)) {
             player.direction = command.direction;
@@ -8452,7 +8582,7 @@
     tickFlags(player, ticksPassed);
     processCommands(player, commands, game.map, effects);
     if (player.direction) {
-      const newPosition = moveBy(player.position, player.direction);
+      const newPosition = moveTo(player.position, player.direction);
       const objsAtNewPosition = game.map.at(newPosition);
       if (canMoveOn(objsAtNewPosition)) {
         if (objsAtNewPosition.length > 0) {
@@ -8487,6 +8617,7 @@
             case "wall":
             case "boss":
             case "developer.footprint":
+            case "developer.pathlights":
             case "boss.footprint":
             case "developer":
               break;
@@ -8495,7 +8626,7 @@
           }
         }
         game.map.move(player, newPosition);
-        if (game.map.objAt(moveBy(newPosition, player.direction), "commit") && carriedSomething) {
+        if (game.map.objAt(moveTo(newPosition, player.direction), "commit") && carriedSomething) {
           player.direction = null;
         }
       } else {
