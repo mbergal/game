@@ -4,15 +4,14 @@ import * as Item from "../item"
 import * as Traits from "../traits"
 import * as FootprintTrait from "../traits/footprint"
 import * as Footprint from "./footprint"
-export * as Footprint from "./footprint"
 import * as Pathlights from "./pathlights"
+export * as Footprint from "./footprint"
 export * as Pathlights from "./pathlights"
 
+import config from "@/game/config"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
-import { pickDirection } from "./pickDirection"
-import config from "@/game/config"
 
 export const logger = Logging.make("fellow_developer")
 
