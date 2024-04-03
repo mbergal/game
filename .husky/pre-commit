@@ -1,2 +1,3 @@
 # npm test
+npm run lint-prettier-fix
 # npx lint-staged
