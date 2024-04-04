@@ -1,20 +1,25 @@
-import { Vector } from "../geometry"
+import { Vector } from "@/geometry"
+import config from "@/game/config"
+import { GameObject } from "@/objects"
 
-export interface t {
-    type: "door"
+const type = "door"
+export interface Door {
+    type: typeof type
     position: Vector.t
-    zIndex: 1
+    zIndex: number
     open: boolean
     placed: boolean
 }
 
-export type Door = t
+export function isDoor(obj: GameObject.GameObject): obj is Door {
+    return obj.type === type
+}
 
-export function make(position: Vector.t): t {
+export function make(position: Vector.t): Door {
     return {
-        type: "door",
+        type: type,
         position: position,
-        zIndex: 1,
+        zIndex: config.items.door.zIndex,
         open: false,
         placed: false,
     }

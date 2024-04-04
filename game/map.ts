@@ -58,13 +58,17 @@ export class GameMap {
         this.add([obj])
     }
 
-    getRandomEmptyLocation(): Vector.t {
+    getRandomLocation(f: (map: GameMap, position: Vector.Vector) => boolean): Vector.t {
         const [x, y] = check(
             () => [random.int(0, this.width), random.int(0, this.height)],
-            ([x, y]) => this.at({ x, y }).length == 0,
+            ([x, y]) => f(this, { x, y }),
         )
 
         return { x, y }
+    }
+
+    getRandomEmptyLocation(): Vector.t {
+        return this.getRandomLocation(Predicates.empty)
     }
 
     at(v: Vector.t): GameObject.t[] {
@@ -120,6 +124,18 @@ export class GameMap {
         return p
     }
 
+    possibleDirections2(
+        position: Vector.t,
+        canMoveOn: (position: Vector.Vector, map: GameMap) => boolean,
+    ): Direction.t[] {
+        const p: Direction.t[] = []
+        for (const d of Direction.all) {
+            const newPos = moveTo(position, d)
+            if (canMoveOn(newPos, this)) p.push(d)
+        }
+        return p
+    }
+
     toString(): string {
         let s = "\n"
         for (const y of _.range(this.height)) {
@@ -152,6 +168,12 @@ export function directionTo(
         Direction.all.filter((x) => map.someObjectsAt(moveTo(position, x), objType)),
     )
     return dd.length ? dd[0] : null
+}
+
+export namespace Predicates {
+    export function empty(map: GameMap, position: Vector.Vector) {
+        return map.at(position).length == 0
+    }
 }
 
 function repr(objs: GameObject.t[]) {

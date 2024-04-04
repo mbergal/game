@@ -1,14 +1,13 @@
+import { GameObject } from "."
 import { Vector } from "../geometry"
 
-export interface t {
+export interface Commit {
     type: "commit"
     position: Vector.t
     zIndex: number
     open: false
     hash: string
 }
-
-export interface Commit extends t {}
 
 export function make(position: Vector.t): Commit {
     return {
@@ -18,6 +17,10 @@ export function make(position: Vector.t): Commit {
         open: false,
         hash: generateId(8),
     }
+}
+
+export function isCommit(obj: GameObject.GameObject): obj is Commit {
+    return obj.type === "commit"
 }
 
 function byteToHex(byte: any) {

@@ -41,7 +41,11 @@ export type Config = {
     }
     items: {
         coffee: {
+            zIndex: number
             speedUpDays: number
+        }
+        door: {
+            zIndex: number
         }
     }
 }
@@ -82,14 +86,18 @@ const config: Config = {
         interval: 40,
         maxItems: 20,
         frequencies: {
-            door: 1,
+            door: 3,
             commit: 10,
             coffee: 1,
         },
     },
     items: {
         coffee: {
+            zIndex: 2,
             speedUpDays: 1,
+        },
+        door: {
+            zIndex: 2,
         },
     },
 }

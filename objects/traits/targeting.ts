@@ -1,56 +1,91 @@
-import { GameMap } from "@/game"
-import { Coffee, GameObject, Story } from "@/objects"
+import { Coffee, Commit, GameObject, Story } from "@/objects"
 
+import { GameMap } from "@/game"
 import { Direction, Vector, directionTo, moveTo } from "@/geometry"
 import _ from "lodash"
 
-export type Trait = { position: Vector.Vector | null; target: GameObject.GameObject | null }
+export type Targeting = {
+    position: Vector.Vector | null
+    target: GameObject.GameObject | null
+}
 
 export interface Pathway {
     make(position: Vector.Vector): GameObject.GameObject
     isPathlight(obj: GameObject.GameObject): obj is GameObject.GameObject
 }
 
+function isPresent<T>(input: null | undefined | T): input is T {
+    return input != null
+}
+
+const findTargets = (objs: GameObject.GameObject[]) => {
+    return objs
+        .filter((x) => Story.isStory(x) || Coffee.isCoffee(x) || Commit.isCommit(x))
+        .filter((x) => x.position != null)
+}
+
+const findTargetPaths = (
+    targets: GameObject.GameObject[],
+    startPosition: Vector.Vector,
+    map: GameMap.GameMap,
+    canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
+) => {
+    return targets
+        .map((x) => ({
+            target: x,
+            path: findPath(x, map, x.position!, startPosition, canMoveOn),
+        }))
+        .map((x) => (x.path != null ? { target: x.target, path: x.path } : null))
+        .filter(isPresent)
+}
+
 export function pickDirection(
-    target: Trait,
+    target: Targeting,
     map: GameMap.GameMap,
     pathway: Pathway,
+    canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Direction.t | null {
-    if (target.target == null || target.position == null) {
-        const targets = map.objects
-            .filter((x) => Story.isStory(x) || Coffee.isCoffee(x))
-            .filter((x) => x.position != null)
-
-        const paths = targets.map((x) => ({
-            target: x,
-            path: findTarget(x, map, x.position!, target.position!),
-        }))
-        const path = _.minBy(paths, (x) => (x.path ? x.path.length : Infinity))
+    if (target.target == null || target.target.position == null) {
+        const targets = findTargets(map.objects)
+        const targetPaths = findTargetPaths(targets, target.position!, map, canMoveOn)
+        const path = _.minBy(targetPaths, (x) => (x.path ? x.path.length : Infinity))
         target.target = path?.target ?? null
     }
 
-    if (target.target == null) {
+    if (target.target == null || target.target.position == null) {
         return null
     }
 
-    const pathToTarget = findTarget(target.target, map, target.position!, target.target.position!)
+    const pathToTarget = findPath(
+        target.target,
+        map,
+        target.position!,
+        target.target.position!,
+        canMoveOn,
+    )
 
     map.remove(map.objects.filter(pathway.isPathlight))
-    if (pathToTarget) {
-        map.add(pathToTarget.map((x) => pathway.make(x)))
-        return pathToTarget.length > 0 ? directionTo(target.position!, pathToTarget[1]) : null
+    if (pathToTarget != null) {
+        if (pathToTarget) {
+            map.add(pathToTarget.map((x) => pathway.make(x)))
+            return pathToTarget.length > 0 ? directionTo(target.position!, pathToTarget[1]) : null
+        } else {
+            return null
+        }
     } else {
+        target.target = null
         return null
     }
 }
 
-function findTarget(
+function findPath(
     obj: GameObject.GameObject,
     map: GameMap.GameMap,
     position: Vector.Vector,
     target: Vector.Vector,
+    canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Vector.Vector[] | null {
-    return bfs((v) => map.possibleDirections(v, (obj) => obj?.type != "wall"), position, target)
+    return bfs((v) => map.possibleDirections2(v, canMoveOn), position, target)
 }
 
 export function bfs(

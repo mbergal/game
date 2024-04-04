@@ -1,10 +1,10 @@
 import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
 import { Direction, Vector, moveTo } from "@/geometry"
-import * as Item from "../item"
-import * as Traits from "../traits"
-import * as FootprintTrait from "../traits/footprint"
+import { Item, Traits } from "@/objects"
+
 import * as Footprint from "./footprint"
 import * as Pathlights from "./pathlights"
+
 export * as Footprint from "./footprint"
 export * as Pathlights from "./pathlights"
 
@@ -18,7 +18,7 @@ export const logger = Logging.make("fellow_developer")
 export const type = "developer"
 
 export type Developer = Traits.SpeedUp.SpeedUp &
-    Traits.Targeting.Trait & {
+    Traits.Targeting.Targeting & {
         type: typeof type
         position: Vector.Vector | null
         tact: number
@@ -74,11 +74,15 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     }
 
     if (developer.position != null) {
-        const moveChoice = Traits.Targeting.pickDirection(developer, game.map, {
-            isPathlight: Pathlights.isPathlights,
-            make: Pathlights.make,
-        })
-        // const moveChoice = pickDirection(developer.position, developer.direction, game.map)
+        const moveChoice = Traits.Targeting.pickDirection(
+            developer,
+            game.map,
+            {
+                isPathlight: Pathlights.isPathlights,
+                make: Pathlights.make,
+            },
+            canMoveOn,
+        )
         if (moveChoice != null) {
             developer.direction = moveChoice
             move(developer, moveTo(developer.position, moveChoice), moveChoice, game.map)
@@ -94,6 +98,10 @@ export function possibleMoves(pos: Vector.t, map: GameMap.GameMap): Direction.t[
         (obj) => !obj || !["wall", "door", "player"].includes(obj.type),
     )
     return possible
+}
+
+export function canMoveOn(position: Vector.Vector, map: GameMap.GameMap): boolean {
+    return map.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type))
 }
 
 function canPickup(obj: Developer, item: Item.Item, map: GameMap.GameMap): boolean {
@@ -137,7 +145,7 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
         }
 
     if (obj.position != null) {
-        FootprintTrait.leaveFootprint(obj.position, map, Footprint.make)
+        Traits.Footprint.leaveFootprint(obj.position, map, Footprint.make)
     }
 
     map.move(obj, newPos)

@@ -1,10 +1,10 @@
+import { GameMap } from "@/game"
+import config from "@/game/config"
+
+import { Vector, moveTo, Direction } from "@/geometry"
+import { Player } from "@/objects"
+import * as random from "@/utils/random"
 import _ from "lodash"
-import { GameMap } from "../../game"
-import config from "../../game/config"
-import { Vector, moveTo } from "../../geometry"
-import * as Direction from "../../geometry/direction"
-import * as random from "../../utils/random"
-import { Player } from "../player"
 import * as Footprint from "./footprint"
 export * as Footprint from "./footprint"
 
@@ -47,12 +47,9 @@ BOSS_WEIGHTS = {
     jump: 5.0,
 }
 
-export function make(): Boss {
+export function make(position: Vector.Vector): Boss {
     return {
-        position: {
-            x: 0,
-            y: 0,
-        },
+        position: position,
         type: "boss",
         zIndex: 10,
         state: { type: "stopped", previous_direction: null },
@@ -72,7 +69,15 @@ export function possibleMoves(
     map: GameMap.GameMap,
 ): MoveActions {
     const result: MoveActions = {}
-    const possible = map.possibleDirections(pos, "wall")
+    const possible = map.possibleDirections(
+        pos,
+        (obj) =>
+            obj != null &&
+            obj.type == "wall" &&
+            obj.position != null &&
+            obj.position.y > 1 &&
+            obj.position.y < map.height - 1,
+    )
     const turns = _.difference(possible, [
         currentDirection,
         Direction.reverse(currentDirection),
@@ -113,7 +118,7 @@ function move(obj: Boss, newPos: Vector.t, newDirection: Direction.t, map: GameM
     map.move(obj, newPos)
 }
 
-function pipPlayer(obj: Boss, player: Player) {
+function pipPlayer(obj: Boss, player: Player.Player) {
     player.hrTaskTact = 0
 }
 
@@ -184,7 +189,7 @@ export function tick(boss: Boss, map: GameMap.GameMap) {
                     _.compact([moves.back ? "back" : null, moves.jump ? "jump" : null]),
                     _.compact([
                         moves.back ? BOSS_WEIGHTS.back : null,
-                        BOSS_WEIGHTS.jump ? 5 : null,
+                        moves.jump ? BOSS_WEIGHTS.jump : null,
                     ]),
                 )
                 switch (move_choice) {

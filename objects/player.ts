@@ -171,7 +171,10 @@ function pickItem(
             newItem.open = true
             dropCarriedItem(player, game, effects)
             player.item = newItem
-            effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
+            Effects.append(
+                effects,
+                Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000),
+            )
             return true
         case "coffee":
             dropCarriedItem(player, game, effects)

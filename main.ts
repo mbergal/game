@@ -1,7 +1,7 @@
 import { Boss, Developer, Player } from "@/objects"
 import _ from "lodash"
 import { Game, GameStorage, Intro, Plan } from "./game"
-
+import * as random from "@/utils/random"
 import { Vector } from "./geometry"
 
 import * as MazeGenerator from "./generator"
@@ -23,9 +23,22 @@ export function main() {
     const plan: Plan.Plan = Plan.generatePlan(0)
     let game: Game.Game = Game.make(MAZE_SIZE, plan)
 
-    const boss: Boss.Boss = Boss.make()
-
     MazeGenerator.maze(MAZE_SIZE, game)
+
+    const boss: Boss.Boss = Boss.make(
+        game.map.getRandomLocation((map, position) => {
+            const objs = map.at(position)
+            return (
+                objs.length > 0 &&
+                objs.every(
+                    (obj) =>
+                        obj.type === "wall" &&
+                        obj.position.y > 1 &&
+                        obj.position.y < game.map.height - 1,
+                )
+            )
+        }),
+    )
 
     game.map.add([boss])
 

@@ -100,7 +100,7 @@ function showTask(game: Game.Game): string {
     if (task != null) {
         switch (task.type) {
             case "story":
-                return `Story ${task.appliedCommits}/${task.neededCommits}`
+                return `|Story ${task.appliedCommits}/${task.neededCommits}`
         }
     }
     return ""
@@ -119,11 +119,12 @@ function isVisible(obj: GameObject.t) {
         case "commit":
         case "door":
         case "developer":
-        case "developer.pathlights":
             return true
         case "boss.footprint":
         case "developer.footprint":
             return false
+        case "developer.pathlights":
+            return true
         default:
             assertUnreachable(obj)
     }
