@@ -1,7 +1,7 @@
 import { GameMap } from "@/game"
 import config from "@/game/config"
 
-import { Vector, moveTo, Direction } from "@/geometry"
+import { Direction, Vector, moveTo } from "@/geometry"
 import { Player } from "@/objects"
 import * as random from "@/utils/random"
 import _ from "lodash"

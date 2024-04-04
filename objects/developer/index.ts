@@ -77,10 +77,7 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
         const moveChoice = Traits.Targeting.pickDirection(
             developer,
             game.map,
-            {
-                isPathlight: Pathlights.isPathlights,
-                make: Pathlights.make,
-            },
+            Pathlights,
             canMoveOn,
         )
         if (moveChoice != null) {
@@ -93,9 +90,8 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
 }
 
 export function possibleMoves(pos: Vector.t, map: GameMap.GameMap): Direction.t[] {
-    const possible = map.possibleDirections(
-        pos,
-        (obj) => !obj || !["wall", "door", "player"].includes(obj.type),
+    const possible = map.possibleDirections(pos, (position, map) =>
+        map.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type)),
     )
     return possible
 }

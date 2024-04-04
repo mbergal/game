@@ -1,5 +1,5 @@
 import { expect, test, describe } from "vitest"
-import { GameMap } from "../../game/map"
+import { GameMap } from "@/game"
 import _ from "lodash"
 import { Wall } from "../../objects/wall"
 import { loadMap } from "../utils"
@@ -17,7 +17,7 @@ describe("forks", () => {
         |   |   |
         ---------
         `)
-        expect(map.possibleDirections({ x: 0, y: 0 }, "wall")).toEqual({
+        expect(map.possibleDirections({ x: 0, y: 0 }, GameMap.Predicates.has("wall"))).toEqual({
             down: {
                 x: 0,
                 y: 1,

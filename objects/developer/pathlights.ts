@@ -16,6 +16,6 @@ export function make(position: Vector.Vector): Pathlights {
     }
 }
 
-export function isPathlights(obj: any): obj is Pathlights {
+export function isPathlight(obj: any): obj is Pathlights {
     return obj.type === type
 }

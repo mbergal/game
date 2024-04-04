@@ -345,7 +345,7 @@ export function tick(
                         }
                         break
                     case "story":
-                        const task: StoryTask.t = StoryTask.make(obj)
+                        const task: StoryTask.Story = StoryTask.make(obj)
 
                         if (canTakeTask(task, player)) {
                             takeTask(player, task, game)

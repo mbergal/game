@@ -6125,40 +6125,6 @@
     make: () => make2
   });
 
-  // game/effects.ts
-  var effects_exports = {};
-  __export(effects_exports, {
-    append: () => append
-  });
-  var import_lodash = __toESM(require_lodash());
-  function append(effects, other) {
-    if (!import_lodash.default.isArray(other)) {
-      other = [other];
-    }
-    for (const effect of other) {
-      effects.push(effect);
-    }
-  }
-  __name(append, "append");
-
-  // game/effect.ts
-  var effect_exports = {};
-  __export(effect_exports, {
-    addImpact: () => addImpact,
-    showMessage: () => showMessage
-  });
-  function addImpact(impact) {
-    return {
-      type: "addImpact",
-      impact
-    };
-  }
-  __name(addImpact, "addImpact");
-  function showMessage(text, ttl) {
-    return { type: "showMessage", message: { text, ttl } };
-  }
-  __name(showMessage, "showMessage");
-
   // utils/logging.ts
   function setIsEnabled(f) {
     isEnabled = f;
@@ -6179,99 +6145,30 @@
   var isEnabled = /* @__PURE__ */ __name(() => true, "isEnabled");
   var tick = 0;
 
-  // game/levels.ts
-  var levels_exports = {};
-  __export(levels_exports, {
-    all: () => all,
-    level: () => level
-  });
-  var import_lodash2 = __toESM(require_lodash());
-  var all = [
-    {
-      name: "Engineer I",
-      rate: 5,
-      impact: 2
-    },
-    {
-      name: "Engineer II",
-      rate: 30,
-      impact: 3
-    },
-    {
-      name: "Engineer III",
-      rate: 40,
-      impact: 4
-    },
-    {
-      name: "Senior Engineer I",
-      rate: 50,
-      impact: 5
-    },
-    {
-      name: "Senior Engineer II",
-      rate: 60,
-      impact: 6
-    },
-    {
-      name: "Engineering Lead",
-      rate: 70,
-      impact: 7
-    },
-    {
-      name: "Staff Engineer I",
-      rate: 80,
-      impact: 8
-    },
-    {
-      name: "Staff Engineer II",
-      rate: 90,
-      impact: 9
-    },
-    {
-      name: "Principal Engineer",
-      rate: 100,
-      impact: 10
-    }
-  ];
-  function level(impact) {
-    let total = 0;
-    for (const level2 of all) {
-      total += level2.impact;
-      if (total >= impact) {
-        return level2;
-      }
-    }
-    return import_lodash2.default.last(all);
-  }
-  __name(level, "level");
-
   // game/performance_review.ts
   var logger = make("performance_review");
   function generatePlan(startTick) {
     const plan2 = make2();
-    addEvent(plan2, startTick + config_default.dayTicks * 14, { type: "performanceReview" });
     return plan2;
   }
   __name(generatePlan, "generatePlan");
   function tick2(game) {
     const effects = [];
-    const events = game.plan.get(game.time.ticks);
-    if (events) {
-      for (const event of events) {
-        switch (event.type) {
-          case "performanceReview":
-            logger("Performance review");
-            game.player.level = level(game.score.impact);
-            append(effects, showMessage("Performance review", 3e3));
-        }
-      }
+    const newLevel = levels_exports.level(game.score.impact);
+    if (newLevel > game.player.level) {
+      game.player.level = newLevel;
+      effects_exports.append(
+        effects,
+        effect_exports.showMessage(`You've been promoted Level up! ${game.player.level}`, 3e3)
+      );
     }
+    game.player.level = levels_exports.level(game.score.impact);
     return effects;
   }
   __name(tick2, "tick");
 
   // game/sprint.ts
-  var import_lodash3 = __toESM(require_lodash());
+  var import_lodash2 = __toESM(require_lodash());
 
   // utils/utils.ts
   function assertUnreachable(x) {
@@ -6279,8 +6176,42 @@
   }
   __name(assertUnreachable, "assertUnreachable");
 
+  // game/effect.ts
+  var effect_exports = {};
+  __export(effect_exports, {
+    addImpact: () => addImpact,
+    showMessage: () => showMessage
+  });
+  function addImpact(impact) {
+    return {
+      type: "addImpact",
+      impact
+    };
+  }
+  __name(addImpact, "addImpact");
+  function showMessage(text, ttl) {
+    return { type: "showMessage", message: { text, ttl } };
+  }
+  __name(showMessage, "showMessage");
+
+  // game/effects.ts
+  var effects_exports = {};
+  __export(effects_exports, {
+    append: () => append
+  });
+  var import_lodash = __toESM(require_lodash());
+  function append(effects, other) {
+    if (!import_lodash.default.isArray(other)) {
+      other = [other];
+    }
+    for (const effect of other) {
+      effects.push(effect);
+    }
+  }
+  __name(append, "append");
+
   // game/day_of_week.ts
-  var all2 = [
+  var all = [
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -6293,7 +6224,7 @@
   // game/game_time.ts
   function make3(ticks) {
     const day = Math.floor(ticks / config_default.dayTicks);
-    const dayOfWeek = all2[day % 7];
+    const dayOfWeek = all[day % 7];
     return {
       ticks,
       day,
@@ -6350,7 +6281,7 @@
       ...make3(startTick)
     });
     startTick += 1;
-    for (const i of import_lodash3.default.range(4)) {
+    for (const i of import_lodash2.default.range(4)) {
       const day = Math.floor(startTick / DAY);
       sprintDay += 1;
       addEvent2({
@@ -6373,7 +6304,7 @@
     startTick += 2 * DAY + 1;
     addEvent2({ type: "weekendEnd" });
     addEvent2({ type: "workWeekStarted", ...make3(startTick) });
-    for (const i of import_lodash3.default.range(4)) {
+    for (const i of import_lodash2.default.range(4)) {
       sprintDay += 1;
       addEvent2({
         type: "sprintDayStart",
@@ -6471,7 +6402,7 @@
   __name(tick3, "tick");
 
   // game/plan.ts
-  var import_lodash4 = __toESM(require_lodash());
+  var import_lodash3 = __toESM(require_lodash());
   function make2() {
     return /* @__PURE__ */ new Map();
   }
@@ -6499,13 +6430,13 @@
   function generatePlan3(startDay) {
     let plan2 = make2();
     let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+    for (const i in import_lodash3.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
       const r = generatePlan2(startTick);
       append2(plan2, r[0]);
       startTick = r[1];
     }
     startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash4.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+    for (const i in import_lodash3.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
       const pplan = generatePlan(startTick);
       append2(plan2, pplan);
       startTick += config_default.dayTicks * 14;
@@ -6622,7 +6553,6 @@
     Predicates: () => Predicates,
     directionTo: () => directionTo2
   });
-  var _7 = __toESM(require_lodash());
 
   // geometry/vector.ts
   var vector_exports = {};
@@ -6664,7 +6594,7 @@
   // geometry/direction.ts
   var direction_exports = {};
   __export(direction_exports, {
-    all: () => all3,
+    all: () => all2,
     reverse: () => reverse,
     toRose: () => toRose
   });
@@ -6689,7 +6619,7 @@
     return rose;
   }
   __name(toRose, "toRose");
-  var all3 = ["left", "right", "down", "up"];
+  var all2 = ["left", "right", "down", "up"];
 
   // geometry/index.ts
   function moveTo(vector, direction) {
@@ -6726,8 +6656,11 @@
   }
   __name(directionTo, "directionTo");
 
+  // game/map.ts
+  var _6 = __toESM(require_lodash());
+
   // generator.ts
-  var import_lodash5 = __toESM(require_lodash());
+  var import_lodash4 = __toESM(require_lodash());
 
   // room.ts
   function upperDoors(room) {
@@ -6757,7 +6690,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = import_lodash5.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
+    const inner_walls = import_lodash4.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
@@ -6781,9 +6714,9 @@
   }
   __name(maze, "maze");
   function roomWalls(args) {
-    const room_walls = import_lodash5.default.flatMap(
-      import_lodash5.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash5.default.flatMap(
+    const room_walls = import_lodash4.default.flatMap(
+      import_lodash4.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash4.default.flatMap(
           check(
             () => ints(
               0,
@@ -6802,7 +6735,7 @@
     for (let row = 3; row <= map.height - 2; row += 2) {
       const rooms = getRowRooms(map, row);
       makeRoomDoors(map, rooms);
-      const doors = import_lodash5.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      const doors = import_lodash4.default.map(rooms, (x) => x.doors).flatMap((x) => x);
       for (const door of doors) {
         const objs = map.at(door);
         map.remove(objs);
@@ -6816,7 +6749,7 @@
       [6, 1, 2],
       [100, 2, 5]
     ];
-    const min_max = import_lodash5.default.find(a, (x) => x[0] > room.length);
+    const min_max = import_lodash4.default.find(a, (x) => x[0] > room.length);
     return int(min_max[1], min_max[2]);
   }
   __name(desiredNumOfDoors, "desiredNumOfDoors");
@@ -6874,9 +6807,9 @@
   __name(getRowRooms, "getRowRooms");
   function proper_distance(walls) {
     const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash5.default.sortBy(walls);
-    const distances = import_lodash5.default.chain(import_lodash5.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
-    const result = import_lodash5.default.every(
+    const sorted_walls = import_lodash4.default.sortBy(walls);
+    const distances = import_lodash4.default.chain(import_lodash4.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash4.default.every(
       distances.map((x) => x[1] - x[0]),
       (x) => x > 2
     );
@@ -6908,9 +6841,9 @@
     constructor(width, height, objs) {
       this.width = width;
       this.height = height;
-      const a = _7.range(1, 21);
-      this.cells = _7.chunk(
-        _7.range(width * height).map((x) => []),
+      const a = _6.range(1, 21);
+      this.cells = _6.chunk(
+        _6.range(width * height).map((x) => []),
         width
       );
       this.objects = [];
@@ -6923,16 +6856,16 @@
         if (obj.position != null) {
           const objs2 = this.cells[obj.position.y][obj.position.x];
           objs2.push(obj);
-          this.cells[obj.position.y][obj.position.x] = _7.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+          this.cells[obj.position.y][obj.position.x] = _6.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
         }
       }
     }
     remove(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.filter((x) => _7.indexOf(objs_, x) == -1);
+      this.objects = this.objects.filter((x) => _6.indexOf(objs_, x) == -1);
       for (const obj of objs_) {
         if (obj.position) {
-          this.cells[obj.position.y][obj.position.x] = _7.pull(
+          this.cells[obj.position.y][obj.position.x] = _6.pull(
             this.cells[obj.position.y][obj.position.x],
             obj
           );
@@ -6967,13 +6900,13 @@
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs.length > 0 ? _7.some(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
+      return objs.length > 0 ? _6.some(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
     everyObjectAt(v, include) {
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs.length > 0 ? _7.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
+      return objs.length > 0 ? _6.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
     possibleDirections(position, check2) {
       const p = [];
@@ -6995,8 +6928,8 @@
     }
     toString() {
       let s2 = "\n";
-      for (const y of _7.range(this.height)) {
-        for (const x of _7.range(this.width))
+      for (const y of _6.range(this.height)) {
+        for (const x of _6.range(this.width))
           s2 += repr2(this.cells[y][x]);
         s2 += "\n";
       }
@@ -7017,7 +6950,7 @@
   __name(_GameMap, "GameMap");
   var GameMap = _GameMap;
   function directionTo2(position, map, objType) {
-    const dd = _7.compact(
+    const dd = _6.compact(
       direction_exports.all.filter((x) => map.someObjectsAt(moveTo(position, x), objType))
     );
     return dd.length ? dd[0] : null;
@@ -7288,7 +7221,12 @@
       itemGenerator: game.itemGenerator,
       commands: game.commands,
       messages: game.messages,
-      messageTact: game.messageTact
+      messageTact: game.messageTact,
+      time: game.time,
+      sprint: game.sprint,
+      plan: game.plan,
+      messageStartTime: game.messageStartTime,
+      collapse: game.collapse
     };
   }
   __name(toJson, "toJson");
@@ -7413,6 +7351,9 @@
       const player = map_.objects.find(
         (x) => x.type === "player"
       );
+      const developer = map_.objects.find(
+        (x) => x.type === "developer"
+      );
       return {
         time,
         score,
@@ -7458,7 +7399,7 @@
     updateScreen: () => updateScreen,
     windows: () => windows
   });
-  var import_lodash6 = __toESM(require_lodash());
+  var import_lodash5 = __toESM(require_lodash());
 
   // ui/screens.ts
   function render2(chars) {
@@ -7538,12 +7479,12 @@
   __name(_Window, "Window");
   var Window = _Window;
   function isFocused(window2) {
-    return import_lodash6.default.last(windows) === window2;
+    return import_lodash5.default.last(windows) === window2;
   }
   __name(isFocused, "isFocused");
   var windows = [];
   function focused() {
-    return import_lodash6.default.last(windows) ?? null;
+    return import_lodash5.default.last(windows) ?? null;
   }
   __name(focused, "focused");
   function updateScreen() {
@@ -7638,6 +7579,72 @@
   };
   __name(_Window2, "Window");
   var Window2 = _Window2;
+
+  // game/levels.ts
+  var levels_exports = {};
+  __export(levels_exports, {
+    all: () => all3,
+    level: () => level
+  });
+  var import_lodash6 = __toESM(require_lodash());
+  var all3 = [
+    {
+      name: "Engineer I",
+      rate: 5,
+      impact: 2
+    },
+    {
+      name: "Engineer II",
+      rate: 30,
+      impact: 3
+    },
+    {
+      name: "Engineer III",
+      rate: 40,
+      impact: 4
+    },
+    {
+      name: "Senior Engineer I",
+      rate: 50,
+      impact: 5
+    },
+    {
+      name: "Senior Engineer II",
+      rate: 60,
+      impact: 6
+    },
+    {
+      name: "Engineering Lead",
+      rate: 70,
+      impact: 7
+    },
+    {
+      name: "Staff Engineer I",
+      rate: 80,
+      impact: 8
+    },
+    {
+      name: "Staff Engineer II",
+      rate: 90,
+      impact: 9
+    },
+    {
+      name: "Principal Engineer",
+      rate: 100,
+      impact: 10
+    }
+  ];
+  function level(impact) {
+    let total = 0;
+    for (const level2 of all3) {
+      total += level2.impact;
+      if (total >= impact) {
+        return level2;
+      }
+    }
+    return import_lodash6.default.last(all3);
+  }
+  __name(level, "level");
 
   // game/messages.ts
   var messages_exports = {};
@@ -7964,7 +7971,7 @@
   // objects/developer/pathlights.ts
   var pathlights_exports = {};
   __export(pathlights_exports, {
-    isPathlights: () => isPathlights,
+    isPathlight: () => isPathlight,
     make: () => make14,
     type: () => type3
   });
@@ -7977,10 +7984,10 @@
     };
   }
   __name(make14, "make");
-  function isPathlights(obj) {
+  function isPathlight(obj) {
     return obj.type === type3;
   }
-  __name(isPathlights, "isPathlights");
+  __name(isPathlight, "isPathlight");
 
   // objects/developer/index.ts
   var import_lodash8 = __toESM(require_lodash());
@@ -8029,10 +8036,7 @@
       const moveChoice = traits_exports.Targeting.pickDirection(
         developer,
         game.map,
-        {
-          isPathlight: isPathlights,
-          make: make14
-        },
+        pathlights_exports,
         canMoveOn
       );
       if (moveChoice != null) {
@@ -8437,8 +8441,8 @@
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
-      append(effects, addImpact(task.impact));
-      append(effects, showMessage(`Finished ${task.story.name}`, 30));
+      effects_exports.append(effects, effect_exports.addImpact(task.impact));
+      effects_exports.append(effects, effect_exports.showMessage(`Finished ${task.story.name}`, 3e3));
       player.task = null;
     }
     return effects;
@@ -8790,7 +8794,7 @@
         this.processKey(event);
       };
       this.interval = this.setInterval(() => {
-        game_exports.tick(game);
+        game_exports.tick(this.game);
         windows_exports.updateScreen();
       }, config_default.tickInterval);
     }
@@ -8823,9 +8827,11 @@
           save2(this.game, this.storage);
           break;
         case "l": {
+          const now = this.game.time.ticks;
           const loaded = load2(this.storage);
           if (loaded != null) {
             this.game = loaded;
+            this.game.loadedAt = now;
           }
           break;
         }

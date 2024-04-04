@@ -1,14 +1,17 @@
+import { Direction, Vector, moveTo } from "@/geometry"
 import * as _ from "lodash"
-import { Vector, Direction, moveTo } from "../geometry"
 
-import * as random from "../utils/random"
-import { GameObject } from "../objects"
-import { check } from "../generator"
+import { check } from "@/generator"
+import { GameObject } from "@/objects"
+import * as random from "@/utils/random"
 
 export class GameMap {
     width: number
     height: number
     cells: GameObject.t[][][]
+    /**
+     * List of objects in the game including ones that don't have a position
+     */
     objects: GameObject.t[]
 
     constructor(width: number, height: number, objs: GameObject.t[]) {
@@ -23,7 +26,14 @@ export class GameMap {
         this.add(objs)
     }
 
-    add(objs: GameObject.t | GameObject.t[]) {
+    /**
+     * Add objects to the map
+     * * If the object has a position, it will be added to the map cells
+     * * If the object doesn't have a position, it will be added to the list of objects
+     *
+     * @param objs - Object or list of objects to add to the map
+1     */
+    add(objs: GameObject.t | GameObject.t[]): void {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.concat(objs_)
         for (const obj of objs_) {
@@ -38,6 +48,10 @@ export class GameMap {
         }
     }
 
+    /**
+     * Remove objects from the map
+     * * If the object has a position, it will be removed from the map cells
+     */
     remove(objs: GameObject.t | GameObject.t[]) {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
@@ -112,19 +126,19 @@ export class GameMap {
               : false
     }
 
-    possibleDirections(
-        position: Vector.t,
-        check: GameObject.Type | ((obj: GameObject.t | null) => boolean),
-    ): Direction.t[] {
-        const p: Direction.t[] = []
-        for (const d of Direction.all) {
-            const newPos = moveTo(position, d)
-            if (this.everyObjectAt(newPos, check)) p.push(d)
-        }
-        return p
-    }
+    // possibleDirections(
+    //     position: Vector.t,
+    //     check: GameObject.Type | ((obj: GameObject.t | null) => boolean),
+    // ): Direction.t[] {
+    //     const p: Direction.t[] = []
+    //     for (const d of Direction.all) {
+    //         const newPos = moveTo(position, d)
+    //         if (this.everyObjectAt(newPos, check)) p.push(d)
+    //     }
+    //     return p
+    // }
 
-    possibleDirections2(
+    possibleDirections(
         position: Vector.t,
         canMoveOn: (position: Vector.Vector, map: GameMap) => boolean,
     ): Direction.t[] {
@@ -173,6 +187,9 @@ export function directionTo(
 export namespace Predicates {
     export function empty(map: GameMap, position: Vector.Vector) {
         return map.at(position).length == 0
+    }
+    export function has(objType: GameObject.Type) {
+        return (position: Vector.Vector, map: GameMap) => map.someObjectsAt(position, objType)
     }
 }
 

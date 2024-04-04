@@ -66,6 +66,11 @@ export function toJson(game: Game): object {
         commands: game.commands,
         messages: game.messages,
         messageTact: game.messageTact,
+        time: game.time,
+        sprint: game.sprint,
+        plan: game.plan,
+        messageStartTime: game.messageStartTime,
+        collapse: game.collapse,
     }
 }
 
@@ -214,6 +219,9 @@ export function load(storage: GameStorage.GameStorage): Game | null {
         const player = map_.objects.find<Player.Player>(
             (x): x is Player.Player => x.type === "player",
         )
+        const developer = map_.objects.find<Developer.Developer>(
+            (x): x is Developer.Developer => x.type === "developer",
+        )
         return {
             time: time,
             score: score,
@@ -224,6 +232,7 @@ export function load(storage: GameStorage.GameStorage): Game | null {
             commands: commands,
             map: map_,
             player: player,
+            developer: developer,
             plan: plan,
             messageStartTime: messageStartTime,
             collapse: collapse,

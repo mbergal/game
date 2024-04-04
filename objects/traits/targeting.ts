@@ -1,4 +1,4 @@
-import { Coffee, Commit, GameObject, Story } from "@/objects"
+import { Coffee, Commit, GameObject, Story, Pathlight } from "@/objects"
 
 import { GameMap } from "@/game"
 import { Direction, Vector, directionTo, moveTo } from "@/geometry"
@@ -7,11 +7,6 @@ import _ from "lodash"
 export type Targeting = {
     position: Vector.Vector | null
     target: GameObject.GameObject | null
-}
-
-export interface Pathway {
-    make(position: Vector.Vector): GameObject.GameObject
-    isPathlight(obj: GameObject.GameObject): obj is GameObject.GameObject
 }
 
 function isPresent<T>(input: null | undefined | T): input is T {
@@ -42,7 +37,7 @@ const findTargetPaths = (
 export function pickDirection(
     target: Targeting,
     map: GameMap.GameMap,
-    pathway: Pathway,
+    pathway: Pathlight.Pathlight,
     canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Direction.t | null {
     if (target.target == null || target.target.position == null) {
@@ -85,7 +80,7 @@ function findPath(
     target: Vector.Vector,
     canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Vector.Vector[] | null {
-    return bfs((v) => map.possibleDirections2(v, canMoveOn), position, target)
+    return bfs((v) => map.possibleDirections(v, canMoveOn), position, target)
 }
 
 export function bfs(

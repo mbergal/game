@@ -4,8 +4,10 @@ import * as Command from "./command"
 import { Game, GameStorage, Renderer } from "./game"
 import config from "./game/config"
 import { Window } from "./help"
+import { tick } from "./objects/player"
 
 const logger = Logging.make("game_window")
+
 export class GameWindow extends Windows.Window {
     storage: GameStorage.GameStorage
     interval: number
@@ -19,7 +21,7 @@ export class GameWindow extends Windows.Window {
             this.processKey(event)
         }
         this.interval = this.setInterval(() => {
-            Game.tick(game)
+            Game.tick(this.game)
             Windows.updateScreen()
         }, config.tickInterval)
     }
@@ -60,6 +62,7 @@ export class GameWindow extends Windows.Window {
                 save(this.game, this.storage)
                 break
             case "l": {
+                const now = this.game.time.ticks
                 const loaded = load(this.storage)
                 if (loaded != null) {
                     this.game = loaded
