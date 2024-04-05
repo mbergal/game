@@ -2,26 +2,26 @@ import { Effects, GameMap } from "@/game"
 import { Vector } from "@/geometry"
 import * as GameObject from "../object"
 
-export type Footprint = {
-    position: Vector.t
-    zIndex: number
-    tact: number
-    lifetime: number
+export interface Footprint<T> {
+    tick(t: T): number
+    setTick(t: T, tick: number): void
+    lifetime(t: T): number
 }
 
-export function tick<T extends Footprint & GameObject.t>(
+export function tick<T extends GameObject.GameObject>(
+    footprint: Footprint<T>,
     obj: T,
     map: GameMap.GameMap,
 ): Effects.Effects {
-    if (obj.tact > obj.lifetime) {
+    if (footprint.tick(obj) > footprint.lifetime(obj)) {
         map.remove([obj])
     } else {
-        obj.tact += 1
+        footprint.setTick(obj, footprint.tick(obj) + 1)
     }
     return []
 }
 
-export function leaveFootprint<T extends Footprint & GameObject.t>(
+export function leaveFootprint<T extends GameObject.GameObject>(
     position: Vector.Vector,
     map: GameMap.GameMap,
     make: (position: Vector.Vector) => T,

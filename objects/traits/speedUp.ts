@@ -1,17 +1,15 @@
 import config from "@/game/config"
-export type SpeedUp = {
-    speedUp: false | number
+export interface SpeedUp<T> {
+    speedUpDays(t: T): number
+    setSpeedUp(t: T, ticks: number): void
+    speedUp(t: T): number
 }
 
-export function speedUp(object: SpeedUp, days: number) {
-    object.speedUp = (object.speedUp ? object.speedUp : 0) + days * config.dayTicks
+export function speedUp<T>(speedUp: SpeedUp<T>, t: T) {
+    const days = speedUp.speedUpDays(t)
+    speedUp.setSpeedUp(t, speedUp.speedUp(t) + days * config.dayTicks)
 }
 
-export function tick(object: SpeedUp, ticksPassed: number) {
-    if (object.speedUp) {
-        object.speedUp -= ticksPassed
-        if (object.speedUp <= 0) {
-            object.speedUp = false
-        }
-    }
+export function tick<T>(speedUp: SpeedUp<T>, t: T, ticksPassed: number) {
+    speedUp.setSpeedUp(t, Math.max(speedUp.speedUp(t) - ticksPassed))
 }

@@ -1,12 +1,11 @@
 import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
 import { Direction, Vector, moveTo } from "@/geometry"
-import { Item, Traits } from "@/objects"
+import { GameObject, Item, Traits } from "@/objects"
 
 import * as Footprint from "./footprint"
-import * as Pathlights from "./pathlights"
-
 export * as Footprint from "./footprint"
-export * as Pathlights from "./pathlights"
+import * as Pathlight from "./pathlight"
+export * as Pathlight from "./pathlight"
 
 import config from "@/game/config"
 import * as Logging from "@/utils/logging"
@@ -17,14 +16,38 @@ export const logger = Logging.make("fellow_developer")
 
 export const type = "developer"
 
-export type Developer = Traits.SpeedUp.SpeedUp &
-    Traits.Targeting.Targeting & {
-        type: typeof type
-        position: Vector.Vector | null
-        tact: number
-        zIndex: number
-        direction: Direction.t | null
-    }
+export type Developer = {
+    target: GameObject.GameObject | null
+    type: typeof type
+    position: Vector.Vector | null
+    tact: number
+    zIndex: number
+    direction: Direction.t | null
+    speedUp: number
+}
+
+export function isDeveloper(obj: GameObject.GameObject): obj is Developer {
+    return obj.type === type
+}
+
+// trait instance!!!
+export const targeting: Traits.Targeting.Targeting<Developer> = {
+    position: (developer) => developer.position,
+    target: (developer) => developer.target,
+    setTarget: (developer, target) => {
+        developer.target = target
+    },
+    canMoveOn,
+}
+
+// another one!!!
+export const speedUp: Traits.SpeedUp.SpeedUp<Developer> = {
+    speedUpDays: (t) => config.items.coffee.speedUpDays,
+    setSpeedUp: (t, ticks) => {
+        t.speedUp = ticks
+    },
+    speedUp: (t) => t.speedUp,
+}
 
 export function make(): Developer {
     return {
@@ -33,13 +56,9 @@ export function make(): Developer {
         tact: 0,
         direction: null,
         zIndex: 2,
-        speedUp: false,
+        speedUp: 0,
         target: null,
     }
-}
-
-function speedUp(developer: Developer) {
-    Traits.SpeedUp.speedUp(developer, config.items.coffee.speedUpDays)
 }
 
 function processEvents(
@@ -67,19 +86,14 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     const events = Plan.getEvents(game.plan, game.time.ticks)
     processEvents(developer, events, game, effects)
 
-    Traits.SpeedUp.tick(developer, 1)
+    Traits.SpeedUp.tick(speedUp, developer, 1)
 
     if (developer.tact % config.developer.moves.ticksPerMove != 0) {
         return effects
     }
 
     if (developer.position != null) {
-        const moveChoice = Traits.Targeting.pickDirection(
-            developer,
-            game.map,
-            Pathlights,
-            canMoveOn,
-        )
+        const moveChoice = Traits.Targeting.pickDirection(targeting, developer, game.map, Pathlight)
         if (moveChoice != null) {
             developer.direction = moveChoice
             move(developer, moveTo(developer.position, moveChoice), moveChoice, game.map)
@@ -120,7 +134,7 @@ function pickupItem(obj: Developer, item: Item.Item, map: GameMap.GameMap) {
     map.remove(item)
     switch (item.type) {
         case "coffee":
-            speedUp(obj)
+            Traits.SpeedUp.speedUp(speedUp, obj)
             break
         case "commit":
         case "door":

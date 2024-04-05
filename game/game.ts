@@ -1,4 +1,4 @@
-import { Boss, Developer, GameObject, Player } from "@/objects"
+import { Boss, Developer, GameObject, Player, Traits } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import * as Command from "../command"
@@ -159,10 +159,10 @@ function objTick(
             Boss.tick(obj, game.map)
             break
         case "boss.footprint":
-            handleEffects(game, Boss.Footprint.tick(obj, game.map))
+            handleEffects(game, Traits.Footprint.tick(Boss.Footprint.footprint, obj, game.map))
             break
         case "developer.footprint":
-            handleEffects(game, Developer.Footprint.tick(obj, game.map))
+            handleEffects(game, Traits.Footprint.tick(Developer.Footprint.footprint, obj, game.map))
             break
         case "player":
             handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
@@ -219,9 +219,7 @@ export function load(storage: GameStorage.GameStorage): Game | null {
         const player = map_.objects.find<Player.Player>(
             (x): x is Player.Player => x.type === "player",
         )
-        const developer = map_.objects.find<Developer.Developer>(
-            (x): x is Developer.Developer => x.type === "developer",
-        )
+        const developer = map_.objects.find<Developer.Developer>(Developer.isDeveloper)
         return {
             time: time,
             score: score,

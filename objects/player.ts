@@ -1,21 +1,20 @@
-import * as Traits from "@/objects/traits"
+import { GameObject, Item, Traits } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
 import * as Command from "../command"
-import { Effect, Effects, EngineeringLevels, Game, GameMap, Messages } from "../game"
-import config from "../game/config"
-import { Vector, moveTo } from "../geometry"
-import * as Direction from "../geometry/direction"
-import * as Item from "./item"
-import * as GameObject from "./object"
+
+import { Effect, Effects, EngineeringLevels, Game, GameMap, Messages } from "@/game"
+import config from "@/game/config"
+import { Direction, Vector, moveTo } from "@/geometry"
+
 import { StoryTask, Task } from "./tasks"
 
 const logger = Logging.make("player")
 
 export const type = "player"
 
-export type Player = Traits.SpeedUp.SpeedUp & {
+export type Player = {
     type: typeof type
     position: Vector.t
     direction: Direction.t | null
@@ -24,11 +23,20 @@ export type Player = Traits.SpeedUp.SpeedUp & {
     hrTaskTact: number | null
     task: Task | null
     level: EngineeringLevels.EngineeringLevel
+    speedUp: number
     commands: {
         command: Command.Command
         tact: number
     }[]
     item: GameObject.Item | null
+}
+
+const speedUp: Traits.SpeedUp.SpeedUp<Player> = {
+    speedUpDays: (t) => config.items.coffee.speedUpDays,
+    setSpeedUp: (t, ticks) => {
+        t.speedUp = ticks
+    },
+    speedUp: (t) => t.speedUp,
 }
 
 export function make(position: Vector.t): Player {
@@ -42,7 +50,7 @@ export function make(position: Vector.t): Player {
         hrTaskTact: null,
         item: null,
         task: null,
-        speedUp: false,
+        speedUp: 0,
         level: EngineeringLevels.all[0],
     }
 }
@@ -136,7 +144,7 @@ function useItem(
             }
         case "coffee":
             Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
-            speedUp(player)
+            Traits.SpeedUp.speedUp(speedUp, player)
             player.item = null
             return true
         case "door":
@@ -153,10 +161,6 @@ function useItem(
             assertUnreachable(item)
     }
     return false
-}
-
-function speedUp(player: Player) {
-    Traits.SpeedUp.speedUp(player, config.items.coffee.speedUpDays)
 }
 
 function pickItem(
@@ -216,7 +220,7 @@ function tickHrTask(player: Player, ticksPassed: number) {
 }
 
 function tickFlags(player: Player, ticksPassed: number) {
-    Traits.SpeedUp.tick(player, ticksPassed)
+    Traits.SpeedUp.tick(speedUp, player, ticksPassed)
 }
 
 function handleDrop(player: Player, map: GameMap.GameMap) {

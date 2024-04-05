@@ -2,13 +2,13 @@ import { Vector } from "@/geometry"
 
 export const type = "developer.pathlights"
 
-export type Pathlights = {
+export type Pathlight = {
     type: "developer.pathlights"
     position: Vector.Vector
     zIndex: number
 }
 
-export function make(position: Vector.Vector): Pathlights {
+export function make(position: Vector.Vector): Pathlight {
     return {
         type: "developer.pathlights",
         position: position,
@@ -16,6 +16,6 @@ export function make(position: Vector.Vector): Pathlights {
     }
 }
 
-export function isPathlight(obj: any): obj is Pathlights {
+export function isPathlight(obj: any): obj is Pathlight {
     return obj.type === type
 }

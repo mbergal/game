@@ -1,4 +1,4 @@
-import { GameMap } from "@/game"
+import { Game, GameMap } from "@/game"
 import config from "@/game/config"
 
 import { Direction, Vector, moveTo } from "@/geometry"
@@ -69,15 +69,7 @@ export function possibleMoves(
     map: GameMap.GameMap,
 ): MoveActions {
     const result: MoveActions = {}
-    const possible = map.possibleDirections(
-        pos,
-        (obj) =>
-            obj != null &&
-            obj.type == "wall" &&
-            obj.position != null &&
-            obj.position.y > 1 &&
-            obj.position.y < map.height - 1,
-    )
+    const possible = map.possibleDirections(pos, GameMap.Predicates.insideWall)
     const turns = _.difference(possible, [
         currentDirection,
         Direction.reverse(currentDirection),
@@ -112,7 +104,7 @@ function move(obj: Boss, newPos: Vector.t, newDirection: Direction.t, map: GameM
             type: "boss.footprint",
             position: obj.position,
             zIndex: 1,
-            tact: 0,
+            tick: 0,
         } as Footprint.Footprint,
     ])
     map.move(obj, newPos)
@@ -230,7 +222,7 @@ function choose_direction(
     least_preferred: Direction.t | null,
     map: GameMap.GameMap,
 ): Direction.t | null {
-    const forks = map.possibleDirections(pos, "wall")
+    const forks = map.possibleDirections(pos, GameMap.Predicates.insideWall)
     const b = forks.filter((x) => x[0] != least_preferred)
 
     if (b.length != 0) {

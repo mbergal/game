@@ -1,13 +1,15 @@
-import { GameMap, Effects } from "@/game"
-import * as FootprintTrait from "../traits/footprint"
 import { Vector } from "@/geometry"
+import { Traits } from "@/objects"
 
 const LIFETIME = 1000
 
 export const type = "developer.footprint"
 
-export type Footprint = FootprintTrait.Footprint & {
+export type Footprint = {
     type: typeof type
+    position: Vector.Vector
+    zIndex: number
+    tick: number
 }
 
 export function make(position: Vector.Vector): Footprint {
@@ -15,16 +17,14 @@ export function make(position: Vector.Vector): Footprint {
         type: "developer.footprint",
         position: position,
         zIndex: 1,
-        tact: 0,
-        lifetime: LIFETIME,
+        tick: 0,
     }
 }
 
-export function tick(obj: Footprint, map: GameMap.GameMap): Effects.Effects {
-    if (obj.tact > LIFETIME) {
-        map.remove([obj])
-    } else {
-        obj.tact += 1
-    }
-    return []
+export const footprint: Traits.Footprint.Footprint<Footprint> = {
+    tick: (t) => t.tick,
+    setTick: (t, tick) => {
+        t.tick = tick
+    },
+    lifetime: () => LIFETIME,
 }

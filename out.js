@@ -6849,17 +6849,31 @@
       this.objects = [];
       this.add(objs);
     }
+    /**
+         * Add objects to the map
+         * * If the object has a position, it will be added to the map cells
+         * * If the object doesn't have a position, it will be added to the list of objects
+         *
+         * @param objs - Object or list of objects to add to the map
+    1     */
     add(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
       this.objects = this.objects.concat(objs_);
       for (const obj of objs_) {
         if (obj.position != null) {
           const objs2 = this.cells[obj.position.y][obj.position.x];
+          if (objs2 == null) {
+            debugger;
+          }
           objs2.push(obj);
           this.cells[obj.position.y][obj.position.x] = _6.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
         }
       }
     }
+    /**
+     * Remove objects from the map
+     * * If the object has a position, it will be removed from the map cells
+     */
     remove(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
       this.objects = this.objects.filter((x) => _6.indexOf(objs_, x) == -1);
@@ -6908,16 +6922,18 @@
       const objs = this.cells[v.y][v.x];
       return objs.length > 0 ? _6.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
-    possibleDirections(position, check2) {
-      const p = [];
-      for (const d of direction_exports.all) {
-        const newPos = moveTo(position, d);
-        if (this.everyObjectAt(newPos, check2))
-          p.push(d);
-      }
-      return p;
-    }
-    possibleDirections2(position, canMoveOn3) {
+    // possibleDirections(
+    //     position: Vector.t,
+    //     check: GameObject.Type | ((obj: GameObject.t | null) => boolean),
+    // ): Direction.t[] {
+    //     const p: Direction.t[] = []
+    //     for (const d of Direction.all) {
+    //         const newPos = moveTo(position, d)
+    //         if (this.everyObjectAt(newPos, check)) p.push(d)
+    //     }
+    //     return p
+    // }
+    possibleDirections(position, canMoveOn3) {
       const p = [];
       for (const d of direction_exports.all) {
         const newPos = moveTo(position, d);
@@ -6963,6 +6979,18 @@
     }
     Predicates2.empty = empty;
     __name(empty, "empty");
+    function has(objType) {
+      return (position, map) => map.someObjectsAt(position, objType);
+    }
+    Predicates2.has = has;
+    __name(has, "has");
+    function insideWall(position, map) {
+      return map.at(position).every(
+        (obj) => obj != null && obj.type == "wall" && obj.position != null && obj.position.y > 1 && obj.position.y < map.height - 1
+      );
+    }
+    Predicates2.insideWall = insideWall;
+    __name(insideWall, "insideWall");
   })(Predicates || (Predicates = {}));
   function repr2(objs) {
     if (objs.length > 0) {
@@ -7351,9 +7379,7 @@
       const player = map_.objects.find(
         (x) => x.type === "player"
       );
-      const developer = map_.objects.find(
-        (x) => x.type === "developer"
-      );
+      const developer = map_.objects.find(developer_exports.isDeveloper);
       return {
         time,
         score,
@@ -7364,6 +7390,7 @@
         commands,
         map: map_,
         player,
+        developer,
         plan: plan2,
         messageStartTime,
         collapse
@@ -7731,10 +7758,7 @@
   __name(make10, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
-    const possible = map.possibleDirections(
-      pos,
-      (obj) => obj != null && obj.type == "wall" && obj.position != null && obj.position.y > 1 && obj.position.y < map.height - 1
-    );
+    const possible = map.possibleDirections(pos, map_exports.Predicates.insideWall);
     const turns = import_lodash7.default.difference(possible, [
       currentDirection,
       direction_exports.reverse(currentDirection)
@@ -7862,7 +7886,7 @@
   }
   __name(tick8, "tick");
   function choose_direction(pos, least_preferred, map) {
-    const forks = map.possibleDirections(pos, "wall");
+    const forks = map.possibleDirections(pos, map_exports.Predicates.insideWall);
     const b = forks.filter((x) => x[0] != least_preferred);
     if (b.length != 0) {
       const direction = choice(b);
@@ -7930,11 +7954,14 @@
   var developer_exports = {};
   __export(developer_exports, {
     Footprint: () => footprint_exports2,
-    Pathlights: () => pathlights_exports,
+    Pathlight: () => pathlight_exports,
     canMoveOn: () => canMoveOn,
+    isDeveloper: () => isDeveloper,
     logger: () => logger3,
     make: () => make15,
     possibleMoves: () => possibleMoves2,
+    speedUp: () => speedUp,
+    targeting: () => targeting,
     tick: () => tick10,
     type: () => type4
   });
@@ -7968,9 +7995,9 @@
   }
   __name(tick9, "tick");
 
-  // objects/developer/pathlights.ts
-  var pathlights_exports = {};
-  __export(pathlights_exports, {
+  // objects/developer/pathlight.ts
+  var pathlight_exports = {};
+  __export(pathlight_exports, {
     isPathlight: () => isPathlight,
     make: () => make14,
     type: () => type3
@@ -7993,6 +8020,25 @@
   var import_lodash8 = __toESM(require_lodash());
   var logger3 = make("fellow_developer");
   var type4 = "developer";
+  function isDeveloper(obj) {
+    return obj.type === type4;
+  }
+  __name(isDeveloper, "isDeveloper");
+  var targeting = {
+    position: (developer) => developer.position,
+    target: (developer) => developer.target,
+    setTarget: (developer, target) => {
+      developer.target = target;
+    },
+    canMoveOn
+  };
+  var speedUp = {
+    speedUpDays: (t) => config_default.items.coffee.speedUpDays,
+    setSpeedUp: (t, ticks) => {
+      t.speedUp = ticks;
+    },
+    speedUp: (t) => t.speedUp
+  };
   function make15() {
     return {
       type: type4,
@@ -8000,15 +8046,11 @@
       tact: 0,
       direction: null,
       zIndex: 2,
-      speedUp: false,
+      speedUp: 0,
       target: null
     };
   }
   __name(make15, "make");
-  function speedUp(developer) {
-    traits_exports.SpeedUp.speedUp(developer, config_default.items.coffee.speedUpDays);
-  }
-  __name(speedUp, "speedUp");
   function processEvents(developer, events, game, effects) {
     for (const event of events) {
       switch (event.type) {
@@ -8028,16 +8070,16 @@
     developer.tact += 1;
     const events = plan_exports.getEvents(game.plan, game.time.ticks);
     processEvents(developer, events, game, effects);
-    traits_exports.SpeedUp.tick(developer, 1);
+    traits_exports.SpeedUp.tick(speedUp, developer, 1);
     if (developer.tact % config_default.developer.moves.ticksPerMove != 0) {
       return effects;
     }
     if (developer.position != null) {
       const moveChoice = traits_exports.Targeting.pickDirection(
+        targeting,
         developer,
         game.map,
-        pathlights_exports,
-        canMoveOn
+        Developer.Pathlight
       );
       if (moveChoice != null) {
         developer.direction = moveChoice;
@@ -8050,7 +8092,7 @@
   function possibleMoves2(pos, map) {
     const possible = map.possibleDirections(
       pos,
-      (obj) => !obj || !["wall", "door", "player"].includes(obj.type)
+      (position, map2) => map2.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type))
     );
     return possible;
   }
@@ -8099,7 +8141,7 @@
       }
     }
     if (obj.position != null) {
-      traits_exports.Footprint.leaveFootprint(obj.position, map, make13);
+      traits_exports.Footprint.leaveFootprint(obj.position, map, Footprint.make);
     }
     map.move(obj, newPos);
   }
@@ -8319,39 +8361,46 @@
       path: findPath(x, map, x.position, startPosition, canMoveOn3)
     })).map((x) => x.path != null ? { target: x.target, path: x.path } : null).filter(isPresent);
   }, "findTargetPaths");
-  function pickDirection(target, map, pathway, canMoveOn3) {
-    if (target.target == null || target.target.position == null) {
+  function pickDirection(targeting2, t, map, pathway) {
+    let target = targeting2.target(t);
+    if (target == null || target.position == null) {
       const targets = findTargets(map.objects);
-      const targetPaths = findTargetPaths(targets, target.position, map, canMoveOn3);
+      const targetPaths = findTargetPaths(
+        targets,
+        targeting2.position(t),
+        map,
+        targeting2.canMoveOn
+      );
       const path = import_lodash10.default.minBy(targetPaths, (x) => x.path ? x.path.length : Infinity);
-      target.target = path?.target ?? null;
+      targeting2.setTarget(t, path?.target ?? null);
     }
-    if (target.target == null || target.target.position == null) {
+    target = targeting2.target(t);
+    if (target == null || target.position == null) {
       return null;
     }
     const pathToTarget = findPath(
-      target.target,
+      target,
       map,
+      targeting2.position(t),
       target.position,
-      target.target.position,
-      canMoveOn3
+      targeting2.canMoveOn
     );
     map.remove(map.objects.filter(pathway.isPathlight));
     if (pathToTarget != null) {
       if (pathToTarget) {
         map.add(pathToTarget.map((x) => pathway.make(x)));
-        return pathToTarget.length > 0 ? directionTo(target.position, pathToTarget[1]) : null;
+        return pathToTarget.length > 0 ? directionTo(targeting2.position(t), pathToTarget[1]) : null;
       } else {
         return null;
       }
     } else {
-      target.target = null;
+      targeting2.setTarget(t, null);
       return null;
     }
   }
   __name(pickDirection, "pickDirection");
   function findPath(obj, map, position, target, canMoveOn3) {
-    return bfs((v) => map.possibleDirections2(v, canMoveOn3), position, target);
+    return bfs((v) => map.possibleDirections(v, canMoveOn3), position, target);
   }
   __name(findPath, "findPath");
   function bfs(possibleMoves3, start, target) {
@@ -8402,17 +8451,13 @@
     speedUp: () => speedUp2,
     tick: () => tick12
   });
-  function speedUp2(object, days) {
-    object.speedUp = (object.speedUp ? object.speedUp : 0) + days * config_default.dayTicks;
+  function speedUp2(speedUp4, t) {
+    const days = speedUp4.speedUpDays(t);
+    speedUp4.setSpeedUp(t, speedUp4.speedUp(t) + days * config_default.dayTicks);
   }
   __name(speedUp2, "speedUp");
-  function tick12(object, ticksPassed) {
-    if (object.speedUp) {
-      object.speedUp -= ticksPassed;
-      if (object.speedUp <= 0) {
-        object.speedUp = false;
-      }
-    }
+  function tick12(speedUp4, t, ticksPassed) {
+    speedUp4.setSpeedUp(t, Math.max(speedUp4.speedUp(t) - ticksPassed));
   }
   __name(tick12, "tick");
 
@@ -8831,7 +8876,6 @@
           const loaded = load2(this.storage);
           if (loaded != null) {
             this.game = loaded;
-            this.game.loadedAt = now;
           }
           break;
         }

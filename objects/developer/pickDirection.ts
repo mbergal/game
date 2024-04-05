@@ -21,9 +21,9 @@ export function pickDirection(
     const footprintWeights = _.chain(footprints)
         .map((f) => ({
             moveIndex: f.moveIndex,
-            tact: f.footprint.tact,
+            tick: f.footprint.tick,
         }))
-        .sortBy(footprints, (x) => x.tact)
+        .sortBy(footprints, (x) => x.tick)
         .reverse()
         .map((x, i) => ({
             moveIndex: x.moveIndex,

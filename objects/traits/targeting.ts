@@ -4,9 +4,11 @@ import { GameMap } from "@/game"
 import { Direction, Vector, directionTo, moveTo } from "@/geometry"
 import _ from "lodash"
 
-export type Targeting = {
-    position: Vector.Vector | null
-    target: GameObject.GameObject | null
+export interface Targeting<T> {
+    position(t: T): Vector.Vector | null
+    target(t: T): GameObject.GameObject | null
+    setTarget(t: T, target: GameObject.GameObject | null): void
+    canMoveOn(position: Vector.Vector, map: GameMap.GameMap): boolean
 }
 
 function isPresent<T>(input: null | undefined | T): input is T {
@@ -34,41 +36,50 @@ const findTargetPaths = (
         .filter(isPresent)
 }
 
-export function pickDirection(
-    target: Targeting,
+export function pickDirection<T>(
+    targeting: Targeting<T>, // modular explicit !!!
+    t: T,
     map: GameMap.GameMap,
     pathway: Pathlight.Pathlight,
-    canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Direction.t | null {
-    if (target.target == null || target.target.position == null) {
+    let target = targeting.target(t)
+    if (target == null || target.position == null) {
         const targets = findTargets(map.objects)
-        const targetPaths = findTargetPaths(targets, target.position!, map, canMoveOn)
+        const targetPaths = findTargetPaths(
+            targets,
+            targeting.position(t)!,
+            map,
+            targeting.canMoveOn,
+        )
         const path = _.minBy(targetPaths, (x) => (x.path ? x.path.length : Infinity))
-        target.target = path?.target ?? null
+        targeting.setTarget(t, path?.target ?? null)
     }
 
-    if (target.target == null || target.target.position == null) {
+    target = targeting.target(t)
+    if (target == null || target.position == null) {
         return null
     }
 
     const pathToTarget = findPath(
-        target.target,
+        target,
         map,
+        targeting.position(t)!,
         target.position!,
-        target.target.position!,
-        canMoveOn,
+        targeting.canMoveOn,
     )
 
     map.remove(map.objects.filter(pathway.isPathlight))
     if (pathToTarget != null) {
         if (pathToTarget) {
             map.add(pathToTarget.map((x) => pathway.make(x)))
-            return pathToTarget.length > 0 ? directionTo(target.position!, pathToTarget[1]) : null
+            return pathToTarget.length > 0
+                ? directionTo(targeting.position(t)!, pathToTarget[1])
+                : null
         } else {
             return null
         }
     } else {
-        target.target = null
+        targeting.setTarget(t, null)
         return null
     }
 }

@@ -39,6 +39,9 @@ export class GameMap {
         for (const obj of objs_) {
             if (obj.position != null) {
                 const objs = this.cells[obj.position.y][obj.position.x]
+                if (objs == null) {
+                    debugger
+                }
                 objs.push(obj)
                 this.cells[obj.position.y][obj.position.x] = _.chain(objs)
                     .push(obj)
@@ -188,8 +191,26 @@ export namespace Predicates {
     export function empty(map: GameMap, position: Vector.Vector) {
         return map.at(position).length == 0
     }
+
     export function has(objType: GameObject.Type) {
         return (position: Vector.Vector, map: GameMap) => map.someObjectsAt(position, objType)
+    }
+
+    export function doesNotHave(objType: GameObject.Type) {
+        return (position: Vector.Vector, map: GameMap) => !map.everyObjectAt(position, objType)
+    }
+
+    export function insideWall(position: Vector.Vector, map: GameMap) {
+        return map
+            .at(position)
+            .every(
+                (obj) =>
+                    obj != null &&
+                    obj.type == "wall" &&
+                    obj.position != null &&
+                    obj.position.y > 1 &&
+                    obj.position.y < map.height - 1,
+            )
     }
 }
 
