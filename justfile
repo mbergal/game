@@ -1,0 +1,5 @@
+default:
+    just -l
+
+watch:
+    
