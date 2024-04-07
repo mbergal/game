@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "watch": "esbuild main.ts --bundle --keep-names --sourcemap --outfile=out.js --analyze --metafile=meta.json  --target=es2020 --watch --format=iife",
+        "watch": "esbuild main.ts --bundle --keep-names --sourcemap --outfile=out.js --target=es2020 --watch --format=iife",
         "typescript-check": "tsc --noEmit",
         "test": "vitest",
         "prepare": "husky && husky install",

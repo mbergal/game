@@ -16,14 +16,8 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "plugins": [
-        "@typescript-eslint",
-        "sonarjs",
-        "import"
-    ],
-    "ignorePatterns": [
-        "out.js"
-    ],
+    "plugins": ["@typescript-eslint", "sonarjs", "import"],
+    "ignorePatterns": ["out.js"],
     "settings": {
         "import/resolver": {
             "typescript": true,
