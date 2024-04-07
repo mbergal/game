@@ -1,7 +1,3 @@
-import { Vector } from "../geometry"
-
-const buffer = []
-
 export function render(chars: string[][]) {
     const contentBlock = document.getElementById("content")
     const newInnerHTML = chars.map((x) => x.join("")).join("\n")

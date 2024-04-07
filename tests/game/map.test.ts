@@ -1,7 +1,5 @@
-import { expect, test, describe } from "vitest"
 import { GameMap } from "@/game"
-import _ from "lodash"
-import { Wall } from "../../objects/wall"
+import { describe, expect, test } from "vitest"
 import { loadMap } from "../utils"
 
 export function sum(a: number, b: number) {

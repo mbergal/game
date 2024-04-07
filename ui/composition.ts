@@ -6,9 +6,9 @@ type Composition = string[][]
 
 function make(size: Vector.Vector): Composition {
     const composition: Composition = []
-    for (let y = 0; y < Screen.size.y; y++) {
+    for (let y = 0; y < size.y; y++) {
         composition[y] = []
-        for (let x = 0; x < Screen.size.x; x++) {
+        for (let x = 0; x < size.x; x++) {
             composition[y][x] = " "
         }
     }

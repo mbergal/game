@@ -1,19 +1,20 @@
-import { Boss, Developer, Player } from "@/objects"
+console.log("main.ts")
 import _ from "lodash"
-import { Game, GameStorage, Intro, Plan } from "./game"
-import * as random from "@/utils/random"
+import { Game, Plan, GameStorage } from "./game"
+import { Boss, Player, Developer } from "@/objects"
 import { Vector } from "./geometry"
-
-import * as MazeGenerator from "./generator"
-
 import { Windows } from "@/ui"
-import * as Logging from "@/utils/logging"
+import { GameWindow } from "@/game_window"
+import * as Intro from "@/help"
 
-import { GameWindow } from "./game_window"
+import * as Logging from "@/utils/logging"
+import * as MazeGenerator from "@/generator"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
 const logger = Logging.make("main")
+
+logger("Staring the game")
 
 Logging.setIsEnabled((name: string) =>
     _.includes(["main", "player", "game", "fellow_developer"], name),
@@ -21,7 +22,7 @@ Logging.setIsEnabled((name: string) =>
 
 export function main() {
     const plan: Plan.Plan = Plan.generatePlan(0)
-    let game: Game.Game = Game.make(MAZE_SIZE, plan)
+    const game: Game.Game = Game.make(MAZE_SIZE, plan)
 
     MazeGenerator.maze(MAZE_SIZE, game)
 

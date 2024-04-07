@@ -1,3 +1,5 @@
+console.log("objects/object.ts")
+
 import * as Boss from "./boss"
 import * as Player from "./player"
 import * as Wall from "./wall"

@@ -1,3 +1,5 @@
+console.log("objects/developer/pickDirection.ts")
+
 import { GameMap } from "@/game"
 import config from "@/game/config"
 import { Direction, Vector, moveTo } from "@/geometry"

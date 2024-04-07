@@ -1,11 +1,12 @@
 {
     "scripts": {
-        "watch": "esbuild main.ts --bundle --keep-names --sourcemap --outfile=out.js --target=es2020 --watch",
+        "watch": "esbuild main.ts --bundle --keep-names --sourcemap --outfile=out.js --analyze --metafile=meta.json  --target=es2020 --watch --format=iife",
         "typescript-check": "tsc --noEmit",
         "test": "vitest",
         "prepare": "husky && husky install",
         "lint-prettier": "prettier  -c .",
-        "lint-prettier-fix": "prettier --write ."
+        "lint-prettier-fix": "prettier --write .",
+        "lint-eslint": "eslint ."
     },
     "dependencies": {
         "@types/lodash": "^4.14.188",
@@ -18,6 +19,8 @@
         "@typescript-eslint/parser": "^7.3.1",
         "esbuild": "0.20.1",
         "eslint": "^8.57.0",
+        "eslint-import-resolver-typescript": "^3.6.1",
+        "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-sonarjs": "^0.24.0",
         "husky": "^9.0.11",
         "lint-staged": "^15.2.2",

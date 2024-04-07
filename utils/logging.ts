@@ -16,5 +16,5 @@ export function make<T extends string>(name: T): Logger {
     }
 }
 
-let isEnabled: (name: string) => boolean = () => true
+let isEnabled: (name: string) => boolean = (_) => true
 let tick = 0

@@ -1,3 +1,5 @@
+console.log("objects/developer/pathlight.ts")
+
 import { Vector } from "@/geometry"
 
 export const type = "developer.pathlights"

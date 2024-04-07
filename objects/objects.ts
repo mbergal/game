@@ -1,3 +1,5 @@
+console.log("objects/objects.ts")
+
 import _ from "lodash"
 import * as GameObject from "./object"
 

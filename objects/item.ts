@@ -1,3 +1,5 @@
+console.log("geometry/item.ts")
+
 import * as Door from "./door"
 import * as Commit from "./commit"
 import * as Story from "./story"

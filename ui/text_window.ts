@@ -1,4 +1,3 @@
-import { Vector } from "@/geometry"
 import * as Windows from "./windows"
 
 export class TextWindow extends Windows.Window {
@@ -10,7 +9,7 @@ export class TextWindow extends Windows.Window {
         this.position = { x: 0, y: 0 }
         const splitText = formatText(text)
         const width = splitText[0].length
-        const height = splitText.length
+
         const topLine = "┏━" + "━".repeat(width) + "━┓"
         const bottomLine = "┗━" + "━".repeat(width) + "━┛"
 

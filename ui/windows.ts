@@ -40,7 +40,7 @@ function isFocused(window: Window): boolean {
     return _.last(windows) === window
 }
 
-export let windows: Window[] = []
+export const windows: Window[] = []
 
 export function focused(): Window | null {
     return _.last(windows) ?? null

@@ -1,24 +1,24 @@
+import {
+    Collapse,
+    Effect,
+    Effects,
+    GameMap,
+    GameStorage,
+    GameTime,
+    ItemGenerator,
+    PerformanceReview,
+    Plan,
+    Score,
+    Sprint,
+} from "@/game"
+import { Vector } from "@/geometry"
 import { Boss, Developer, GameObject, Player, Traits } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import * as Command from "../command"
-import * as ItemGenerator from "../game/item_generator"
-import { Vector } from "../geometry"
-import * as Collapse from "./collapse"
 import config from "./config"
-import * as Effect from "./effect"
-import * as Effects from "./effects"
-import * as GameStorage from "./game_storage"
-import * as GameTime from "./game_time"
-import * as GameMap from "./map"
 import { Message } from "./message"
-import * as PerformanceReview from "./performance_review"
-import * as Plan from "./plan"
 import * as Renderer from "./renderer"
-import * as Score from "./score"
-import * as Sprint from "./sprint"
-export * as GameMap from "./map"
-export * as Score from "./score"
 
 const logger = Logging.make("game")
 
@@ -148,6 +148,9 @@ export function tick(game: Game) {
     }
 }
 
+const bossFootprint = Traits.Footprint.make(Boss.Footprint.footprint)
+const developerFootprint = Traits.Footprint.make(Developer.Footprint.footprint)
+
 function objTick(
     obj: GameObject.GameObject,
     game: Game,
@@ -159,10 +162,10 @@ function objTick(
             Boss.tick(obj, game.map)
             break
         case "boss.footprint":
-            handleEffects(game, Traits.Footprint.tick(Boss.Footprint.footprint, obj, game.map))
+            handleEffects(game, bossFootprint.tick(obj, game.map))
             break
         case "developer.footprint":
-            handleEffects(game, Traits.Footprint.tick(Developer.Footprint.footprint, obj, game.map))
+            handleEffects(game, developerFootprint.tick(obj, game.map))
             break
         case "player":
             handleEffects(game, Player.tick(obj, game, commands, ticksPassed))

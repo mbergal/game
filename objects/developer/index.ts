@@ -1,7 +1,8 @@
-import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
-import { Direction, Vector, moveTo } from "@/geometry"
 import { GameObject, Item, Traits } from "@/objects"
 
+import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
+import { Direction, Vector, moveTo } from "@/geometry"
+import * as PickDirection from "@/objects/pickDirection"
 import * as Footprint from "./footprint"
 export * as Footprint from "./footprint"
 import * as Pathlight from "./pathlight"
@@ -30,7 +31,6 @@ export function isDeveloper(obj: GameObject.GameObject): obj is Developer {
     return obj.type === type
 }
 
-// trait instance!!!
 export const targeting: Traits.Targeting.Targeting<Developer> = {
     position: (developer) => developer.position,
     target: (developer) => developer.target,
@@ -40,7 +40,9 @@ export const targeting: Traits.Targeting.Targeting<Developer> = {
     canMoveOn,
 }
 
-// another one!!!
+debugger
+const footprint = Traits.Footprint.make(Footprint.footprint)
+
 export const speedUp: Traits.SpeedUp.SpeedUp<Developer> = {
     speedUpDays: (t) => config.items.coffee.speedUpDays,
     setSpeedUp: (t, ticks) => {
@@ -79,6 +81,9 @@ function processEvents(
         }
     }
 }
+
+const pickDirectionDeveloper = PickDirection.make(targeting)
+
 export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     const effects: Effects.Effects = []
     developer.tact += 1
@@ -93,7 +98,7 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     }
 
     if (developer.position != null) {
-        const moveChoice = Traits.Targeting.pickDirection(targeting, developer, game.map, Pathlight)
+        const moveChoice = pickDirectionDeveloper.pickDirection(developer, game.map, Pathlight)
         if (moveChoice != null) {
             developer.direction = moveChoice
             move(developer, moveTo(developer.position, moveChoice), moveChoice, game.map)
@@ -155,7 +160,7 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
         }
 
     if (obj.position != null) {
-        Traits.Footprint.leaveFootprint(obj.position, map, Footprint.make)
+        footprint.leaveFootprint(obj.position, map, Footprint.make)
     }
 
     map.move(obj, newPos)

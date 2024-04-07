@@ -12,7 +12,7 @@ export function int(min: number, max: number): number {
 }
 
 export function ints(min: number, max: number, num_of_ints: number): number[] {
-    return _.range(num_of_ints).map((i: number) => int(min, max))
+    return _.range(num_of_ints).map((_: number) => int(min, max))
 }
 
 export function choice<T>(choices: T[], weights: number[] | null = null): T {
@@ -20,7 +20,7 @@ export function choice<T>(choices: T[], weights: number[] | null = null): T {
     if (choices.length == 3) {
         // debugger
     }
-    weights = weights ?? _.range(choices.length).map((x) => 1)
+    weights = weights ?? _.range(choices.length).map((_) => 1)
     let total = _.sum(weights)
 
     // Total in hand, we can now pick a random value akin to our

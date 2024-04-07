@@ -23,7 +23,7 @@ export function make(story: StoryObject.Story): Story {
 export function addCommit(
     player: Player.Player,
     task: Story,
-    commit: Commit.Commit,
+    commit: Commit.Commit, // eslint-disable-line @typescript-eslint/no-unused-vars
     effects: Effect.Effect[],
 ) {
     task.appliedCommits += 1

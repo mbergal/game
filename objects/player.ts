@@ -1,4 +1,6 @@
-import { GameObject, Item, Traits } from "@/objects"
+console.log("objects/player.ts")
+
+import { Commit, GameObject, Item, Traits } from "@/objects"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
@@ -32,7 +34,7 @@ export type Player = {
 }
 
 const speedUp: Traits.SpeedUp.SpeedUp<Player> = {
-    speedUpDays: (t) => config.items.coffee.speedUpDays,
+    speedUpDays: (_) => config.items.coffee.speedUpDays,
     setSpeedUp: (t, ticks) => {
         t.speedUp = ticks
     },
@@ -85,7 +87,7 @@ function canMoveOn(objs: GameObject.t[]) {
     }
 }
 
-function canTakeTask(task: Task, player: Player) {
+function canTakeTask(_task: Task, player: Player) {
     return player.task == null
 }
 
@@ -108,6 +110,11 @@ function canPickItem(player: Player, item: GameObject.Item) {
             if (item.placed) {
                 return false
             }
+            break
+        case "coffee":
+        case "commit":
+        case "story":
+            break
     }
     return player.hrTaskTact == null
 }
@@ -121,27 +128,7 @@ function useItem(
     logger(`Using item ${item.type}`)
     switch (item.type) {
         case "commit":
-            if (player.task) {
-                const task = player.task
-                switch (task.type) {
-                    case "story":
-                        StoryTask.addCommit(player, task, item, effects)
-                        player.item = null
-                        Effects.append(
-                            effects,
-                            Effect.showMessage(
-                                `Added commit ${item.hash} to PR "${task.story.name}" `,
-                                3_000,
-                            ),
-                        )
-                        break
-                }
-
-                return true
-            } else {
-                Effects.append(effects, Effect.showMessage("No task to apply commit to", 3_000))
-                return false
-            }
+            return useCommit(player, item, effects)
         case "coffee":
             Effects.append(effects, Effect.showMessage("Drinking coffee", 3_000))
             Traits.SpeedUp.speedUp(speedUp, player)
@@ -161,6 +148,31 @@ function useItem(
             assertUnreachable(item)
     }
     return false
+}
+
+function useCommit(player: Player, item: Commit.Commit, effects: Effect.Effect[]) {
+    if (player.task) {
+        const task = player.task
+        switch (task.type) {
+            case "story":
+                StoryTask.addCommit(player, task, item, effects)
+                player.item = null
+                Effects.append(
+                    effects,
+                    Effect.showMessage(
+                        `Added commit ${item.hash} to PR "${task.story.name}" `,
+                        3_000,
+                    ),
+                )
+                break
+            case "null":
+                break
+        }
+        return true
+    } else {
+        Effects.append(effects, Effect.showMessage("No task to apply commit to", 3_000))
+        return false
+    }
 }
 
 function pickItem(
@@ -348,7 +360,7 @@ export function tick(
                                 pickedSomething || pickItem(player, obj, game, effects)
                         }
                         break
-                    case "story":
+                    case "story": {
                         const task: StoryTask.Story = StoryTask.make(obj)
 
                         if (canTakeTask(task, player)) {
@@ -356,6 +368,7 @@ export function tick(
                             game.map.remove(obj)
                         }
                         break
+                    }
                     case "player":
                     case "wall":
                     case "boss":
@@ -375,7 +388,6 @@ export function tick(
             ) {
                 player.direction = null
             }
-        } else {
         }
     }
     return effects
