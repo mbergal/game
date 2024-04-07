@@ -1,10 +1,10 @@
 import { Windows } from "@/ui"
 import * as Logging from "@/utils/logging"
-import * as Command from "./command"
-import { Game, GameStorage, Renderer } from "./game"
-import config from "./game/config"
-import { Window } from "./help"
-import { tick } from "./objects/player"
+import * as Command from "../command"
+import { Game, GameStorage, Renderer } from "../game"
+import config from "../game/config"
+import * as Help from "./help"
+import * as EndGame from "./end_game"
 
 const logger = Logging.make("game_window")
 
@@ -21,7 +21,15 @@ export class GameWindow extends Windows.Window {
             this.processKey(event)
         }
         this.interval = this.setInterval(() => {
-            Game.tick(this.game)
+            const effect = Game.tick(this.game)
+            switch (effect.type) {
+                case "endGame":
+                    this.clearInterval(this.interval)
+                    endGame(effect)
+                    break
+                case "null":
+                    break
+            }
             Windows.updateScreen()
         }, config.tickInterval)
     }
@@ -82,7 +90,11 @@ export class GameWindow extends Windows.Window {
 }
 
 function help() {
-    Windows.show(Windows.center(new Window()))
+    Windows.show(Windows.center(new Help.Window()))
+}
+
+function endGame(effect: Game.EndGameEffect) {
+    Windows.show(Windows.center(new EndGame.Window(effect.message, effect.money, effect.level)))
 }
 
 function getCommand(key: string): Command.Command | null | undefined {

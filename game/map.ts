@@ -200,17 +200,17 @@ export namespace Predicates {
         return (position: Vector.Vector, map: GameMap) => !map.everyObjectAt(position, objType)
     }
 
-    export function insideWall(position: Vector.Vector, map: GameMap) {
-        return map
-            .at(position)
-            .every(
-                (obj) =>
-                    obj != null &&
-                    obj.type == "wall" &&
-                    obj.position != null &&
-                    obj.position.y > 1 &&
-                    obj.position.y < map.height - 1,
-            )
+    export function insideWall(position: Vector.Vector, map: GameMap): boolean {
+        if (
+            position != null &&
+            position.y > 1 &&
+            position.y < map.height - 1 &&
+            position.x < map.width
+        )
+            return map.at(position).some((obj) => obj != null && obj.type == "wall")
+        else {
+            return false
+        }
     }
 }
 

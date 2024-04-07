@@ -26,7 +26,7 @@ export function tick(game: Game.Game): Effects.Effects {
         game.player!.level = newLevel
         Effects.append(
             effects,
-            Effect.showMessage(`You've been promoted Level up! ${game.player!.level}`, 3_000),
+            Effect.showMessage(`You've been promoted to ${game.player!.level} !!!!!`, 3_000),
         )
     }
     game.player!.level = EngineeringLevels.level(game.score.impact)

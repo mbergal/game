@@ -57,6 +57,7 @@ export function show(window: Window): Window {
 }
 
 export function hide(window: Window) {
+    debugger
     window.hide()
     windows.splice(windows.indexOf(window), 1)
     updateScreen()

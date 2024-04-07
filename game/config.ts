@@ -67,7 +67,8 @@ const config: Config = {
             ticksPerMove: 2,
         },
     },
-    totalDays: 14 * 3,
+    // totalDays: 14 * 3,
+    totalDays: 2,
     dayTicks: 80,
     story: {
         small: { neededCommits: 2, impact: 1 },
@@ -86,9 +87,9 @@ const config: Config = {
         interval: 40,
         maxItems: 20,
         frequencies: {
-            door: 3,
+            door: 2,
             commit: 10,
-            coffee: 1000,
+            coffee: 1,
         },
     },
     items: {

@@ -6080,7 +6080,8 @@
         ticksPerMove: 2
       }
     },
-    totalDays: 14 * 3,
+    // totalDays: 14 * 3,
+    totalDays: 2,
     dayTicks: 80,
     story: {
       small: { neededCommits: 2, impact: 1 },
@@ -6099,9 +6100,9 @@
       interval: 40,
       maxItems: 20,
       frequencies: {
-        door: 3,
+        door: 2,
         commit: 10,
-        coffee: 1e3
+        coffee: 1
       }
     },
     items: {
@@ -6173,7 +6174,7 @@
       game.player.level = newLevel;
       effects_exports.append(
         effects,
-        effect_exports.showMessage(`You've been promoted Level up! ${game.player.level}`, 3e3)
+        effect_exports.showMessage(`You've been promoted to ${game.player.level} !!!!!`, 3e3)
       );
     }
     game.player.level = levels_exports.level(game.score.impact);
@@ -8063,6 +8064,15 @@
       halfTick(0.5);
       fullTick(0.5);
     }
+    if (game.score.stockPrice <= 0) {
+      return {
+        type: "endGame",
+        message: "This company was liquidated!",
+        money: game.score.money,
+        level: game.player.level.name
+      };
+    }
+    return { type: "null" };
   }
   __name(tick9, "tick");
   var bossFootprint = traits_exports.Footprint.make(boss_exports.Footprint.footprint);
@@ -8144,214 +8154,16 @@
   }
   __name(load, "load");
 
-  // ui/text_window.ts
-  var text_window_exports = {};
-  __export(text_window_exports, {
-    TextWindow: () => TextWindow
-  });
-
-  // ui/windows.ts
-  var windows_exports = {};
-  __export(windows_exports, {
-    Window: () => Window,
-    center: () => center,
-    focused: () => focused,
-    hide: () => hide,
-    move: () => move3,
-    show: () => show,
-    updateScreen: () => updateScreen,
-    windows: () => windows
-  });
-  var import_lodash9 = __toESM(require_lodash());
-
-  // ui/screens.ts
-  function render2(chars) {
-    const contentBlock = document.getElementById("content");
-    const newInnerHTML = chars.map((x) => x.join("")).join("\n");
-    if (contentBlock.innerHTML != newInnerHTML) {
-      contentBlock.innerHTML = newInnerHTML;
-    }
-  }
-  __name(render2, "render");
-  var size = { x: 80, y: 27 };
-
-  // ui/composition.ts
-  function make20(size2) {
-    const composition = [];
-    for (let y = 0; y < size2.y; y++) {
-      composition[y] = [];
-      for (let x = 0; x < size2.x; x++) {
-        composition[y][x] = " ";
-      }
-    }
-    return composition;
-  }
-  __name(make20, "make");
-  function compose(composition, position, window2) {
-    for (let y = 0; y < window2.length; y++) {
-      for (let x = 0; x < window2[y].length; x++) {
-        const t_y = position.y + y;
-        const t_x = position.x + x;
-        if (t_y < 0 || t_y >= size.y || t_x < 0 || t_x >= size.x) {
-          continue;
-        }
-        composition[position.y + y][position.x + x] = window2[y][x];
-      }
-    }
-    return composition;
-  }
-  __name(compose, "compose");
-  function render3(windows2) {
-    let composition = make20(size);
-    for (const window2 of windows2) {
-      composition = compose(
-        composition,
-        window2.position,
-        window2.render().map((x) => x.split(""))
-      );
-    }
-    render2(composition);
-  }
-  __name(render3, "render");
-
-  // ui/windows.ts
-  var _Window = class _Window {
-    constructor() {
-      this.keydown = null;
-      this.position = vector_exports.zero;
-      this.size = vector_exports.zero;
-    }
-    hide() {
-    }
-    show() {
-    }
-    render() {
-      return [];
-    }
-    clearInterval(id) {
-      window.clearInterval(id);
-    }
-    setInterval(handler, timeout) {
-      return window.setInterval(() => {
-        if (isFocused(this)) {
-          handler();
-        }
-      }, timeout);
-    }
-  };
-  __name(_Window, "Window");
-  var Window = _Window;
-  function isFocused(window2) {
-    return import_lodash9.default.last(windows) === window2;
-  }
-  __name(isFocused, "isFocused");
-  var windows = [];
-  function focused() {
-    return import_lodash9.default.last(windows) ?? null;
-  }
-  __name(focused, "focused");
-  function updateScreen() {
-    render3(windows);
-  }
-  __name(updateScreen, "updateScreen");
-  function show(window2) {
-    windows.push(window2);
-    window2.show();
-    updateScreen();
-    return window2;
-  }
-  __name(show, "show");
-  function hide(window2) {
-    window2.hide();
-    windows.splice(windows.indexOf(window2), 1);
-    updateScreen();
-  }
-  __name(hide, "hide");
-  function move3(position, window2) {
-    window2.position = position;
-    updateScreen();
-    return window2;
-  }
-  __name(move3, "move");
-  function center(window2) {
-    move3(
-      {
-        x: Math.floor((size.x - window2.size.x) / 2),
-        y: Math.floor((size.y - window2.size.y) / 2)
-      },
-      window2
-    );
-    return window2;
-  }
-  __name(center, "center");
-
-  // ui/text_window.ts
-  var _TextWindow = class _TextWindow extends Window {
-    constructor(text) {
-      super();
-      this.keydown = null;
-      this.position = { x: 0, y: 0 };
-      const splitText = formatText(text);
-      const width = splitText[0].length;
-      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
-      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
-      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
-      this.size = { x: this.contents[0].length, y: this.contents.length };
-    }
-    render() {
-      return this.contents;
-    }
-    onKeyPress(callback) {
-      this.keydown = callback;
-      return this;
-    }
-  };
-  __name(_TextWindow, "TextWindow");
-  var TextWindow = _TextWindow;
-  function formatText(text) {
-    const lines = text.split("\n");
-    const maxLength = Math.max(...lines.map((x) => x.length));
-    return lines.map((x) => x.padEnd(maxLength, " "));
-  }
-  __name(formatText, "formatText");
-
-  // game/intro.ts
-  var _Window2 = class _Window2 extends text_window_exports.TextWindow {
-    constructor() {
-      super(
-        [
-          "        REQUIEM FOR A PROGRAMMER.",
-          "                                   ",
-          "       You ('*') are in Agile hell.",
-          "Earn enough money and get out (if you can)!",
-          "",
-          "Keys",
-          "----",
-          "",
-          "Move - arrows",
-          "Drop item - space",
-          "Use item - enter",
-          "Stop - end"
-        ].join("\n")
-      );
-      this.onKeyPress((window2, event) => {
-        windows_exports.hide(window2);
-      });
-    }
-  };
-  __name(_Window2, "Window");
-  var Window2 = _Window2;
-
   // game/item_generator.ts
   var item_generator_exports = {};
   __export(item_generator_exports, {
-    make: () => make21,
+    make: () => make20,
     tick: () => tick10
   });
-  function make21() {
+  function make20() {
     return { state: { type: "waiting", tact: 0 } };
   }
-  __name(make21, "make");
+  __name(make20, "make");
   function tick10(itemGenerator, game) {
     switch (itemGenerator.state.type) {
       case "waiting":
@@ -8401,7 +8213,7 @@
     all: () => all3,
     level: () => level
   });
-  var import_lodash10 = __toESM(require_lodash());
+  var import_lodash9 = __toESM(require_lodash());
   var all3 = [
     {
       name: "Engineer I",
@@ -8457,7 +8269,7 @@
         return level2;
       }
     }
-    return import_lodash10.default.last(all3);
+    return import_lodash9.default.last(all3);
   }
   __name(level, "level");
 
@@ -8468,10 +8280,10 @@
     Predicates: () => Predicates,
     directionTo: () => directionTo2
   });
-  var _13 = __toESM(require_lodash());
+  var _12 = __toESM(require_lodash());
 
   // generator.ts
-  var import_lodash11 = __toESM(require_lodash());
+  var import_lodash10 = __toESM(require_lodash());
 
   // room.ts
   function upperDoors(room) {
@@ -8501,7 +8313,7 @@
       })
     );
     game.map.add(outer_walls);
-    const inner_walls = import_lodash11.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
+    const inner_walls = import_lodash10.default.range(0, size2.y, 2).map((y) => hline({ x: 0, y }, size2.x)).flatMap((x) => x).map(
       (point) => ({
         type: "wall",
         position: point,
@@ -8525,9 +8337,9 @@
   }
   __name(maze, "maze");
   function roomWalls(args) {
-    const room_walls = import_lodash11.default.flatMap(
-      import_lodash11.default.range(3, args.height - 2, 2).map(
-        (y) => import_lodash11.default.flatMap(
+    const room_walls = import_lodash10.default.flatMap(
+      import_lodash10.default.range(3, args.height - 2, 2).map(
+        (y) => import_lodash10.default.flatMap(
           check(
             () => ints(
               0,
@@ -8546,7 +8358,7 @@
     for (let row = 3; row <= map.height - 2; row += 2) {
       const rooms = getRowRooms(map, row);
       makeRoomDoors(map, rooms);
-      const doors = import_lodash11.default.map(rooms, (x) => x.doors).flatMap((x) => x);
+      const doors = import_lodash10.default.map(rooms, (x) => x.doors).flatMap((x) => x);
       for (const door of doors) {
         const objs = map.at(door);
         map.remove(objs);
@@ -8560,7 +8372,7 @@
       [6, 1, 2],
       [100, 2, 5]
     ];
-    const min_max = import_lodash11.default.find(a, (x) => x[0] > room.length);
+    const min_max = import_lodash10.default.find(a, (x) => x[0] > room.length);
     return int(min_max[1], min_max[2]);
   }
   __name(desiredNumOfDoors, "desiredNumOfDoors");
@@ -8618,9 +8430,9 @@
   __name(getRowRooms, "getRowRooms");
   function proper_distance(walls) {
     const notEmpty = /* @__PURE__ */ __name((value) => value[0] !== null && value[1] != null, "notEmpty");
-    const sorted_walls = import_lodash11.default.sortBy(walls);
-    const distances = import_lodash11.default.chain(import_lodash11.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
-    const result = import_lodash11.default.every(
+    const sorted_walls = import_lodash10.default.sortBy(walls);
+    const distances = import_lodash10.default.chain(import_lodash10.default.zip(sorted_walls, sorted_walls.slice(1))).initial().value().filter(notEmpty);
+    const result = import_lodash10.default.every(
       distances.map((x) => x[1] - x[0]),
       (x) => x > 2
     );
@@ -8652,9 +8464,9 @@
     constructor(width, height, objs) {
       this.width = width;
       this.height = height;
-      const a = _13.range(1, 21);
-      this.cells = _13.chunk(
-        _13.range(width * height).map((x) => []),
+      const a = _12.range(1, 21);
+      this.cells = _12.chunk(
+        _12.range(width * height).map((x) => []),
         width
       );
       this.objects = [];
@@ -8677,7 +8489,7 @@
             debugger;
           }
           objs2.push(obj);
-          this.cells[obj.position.y][obj.position.x] = _13.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
+          this.cells[obj.position.y][obj.position.x] = _12.chain(objs2).push(obj).orderBy((x) => x.zIndex, "desc").value();
         }
       }
     }
@@ -8687,10 +8499,10 @@
      */
     remove(objs) {
       const objs_ = objs instanceof Array ? objs : [objs];
-      this.objects = this.objects.filter((x) => _13.indexOf(objs_, x) == -1);
+      this.objects = this.objects.filter((x) => _12.indexOf(objs_, x) == -1);
       for (const obj of objs_) {
         if (obj.position) {
-          this.cells[obj.position.y][obj.position.x] = _13.pull(
+          this.cells[obj.position.y][obj.position.x] = _12.pull(
             this.cells[obj.position.y][obj.position.x],
             obj
           );
@@ -8725,13 +8537,13 @@
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs.length > 0 ? _13.some(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
+      return objs.length > 0 ? _12.some(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
     everyObjectAt(v, include) {
       if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height)
         return false;
       const objs = this.cells[v.y][v.x];
-      return objs.length > 0 ? _13.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
+      return objs.length > 0 ? _12.every(objs, (x) => include instanceof Function ? include(x) : include == x.type) : include instanceof Function ? include(null) : false;
     }
     // possibleDirections(
     //     position: Vector.t,
@@ -8755,8 +8567,8 @@
     }
     toString() {
       let s2 = "\n";
-      for (const y of _13.range(this.height)) {
-        for (const x of _13.range(this.width))
+      for (const y of _12.range(this.height)) {
+        for (const x of _12.range(this.width))
           s2 += repr2(this.cells[y][x]);
         s2 += "\n";
       }
@@ -8777,7 +8589,7 @@
   __name(_GameMap, "GameMap");
   var GameMap3 = _GameMap;
   function directionTo2(position, map, objType) {
-    const dd = _13.compact(
+    const dd = _12.compact(
       direction_exports.all.filter((x) => map.someObjectsAt(moveTo(position, x), objType))
     );
     return dd.length ? dd[0] : null;
@@ -8801,9 +8613,11 @@
     Predicates2.doesNotHave = doesNotHave;
     __name(doesNotHave, "doesNotHave");
     function insideWall(position, map) {
-      return map.at(position).every(
-        (obj) => obj != null && obj.type == "wall" && obj.position != null && obj.position.y > 1 && obj.position.y < map.height - 1
-      );
+      if (position != null && position.y > 1 && position.y < map.height - 1 && position.x < map.width)
+        return map.at(position).some((obj) => obj != null && obj.type == "wall");
+      else {
+        return false;
+      }
     }
     Predicates2.insideWall = insideWall;
     __name(insideWall, "insideWall");
@@ -8840,19 +8654,199 @@
   // game/score.ts
   var score_exports = {};
   __export(score_exports, {
-    make: () => make22
+    make: () => make21
   });
-  function make22() {
+  function make21() {
     return {
       money: 0,
       impact: 0,
       stockPrice: 0
     };
   }
-  __name(make22, "make");
+  __name(make21, "make");
 
-  // help.ts
-  var _Window3 = class _Window3 extends text_window_exports.TextWindow {
+  // ui/text_window.ts
+  var text_window_exports = {};
+  __export(text_window_exports, {
+    TextWindow: () => TextWindow
+  });
+
+  // ui/windows.ts
+  var windows_exports = {};
+  __export(windows_exports, {
+    Window: () => Window,
+    center: () => center,
+    focused: () => focused,
+    hide: () => hide,
+    move: () => move3,
+    show: () => show,
+    updateScreen: () => updateScreen,
+    windows: () => windows
+  });
+  var import_lodash11 = __toESM(require_lodash());
+
+  // ui/screens.ts
+  function render2(chars) {
+    const contentBlock = document.getElementById("content");
+    const newInnerHTML = chars.map((x) => x.join("")).join("\n");
+    if (contentBlock.innerHTML != newInnerHTML) {
+      contentBlock.innerHTML = newInnerHTML;
+    }
+  }
+  __name(render2, "render");
+  var size = { x: 80, y: 27 };
+
+  // ui/composition.ts
+  function make22(size2) {
+    const composition = [];
+    for (let y = 0; y < size2.y; y++) {
+      composition[y] = [];
+      for (let x = 0; x < size2.x; x++) {
+        composition[y][x] = " ";
+      }
+    }
+    return composition;
+  }
+  __name(make22, "make");
+  function compose(composition, position, window2) {
+    for (let y = 0; y < window2.length; y++) {
+      for (let x = 0; x < window2[y].length; x++) {
+        const t_y = position.y + y;
+        const t_x = position.x + x;
+        if (t_y < 0 || t_y >= size.y || t_x < 0 || t_x >= size.x) {
+          continue;
+        }
+        composition[position.y + y][position.x + x] = window2[y][x];
+      }
+    }
+    return composition;
+  }
+  __name(compose, "compose");
+  function render3(windows2) {
+    let composition = make22(size);
+    for (const window2 of windows2) {
+      composition = compose(
+        composition,
+        window2.position,
+        window2.render().map((x) => x.split(""))
+      );
+    }
+    render2(composition);
+  }
+  __name(render3, "render");
+
+  // ui/windows.ts
+  var _Window = class _Window {
+    constructor() {
+      this.keydown = null;
+      this.position = vector_exports.zero;
+      this.size = vector_exports.zero;
+    }
+    hide() {
+    }
+    show() {
+    }
+    render() {
+      return [];
+    }
+    clearInterval(id) {
+      window.clearInterval(id);
+    }
+    setInterval(handler, timeout) {
+      return window.setInterval(() => {
+        if (isFocused(this)) {
+          handler();
+        }
+      }, timeout);
+    }
+  };
+  __name(_Window, "Window");
+  var Window = _Window;
+  function isFocused(window2) {
+    return import_lodash11.default.last(windows) === window2;
+  }
+  __name(isFocused, "isFocused");
+  var windows = [];
+  function focused() {
+    return import_lodash11.default.last(windows) ?? null;
+  }
+  __name(focused, "focused");
+  function updateScreen() {
+    render3(windows);
+  }
+  __name(updateScreen, "updateScreen");
+  function show(window2) {
+    windows.push(window2);
+    window2.show();
+    updateScreen();
+    return window2;
+  }
+  __name(show, "show");
+  function hide(window2) {
+    debugger;
+    window2.hide();
+    windows.splice(windows.indexOf(window2), 1);
+    updateScreen();
+  }
+  __name(hide, "hide");
+  function move3(position, window2) {
+    window2.position = position;
+    updateScreen();
+    return window2;
+  }
+  __name(move3, "move");
+  function center(window2) {
+    move3(
+      {
+        x: Math.floor((size.x - window2.size.x) / 2),
+        y: Math.floor((size.y - window2.size.y) / 2)
+      },
+      window2
+    );
+    return window2;
+  }
+  __name(center, "center");
+
+  // ui/text_window.ts
+  var _TextWindow = class _TextWindow extends Window {
+    constructor(text) {
+      super();
+      this.keydown = null;
+      this.position = { x: 0, y: 0 };
+      const splitText = formatText(text);
+      const width = splitText[0].length;
+      const topLine = "\u250F\u2501" + "\u2501".repeat(width) + "\u2501\u2513";
+      const bottomLine = "\u2517\u2501" + "\u2501".repeat(width) + "\u2501\u251B";
+      this.contents = [topLine].concat(splitText.map((x) => "\u2503 " + x + " \u2503")).concat([bottomLine]);
+      this.size = { x: this.contents[0].length, y: this.contents.length };
+    }
+    render() {
+      return this.contents;
+    }
+    onKeyPress(callback) {
+      this.keydown = callback;
+      return this;
+    }
+  };
+  __name(_TextWindow, "TextWindow");
+  var TextWindow = _TextWindow;
+  function formatText(text) {
+    const lines = text.split("\n");
+    const maxLength = Math.max(...lines.map((x) => x.length));
+    return lines.map((x) => x.padEnd(maxLength, " "));
+  }
+  __name(formatText, "formatText");
+
+  // ui/game_window.ts
+  var game_window_exports = {};
+  __export(game_window_exports, {
+    GameWindow: () => GameWindow,
+    load: () => load2,
+    save: () => save2
+  });
+
+  // ui/help.ts
+  var _Window2 = class _Window2 extends text_window_exports.TextWindow {
     constructor() {
       super(
         [
@@ -8869,10 +8863,28 @@
       });
     }
   };
+  __name(_Window2, "Window");
+  var Window2 = _Window2;
+
+  // ui/end_game.ts
+  var _Window3 = class _Window3 extends text_window_exports.TextWindow {
+    constructor(title, money, description2) {
+      super(
+        [
+          `        ${title}       `,
+          "",
+          `You are out of you job :(. Hopefully ${money} will be last enough`,
+          "till you find the new job.",
+          "",
+          `This is not going to be easy for a ${description2}`
+        ].join("\n")
+      );
+    }
+  };
   __name(_Window3, "Window");
   var Window3 = _Window3;
 
-  // game_window.ts
+  // ui/game_window.ts
   var logger5 = make("game_window");
   var _GameWindow = class _GameWindow extends windows_exports.Window {
     constructor(game, storage) {
@@ -8883,7 +8895,15 @@
         this.processKey(event);
       };
       this.interval = this.setInterval(() => {
-        game_exports.tick(this.game);
+        const effect = game_exports.tick(this.game);
+        switch (effect.type) {
+          case "endGame":
+            this.clearInterval(this.interval);
+            endGame(effect);
+            break;
+          case "null":
+            break;
+        }
         windows_exports.updateScreen();
       }, config_default.tickInterval);
     }
@@ -8937,9 +8957,13 @@
   __name(_GameWindow, "GameWindow");
   var GameWindow = _GameWindow;
   function help() {
-    windows_exports.show(windows_exports.center(new Window3()));
+    windows_exports.show(windows_exports.center(new Window2()));
   }
   __name(help, "help");
+  function endGame(effect) {
+    windows_exports.show(windows_exports.center(new Window3(effect.message, effect.money, effect.level)));
+  }
+  __name(endGame, "endGame");
   function getCommand(key) {
     switch (key) {
       case "ArrowUp":
@@ -8969,6 +8993,37 @@
     return game_exports.load(storage);
   }
   __name(load2, "load");
+
+  // ui/intro.ts
+  var intro_exports = {};
+  __export(intro_exports, {
+    Window: () => Window4
+  });
+  var _Window4 = class _Window4 extends text_window_exports.TextWindow {
+    constructor() {
+      super(
+        [
+          "        REQUIEM FOR A PROGRAMMER.",
+          "                                   ",
+          "       You ('*') are in Agile hell.",
+          "Earn enough money and get out (if you can)!",
+          "",
+          "Keys",
+          "----",
+          "",
+          "Move - arrows",
+          "Drop item - space",
+          "Use item - enter",
+          "Stop - end"
+        ].join("\n")
+      );
+      this.onKeyPress((window2, event) => {
+        windows_exports.hide(window2);
+      });
+    }
+  };
+  __name(_Window4, "Window");
+  var Window4 = _Window4;
 
   // main.ts
   console.log("main.ts");
@@ -9002,8 +9057,8 @@
         focused2.keydown(focused2, event);
       }
     });
-    windows_exports.show(new GameWindow(game, localStorage));
-    windows_exports.show(windows_exports.center(new Window3()));
+    windows_exports.show(new game_window_exports.GameWindow(game, localStorage));
+    windows_exports.show(windows_exports.center(new intro_exports.Window()));
   }
   __name(main, "main");
   var localStorage = {

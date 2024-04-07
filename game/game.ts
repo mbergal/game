@@ -101,7 +101,20 @@ export function message(game: Game, m: Message | { text: string[]; ttl: number }
     }
 }
 
-export function tick(game: Game) {
+export type EndGameEffect = {
+    type: "endGame"
+    message: string
+    money: number
+    level: string
+}
+
+export type NullEffect = {
+    type: "null"
+}
+
+export type GameEffect = EndGameEffect | NullEffect
+
+export function tick(game: Game): GameEffect {
     const fullTick = (timePassed: number) => {
         Logging.setTime(game.time.ticks)
         game.score.stockPrice =
@@ -145,6 +158,16 @@ export function tick(game: Game) {
         halfTick(0.5)
         fullTick(0.5)
     }
+    if (game.score.stockPrice <= 0) {
+        return {
+            type: "endGame",
+            message: "This company was liquidated!",
+            money: game.score.money,
+            level: game.player!.level.name,
+        }
+    }
+
+    return { type: "null" }
 }
 
 const bossFootprint = Traits.Footprint.make(Boss.Footprint.footprint)

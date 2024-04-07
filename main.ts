@@ -4,8 +4,7 @@ import { Game, Plan, GameStorage } from "./game"
 import { Boss, Player, Developer } from "@/objects"
 import { Vector } from "./geometry"
 import { Windows } from "@/ui"
-import { GameWindow } from "@/game_window"
-import * as Intro from "@/help"
+import { GameWindow, Intro } from "@/ui"
 
 import * as Logging from "@/utils/logging"
 import * as MazeGenerator from "@/generator"
@@ -56,7 +55,7 @@ export function main() {
         }
     })
 
-    Windows.show(new GameWindow(game, localStorage))
+    Windows.show(new GameWindow.GameWindow(game, localStorage))
     Windows.show(Windows.center(new Intro.Window()))
 }
 

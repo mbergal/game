@@ -1,4 +1,4 @@
-import { Game, GameMap } from "@/game"
+import { GameMap } from "@/game"
 import config from "@/game/config"
 
 import { Direction, Vector, moveTo } from "@/geometry"

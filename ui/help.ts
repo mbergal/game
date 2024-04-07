@@ -12,7 +12,6 @@ export class Window extends TextWindow.TextWindow {
                 "Stop - end",
             ].join("\n"),
         )
-
         this.onKeyPress((window, event) => {
             Windows.hide(window)
         })
