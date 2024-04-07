@@ -40,7 +40,6 @@ export const targeting: Traits.Targeting.Targeting<Developer> = {
     canMoveOn,
 }
 
-debugger
 const footprint = Traits.Footprint.make(Footprint.footprint)
 
 export const speedUp: Traits.SpeedUp.SpeedUp<Developer> = {

@@ -262,7 +262,7 @@ function processCommands(
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))]
 
     if (player.commands.length > 0) {
-        logger(JSON.stringify(player.commands))
+        logger(`processCommands: ${JSON.stringify(player.commands)}`)
     }
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
         logger(JSON.stringify(player.commands))

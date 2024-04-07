@@ -17,7 +17,7 @@ const logger = Logging.make("main")
 logger("Staring the game")
 
 Logging.setIsEnabled((name: string) =>
-    _.includes(["main", "player", "game", "fellow_developer"], name),
+    _.includes(["main", "player", "game", "fellow_developer", "game_window"], name),
 )
 
 export function main() {
@@ -49,6 +49,7 @@ export function main() {
     game.map.add([game.developer])
 
     window.addEventListener("keydown", (event) => {
+        logger(`keydown ${event.key}`)
         const focused = Windows.focused()
         if (focused && focused.keydown) {
             focused.keydown(focused, event)

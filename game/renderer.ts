@@ -22,6 +22,7 @@ export function render(game: Game.Game) {
     buffer.push(
         showTime(game) +
             showLevel(game) +
+            showFlags(game) +
             "|Money: $" +
             game.score.money.toString().padStart(6, "0") +
             "|Impact: " +
@@ -93,6 +94,10 @@ function showTime(game: Game.Game): string {
 
 function showLevel(game: Game.Game): string {
     return "|Pos:" + game.player!.level.name
+}
+
+function showFlags(game: Game.Game): string {
+    return "| " + (game.player!.speedUp ? "⚡" : " ")
 }
 
 function showTask(game: Game.Game): string {

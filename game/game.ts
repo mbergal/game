@@ -135,7 +135,6 @@ export function tick(game: Game) {
         if (game.developer!.speedUp) {
             objTick(game.developer!, game, game.commands, 0.5)
         }
-        game.commands = []
         Renderer.render(game)
         game.time.ticks += timePassed
     }

@@ -1,0 +1,1947 @@
+{
+  "inputs": {
+    "node_modules/lodash/lodash.js": {
+      "bytes": 544098,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "utils/assert.ts": {
+      "bytes": 349,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "utils/random.ts": {
+      "bytes": 1268,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "utils/assert.ts",
+          "kind": "import-statement",
+          "original": "./assert"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/config.ts": {
+      "bytes": 2251,
+      "imports": [
+        {
+          "path": "../objects/story_size",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "utils/logging.ts": {
+      "bytes": 473,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/performance_review.ts": {
+      "bytes": 1556,
+      "imports": [
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "game/plan.ts",
+          "kind": "import-statement",
+          "original": "./plan"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "./config",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/traits/footprint.ts": {
+      "bytes": 1090,
+      "imports": [
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/traits/targeting.ts": {
+      "bytes": 366,
+      "imports": [
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/traits/speedUp.ts": {
+      "bytes": 485,
+      "imports": [
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/traits/moving.ts": {
+      "bytes": 247,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/traits/index.ts": {
+      "bytes": 194,
+      "imports": [
+        {
+          "path": "objects/traits/footprint.ts",
+          "kind": "import-statement",
+          "original": "./footprint"
+        },
+        {
+          "path": "objects/traits/targeting.ts",
+          "kind": "import-statement",
+          "original": "./targeting"
+        },
+        {
+          "path": "objects/traits/speedUp.ts",
+          "kind": "import-statement",
+          "original": "./speedUp"
+        },
+        {
+          "path": "objects/traits/moving.ts",
+          "kind": "import-statement",
+          "original": "./moving"
+        }
+      ],
+      "format": "esm"
+    },
+    "geometry/vector.ts": {
+      "bytes": 651,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "geometry/direction.ts": {
+      "bytes": 576,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "geometry/index.ts": {
+      "bytes": 1184,
+      "imports": [
+        {
+          "path": "./direction",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "geometry/vector.ts",
+          "kind": "import-statement",
+          "original": "./vector"
+        },
+        {
+          "path": "geometry/direction.ts",
+          "kind": "import-statement",
+          "original": "./direction"
+        },
+        {
+          "path": "geometry/vector.ts",
+          "kind": "import-statement",
+          "original": "./vector"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/boss/footprint.ts": {
+      "bytes": 388,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "..",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/boss/index.ts": {
+      "bytes": 7541,
+      "imports": [
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "@/geometry"
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "@/utils/random"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "./footprint",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/boss/footprint.ts",
+          "kind": "import-statement",
+          "original": "./footprint"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/coffee.ts": {
+      "bytes": 484,
+      "imports": [
+        {
+          "path": "../geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./object",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/commit.ts": {
+      "bytes": 732,
+      "imports": [
+        {
+          "path": ".",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/pickDirection.ts": {
+      "bytes": 4614,
+      "imports": [
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "@/geometry"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/developer/footprint.ts": {
+      "bytes": 615,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/developer/pathlight.ts": {
+      "bytes": 492,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "utils/utils.ts": {
+      "bytes": 271,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/developer/index.ts": {
+      "bytes": 4709,
+      "imports": [
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "@/geometry"
+        },
+        {
+          "path": "objects/pickDirection.ts",
+          "kind": "import-statement",
+          "original": "@/objects/pickDirection"
+        },
+        {
+          "path": "objects/developer/footprint.ts",
+          "kind": "import-statement",
+          "original": "./footprint"
+        },
+        {
+          "path": "objects/developer/footprint.ts",
+          "kind": "import-statement",
+          "original": "./footprint"
+        },
+        {
+          "path": "objects/developer/pathlight.ts",
+          "kind": "import-statement",
+          "original": "./pathlight"
+        },
+        {
+          "path": "objects/developer/pathlight.ts",
+          "kind": "import-statement",
+          "original": "./pathlight"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "@/utils/utils"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/door.ts": {
+      "bytes": 562,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/item.ts": {
+      "bytes": 1133,
+      "imports": [
+        {
+          "path": "./door",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./commit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./story",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./coffee",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./object",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "@/utils/utils"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/story_size.ts": {
+      "bytes": 265,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/story.ts": {
+      "bytes": 2494,
+      "imports": [
+        {
+          "path": "../geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "../utils/random"
+        },
+        {
+          "path": "./object",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./story_size",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/story_size.ts",
+          "kind": "import-statement",
+          "original": "./story_size"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/object.ts": {
+      "bytes": 1089,
+      "imports": [
+        {
+          "path": "./boss",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./player",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./wall",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./door",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/door.ts",
+          "kind": "import-statement",
+          "original": "./door"
+        },
+        {
+          "path": "./story",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/story.ts",
+          "kind": "import-statement",
+          "original": "./story"
+        },
+        {
+          "path": "./commit",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/commit.ts",
+          "kind": "import-statement",
+          "original": "./commit"
+        },
+        {
+          "path": "./coffee",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/coffee.ts",
+          "kind": "import-statement",
+          "original": "./coffee"
+        },
+        {
+          "path": "./developer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/developer/index.ts",
+          "kind": "import-statement",
+          "original": "./developer"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/objects.ts": {
+      "bytes": 321,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "./object",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/pathlight.ts": {
+      "bytes": 238,
+      "imports": [
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/tasks/story.ts": {
+      "bytes": 1029,
+      "imports": [
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/tasks/index.ts": {
+      "bytes": 155,
+      "imports": [
+        {
+          "path": "./null",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./story",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/tasks/story.ts",
+          "kind": "import-statement",
+          "original": "./story"
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/player.ts": {
+      "bytes": 12042,
+      "imports": [
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "@/utils/utils"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "../command",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "@/game/config"
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "@/geometry"
+        },
+        {
+          "path": "objects/tasks/index.ts",
+          "kind": "import-statement",
+          "original": "./tasks"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "objects/index.ts": {
+      "bytes": 461,
+      "imports": [
+        {
+          "path": "objects/traits/index.ts",
+          "kind": "import-statement",
+          "original": "./traits"
+        },
+        {
+          "path": "objects/boss/index.ts",
+          "kind": "import-statement",
+          "original": "./boss"
+        },
+        {
+          "path": "objects/coffee.ts",
+          "kind": "import-statement",
+          "original": "./coffee"
+        },
+        {
+          "path": "objects/commit.ts",
+          "kind": "import-statement",
+          "original": "./commit"
+        },
+        {
+          "path": "objects/developer/index.ts",
+          "kind": "import-statement",
+          "original": "./developer"
+        },
+        {
+          "path": "objects/door.ts",
+          "kind": "import-statement",
+          "original": "./door"
+        },
+        {
+          "path": "objects/item.ts",
+          "kind": "import-statement",
+          "original": "./item"
+        },
+        {
+          "path": "objects/object.ts",
+          "kind": "import-statement",
+          "original": "./object"
+        },
+        {
+          "path": "objects/objects.ts",
+          "kind": "import-statement",
+          "original": "./objects"
+        },
+        {
+          "path": "objects/pathlight.ts",
+          "kind": "import-statement",
+          "original": "./pathlight"
+        },
+        {
+          "path": "objects/player.ts",
+          "kind": "import-statement",
+          "original": "./player"
+        },
+        {
+          "path": "objects/story.ts",
+          "kind": "import-statement",
+          "original": "./story"
+        }
+      ],
+      "format": "esm"
+    },
+    "game/effect.ts": {
+      "bytes": 557,
+      "imports": [
+        {
+          "path": "./message",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/effects.ts": {
+      "bytes": 308,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "./effect",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/day_of_week.ts": {
+      "bytes": 280,
+      "imports": [],
+      "format": "esm"
+    },
+    "game/game_time.ts": {
+      "bytes": 384,
+      "imports": [
+        {
+          "path": "game/day_of_week.ts",
+          "kind": "import-statement",
+          "original": "./day_of_week"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/sprint.ts": {
+      "bytes": 6381,
+      "imports": [
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "../objects/story_size",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils/utils"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "game/effect.ts",
+          "kind": "import-statement",
+          "original": "./effect"
+        },
+        {
+          "path": "game/effects.ts",
+          "kind": "import-statement",
+          "original": "./effects"
+        },
+        {
+          "path": "game/game_time.ts",
+          "kind": "import-statement",
+          "original": "./game_time"
+        },
+        {
+          "path": "game/plan.ts",
+          "kind": "import-statement",
+          "original": "./plan"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/plan.ts": {
+      "bytes": 1774,
+      "imports": [
+        {
+          "path": "game/collapse.ts",
+          "kind": "import-statement",
+          "original": "./collapse"
+        },
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/performance_review.ts",
+          "kind": "import-statement",
+          "original": "./performance_review"
+        },
+        {
+          "path": "game/sprint.ts",
+          "kind": "import-statement",
+          "original": "./sprint"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/collapse.ts": {
+      "bytes": 1340,
+      "imports": [
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "@/utils/random"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "./effect",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/plan.ts",
+          "kind": "import-statement",
+          "original": "./plan"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/event.ts": {
+      "bytes": 1508,
+      "imports": [
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./day_of_week",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/renderer.ts": {
+      "bytes": 7008,
+      "imports": [
+        {
+          "path": ".",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "../geometry"
+        },
+        {
+          "path": "../objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "../utils/utils"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "./day_of_week",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/game.ts": {
+      "bytes": 6949,
+      "imports": [
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "@/game"
+        },
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "@/utils/utils"
+        },
+        {
+          "path": "../command",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "./message",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/renderer.ts",
+          "kind": "import-statement",
+          "original": "./renderer"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/game_storage.ts": {
+      "bytes": 88,
+      "imports": [],
+      "format": "esm"
+    },
+    "ui/screens.ts": {
+      "bytes": 313,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "ui/composition.ts": {
+      "bytes": 1253,
+      "imports": [
+        {
+          "path": "@/geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./windows",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "ui/screens.ts",
+          "kind": "import-statement",
+          "original": "./screens"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "ui/windows.ts": {
+      "bytes": 1748,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "../geometry"
+        },
+        {
+          "path": "ui/composition.ts",
+          "kind": "import-statement",
+          "original": "./composition"
+        },
+        {
+          "path": "ui/screens.ts",
+          "kind": "import-statement",
+          "original": "./screens"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "ui/text_window.ts": {
+      "bytes": 1102,
+      "imports": [
+        {
+          "path": "ui/windows.ts",
+          "kind": "import-statement",
+          "original": "./windows"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "ui/index.ts": {
+      "bytes": 81,
+      "imports": [
+        {
+          "path": "ui/text_window.ts",
+          "kind": "import-statement",
+          "original": "./text_window"
+        },
+        {
+          "path": "ui/windows.ts",
+          "kind": "import-statement",
+          "original": "./windows"
+        }
+      ],
+      "format": "esm"
+    },
+    "game/intro.ts": {
+      "bytes": 729,
+      "imports": [
+        {
+          "path": "ui/index.ts",
+          "kind": "import-statement",
+          "original": "@/ui"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/item_generator.ts": {
+      "bytes": 2285,
+      "imports": [
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "@/utils/random"
+        },
+        {
+          "path": "utils/utils.ts",
+          "kind": "import-statement",
+          "original": "@/utils/utils"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./config"
+        },
+        {
+          "path": "./game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/levels.ts": {
+      "bytes": 1141,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "room.ts": {
+      "bytes": 354,
+      "imports": [
+        {
+          "path": "./geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "generator.ts": {
+      "bytes": 5612,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "@/game",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "./geometry"
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "room.ts",
+          "kind": "import-statement",
+          "original": "./room"
+        },
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "@/utils/random"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/map.ts": {
+      "bytes": 7006,
+      "imports": [
+        {
+          "path": "geometry/index.ts",
+          "kind": "import-statement",
+          "original": "@/geometry"
+        },
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "generator.ts",
+          "kind": "import-statement",
+          "original": "@/generator"
+        },
+        {
+          "path": "@/objects",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "utils/random.ts",
+          "kind": "import-statement",
+          "original": "@/utils/random"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/message.ts": {
+      "bytes": 62,
+      "imports": [],
+      "format": "esm"
+    },
+    "game/messages.ts": {
+      "bytes": 429,
+      "imports": [
+        {
+          "path": "../objects/object",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../objects/story",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "objects/story_size.ts",
+          "kind": "import-statement",
+          "original": "../objects/story_size"
+        },
+        {
+          "path": "./message",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/score.ts": {
+      "bytes": 198,
+      "imports": [
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game/index.ts": {
+      "bytes": 695,
+      "imports": [
+        {
+          "path": "game/collapse.ts",
+          "kind": "import-statement",
+          "original": "./collapse"
+        },
+        {
+          "path": "game/effect.ts",
+          "kind": "import-statement",
+          "original": "./effect"
+        },
+        {
+          "path": "game/effects.ts",
+          "kind": "import-statement",
+          "original": "./effects"
+        },
+        {
+          "path": "game/event.ts",
+          "kind": "import-statement",
+          "original": "./event"
+        },
+        {
+          "path": "game/game.ts",
+          "kind": "import-statement",
+          "original": "./game"
+        },
+        {
+          "path": "game/game_storage.ts",
+          "kind": "import-statement",
+          "original": "./game_storage"
+        },
+        {
+          "path": "game/game_time.ts",
+          "kind": "import-statement",
+          "original": "./game_time"
+        },
+        {
+          "path": "game/intro.ts",
+          "kind": "import-statement",
+          "original": "./intro"
+        },
+        {
+          "path": "game/item_generator.ts",
+          "kind": "import-statement",
+          "original": "./item_generator"
+        },
+        {
+          "path": "game/levels.ts",
+          "kind": "import-statement",
+          "original": "./levels"
+        },
+        {
+          "path": "game/map.ts",
+          "kind": "import-statement",
+          "original": "./map"
+        },
+        {
+          "path": "game/message.ts",
+          "kind": "import-statement",
+          "original": "./message"
+        },
+        {
+          "path": "game/messages.ts",
+          "kind": "import-statement",
+          "original": "./messages"
+        },
+        {
+          "path": "game/performance_review.ts",
+          "kind": "import-statement",
+          "original": "./performance_review"
+        },
+        {
+          "path": "game/plan.ts",
+          "kind": "import-statement",
+          "original": "./plan"
+        },
+        {
+          "path": "game/renderer.ts",
+          "kind": "import-statement",
+          "original": "./renderer"
+        },
+        {
+          "path": "game/score.ts",
+          "kind": "import-statement",
+          "original": "./score"
+        },
+        {
+          "path": "game/sprint.ts",
+          "kind": "import-statement",
+          "original": "./sprint"
+        }
+      ],
+      "format": "esm"
+    },
+    "help.ts": {
+      "bytes": 468,
+      "imports": [
+        {
+          "path": "ui/index.ts",
+          "kind": "import-statement",
+          "original": "@/ui"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "game_window.ts": {
+      "bytes": 3572,
+      "imports": [
+        {
+          "path": "ui/index.ts",
+          "kind": "import-statement",
+          "original": "@/ui"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "./command",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "./game"
+        },
+        {
+          "path": "game/config.ts",
+          "kind": "import-statement",
+          "original": "./game/config"
+        },
+        {
+          "path": "help.ts",
+          "kind": "import-statement",
+          "original": "./help"
+        },
+        {
+          "path": "./objects/player",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "main.ts": {
+      "bytes": 2064,
+      "imports": [
+        {
+          "path": "node_modules/lodash/lodash.js",
+          "kind": "import-statement",
+          "original": "lodash"
+        },
+        {
+          "path": "game/index.ts",
+          "kind": "import-statement",
+          "original": "./game"
+        },
+        {
+          "path": "objects/index.ts",
+          "kind": "import-statement",
+          "original": "@/objects"
+        },
+        {
+          "path": "./geometry",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "ui/index.ts",
+          "kind": "import-statement",
+          "original": "@/ui"
+        },
+        {
+          "path": "game_window.ts",
+          "kind": "import-statement",
+          "original": "@/game_window"
+        },
+        {
+          "path": "help.ts",
+          "kind": "import-statement",
+          "original": "@/help"
+        },
+        {
+          "path": "utils/logging.ts",
+          "kind": "import-statement",
+          "original": "@/utils/logging"
+        },
+        {
+          "path": "generator.ts",
+          "kind": "import-statement",
+          "original": "@/generator"
+        },
+        {
+          "path": "<runtime>",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "out.js.map": {
+      "imports": [],
+      "exports": [],
+      "inputs": {},
+      "bytes": 873732
+    },
+    "out.js": {
+      "imports": [],
+      "exports": [],
+      "entryPoint": "main.ts",
+      "inputs": {
+        "node_modules/lodash/lodash.js": {
+          "bytesInOutput": 256364
+        },
+        "main.ts": {
+          "bytesInOutput": 1599
+        },
+        "game/collapse.ts": {
+          "bytesInOutput": 1177
+        },
+        "utils/random.ts": {
+          "bytesInOutput": 929
+        },
+        "utils/assert.ts": {
+          "bytesInOutput": 431
+        },
+        "game/config.ts": {
+          "bytesInOutput": 1012
+        },
+        "game/plan.ts": {
+          "bytesInOutput": 1925
+        },
+        "game/performance_review.ts": {
+          "bytesInOutput": 861
+        },
+        "utils/logging.ts": {
+          "bytesInOutput": 451
+        },
+        "game/sprint.ts": {
+          "bytesInOutput": 5185
+        },
+        "objects/traits/index.ts": {
+          "bytesInOutput": 253
+        },
+        "objects/traits/footprint.ts": {
+          "bytesInOutput": 720
+        },
+        "objects/traits/targeting.ts": {
+          "bytesInOutput": 30
+        },
+        "objects/traits/speedUp.ts": {
+          "bytesInOutput": 456
+        },
+        "objects/traits/moving.ts": {
+          "bytesInOutput": 27
+        },
+        "objects/index.ts": {
+          "bytesInOutput": 35
+        },
+        "objects/boss/index.ts": {
+          "bytesInOutput": 5847
+        },
+        "geometry/vector.ts": {
+          "bytesInOutput": 720
+        },
+        "geometry/direction.ts": {
+          "bytesInOutput": 629
+        },
+        "geometry/index.ts": {
+          "bytesInOutput": 919
+        },
+        "objects/boss/footprint.ts": {
+          "bytesInOutput": 262
+        },
+        "objects/coffee.ts": {
+          "bytesInOutput": 393
+        },
+        "objects/commit.ts": {
+          "bytesInOutput": 705
+        },
+        "objects/developer/index.ts": {
+          "bytesInOutput": 4180
+        },
+        "objects/pickDirection.ts": {
+          "bytesInOutput": 3701
+        },
+        "objects/developer/footprint.ts": {
+          "bytesInOutput": 509
+        },
+        "objects/developer/pathlight.ts": {
+          "bytesInOutput": 488
+        },
+        "utils/utils.ts": {
+          "bytesInOutput": 140
+        },
+        "objects/door.ts": {
+          "bytesInOutput": 419
+        },
+        "objects/item.ts": {
+          "bytesInOutput": 910
+        },
+        "objects/object.ts": {
+          "bytesInOutput": 36
+        },
+        "objects/story.ts": {
+          "bytesInOutput": 2082
+        },
+        "objects/story_size.ts": {
+          "bytesInOutput": 226
+        },
+        "objects/objects.ts": {
+          "bytesInOutput": 313
+        },
+        "objects/player.ts": {
+          "bytesInOutput": 10477
+        },
+        "objects/tasks/story.ts": {
+          "bytesInOutput": 784
+        },
+        "objects/tasks/index.ts": {
+          "bytesInOutput": 0
+        },
+        "game/effect.ts": {
+          "bytesInOutput": 394
+        },
+        "game/effects.ts": {
+          "bytesInOutput": 354
+        },
+        "game/game_time.ts": {
+          "bytesInOutput": 306
+        },
+        "game/day_of_week.ts": {
+          "bytesInOutput": 125
+        },
+        "game/index.ts": {
+          "bytesInOutput": 0
+        },
+        "game/game.ts": {
+          "bytesInOutput": 5378
+        },
+        "game/renderer.ts": {
+          "bytesInOutput": 6343
+        },
+        "ui/text_window.ts": {
+          "bytesInOutput": 1131
+        },
+        "ui/windows.ts": {
+          "bytesInOutput": 1874
+        },
+        "ui/screens.ts": {
+          "bytesInOutput": 320
+        },
+        "ui/composition.ts": {
+          "bytesInOutput": 1032
+        },
+        "ui/index.ts": {
+          "bytesInOutput": 0
+        },
+        "game/intro.ts": {
+          "bytesInOutput": 683
+        },
+        "game/item_generator.ts": {
+          "bytesInOutput": 1791
+        },
+        "game/levels.ts": {
+          "bytesInOutput": 1113
+        },
+        "game/map.ts": {
+          "bytesInOutput": 5787
+        },
+        "generator.ts": {
+          "bytesInOutput": 5005
+        },
+        "room.ts": {
+          "bytesInOutput": 274
+        },
+        "game/messages.ts": {
+          "bytesInOutput": 430
+        },
+        "game/score.ts": {
+          "bytesInOutput": 208
+        },
+        "help.ts": {
+          "bytesInOutput": 458
+        },
+        "game_window.ts": {
+          "bytesInOutput": 2914
+        }
+      },
+      "bytes": 345008
+    }
+  }
+}

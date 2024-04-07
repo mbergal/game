@@ -6101,7 +6101,7 @@
       frequencies: {
         door: 3,
         commit: 10,
-        coffee: 1
+        coffee: 1e3
       }
     },
     items: {
@@ -6241,7 +6241,7 @@
   }
   __name(speedUp, "speedUp");
   function tick3(speedUp4, t, ticksPassed) {
-    speedUp4.setSpeedUp(t, Math.max(speedUp4.speedUp(t) - ticksPassed));
+    speedUp4.setSpeedUp(t, Math.max(speedUp4.speedUp(t) - ticksPassed, 0));
   }
   __name(tick3, "tick");
 
@@ -6796,7 +6796,6 @@
     },
     canMoveOn
   };
-  debugger;
   var footprint3 = traits_exports.Footprint.make(footprint2);
   var speedUp2 = {
     speedUpDays: (t) => config_default.items.coffee.speedUpDays,
@@ -7313,7 +7312,7 @@
     }, "removeAllMoves");
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
-      logger3(JSON.stringify(player.commands));
+      logger3(`processCommands: ${JSON.stringify(player.commands)}`);
     }
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
       logger3(JSON.stringify(player.commands));
@@ -7776,7 +7775,7 @@
       buffer.push(row.join(""));
     }
     buffer.push(
-      showTime(game) + showLevel(game) + "|Money: $" + game.score.money.toString().padStart(6, "0") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + "|" + showStockPrice(game)
+      showTime(game) + showLevel(game) + showFlags(game) + "|Money: $" + game.score.money.toString().padStart(6, "0") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + "|" + showStockPrice(game)
     );
     return buffer.map((x) => x);
   }
@@ -7828,6 +7827,10 @@
     return "|Pos:" + game.player.level.name;
   }
   __name(showLevel, "showLevel");
+  function showFlags(game) {
+    return "| " + (game.player.speedUp ? "\u26A1" : " ");
+  }
+  __name(showFlags, "showFlags");
   function showTask(game) {
     const task = game.player.task;
     if (task != null) {
@@ -8051,7 +8054,6 @@
       if (game.developer.speedUp) {
         objTick(game.developer, game, game.commands, 0.5);
       }
-      game.commands = [];
       render(game);
       game.time.ticks += timePassed;
     }, "halfTick");
@@ -8924,6 +8926,7 @@
         default: {
           const command = getCommand(event.key);
           if (command != null) {
+            logger5(`command: ${command.type}`);
             this.game.commands.push(command);
           }
           break;
@@ -8973,7 +8976,7 @@
   var logger6 = make("main");
   logger6("Staring the game");
   setIsEnabled(
-    (name) => import_lodash12.default.includes(["main", "player", "game", "fellow_developer"], name)
+    (name) => import_lodash12.default.includes(["main", "player", "game", "fellow_developer", "game_window"], name)
   );
   function main() {
     const plan2 = plan_exports.generatePlan(0);
@@ -8993,6 +8996,7 @@
     game.developer = developer_exports.make();
     game.map.add([game.developer]);
     window.addEventListener("keydown", (event) => {
+      logger6(`keydown ${event.key}`);
       const focused2 = windows_exports.focused();
       if (focused2 && focused2.keydown) {
         focused2.keydown(focused2, event);

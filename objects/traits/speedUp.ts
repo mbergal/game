@@ -11,5 +11,5 @@ export function speedUp<T>(speedUp: SpeedUp<T>, t: T) {
 }
 
 export function tick<T>(speedUp: SpeedUp<T>, t: T, ticksPassed: number) {
-    speedUp.setSpeedUp(t, Math.max(speedUp.speedUp(t) - ticksPassed))
+    speedUp.setSpeedUp(t, Math.max(speedUp.speedUp(t) - ticksPassed, 0))
 }

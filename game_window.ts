@@ -72,6 +72,7 @@ export class GameWindow extends Windows.Window {
             default: {
                 const command = getCommand(event.key)
                 if (command != null) {
+                    logger(`command: ${command.type}`)
                     this.game.commands.push(command)
                 }
                 break
