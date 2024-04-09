@@ -12,7 +12,9 @@ import {
     Sprint,
 } from "@/game"
 import { Vector } from "@/geometry"
-import { Boss, Developer, GameObject, Player, Traits } from "@/objects"
+import { Boss, Developer, GameObject, Player, PrReview } from "@/objects"
+import * as Traits from "@/traits"
+
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import * as Command from "../command"
@@ -170,15 +172,15 @@ export function tick(game: Game): GameEffect {
     return { type: "null" }
 }
 
-const bossFootprint = Traits.Footprint.make(Boss.Footprint.footprint)
-const developerFootprint = Traits.Footprint.make(Developer.Footprint.footprint)
-
 function objTick(
     obj: GameObject.GameObject,
     game: Game,
     commands: Command.Command[],
     ticksPassed: number,
 ) {
+    const bossFootprint = Traits.Footprint.make(Boss.Footprint.footprint)
+    const developerFootprint = Traits.Footprint.make(Developer.Footprint.footprint)
+
     switch (obj.type) {
         case "boss":
             Boss.tick(obj, game.map)
@@ -192,11 +194,16 @@ function objTick(
         case "player":
             handleEffects(game, Player.tick(obj, game, commands, ticksPassed))
             break
+        case "pr_review":
+            handleEffects(game, PrReview.tick(obj, game.map))
+            break
+
         case "door":
         case "story":
         case "commit":
         case "coffee":
         case "wall":
+
         case "developer.pathlights":
             break
         case "developer":

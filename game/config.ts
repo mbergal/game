@@ -37,6 +37,7 @@ export type Config = {
             door: number
             commit: number
             coffee: number
+            prReview: number
         }
     }
     items: {
@@ -64,11 +65,11 @@ const config: Config = {
                 footprints: [1000, 400, 20],
                 freeSpace: 10000,
             },
-            ticksPerMove: 2,
+            ticksPerMove: 3,
         },
     },
-    // totalDays: 14 * 3,
-    totalDays: 2,
+    totalDays: 14 * 3,
+    // totalDays: 2,
     dayTicks: 80,
     story: {
         small: { neededCommits: 2, impact: 1 },
@@ -90,6 +91,7 @@ const config: Config = {
             door: 2,
             commit: 10,
             coffee: 1,
+            prReview: 10,
         },
     },
     items: {

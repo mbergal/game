@@ -1,6 +1,5 @@
-console.log("objects/player.ts")
-
-import { Commit, GameObject, Item, Traits } from "@/objects"
+import { Commit, GameObject, Item, PrReview } from "@/objects"
+import * as Traits from "@/traits"
 import * as Logging from "@/utils/logging"
 import { assertUnreachable } from "@/utils/utils"
 import _ from "lodash"
@@ -41,6 +40,11 @@ const speedUp: Traits.SpeedUp.SpeedUp<Player> = {
     speedUp: (t) => t.speedUp,
 }
 
+const picking: Traits.Picking.Picking<Player> = {
+    canPickItem: (t, item) => canPickItem(t, item),
+    dropItem: (t, map, effects) => dropItem(t, map),
+    pickItem: (t, item, map, effects) => pickItem(t, item, map, effects),
+}
 export function make(position: Vector.t): Player {
     return {
         type: type,
@@ -57,15 +61,16 @@ export function make(position: Vector.t): Player {
     }
 }
 
-function canMoveOn(objs: GameObject.t[]) {
+function canMoveOn(objs: readonly GameObject.GameObject[]) {
     if (objs.length > 0) {
-        const canMoveOnObj = (obj: GameObject.t) => {
+        const canMoveOnObj = (obj: GameObject.GameObject) => {
             switch (obj.type) {
                 case "boss.footprint":
                 case "coffee":
                 case "commit":
                 case "developer.footprint":
                 case "developer.pathlights":
+                case "pr_review":
                 case "developer":
                 case "door":
                 case "story":
@@ -114,7 +119,10 @@ function canPickItem(player: Player, item: GameObject.Item) {
         case "coffee":
         case "commit":
         case "story":
+        case "pr_review":
             break
+        default:
+            assertUnreachable(item)
     }
     return player.hrTaskTact == null
 }
@@ -142,6 +150,15 @@ function useItem(
             item.placed = true
             player.item = null
             return true
+        case "pr_review":
+            if (player.direction != null) {
+                debugger
+                player.item = null
+                item.position = player.position
+                map.add(item)
+                PrReview.publishTo(item, Direction.reverse(player.direction))
+            }
+
         case "story":
             break
         default:
@@ -178,14 +195,14 @@ function useCommit(player: Player, item: Commit.Commit, effects: Effect.Effect[]
 function pickItem(
     player: Player,
     newItem: GameObject.Item,
-    game: Game.Game,
+    map: GameMap.GameMap,
     effects: Effects.Effects,
 ): boolean {
-    game.map.remove(newItem)
+    map.remove(newItem)
     switch (newItem.type) {
         case "door":
             newItem.open = true
-            dropCarriedItem(player, game, effects)
+            dropCarriedItem(player, map, effects)
             player.item = newItem
             Effects.append(
                 effects,
@@ -193,12 +210,12 @@ function pickItem(
             )
             return true
         case "coffee":
-            dropCarriedItem(player, game, effects)
+            dropCarriedItem(player, map, effects)
             player.item = newItem
             effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return true
         case "commit":
-            dropCarriedItem(player, game, effects)
+            dropCarriedItem(player, map, effects)
             player.item = newItem
             effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return true
@@ -206,15 +223,18 @@ function pickItem(
             player.task = StoryTask.make(newItem)
             effects.push(Effect.showMessage(`Picked ${Item.description(newItem)}`, 3_000))
             return false
+        case "pr_review":
+            player.item = newItem
+            return true
         default:
             assertUnreachable(newItem)
     }
 }
 
-function dropCarriedItem(player: Player, game: Game.Game, effects: Effects.Effects) {
+function dropCarriedItem(player: Player, map: GameMap.GameMap, effects: Effects.Effects) {
     const carriedItem = player.item
     if (carriedItem != null) {
-        dropItem(player, game.map)
+        dropItem(player, map)
         Effects.append(
             effects,
             Effect.showMessage(`Dropped ${Item.description(carriedItem)}`, 3_000),
@@ -346,7 +366,7 @@ export function tick(
                             logger(`Can pick item  ${JSON.stringify(player)}`)
                             Effects.append(effects, Effect.showMessage(`Picked a ${obj.type}`, 40))
                             pickedSomething =
-                                pickedSomething || pickItem(player, obj, game, effects)
+                                pickedSomething || pickItem(player, obj, game.map, effects)
                         }
                         break
                     case "commit":
@@ -357,7 +377,7 @@ export function tick(
                                 Effect.showMessage(`Picked a commit ${obj.hash}`, 40),
                             )
                             pickedSomething =
-                                pickedSomething || pickItem(player, obj, game, effects)
+                                pickedSomething || pickItem(player, obj, game.map, effects)
                         }
                         break
                     case "story": {
@@ -369,6 +389,10 @@ export function tick(
                         }
                         break
                     }
+                    case "pr_review":
+                        const pickingPlayer = Traits.Picking.make(picking)
+                        pickingPlayer.pick(player, obj, game.map, effects)
+                        break
                     case "player":
                     case "wall":
                     case "boss":

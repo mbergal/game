@@ -17,7 +17,7 @@ export function maze(size: Vector.t, game: Game.Game) {
         .concat(vline({ x: 0, y: 0 }, size.y))
         .concat(vline({ x: size.x - 1, y: 0 }, size.y))
         .map(
-            (point: Vector.t): GameObject.t => ({
+            (point: Vector.t): GameObject.GameObject => ({
                 position: point,
                 type: "wall",
                 zIndex: 0,
@@ -30,7 +30,7 @@ export function maze(size: Vector.t, game: Game.Game) {
         .map((y: number) => hline({ x: 0, y }, size.x))
         .flatMap((x) => x)
         .map(
-            (point: Vector.t): GameObject.t => ({
+            (point: Vector.t): GameObject.GameObject => ({
                 type: "wall",
                 position: point,
                 zIndex: 0,
@@ -44,7 +44,7 @@ export function maze(size: Vector.t, game: Game.Game) {
         width: size.x,
         wallsPerRow: { min: 3, max: 7 },
     }).map(
-        (point: Vector.t): GameObject.t => ({
+        (point: Vector.t): GameObject.GameObject => ({
             type: "wall",
             position: point,
             zIndex: 0,

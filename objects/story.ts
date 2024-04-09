@@ -1,4 +1,4 @@
-import { Vector } from "../geometry"
+import { Vector } from "@/geometry"
 import * as random from "../utils/random"
 import * as GameObject from "./object"
 import * as StorySize from "./story_size"

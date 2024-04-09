@@ -1,5 +1,5 @@
 import { Vector } from "@/geometry"
-import { Traits } from ".."
+import * as Traits from "@/traits"
 
 const LIFETIME = 1000
 

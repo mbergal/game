@@ -1,8 +1,8 @@
-import { Coffee, Commit, Door, Item } from "@/objects"
+import { Game } from "@/game"
+import { PrReview, Coffee, Commit, Door, Item } from "@/objects"
 import * as random from "@/utils/random"
 import { assertUnreachable } from "@/utils/utils"
 import config from "./config"
-import * as Game from "./game"
 
 type Waiting = { type: "waiting"; tact: number }
 type Generating = { type: "generating"; tact: number }
@@ -28,11 +28,12 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
             ) {
                 itemGenerator.state.tact = 0
                 const itemType = random.choice(
-                    ["door" as const, "commit" as const, "coffee" as const],
+                    ["door" as const, "commit" as const, "coffee" as const, "pr_review" as const],
                     [
                         config.itemGenerator.frequencies.door,
                         config.itemGenerator.frequencies.commit,
                         config.itemGenerator.frequencies.coffee,
+                        config.itemGenerator.frequencies.prReview,
                     ],
                 )
                 let item
@@ -47,6 +48,10 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
                         break
                     case "coffee":
                         item = Coffee.make(game.map.getRandomEmptyLocation())
+                        game.map.add([item])
+                        break
+                    case "pr_review":
+                        item = PrReview.make(game.map.getRandomEmptyLocation())
                         game.map.add([item])
                         break
                     default:

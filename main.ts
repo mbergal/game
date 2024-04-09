@@ -1,13 +1,11 @@
-console.log("main.ts")
+import { Developer, Player, Boss } from "@/objects"
+import { GameWindow, Intro, Windows } from "@/ui"
 import _ from "lodash"
-import { Game, Plan, GameStorage } from "./game"
-import { Boss, Player, Developer } from "@/objects"
+import { Game, GameStorage, Plan } from "./game"
 import { Vector } from "./geometry"
-import { Windows } from "@/ui"
-import { GameWindow, Intro } from "@/ui"
 
-import * as Logging from "@/utils/logging"
 import * as MazeGenerator from "@/generator"
+import * as Logging from "@/utils/logging"
 
 const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 

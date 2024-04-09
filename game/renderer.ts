@@ -114,7 +114,7 @@ function showTask(game: Game.Game): string {
 function showStockPrice(game: Game.Game): string {
     return `🗠: $${game.score.stockPrice.toFixed(2)} ▼`
 }
-function isVisible(obj: GameObject.t) {
+function isVisible(obj: GameObject.GameObject): boolean {
     switch (obj.type) {
         case "boss":
         case "wall":
@@ -123,6 +123,7 @@ function isVisible(obj: GameObject.t) {
         case "story":
         case "commit":
         case "door":
+        case "pr_review":
         case "developer":
             return true
         case "boss.footprint":
@@ -139,7 +140,11 @@ function isVisible(obj: GameObject.t) {
 function blink(a: string, b: string, tick: number) {
     return tick % 10 < 5 ? a : b
 }
-function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: number): string {
+function getRepresentation(
+    map: GameMap.GameMap,
+    objs: GameObject.GameObject[],
+    tick: number,
+): string {
     let obj = objs.find(isVisible)
     if (obj) {
         switch (obj.type) {
@@ -168,6 +173,8 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                                 return blink("c", "*", tick)
                             case "story":
                                 return ""
+                            case "pr_review":
+                                return blink("r", "*", tick)
                             default:
                                 return assertUnreachable(item)
                         }
@@ -182,6 +189,8 @@ function getRepresentation(map: GameMap.GameMap, objs: GameObject.t[], tick: num
                 return obj.open ? "c" : "."
             case "developer":
                 return "D"
+            case "pr_review":
+                return "r"
             case "story":
                 switch (obj.size) {
                     case "small":

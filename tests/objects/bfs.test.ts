@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 import { loadMap } from "../utils"
-import { bfs } from "@/objects/traits/targeting"
+import { bfs } from "@/traits/targeting"
 import { GameMap } from "@/game"
 
 test("bfs", () => {

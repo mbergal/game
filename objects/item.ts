@@ -5,9 +5,10 @@ import * as Commit from "./commit"
 import * as Story from "./story"
 import * as Coffee from "./coffee"
 import * as GameObject from "./object"
+import * as PrReview from "./pr_review"
 import { assertUnreachable } from "@/utils/utils"
 
-export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee
+export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee | PrReview.PrReview
 
 export function isItem(obj: GameObject.GameObject): obj is Item {
     switch (obj.type) {
@@ -15,6 +16,7 @@ export function isItem(obj: GameObject.GameObject): obj is Item {
         case "commit":
         case "story":
         case "coffee":
+        case "pr_review":
             return true
         case "wall":
         case "boss":
@@ -39,5 +41,7 @@ export function description(item: Item): string {
             return `cup of coffee`
         case "story":
             return `story "${item.name}"`
+        case "pr_review":
+            return `pr review`
     }
 }

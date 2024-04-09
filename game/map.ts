@@ -8,13 +8,13 @@ import * as random from "@/utils/random"
 export class GameMap {
     width: number
     height: number
-    cells: GameObject.t[][][]
+    cells: GameObject.GameObject[][][]
     /**
      * List of objects in the game including ones that don't have a position
      */
-    objects: GameObject.t[]
+    objects: GameObject.GameObject[]
 
-    constructor(width: number, height: number, objs: GameObject.t[]) {
+    constructor(width: number, height: number, objs: GameObject.GameObject[]) {
         this.width = width
         this.height = height
         const a = _.range(1, 21)
@@ -33,7 +33,7 @@ export class GameMap {
      *
      * @param objs - Object or list of objects to add to the map
 1     */
-    add(objs: GameObject.t | GameObject.t[]): void {
+    add(objs: GameObject.GameObject | GameObject.GameObject[]): void {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.concat(objs_)
         for (const obj of objs_) {
@@ -55,7 +55,7 @@ export class GameMap {
      * Remove objects from the map
      * * If the object has a position, it will be removed from the map cells
      */
-    remove(objs: GameObject.t | GameObject.t[]) {
+    remove(objs: GameObject.GameObject | GameObject.GameObject[]) {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
         for (const obj of objs_) {
@@ -69,7 +69,7 @@ export class GameMap {
         }
     }
 
-    move(obj: GameObject.t, pos: Vector.t | null) {
+    move(obj: GameObject.GameObject, pos: Vector.t | null) {
         this.remove([obj])
         obj.position = pos
         this.add([obj])
@@ -88,25 +88,25 @@ export class GameMap {
         return this.getRandomLocation(Predicates.empty)
     }
 
-    at(v: Vector.t): GameObject.t[] {
+    at(v: Vector.t): readonly GameObject.GameObject[] {
         return v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height
             ? this.cells[v.y][v.x]
             : []
     }
 
-    objAt<T extends GameObject.t["type"]>(
+    objAt<T extends GameObject.GameObject["type"]>(
         v: Vector.t,
         type: T,
-    ): (GameObject.t & { type: T }) | null {
+    ): (GameObject.GameObject & { type: T }) | null {
         const objs = this.at(v)
         const objOfType = objs.find((x) => x.type == type) ?? null
-        return objOfType as (GameObject.t & { type: T }) | null
+        return objOfType as (GameObject.GameObject & { type: T }) | null
     }
 
     someObjectsAt(
         v: Vector.t,
         include: GameObject.Type | ((obj: GameObject.GameObject | null) => boolean),
-    ) {
+    ): boolean {
         if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
         const objs: GameObject.GameObject[] = this.cells[v.y][v.x]
         return objs.length > 0
@@ -119,7 +119,7 @@ export class GameMap {
     everyObjectAt(
         v: Vector.t,
         include: GameObject.Type | ((obj: GameObject.GameObject | null) => boolean),
-    ) {
+    ): boolean {
         if (v.x < 0 || v.x >= this.width || v.y < 0 || v.y >= this.height) return false
         const objs: GameObject.GameObject[] = this.cells[v.y][v.x]
         return objs.length > 0
@@ -214,7 +214,7 @@ export namespace Predicates {
     }
 }
 
-function repr(objs: GameObject.t[]) {
+function repr(objs: GameObject.GameObject[]) {
     if (objs.length > 0) {
         switch (objs[0].type) {
             case "wall":

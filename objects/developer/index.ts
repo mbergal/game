@@ -1,4 +1,5 @@
-import { GameObject, Item, Traits } from "@/objects"
+import { GameObject, Item } from "@/objects"
+import * as Traits from "@/traits"
 
 import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
 import { Direction, Vector, moveTo } from "@/geometry"
@@ -25,6 +26,7 @@ export type Developer = {
     zIndex: number
     direction: Direction.t | null
     speedUp: number
+    reviewingPr: boolean
 }
 
 export function isDeveloper(obj: GameObject.GameObject): obj is Developer {
@@ -59,6 +61,7 @@ export function make(): Developer {
         zIndex: 2,
         speedUp: 0,
         target: null,
+        reviewingPr: false,
     }
 }
 
@@ -96,7 +99,8 @@ export function tick(developer: Developer, game: Game.Game): Effects.Effects {
         return effects
     }
 
-    if (developer.position != null) {
+    if (developer.reviewingPr) {
+    } else if (developer.position != null) {
         const moveChoice = pickDirectionDeveloper.pickDirection(developer, game.map, Pathlight)
         if (moveChoice != null) {
             developer.direction = moveChoice
@@ -123,6 +127,7 @@ function canPickup(obj: Developer, item: Item.Item, map: GameMap.GameMap): boole
         case "coffee":
         case "commit":
         case "story":
+        case "pr_review":
             return true
         case "door":
             return false
@@ -143,6 +148,7 @@ function pickupItem(obj: Developer, item: Item.Item, map: GameMap.GameMap) {
         case "commit":
         case "door":
         case "story":
+        case "pr_review":
             break
         default:
             assertUnreachable(item)
@@ -163,4 +169,19 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
     }
 
     map.move(obj, newPos)
+}
+
+export function defend(obj: Developer, item: Item.Item) {
+    switch (item.type) {
+        case "coffee":
+        case "door":
+        case "commit":
+        case "story":
+            break
+        case "pr_review":
+            obj.reviewingPr = true
+            break
+        default:
+            assertUnreachable(item)
+    }
 }

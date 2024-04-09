@@ -1,6 +1,3 @@
-console.log("objects/index.ts")
-
-export * as Traits from "./traits"
 export * as Boss from "./boss"
 export * as Coffee from "./coffee"
 export * as Commit from "./commit"
@@ -11,4 +8,5 @@ export * as GameObject from "./object"
 export * as GameObjects from "./objects"
 export * as Pathlight from "./pathlight"
 export * as Player from "./player"
+export * as PrReview from "./pr_review"
 export * as Story from "./story"

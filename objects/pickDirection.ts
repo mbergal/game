@@ -1,4 +1,5 @@
-import { Coffee, Commit, GameObject, Story, Pathlight, Traits } from "@/objects"
+import { Coffee, Commit, GameObject, Story, Pathlight } from "@/objects"
+import * as Traits from "@/traits"
 
 import { GameMap } from "@/game"
 import { Direction, Vector, directionTo, moveTo } from "@/geometry"

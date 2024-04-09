@@ -1,7 +1,4 @@
-import * as Collapse from "./collapse"
-import { Event } from "@/game"
-import * as PerformanceReview from "./performance_review"
-import * as Sprint from "./sprint"
+import { Collapse, Event, PerformanceReview, Sprint } from "@/game"
 
 import _ from "lodash"
 import config from "./config"
