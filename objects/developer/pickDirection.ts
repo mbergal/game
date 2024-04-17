@@ -3,10 +3,10 @@ console.log("objects/developer/pickDirection.ts")
 import { GameMap } from "@/game"
 import config from "@/game/config"
 import { Direction, Vector, moveTo } from "@/geometry"
+import { Developer } from "@/objects"
 import * as random from "@/utils/random"
 import _ from "lodash"
 import { logger, possibleMoves } from "."
-import { Developer } from "../object"
 
 export function pickDirection(
     position: Vector.Vector,

@@ -4,12 +4,12 @@ export class Window extends TextWindow.TextWindow {
     constructor(title: string, money: number, description: string) {
         super(
             [
-                `                      ${title}       `,
+                `${title}`,
                 "",
-                `You are out of your job :(. Hopefully $${money} will last`,
-                "                 till you find the new one.",
+                `You are out of your job :(. Hopefully $${money} will`,
+                "last till you find the new one.",
                 "",
-                `          This is not going to be easy for a ${description}`,
+                `This is not going to be easy for a ${description}`,
             ].join("\n"),
         )
     }

@@ -4,12 +4,23 @@ import { Vector } from "./geometry"
 import { GameObject } from "@/objects"
 import * as Room from "./room"
 import * as random from "@/utils/random"
+import { assert } from "@/utils/assert"
 
-export function check<T>(t: () => T, f: (t: T) => boolean) {
-    while (true) {
+export function check<T>(t: () => T, f: (t: T) => boolean, maxAttempts: number = 10): T | null {
+    let attempt = 0
+    while (attempt < maxAttempts) {
+        attempt++
         const tt = t()
         if (f(tt)) return tt
     }
+
+    return null
+}
+
+export function ensure<T>(t: () => T, f: (t: T) => boolean, maxAttempts: number = 10): T {
+    const tt = check(t, f, maxAttempts)
+    assert(tt != null)
+    return tt
 }
 
 export function maze(size: Vector.t, game: Game.Game) {
@@ -63,7 +74,7 @@ export function roomWalls(args: {
     const room_walls = _.flatMap(
         _.range(3, args.height - 2, 2).map((y: number) =>
             _.flatMap(
-                check(
+                ensure(
                     () =>
                         random.ints(
                             0,
@@ -119,7 +130,7 @@ function makeRoomDoors(map: GameMap.GameMap, rooms: Room.Room[]) {
         const num_of_upper = desiredNumOfDoors(room) / 2 - Room.upperDoors(room)
         const num_of_lower = desiredNumOfDoors(room) / 2 - Room.lowerDoors(room)
 
-        const xx = check(
+        const xx = ensure(
             () => random.ints(room.position.x, room.position.x + room.length, num_of_lower),
             (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1),
         )

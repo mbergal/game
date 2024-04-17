@@ -42,6 +42,6 @@ export function description(item: Item): string {
         case "story":
             return `story "${item.name}"`
         case "pr_review":
-            return `pr review`
+            return `Pull Request review`
     }
 }

@@ -1,7 +1,7 @@
 import { Windows } from "@/ui"
 import * as Logging from "@/utils/logging"
 import * as Command from "../command"
-import { Game, GameStorage, Renderer } from "../game"
+import { Effects, Game, GameStorage, Renderer } from "../game"
 import config from "../game/config"
 import * as Help from "./help"
 import * as EndGame from "./end_game"
@@ -68,12 +68,15 @@ export class GameWindow extends Windows.Window {
                 break
             case "s":
                 save(this.game, this.storage)
+                this.game.messages.push({ text: "Game saved!", ttl: 2_000 })
+
                 break
             case "l": {
                 const now = this.game.time.ticks
                 const loaded = load(this.storage)
                 if (loaded != null) {
                     this.game = loaded
+                    this.game.messages.push({ text: "Game loaded!", ttl: 2_000 })
                 }
                 break
             }
@@ -119,7 +122,7 @@ function getCommand(key: string): Command.Command | null | undefined {
 
 export function save(game: Game.Game, storage: GameStorage.GameStorage) {
     Game.save(game, storage)
-    console.log("Game saved!")
+    game.messages.push({ text: "Game saved!", ttl: 2_000 })
 }
 
 export function load(storage: GameStorage.GameStorage): Game.Game | null {

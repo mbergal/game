@@ -6005,7 +6005,7 @@
   var boss_exports = {};
   __export(boss_exports, {
     Footprint: () => footprint_exports2,
-    make: () => make12,
+    make: () => make13,
     possibleMoves: () => possibleMoves,
     tick: () => tick8
   });
@@ -6029,9 +6029,9 @@
   };
   __name(_AssertionError, "AssertionError");
   var AssertionError = _AssertionError;
-  function assert(condition, message2 = null) {
-    if (!(typeof condition === "function" ? condition() : condition)) {
-      throw new AssertionError(message2 || "Assertion failed");
+  function assert(condition, msg) {
+    if (!condition) {
+      throw new AssertionError(msg ?? "");
     }
   }
   __name(assert, "assert");
@@ -6073,7 +6073,11 @@
     tickInterval: 100,
     boss: {
       TACTS_FOR_JUMP: 3,
-      TACTS_FOR_SINGLE_MOVE: 4 * 3
+      TACTS_FOR_SINGLE_MOVE: 4 * 3,
+      footprint: {
+        zIndex: 2,
+        visible: false
+      }
     },
     developer: {
       moves: {
@@ -6084,6 +6088,14 @@
           freeSpace: 1e4
         },
         ticksPerMove: 3
+      },
+      footprint: {
+        zIndex: 2,
+        visible: false
+      },
+      pathlights: {
+        zIndex: 2,
+        visible: false
       }
     },
     totalDays: 14 * 3,
@@ -6115,10 +6127,15 @@
     items: {
       coffee: {
         zIndex: 2,
-        speedUpDays: 1
+        speedUpDays: 1,
+        visible: true
       },
       door: {
         zIndex: 2
+      },
+      prReview: {
+        zIndex: 2,
+        visible: false
       }
     }
   };
@@ -6277,12 +6294,12 @@
         }
         return [];
       },
-      leaveFootprint(position, map, make25) {
+      leaveFootprint(position, map, make26) {
         const existingFootprint = map.objAt(position, "developer.footprint");
         if (existingFootprint) {
           map.remove(existingFootprint);
         }
-        const footprint5 = make25(position);
+        const footprint5 = make26(position);
         map.add([footprint5]);
         return footprint5;
       }
@@ -6558,14 +6575,16 @@
       case "story":
       case "commit":
       case "door":
-      case "pr_review":
       case "developer":
         return true;
+      case "pr_review":
+        return config_default.items.prReview.visible;
       case "boss.footprint":
+        return config_default.boss.footprint.visible;
       case "developer.footprint":
-        return false;
+        return config_default.developer.footprint.visible;
       case "developer.pathlights":
-        return true;
+        return config_default.developer.pathlights.visible;
       default:
         assertUnreachable(obj);
     }
@@ -6774,7 +6793,7 @@
     if (game.score.stockPrice <= 0) {
       return {
         type: "endGame",
-        message: "This company was liquidated!",
+        message: "The company was liquidated!",
         money: game.score.money,
         level: game.player.level.name
       };
@@ -6817,10 +6836,31 @@
   }
   __name(objTick, "objTick");
   function save(game, storage) {
-    storage.save(JSON.stringify(toJson(game)));
+    storage.save(JSON.stringify(toJson(game), replacer));
     logger2("Game saved!");
   }
   __name(save, "save");
+  function replacer(key, value) {
+    if (value instanceof Map) {
+      return {
+        dataType: "Map",
+        value: Array.from(value.entries())
+        // or with spread: value: [...value]
+      };
+    } else {
+      return value;
+    }
+  }
+  __name(replacer, "replacer");
+  function reviver(key, value) {
+    if (typeof value === "object" && value !== null) {
+      if (value.dataType === "Map") {
+        return new Map(value.value);
+      }
+    }
+    return value;
+  }
+  __name(reviver, "reviver");
   function load(storage) {
     const objectsStorage = storage.load();
     if (objectsStorage != null) {
@@ -6836,7 +6876,7 @@
         plan: plan2,
         messageStartTime,
         collapse
-      } = JSON.parse(objectsStorage);
+      } = JSON.parse(objectsStorage, reviver);
       const map_ = map_exports.GameMap.fromJson(map);
       const player = map_.objects.find(
         (x) => x.type === "player"
@@ -6962,47 +7002,56 @@
     {
       name: "Engineer I",
       rate: 5,
-      impact: 2
+      impact: 2,
+      oneTimeBonus: 1e3
     },
     {
       name: "Engineer II",
       rate: 30,
-      impact: 3
+      impact: 3,
+      oneTimeBonus: 1e3
     },
     {
       name: "Engineer III",
       rate: 40,
-      impact: 4
+      impact: 4,
+      oneTimeBonus: 1e3
     },
     {
       name: "Senior Engineer I",
       rate: 50,
-      impact: 5
+      impact: 5,
+      oneTimeBonus: 5e3
     },
     {
       name: "Senior Engineer II",
       rate: 60,
-      impact: 6
+      impact: 6,
+      oneTimeBonus: 5e3
     },
     {
       name: "Engineering Lead",
       rate: 70,
-      impact: 7
+      impact: 7,
+      oneTimeBonus: 7e3
     },
     {
       name: "Staff Engineer I",
       rate: 80,
-      impact: 8
+      impact: 8,
+      oneTimeBonus: 7e3
     },
     {
       name: "Staff Engineer II",
       rate: 90,
-      impact: 9
+      impact: 9,
+      oneTimeBonus: 7e3
     },
     {
       name: "Principal Engineer",
       rate: 100,
-      impact: 10
+      impact: 10,
+      oneTimeBonus: 1e4
     }
   ];
   function level(impact) {
@@ -7040,14 +7089,23 @@
   __name(lowerDoors, "lowerDoors");
 
   // generator.ts
-  function check(t, f) {
-    while (true) {
+  function check(t, f, maxAttempts = 10) {
+    let attempt = 0;
+    while (attempt < maxAttempts) {
+      attempt++;
       const tt = t();
       if (f(tt))
         return tt;
     }
+    return null;
   }
   __name(check, "check");
+  function ensure(t, f, maxAttempts = 10) {
+    const tt = check(t, f, maxAttempts);
+    assert(tt != null);
+    return tt;
+  }
+  __name(ensure, "ensure");
   function maze(size2, game) {
     const outer_walls = hline({ x: 0, y: 0 }, size2.x).concat(vline({ x: 0, y: 0 }, size2.y)).concat(vline({ x: size2.x - 1, y: 0 }, size2.y)).map(
       (point) => ({
@@ -7084,7 +7142,7 @@
     const room_walls = import_lodash4.default.flatMap(
       import_lodash4.default.range(3, args.height - 2, 2).map(
         (y) => import_lodash4.default.flatMap(
-          check(
+          ensure(
             () => ints(
               0,
               args.width,
@@ -7133,7 +7191,7 @@
     for (const room of rooms) {
       const num_of_upper = desiredNumOfDoors(room) / 2 - upperDoors(room);
       const num_of_lower = desiredNumOfDoors(room) / 2 - lowerDoors(room);
-      const xx = check(
+      const xx = ensure(
         () => ints(room.position.x, room.position.x + room.length, num_of_lower),
         (t) => proper_distance(t) && noWalls(map, t, room.position.y - 1)
       );
@@ -7260,10 +7318,12 @@
       this.add([obj]);
     }
     getRandomLocation(f) {
-      const [x, y] = check(
+      const location = check(
         () => [int(0, this.width), int(0, this.height)],
         ([x2, y2]) => f(this, { x: x2, y: y2 })
       );
+      assert(location != null);
+      const [x, y] = location;
       return { x, y };
     }
     getRandomEmptyLocation() {
@@ -7429,15 +7489,17 @@
   __name(generatePlan2, "generatePlan");
   function tick6(game) {
     const effects = [];
-    const newLevel = levels_exports.level(game.score.impact);
-    if (newLevel > game.player.level) {
-      game.player.level = newLevel;
+    const currentLevel = game.player.level;
+    game.player.level = levels_exports.level(game.score.impact);
+    if (game.player.level > currentLevel) {
       effects_exports.append(
         effects,
-        effect_exports.showMessage(`You've been promoted to ${game.player.level} !!!!!`, 3e3)
+        effect_exports.showMessage(
+          `You've been promoted to ${game.player.level.name} with ${game.player.level.oneTimeBonus} bonus !!!`,
+          3e3
+        )
       );
     }
-    game.player.level = levels_exports.level(game.score.impact);
     return effects;
   }
   __name(tick6, "tick");
@@ -7559,6 +7621,25 @@
     return [plan2, startTick];
   }
   __name(generatePlan3, "generatePlan");
+  function distance(pos1, pos2) {
+    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
+  }
+  __name(distance, "distance");
+  function notCloseToOtherStories(objects, pos, minDistance) {
+    const stories = objects_exports.filter(objects, "story");
+    for (const story of stories) {
+      const d_ = distance(pos, story.position);
+      if (d_ < minDistance) {
+        return false;
+      }
+    }
+    return true;
+  }
+  __name(notCloseToOtherStories, "notCloseToOtherStories");
+  function notOnHorizontalWallRow(pos) {
+    return pos.y % 2 == 1;
+  }
+  __name(notOnHorizontalWallRow, "notOnHorizontalWallRow");
   function tick7(sprint, game) {
     const effects = [];
     const events = game.plan.get(game.time.ticks);
@@ -7566,7 +7647,11 @@
       for (const event of events) {
         switch (event.type) {
           case "createBacklogIssue":
-            const story = story_exports.make(game.map.getRandomEmptyLocation(), event.size);
+            const storyPosition = ensure(
+              () => game.map.getRandomEmptyLocation(),
+              (x) => notCloseToOtherStories(game.map.objects, x, 10) && notOnHorizontalWallRow(x)
+            );
+            const story = story_exports.make(storyPosition, event.size);
             game.map.add(story);
             append2(
               effects,
@@ -7637,9 +7722,19 @@
   // objects/boss/footprint.ts
   var footprint_exports2 = {};
   __export(footprint_exports2, {
-    footprint: () => footprint
+    footprint: () => footprint,
+    make: () => make12
   });
   var LIFETIME = 1e3;
+  function make12(position) {
+    return {
+      type: "boss.footprint",
+      position,
+      zIndex: config_default.boss.footprint.zIndex,
+      tick: 0
+    };
+  }
+  __name(make12, "make");
   var footprint = {
     tick: (t) => t.tick,
     setTick: (t, tick12) => {
@@ -7673,7 +7768,7 @@
     back: 1e-7,
     jump: 5
   };
-  function make12(position) {
+  function make13(position) {
     return {
       position,
       type: "boss",
@@ -7681,7 +7776,7 @@
       state: { type: "stopped", previous_direction: null }
     };
   }
-  __name(make12, "make");
+  __name(make13, "make");
   function possibleMoves(pos, currentDirection, map) {
     const result = {};
     const possible = map.possibleDirections(pos, map_exports.Predicates.insideWall);
@@ -7706,14 +7801,7 @@
   __name(possibleMoves, "possibleMoves");
   function move(obj, newPos, newDirection, map) {
     obj.state = { type: "moving", direction: newDirection, tact: 0 };
-    map.add([
-      {
-        type: "boss.footprint",
-        position: obj.position,
-        zIndex: 1,
-        tick: 0
-      }
-    ]);
+    map.add([make12(obj.position)]);
     map.move(obj, newPos);
   }
   __name(move, "move");
@@ -7827,19 +7915,19 @@
   var coffee_exports = {};
   __export(coffee_exports, {
     isCoffee: () => isCoffee,
-    make: () => make13,
+    make: () => make14,
     type: () => type
   });
   var type = "coffee";
-  function make13(position) {
+  function make14(position) {
     return {
       type,
       position,
-      zIndex: 1,
+      zIndex: config_default.items.coffee.zIndex,
       open: false
     };
   }
-  __name(make13, "make");
+  __name(make14, "make");
   function isCoffee(obj) {
     return obj.type === type;
   }
@@ -7849,9 +7937,9 @@
   var commit_exports = {};
   __export(commit_exports, {
     isCommit: () => isCommit,
-    make: () => make14
+    make: () => make15
   });
-  function make14(position) {
+  function make15(position) {
     return {
       type: "commit",
       position,
@@ -7860,7 +7948,7 @@
       hash: generateId(8)
     };
   }
-  __name(make14, "make");
+  __name(make15, "make");
   function isCommit(obj) {
     return obj.type === "commit";
   }
@@ -7885,7 +7973,7 @@
     defend: () => defend,
     isDeveloper: () => isDeveloper,
     logger: () => logger4,
-    make: () => make18,
+    make: () => make19,
     possibleMoves: () => possibleMoves2,
     speedUp: () => speedUp2,
     targeting: () => targeting,
@@ -7895,7 +7983,7 @@
 
   // objects/pickDirection.ts
   var import_lodash7 = __toESM(require_lodash());
-  function make15(targeting2) {
+  function make16(targeting2) {
     return {
       pickDirection(t, map, pathway) {
         let target = targeting2.target(t);
@@ -7915,7 +8003,6 @@
           return null;
         }
         const pathToTarget = findPath(
-          target,
           map,
           targeting2.position(t),
           target.position,
@@ -7936,7 +8023,7 @@
       }
     };
   }
-  __name(make15, "make");
+  __name(make16, "make");
   function isPresent(input) {
     return input != null;
   }
@@ -7947,11 +8034,11 @@
   var findTargetPaths = /* @__PURE__ */ __name((targets, startPosition, map, canMoveOn3) => {
     return targets.map((x) => ({
       target: x,
-      path: findPath(x, map, x.position, startPosition, canMoveOn3)
+      path: findPath(map, x.position, startPosition, canMoveOn3)
     })).map((x) => x.path != null ? { target: x.target, path: x.path } : null).filter(isPresent);
   }, "findTargetPaths");
-  function findPath(obj, map, position, target, canMoveOn3) {
-    return bfs((v) => map.possibleDirections(v, canMoveOn3), position, target);
+  function findPath(map, from, to, canMoveOn3) {
+    return bfs((v) => map.possibleDirections(v, canMoveOn3), from, to);
   }
   __name(findPath, "findPath");
   function bfs(possibleMoves3, start, target) {
@@ -8000,12 +8087,12 @@
   var footprint_exports3 = {};
   __export(footprint_exports3, {
     footprint: () => footprint2,
-    make: () => make16,
+    make: () => make17,
     type: () => type2
   });
   var LIFETIME2 = 1e3;
   var type2 = "developer.footprint";
-  function make16(position) {
+  function make17(position) {
     return {
       type: "developer.footprint",
       position,
@@ -8013,7 +8100,7 @@
       tick: 0
     };
   }
-  __name(make16, "make");
+  __name(make17, "make");
   var footprint2 = {
     tick: (t) => t.tick,
     setTick: (t, tick12) => {
@@ -8026,19 +8113,19 @@
   var pathlight_exports = {};
   __export(pathlight_exports, {
     isPathlight: () => isPathlight,
-    make: () => make17,
+    make: () => make18,
     type: () => type3
   });
   console.log("objects/developer/pathlight.ts");
   var type3 = "developer.pathlights";
-  function make17(position) {
+  function make18(position) {
     return {
       type: "developer.pathlights",
       position,
       zIndex: 1
     };
   }
-  __name(make17, "make");
+  __name(make18, "make");
   function isPathlight(obj) {
     return obj.type === type3;
   }
@@ -8068,7 +8155,7 @@
     },
     speedUp: (t) => t.speedUp
   };
-  function make18() {
+  function make19() {
     return {
       type: type4,
       position: null,
@@ -8080,7 +8167,7 @@
       reviewingPr: false
     };
   }
-  __name(make18, "make");
+  __name(make19, "make");
   function processEvents(developer, events, game, effects) {
     for (const event of events) {
       switch (event.type) {
@@ -8095,7 +8182,7 @@
     }
   }
   __name(processEvents, "processEvents");
-  var pickDirectionDeveloper = make15(targeting);
+  var pickDirectionDeveloper = make16(targeting);
   function tick9(developer, game) {
     const effects = [];
     developer.tact += 1;
@@ -8170,7 +8257,7 @@
       }
     }
     if (obj.position != null) {
-      footprint3.leaveFootprint(obj.position, map, make16);
+      footprint3.leaveFootprint(obj.position, map, make17);
     }
     map.move(obj, newPos);
   }
@@ -8195,14 +8282,14 @@
   var door_exports = {};
   __export(door_exports, {
     isDoor: () => isDoor,
-    make: () => make19
+    make: () => make20
   });
   var type5 = "door";
   function isDoor(obj) {
     return obj.type === type5;
   }
   __name(isDoor, "isDoor");
-  function make19(position) {
+  function make20(position) {
     return {
       type: type5,
       position,
@@ -8211,7 +8298,7 @@
       placed: false
     };
   }
-  __name(make19, "make");
+  __name(make20, "make");
 
   // objects/item.ts
   var item_exports = {};
@@ -8252,7 +8339,7 @@
       case "story":
         return `story "${item.name}"`;
       case "pr_review":
-        return `pr review`;
+        return `Pull Request review`;
     }
   }
   __name(description, "description");
@@ -8272,7 +8359,7 @@
   // objects/player.ts
   var player_exports = {};
   __export(player_exports, {
-    make: () => make21,
+    make: () => make22,
     tick: () => tick10,
     type: () => type6
   });
@@ -8282,9 +8369,9 @@
   var story_exports2 = {};
   __export(story_exports2, {
     addCommit: () => addCommit,
-    make: () => make20
+    make: () => make21
   });
-  function make20(story) {
+  function make21(story) {
     return {
       type: "story",
       story,
@@ -8293,7 +8380,7 @@
       appliedCommits: 0
     };
   }
-  __name(make20, "make");
+  __name(make21, "make");
   function addCommit(player, task, commit, effects) {
     task.appliedCommits += 1;
     if (task.appliedCommits == task.neededCommits) {
@@ -8320,7 +8407,7 @@
     dropItem: (t, map, effects) => dropItem(t, map),
     pickItem: (t, item, map, effects) => pickItem(t, item, map, effects)
   };
-  function make21(position) {
+  function make22(position) {
     return {
       type: type6,
       zIndex: 1e3,
@@ -8335,7 +8422,7 @@
       level: levels_exports.all[0]
     };
   }
-  __name(make21, "make");
+  __name(make22, "make");
   function canMoveOn2(objs) {
     if (objs.length > 0) {
       const canMoveOnObj = /* @__PURE__ */ __name((obj) => {
@@ -8656,11 +8743,11 @@
   // objects/pr_review.ts
   var pr_review_exports = {};
   __export(pr_review_exports, {
-    make: () => make22,
+    make: () => make23,
     publishTo: () => publishTo,
     tick: () => tick11
   });
-  function make22(position) {
+  function make23(position) {
     return {
       type: "pr_review",
       position,
@@ -8669,7 +8756,7 @@
       publishDirection: null
     };
   }
-  __name(make22, "make");
+  __name(make23, "make");
   function publishTo(prReview, direction) {
     prReview.publishDirection = direction;
   }
@@ -8715,7 +8802,7 @@
   var story_exports = {};
   __export(story_exports, {
     isStory: () => isStory,
-    make: () => make23,
+    make: () => make24,
     type: () => type7
   });
   var type7 = "story";
@@ -8723,7 +8810,7 @@
     return obj.type === type7;
   }
   __name(isStory, "isStory");
-  function make23(position, size2) {
+  function make24(position, size2) {
     return {
       type: type7,
       position,
@@ -8734,7 +8821,7 @@
       name: choice(storyNames[size2])
     };
   }
-  __name(make23, "make");
+  __name(make24, "make");
   var storyNames = {
     medium: [
       "Implement Dark Mode for Night Owls",
@@ -8777,7 +8864,8 @@
   // ui/text_window.ts
   var text_window_exports = {};
   __export(text_window_exports, {
-    TextWindow: () => TextWindow
+    TextWindow: () => TextWindow,
+    centerText: () => centerText
   });
 
   // ui/windows.ts
@@ -8806,7 +8894,7 @@
   var size = { x: 80, y: 27 };
 
   // ui/composition.ts
-  function make24(size2) {
+  function make25(size2) {
     const composition = [];
     for (let y = 0; y < size2.y; y++) {
       composition[y] = [];
@@ -8816,7 +8904,7 @@
     }
     return composition;
   }
-  __name(make24, "make");
+  __name(make25, "make");
   function compose(composition, position, window2) {
     for (let y = 0; y < window2.length; y++) {
       for (let x = 0; x < window2[y].length; x++) {
@@ -8832,7 +8920,7 @@
   }
   __name(compose, "compose");
   function render3(windows2) {
-    let composition = make24(size);
+    let composition = make25(size);
     for (const window2 of windows2) {
       composition = compose(
         composition,
@@ -8944,6 +9032,15 @@
     return lines.map((x) => x.padEnd(maxLength, " "));
   }
   __name(formatText, "formatText");
+  function centerText(text, maxLength = null) {
+    const lines = text.split("\n");
+    maxLength = maxLength ?? Math.max(...lines.map((x) => x.length)) ?? 0;
+    return lines.map((x) => {
+      const padding = " ".repeat(Math.floor((maxLength - x.length) / 2));
+      return padding + x + padding;
+    }).join("\n");
+  }
+  __name(centerText, "centerText");
 
   // ui/game_window.ts
   var game_window_exports = {};
@@ -8979,12 +9076,12 @@
     constructor(title, money, description2) {
       super(
         [
-          `                      ${title}       `,
+          `${title}`,
           "",
-          `You are out of your job :(. Hopefully $${money} will last`,
-          "                 till you find the new one.",
+          `You are out of your job :(. Hopefully $${money} will`,
+          "last till you find the new one.",
           "",
-          `          This is not going to be easy for a ${description2}`
+          `This is not going to be easy for a ${description2}`
         ].join("\n")
       );
     }
@@ -9042,12 +9139,14 @@
           break;
         case "s":
           save2(this.game, this.storage);
+          this.game.messages.push({ text: "Game saved!", ttl: 2e3 });
           break;
         case "l": {
           const now = this.game.time.ticks;
           const loaded = load2(this.storage);
           if (loaded != null) {
             this.game = loaded;
+            this.game.messages.push({ text: "Game loaded!", ttl: 2e3 });
           }
           break;
         }
@@ -9094,7 +9193,7 @@
   __name(getCommand, "getCommand");
   function save2(game, storage) {
     game_exports.save(game, storage);
-    console.log("Game saved!");
+    game.messages.push({ text: "Game saved!", ttl: 2e3 });
   }
   __name(save2, "save");
   function load2(storage) {
@@ -9110,20 +9209,29 @@
   var _Window4 = class _Window4 extends text_window_exports.TextWindow {
     constructor() {
       super(
-        [
-          "        REQUIEM FOR A PROGRAMMER.",
-          "                                   ",
-          "       You ('*') are in Agile hell.",
-          "Earn enough money and get out (if you can)!",
-          "",
-          "Keys",
-          "----",
-          "",
-          "Move - arrows",
-          "Drop item - space",
-          "Use item - enter",
-          "Stop - end"
-        ].join("\n")
+        text_window_exports.centerText(
+          [
+            "REQUIEM FOR A PROGRAMMER.",
+            "                                   ",
+            "You ('*') are in Agile hell.",
+            "Earn enough money and get out (if you can)!",
+            "",
+            "Keys",
+            "----",
+            "Move - arrows",
+            "Drop item - space",
+            "Use item - enter",
+            "Stop - end",
+            "",
+            "Items",
+            "-----",
+            "l/m/s - large/medium/small story (needed commits)",
+            "; - commit",
+            "r - PR review",
+            "] - door",
+            ""
+          ].join("\n")
+        )
       );
       this.onKeyPress((window2, event) => {
         windows_exports.hide(window2);

@@ -4,8 +4,8 @@ export class AssertionError extends Error {
     }
 }
 
-export function assert(condition: (() => boolean) | boolean, message: string | null = null) {
-    if (!(typeof condition === "function" ? condition() : condition)) {
-        throw new AssertionError(message || "Assertion failed")
+export function assert(condition: any, msg?: string): asserts condition {
+    if (!condition) {
+        throw new AssertionError(msg ?? "")
     }
 }

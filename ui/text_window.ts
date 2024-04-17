@@ -32,3 +32,14 @@ function formatText(text: string) {
     const maxLength = Math.max(...lines.map((x) => x.length))
     return lines.map((x) => x.padEnd(maxLength, " "))
 }
+
+export function centerText(text: string, maxLength: number | null = null): string {
+    const lines = text.split("\n")
+    maxLength = maxLength ?? Math.max(...lines.map((x) => x.length)) ?? 0
+    return lines
+        .map((x) => {
+            const padding = " ".repeat(Math.floor((maxLength - x.length) / 2))
+            return padding + x + padding
+        })
+        .join("\n")
+}

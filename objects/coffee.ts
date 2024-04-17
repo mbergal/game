@@ -1,5 +1,6 @@
 import { Vector } from "../geometry"
 import * as GameObject from "./object"
+import config from "@/game/config"
 
 export const type = "coffee"
 export interface Coffee {
@@ -13,7 +14,7 @@ export function make(position: Vector.Vector): Coffee {
     return {
         type: type,
         position: position,
-        zIndex: 1,
+        zIndex: config.items.coffee.zIndex,
         open: false,
     }
 }

@@ -31,7 +31,6 @@ export function make<T>(targeting: Traits.Targeting.Targeting<T>) {
             }
 
             const pathToTarget = findPath(
-                target,
                 map,
                 targeting.position(t)!,
                 target.position!,
@@ -75,20 +74,19 @@ const findTargetPaths = (
     return targets
         .map((x) => ({
             target: x,
-            path: findPath(x, map, x.position!, startPosition, canMoveOn),
+            path: findPath(map, x.position!, startPosition, canMoveOn),
         }))
         .map((x) => (x.path != null ? { target: x.target, path: x.path } : null))
         .filter(isPresent)
 }
 
 function findPath(
-    obj: GameObject.GameObject,
     map: GameMap.GameMap,
-    position: Vector.Vector,
-    target: Vector.Vector,
+    from: Vector.Vector,
+    to: Vector.Vector,
     canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Vector.Vector[] | null {
-    return bfs((v) => map.possibleDirections(v, canMoveOn), position, target)
+    return bfs((v) => map.possibleDirections(v, canMoveOn), from, to)
 }
 
 export function bfs(
