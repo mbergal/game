@@ -123,14 +123,16 @@ function isVisible(obj: GameObject.GameObject): boolean {
         case "story":
         case "commit":
         case "door":
-        case "pr_review":
         case "developer":
             return true
+        case "pr_review":
+            return config.items.prReview.visible
         case "boss.footprint":
+            return config.boss.footprint.visible
         case "developer.footprint":
-            return false
+            return config.developer.footprint.visible
         case "developer.pathlights":
-            return true
+            return config.developer.pathlights.visible
         default:
             assertUnreachable(obj)
     }

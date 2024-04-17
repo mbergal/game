@@ -4,6 +4,7 @@ import * as _ from "lodash"
 import { check } from "@/generator"
 import { GameObject } from "@/objects"
 import * as random from "@/utils/random"
+import { assert } from "@/utils/assert"
 
 export class GameMap {
     width: number
@@ -55,7 +56,7 @@ export class GameMap {
      * Remove objects from the map
      * * If the object has a position, it will be removed from the map cells
      */
-    remove(objs: GameObject.GameObject | GameObject.GameObject[]) {
+    remove(objs: GameObject.GameObject | readonly GameObject.GameObject[]) {
         const objs_ = objs instanceof Array ? objs : [objs]
         this.objects = this.objects.filter((x) => _.indexOf(objs_, x) == -1)
         for (const obj of objs_) {
@@ -76,10 +77,12 @@ export class GameMap {
     }
 
     getRandomLocation(f: (map: GameMap, position: Vector.Vector) => boolean): Vector.t {
-        const [x, y] = check(
+        const location = check(
             () => [random.int(0, this.width), random.int(0, this.height)],
             ([x, y]) => f(this, { x, y }),
         )
+        assert(location != null)
+        const [x, y] = location
 
         return { x, y }
     }

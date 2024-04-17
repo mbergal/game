@@ -4,6 +4,10 @@ export type Config = {
     boss: {
         TACTS_FOR_SINGLE_MOVE: number
         TACTS_FOR_JUMP: number
+        footprint: {
+            zIndex: number
+            visible: boolean
+        }
     }
     developer: {
         moves: {
@@ -14,6 +18,14 @@ export type Config = {
                 freeSpace: number
             }
             ticksPerMove: number
+        }
+        footprint: {
+            zIndex: number
+            visible: boolean
+        }
+        pathlights: {
+            zIndex: number
+            visible: boolean
         }
     }
     totalDays: number
@@ -44,9 +56,14 @@ export type Config = {
         coffee: {
             zIndex: number
             speedUpDays: number
+            visible: boolean
         }
         door: {
             zIndex: number
+        }
+        prReview: {
+            zIndex: number
+            visible: boolean
         }
     }
 }
@@ -56,6 +73,10 @@ const config: Config = {
     boss: {
         TACTS_FOR_JUMP: 3,
         TACTS_FOR_SINGLE_MOVE: 4 * 3,
+        footprint: {
+            zIndex: 2,
+            visible: false,
+        },
     },
     developer: {
         moves: {
@@ -66,6 +87,14 @@ const config: Config = {
                 freeSpace: 10000,
             },
             ticksPerMove: 3,
+        },
+        footprint: {
+            zIndex: 2,
+            visible: false,
+        },
+        pathlights: {
+            zIndex: 2,
+            visible: false,
         },
     },
     totalDays: 14 * 3,
@@ -98,9 +127,14 @@ const config: Config = {
         coffee: {
             zIndex: 2,
             speedUpDays: 1,
+            visible: true,
         },
         door: {
             zIndex: 2,
+        },
+        prReview: {
+            zIndex: 2,
+            visible: false,
         },
     },
 }

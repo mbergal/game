@@ -21,16 +21,18 @@ export function generatePlan(startTick: number): Plan.Plan {
 
 export function tick(game: Game.Game): Effects.Effects {
     const effects: Effects.Effects = []
-    const newLevel = EngineeringLevels.level(game.score.impact)
-    if (newLevel > game.player!.level) {
-        game.player!.level = newLevel
+    const currentLevel = game.player!.level
+    game.player!.level = EngineeringLevels.level(game.score.impact)
+    if (game.player!.level > currentLevel) {
         Effects.append(
             effects,
-            Effect.showMessage(`You've been promoted to ${game.player!.level} !!!!!`, 3_000),
+            Effect.showMessage(
+                `You've been promoted to ${game.player!.level.name} with ${game.player!.level.oneTimeBonus} bonus !!!`,
+                3_000,
+            ),
         )
     }
-    game.player!.level = EngineeringLevels.level(game.score.impact)
-    // processEvents(game, effects)
+
     return effects
 }
 

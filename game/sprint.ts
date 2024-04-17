@@ -1,14 +1,15 @@
 import { Event, GameMap } from "@/game"
 import { GameObjects, Player, Story } from "@/objects"
 import _ from "lodash"
-
+import { Vector } from "@/geometry"
+import * as generator from "@/generator"
 import * as StorySize from "../objects/story_size"
 import { assertUnreachable } from "../utils/utils"
+import { assert } from "@/utils/assert"
 import config from "./config"
 import * as Effect from "./effect"
 import * as Effects from "./effects"
 import * as GameTime from "./game_time"
-
 import * as Plan from "./plan"
 
 export interface t {
@@ -124,6 +125,29 @@ export function generatePlan(startTick: number): readonly [Plan.Plan, number] {
     return [plan, startTick] as const
 }
 
+function distance(pos1: Vector.t, pos2: Vector.t): number {
+    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y)
+}
+
+function notCloseToOtherStories(
+    objects: GameObjects.t,
+    pos: Vector.t,
+    minDistance: number,
+): boolean {
+    const stories = GameObjects.filter(objects, "story")
+    for (const story of stories) {
+        const d_ = distance(pos, story.position)
+        if (d_ < minDistance) {
+            return false
+        }
+    }
+    return true
+}
+
+function notOnHorizontalWallRow(pos: Vector.t): boolean {
+    return pos.y % 2 == 1
+}
+
 export function tick(
     sprint: t,
     game: { map: GameMap.GameMap; time: { ticks: number }; plan: Plan.Plan; player: Player.Player },
@@ -134,7 +158,14 @@ export function tick(
         for (const event of events) {
             switch (event.type) {
                 case "createBacklogIssue":
-                    const story = Story.make(game.map.getRandomEmptyLocation(), event.size)
+                    const storyPosition = generator.ensure(
+                        () => game.map.getRandomEmptyLocation(),
+                        (x) =>
+                            notCloseToOtherStories(game.map.objects, x, 10) &&
+                            notOnHorizontalWallRow(x),
+                    )
+                    const story = Story.make(storyPosition, event.size)
+
                     game.map.add(story)
                     Effects.append(
                         effects,

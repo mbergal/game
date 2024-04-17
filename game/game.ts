@@ -163,7 +163,7 @@ export function tick(game: Game): GameEffect {
     if (game.score.stockPrice <= 0) {
         return {
             type: "endGame",
-            message: "This company was liquidated!",
+            message: "The company was liquidated!",
             money: game.score.money,
             level: game.player!.level.name,
         }
@@ -215,10 +215,28 @@ function objTick(
 }
 
 export function save(game: Game, storage: GameStorage.GameStorage) {
-    storage.save(JSON.stringify(toJson(game)))
+    storage.save(JSON.stringify(toJson(game), replacer))
     logger("Game saved!")
 }
 
+function replacer(key: string, value: unknown) {
+    if (value instanceof Map) {
+        return {
+            dataType: "Map",
+            value: Array.from(value.entries()), // or with spread: value: [...value]
+        }
+    } else {
+        return value
+    }
+}
+function reviver(key: string, value: any) {
+    if (typeof value === "object" && value !== null) {
+        if (value.dataType === "Map") {
+            return new Map(value.value)
+        }
+    }
+    return value
+}
 export function load(storage: GameStorage.GameStorage): Game | null {
     const objectsStorage = storage.load()
     if (objectsStorage != null) {
@@ -246,7 +264,7 @@ export function load(storage: GameStorage.GameStorage): Game | null {
             plan: Plan.Plan
             messageStartTime: number
             collapse: Collapse.Collapse
-        } = JSON.parse(objectsStorage)
+        } = JSON.parse(objectsStorage, reviver)
         const map_ = GameMap.GameMap.fromJson(map)
         const player = map_.objects.find<Player.Player>(
             (x): x is Player.Player => x.type === "player",
