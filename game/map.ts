@@ -1,7 +1,7 @@
 import { Direction, Vector, moveTo } from "@/geometry"
 import * as _ from "lodash"
 
-import { check } from "@/generator"
+import { check } from "@/utils/generators"
 import { GameObject } from "@/objects"
 import * as random from "@/utils/random"
 import { assert } from "@/utils/assert"

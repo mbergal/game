@@ -78,7 +78,10 @@ function processEvents(
                 break
             case "workWeekEnded":
                 game.map.move(developer, null)
-                Effects.append(effects, Effect.showMessage("Developer: have a nice weekend!", 1000))
+                Effects.append(
+                    effects,
+                    Effect.showMessage("Developer: have a nice weekend!", 5_000),
+                )
                 break
         }
     }

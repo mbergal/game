@@ -1,6 +1,11 @@
 import * as StorySize from "../objects/story_size"
 
 export type Config = {
+    maze: {
+        // tuple first element is the room length, second is min number of doors,
+        // third is max number of doors
+        numberOfDoorsPerRoom: [number, number, number][]
+    }
     boss: {
         TACTS_FOR_SINGLE_MOVE: number
         TACTS_FOR_JUMP: number
@@ -69,6 +74,13 @@ export type Config = {
 }
 
 const config: Config = {
+    maze: {
+        numberOfDoorsPerRoom: [
+            [3, 0, 1],
+            [6, 1, 2],
+            [100, 2, 5],
+        ],
+    },
     tickInterval: 100,
     boss: {
         TACTS_FOR_JUMP: 3,
@@ -120,7 +132,7 @@ const config: Config = {
             door: 2,
             commit: 10,
             coffee: 1,
-            prReview: 10,
+            prReview: 2,
         },
     },
     items: {
@@ -134,7 +146,7 @@ const config: Config = {
         },
         prReview: {
             zIndex: 2,
-            visible: false,
+            visible: true,
         },
     },
 }

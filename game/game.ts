@@ -87,6 +87,9 @@ function handleEffects(game: Game, effects: Generator<Effect.Effect> | Effects.E
             case "showMessage":
                 message(game, effect.message)
                 break
+            case "itemGenerated":
+                game.score.generatedItems.push(effect.item)
+                break
             default:
                 assertUnreachable(effect)
         }
@@ -125,7 +128,8 @@ export function tick(game: Game): GameEffect {
         game.time = GameTime.make(game.time.ticks)
 
         handleEffects(game, Collapse.tick(game))
-        ItemGenerator.tick(game.itemGenerator, game)
+
+        handleEffects(game, ItemGenerator.tick(game.itemGenerator, game))
 
         if (game.sprint) {
             handleEffects(game, Sprint.tick(game.sprint, { ...game, player: game.player! }))

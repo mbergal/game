@@ -1,4 +1,4 @@
-import { Vector } from "./geometry"
+import { Vector } from "@/geometry"
 
 export type Room = {
     position: Vector.Vector

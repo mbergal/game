@@ -1,8 +1,9 @@
-import { Game } from "@/game"
+import { Game, Effects, Effect } from "@/game"
 import { PrReview, Coffee, Commit, Door, Item } from "@/objects"
 import * as random from "@/utils/random"
 import { assertUnreachable } from "@/utils/utils"
 import config from "./config"
+import { itemGenerated } from "./effect"
 
 type Waiting = { type: "waiting"; tact: number }
 type Generating = { type: "generating"; tact: number }
@@ -13,7 +14,8 @@ export function make(): ItemGenerator {
     return { state: { type: "waiting", tact: 0 } }
 }
 
-export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
+export function tick(itemGenerator: ItemGenerator, game: Game.Game): Effects.Effects {
+    const effects: Effects.Effects = []
     switch (itemGenerator.state.type) {
         case "waiting":
             if (itemGenerator.state.tact > config.itemGenerator.start)
@@ -57,8 +59,10 @@ export function tick(itemGenerator: ItemGenerator, game: Game.Game) {
                     default:
                         assertUnreachable(itemType)
                 }
+                Effects.append(effects, Effect.itemGenerated(item))
             } else {
                 itemGenerator.state.tact += 1
             }
     }
+    return effects
 }

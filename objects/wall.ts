@@ -5,3 +5,11 @@ export interface Wall {
     position: Vector.Vector
     zIndex: number
 }
+
+export function make(position: Vector.Vector): Wall {
+    return {
+        type: "wall",
+        position: position,
+        zIndex: 0,
+    }
+}

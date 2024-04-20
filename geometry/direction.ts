@@ -1,4 +1,7 @@
-export type t = "left" | "right" | "down" | "up"
+export type Horizontal = "left" | "right"
+export type Vertical = "down" | "up"
+
+export type t = Horizontal | Vertical
 export type Rose = Partial<Record<t, true>>
 
 export function reverse(direction: t) {

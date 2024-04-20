@@ -11,7 +11,7 @@ const MAZE_SIZE: Vector.t = { y: 25, x: 80 }
 
 const logger = Logging.make("main")
 
-logger("Staring the game")
+logger("Starting the game")
 
 Logging.setIsEnabled((name: string) =>
     _.includes(["main", "player", "game", "fellow_developer", "game_window"], name),

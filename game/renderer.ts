@@ -1,37 +1,81 @@
 import { Game, GameMap, Message } from "."
 import { Vector } from "../geometry"
-import { GameObject } from "../objects"
+import { GameObject, Item } from "../objects"
 import { assertUnreachable } from "../utils/utils"
 import config from "./config"
 import { DayOfWeek } from "./day_of_week"
 
 export function render(game: Game.Game) {
     const map = game.map
-    const buffer = [showMessage(game)]
-    for (let y = 0; y < map.height; y++) {
-        const row = []
-
-        for (let x = 0; x < map.width; x++) {
-            const objs = map.cells[y][x]
-            row.push(getRepresentation(map, objs, game.time.ticks))
-        }
-
-        buffer.push(row.join(""))
-    }
+    let buffer = [showMessage(game)]
+    buffer = buffer.concat(renderMap(map, game.time.ticks))
 
     buffer.push(
         showTime(game) +
             showLevel(game) +
             showFlags(game) +
-            "|Money: $" +
-            game.score.money.toString().padStart(6, "0") +
+            "|Money: " +
+            new Intl.NumberFormat("en-us", { style: "currency", currency: "USD" })
+                .format(game.score.money)
+                .padStart(6, " ") +
             "|Impact: " +
             game.score.impact.toString().padStart(3, " ") +
             showTask(game) +
+            showItems(game.score.generatedItems) +
             "|" +
             showStockPrice(game),
     )
+
     return buffer.map((x) => x)
+}
+
+function itemIcon(item: Item.Item): string {
+    switch (item.type) {
+        case "door":
+            return "["
+        case "commit":
+            return ";"
+        case "coffee":
+            return "☕"
+        case "pr_review":
+            return "r"
+        case "story":
+            return ""
+        default:
+            return assertUnreachable(item)
+    }
+}
+
+function showItems(items: GameObject.GameObject[]): string {
+    return "| " + items.filter(Item.isItem).map(itemIcon).join("")
+}
+
+export function renderMapRect(
+    map: GameMap.GameMap,
+    tick: number,
+    rect: { position: Vector.Vector; size: Vector.Vector },
+): string[] {
+    const rendered = renderMap(map, tick)
+    const subRect = []
+    for (let y = rect.position.y; y < rect.position.y + rect.size.y; y++) {
+        subRect.push(rendered[y].substring(rect.position.x, rect.position.x + rect.size.x))
+    }
+    return subRect
+}
+
+export function renderMap(map: GameMap.GameMap, tick: number): string[] {
+    const buffer: string[] = []
+    for (let y = 0; y < map.height; y++) {
+        const row = []
+
+        for (let x = 0; x < map.width; x++) {
+            const objs = map.cells[y][x]
+            row.push(getRepresentation(map, objs, tick))
+        }
+
+        buffer.push(row.join(""))
+    }
+    return buffer
 }
 
 export function showMessage(game: {

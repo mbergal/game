@@ -45,7 +45,8 @@ const picking: Traits.Picking.Picking<Player> = {
     dropItem: (t, map, effects) => dropItem(t, map),
     pickItem: (t, item, map, effects) => pickItem(t, item, map, effects),
 }
-export function make(position: Vector.t): Player {
+
+export function make(position: Vector.Vector): Player {
     return {
         type: type,
         zIndex: 1000,
