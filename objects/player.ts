@@ -1,7 +1,7 @@
 import { Commit, GameObject, Item, PrReview } from "@/objects"
 import * as Traits from "@/traits"
 import * as Logging from "@/utils/logging"
-import { assertUnreachable } from "@/utils/utils"
+import { assertUnreachable } from "@/utils"
 import _ from "lodash"
 import * as Command from "../command"
 

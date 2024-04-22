@@ -1,5 +1,6 @@
 import { Coffee, Commit, GameObject, Story, Pathlight } from "@/objects"
 import * as Traits from "@/traits"
+import * as Utils from "@/utils"
 
 import { GameMap } from "@/game"
 import { Direction, Vector, directionTo, moveTo } from "@/geometry"
@@ -14,7 +15,7 @@ export function make<T>(targeting: Traits.Targeting.Targeting<T>) {
         ): Direction.t | null {
             let target = targeting.target(t)
             if (target == null || target.position == null) {
-                const targets = findTargets(map.objects)
+                const targets = targeting.findTargets(t, map)
                 const targetPaths = findTargetPaths(
                     targets,
                     targeting.position(t)!,
@@ -59,12 +60,6 @@ function isPresent<T>(input: null | undefined | T): input is T {
     return input != null
 }
 
-const findTargets = (objs: GameObject.GameObject[]) => {
-    return objs
-        .filter((x) => Story.isStory(x) || Coffee.isCoffee(x) || Commit.isCommit(x))
-        .filter((x) => x.position != null)
-}
-
 const findTargetPaths = (
     targets: GameObject.GameObject[],
     startPosition: Vector.Vector,
@@ -86,66 +81,5 @@ function findPath(
     to: Vector.Vector,
     canMoveOn: (position: Vector.Vector, map: GameMap.GameMap) => boolean,
 ): Vector.Vector[] | null {
-    return bfs((v) => map.possibleDirections(v, canMoveOn), from, to)
-}
-
-export function bfs(
-    possibleMoves: (pos: Vector.Vector) => Direction.t[],
-    start: Vector.Vector,
-    target: Vector.Vector,
-) {
-    if (Vector.equals(start, target)) {
-        return []
-    }
-    const queue: Array<Vector.Vector> = [start]
-    const discovered = new Set<Vector.Repr>([Vector.repr(start)])
-
-    const edges = new Map<Vector.Repr, number>()
-    edges.set(Vector.repr(start), 0)
-
-    const predecessors = new Map<Vector.Repr, Vector.Vector | null>()
-    predecessors.set(Vector.repr(start), null)
-
-    const buildPath = (
-        goal: Vector.Vector,
-        root: Vector.Vector,
-        predecessors: Map<Vector.Repr, Vector.Vector | null>,
-    ) => {
-        const stack = [goal]
-
-        let u = predecessors.get(Vector.repr(goal))!
-
-        while (u != root) {
-            stack.push(u)
-            u = predecessors.get(Vector.repr(u))!
-        }
-
-        stack.push(root)
-
-        let path = stack.reverse()
-
-        return path
-    }
-
-    while (queue.length) {
-        let v = queue.shift()!
-
-        if (v.x === target.x && v.y === target.y) {
-            return buildPath(target, start, predecessors)
-        }
-
-        for (const d of possibleMoves(v)) {
-            {
-                const nextPos = moveTo(v, d)
-                if (!discovered.has(Vector.repr(nextPos))) {
-                    discovered.add(Vector.repr(nextPos))
-                    queue.push(nextPos)
-                    edges.set(Vector.repr(nextPos), edges.get(Vector.repr(v))! + 1)
-                    predecessors.set(Vector.repr(nextPos), v)
-                }
-            }
-        }
-    }
-
-    return null
+    return Utils.Bfs.bfs((v) => map.possibleDirections(v, canMoveOn), from, to)
 }

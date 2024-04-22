@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 import { loadMap } from "../utils"
-import { bfs } from "@/traits/targeting"
+import { Bfs } from "@/utils"
 import { GameMap } from "@/game"
 
 test("bfs", () => {
@@ -15,7 +15,7 @@ test("bfs", () => {
         `)
 
     expect(
-        bfs(
+        Bfs.bfs(
             (v) => map.possibleDirections(v, GameMap.Predicates.doesNotHave("wall")),
             b.get("b")!,
             b.get("e")!,

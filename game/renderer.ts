@@ -1,7 +1,7 @@
 import { Game, GameMap, Message } from "."
 import { Vector } from "../geometry"
 import { GameObject, Item } from "../objects"
-import { assertUnreachable } from "../utils/utils"
+import { assertUnreachable } from "../utils"
 import config from "./config"
 import { DayOfWeek } from "./day_of_week"
 

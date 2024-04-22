@@ -6,7 +6,7 @@ import * as Story from "./story"
 import * as Coffee from "./coffee"
 import * as GameObject from "./object"
 import * as PrReview from "./pr_review"
-import { assertUnreachable } from "@/utils/utils"
+import { assertUnreachable } from "@/utils"
 
 export type Item = Door.Door | Commit.Commit | Story.Story | Coffee.Coffee | PrReview.PrReview
 

@@ -6035,6 +6035,10 @@
     }
   }
   __name(assert, "assert");
+  function assertUnreachable(_15) {
+    throw new AssertionError("Didn't expect to get here");
+  }
+  __name(assertUnreachable, "assertUnreachable");
 
   // utils/random.ts
   var rng = Math.random;
@@ -6382,19 +6386,10 @@
   }
   __name(make5, "make");
 
-  // utils/utils.ts
-  function assertUnreachable(_15) {
-    throw new Error("Didn't expect to get here");
-  }
-  __name(assertUnreachable, "assertUnreachable");
-
-  // game/renderer.ts
-  var renderer_exports = {};
-  __export(renderer_exports, {
-    render: () => render,
-    renderMap: () => renderMap,
-    renderMapRect: () => renderMapRect,
-    showMessage: () => showMessage2
+  // utils/bfs.ts
+  var bfs_exports = {};
+  __export(bfs_exports, {
+    bfs: () => bfs
   });
 
   // geometry/vector.ts
@@ -6518,7 +6513,57 @@
   }
   __name(vline, "vline");
 
+  // utils/bfs.ts
+  function bfs(possibleMoves3, start, target) {
+    if (vector_exports.equals(start, target)) {
+      return [];
+    }
+    const queue = [start];
+    const discovered = /* @__PURE__ */ new Set([vector_exports.repr(start)]);
+    const edges = /* @__PURE__ */ new Map();
+    edges.set(vector_exports.repr(start), 0);
+    const predecessors = /* @__PURE__ */ new Map();
+    predecessors.set(vector_exports.repr(start), null);
+    const buildPath = /* @__PURE__ */ __name((goal, root, predecessors2) => {
+      const stack = [goal];
+      let u = predecessors2.get(vector_exports.repr(goal));
+      while (u != root) {
+        stack.push(u);
+        u = predecessors2.get(vector_exports.repr(u));
+      }
+      stack.push(root);
+      let path = stack.reverse();
+      return path;
+    }, "buildPath");
+    while (queue.length) {
+      let v = queue.shift();
+      if (v.x === target.x && v.y === target.y) {
+        return buildPath(target, start, predecessors);
+      }
+      for (const d of possibleMoves3(v)) {
+        {
+          const nextPos = moveTo(v, d);
+          if (!discovered.has(vector_exports.repr(nextPos))) {
+            discovered.add(vector_exports.repr(nextPos));
+            queue.push(nextPos);
+            edges.set(vector_exports.repr(nextPos), edges.get(vector_exports.repr(v)) + 1);
+            predecessors.set(vector_exports.repr(nextPos), v);
+          }
+        }
+      }
+    }
+    return null;
+  }
+  __name(bfs, "bfs");
+
   // game/renderer.ts
+  var renderer_exports = {};
+  __export(renderer_exports, {
+    render: () => render,
+    renderMap: () => renderMap,
+    renderMapRect: () => renderMapRect,
+    showMessage: () => showMessage2
+  });
   function render(game) {
     const map2 = game.map;
     let buffer = [showMessage2(game)];
@@ -7149,7 +7194,7 @@
   __export(map_exports, {
     GameMap: () => GameMap2,
     Predicates: () => Predicates,
-    directionTo: () => directionTo2
+    directionTo: () => directionTo3
   });
   var _5 = __toESM(require_lodash());
 
@@ -7303,13 +7348,13 @@
   };
   __name(_GameMap, "GameMap");
   var GameMap2 = _GameMap;
-  function directionTo2(position, map2, objType) {
+  function directionTo3(position, map2, objType) {
     const dd = _5.compact(
       direction_exports.all.filter((x) => map2.someObjectsAt(moveTo(position, x), objType))
     );
     return dd.length ? dd[0] : null;
   }
-  __name(directionTo2, "directionTo");
+  __name(directionTo3, "directionTo");
   var Predicates;
   ((Predicates2) => {
     function empty(map2, position) {
@@ -7900,7 +7945,7 @@
       pickDirection(t, map2, pathway) {
         let target = targeting2.target(t);
         if (target == null || target.position == null) {
-          const targets = findTargets(map2.objects);
+          const targets = targeting2.findTargets(t, map2);
           const targetPaths = findTargetPaths(
             targets,
             targeting2.position(t),
@@ -7940,9 +7985,6 @@
     return input != null;
   }
   __name(isPresent, "isPresent");
-  var findTargets = /* @__PURE__ */ __name((objs) => {
-    return objs.filter((x) => story_exports.isStory(x) || coffee_exports.isCoffee(x) || commit_exports.isCommit(x)).filter((x) => x.position != null);
-  }, "findTargets");
   var findTargetPaths = /* @__PURE__ */ __name((targets, startPosition, map2, canMoveOn3) => {
     return targets.map((x) => ({
       target: x,
@@ -7950,50 +7992,9 @@
     })).map((x) => x.path != null ? { target: x.target, path: x.path } : null).filter(isPresent);
   }, "findTargetPaths");
   function findPath(map2, from, to, canMoveOn3) {
-    return bfs((v) => map2.possibleDirections(v, canMoveOn3), from, to);
+    return bfs_exports.bfs((v) => map2.possibleDirections(v, canMoveOn3), from, to);
   }
   __name(findPath, "findPath");
-  function bfs(possibleMoves3, start, target) {
-    if (vector_exports.equals(start, target)) {
-      return [];
-    }
-    const queue = [start];
-    const discovered = /* @__PURE__ */ new Set([vector_exports.repr(start)]);
-    const edges = /* @__PURE__ */ new Map();
-    edges.set(vector_exports.repr(start), 0);
-    const predecessors = /* @__PURE__ */ new Map();
-    predecessors.set(vector_exports.repr(start), null);
-    const buildPath = /* @__PURE__ */ __name((goal, root, predecessors2) => {
-      const stack = [goal];
-      let u = predecessors2.get(vector_exports.repr(goal));
-      while (u != root) {
-        stack.push(u);
-        u = predecessors2.get(vector_exports.repr(u));
-      }
-      stack.push(root);
-      let path = stack.reverse();
-      return path;
-    }, "buildPath");
-    while (queue.length) {
-      let v = queue.shift();
-      if (v.x === target.x && v.y === target.y) {
-        return buildPath(target, start, predecessors);
-      }
-      for (const d of possibleMoves3(v)) {
-        {
-          const nextPos = moveTo(v, d);
-          if (!discovered.has(vector_exports.repr(nextPos))) {
-            discovered.add(vector_exports.repr(nextPos));
-            queue.push(nextPos);
-            edges.set(vector_exports.repr(nextPos), edges.get(vector_exports.repr(v)) + 1);
-            predecessors.set(vector_exports.repr(nextPos), v);
-          }
-        }
-      }
-    }
-    return null;
-  }
-  __name(bfs, "bfs");
 
   // objects/developer/footprint.ts
   var footprint_exports3 = {};
@@ -8057,7 +8058,27 @@
     setTarget: (developer, target) => {
       developer.target = target;
     },
-    canMoveOn
+    canMoveOn,
+    findTargets: (developer, map2) => {
+      const developerPosition = developer.position;
+      assert(developerPosition != null);
+      return import_lodash7.default.chain(map2.objects).filter((x) => item_exports.isItem(x)).filter((x) => x.position != null).map(
+        (x) => [
+          x,
+          bfs_exports.bfs(
+            (v) => map2.possibleDirections(v, canMoveOn),
+            developerPosition,
+            x.position
+          )
+        ]
+      ).tap((x) => {
+        debugger;
+        return x;
+      }).sortBy((x) => x[1] ? x[1].length : Infinity).tap((x) => {
+        debugger;
+        return x;
+      }).map((x) => x[0]).value();
+    }
   };
   var footprint3 = footprint_exports.make(footprint2);
   var speedUp2 = {

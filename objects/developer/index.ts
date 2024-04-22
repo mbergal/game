@@ -1,4 +1,4 @@
-import { GameObject, Item } from "@/objects"
+import { Coffee, Commit, GameObject, Item, Story } from "@/objects"
 import * as Traits from "@/traits"
 
 import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
@@ -11,7 +11,8 @@ export * as Pathlight from "./pathlight"
 
 import config from "@/game/config"
 import * as Logging from "@/utils/logging"
-import { assertUnreachable } from "@/utils/utils"
+import * as Utils from "@/utils"
+import { assertUnreachable, assert } from "@/utils"
 import _ from "lodash"
 
 export const logger = Logging.make("fellow_developer")
@@ -40,6 +41,35 @@ export const targeting: Traits.Targeting.Targeting<Developer> = {
         developer.target = target
     },
     canMoveOn,
+    findTargets: (developer: Developer, map: GameMap.GameMap) => {
+        const developerPosition = developer.position
+        assert(developerPosition != null)
+        return _.chain(map.objects)
+            .filter((x) => Item.isItem(x))
+            .filter((x) => x.position != null)
+            .map(
+                (x) =>
+                    [
+                        x,
+                        Utils.Bfs.bfs(
+                            (v) => map.possibleDirections(v, canMoveOn),
+                            developerPosition,
+                            x.position!,
+                        ),
+                    ] as const,
+            )
+            .tap((x) => {
+                debugger
+                return x
+            })
+            .sortBy((x) => (x[1] ? x[1].length : Infinity))
+            .tap((x) => {
+                debugger
+                return x
+            })
+            .map((x) => x[0])
+            .value()
+    },
 }
 
 const footprint = Traits.Footprint.make(Footprint.footprint)

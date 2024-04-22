@@ -1,7 +1,7 @@
 import { GameMap, Effects } from "@/game"
 import { Developer } from "@/objects"
 import { Vector, Direction, moveTo } from "@/geometry"
-import { assertUnreachable } from "@/utils/utils"
+import { assertUnreachable } from "@/utils"
 
 export interface PrReview {
     type: "pr_review"

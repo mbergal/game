@@ -1,7 +1,7 @@
 import { Game, Effects, Effect } from "@/game"
 import { PrReview, Coffee, Commit, Door, Item } from "@/objects"
 import * as random from "@/utils/random"
-import { assertUnreachable } from "@/utils/utils"
+import { assertUnreachable } from "@/utils"
 import config from "./config"
 import { itemGenerated } from "./effect"
 

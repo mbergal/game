@@ -9,3 +9,7 @@ export function assert(condition: any, msg?: string): asserts condition {
         throw new AssertionError(msg ?? "")
     }
 }
+
+export function assertUnreachable(_: never): never {
+    throw new AssertionError("Didn't expect to get here")
+}
