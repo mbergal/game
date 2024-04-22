@@ -6077,7 +6077,8 @@
     maze: {
       numberOfDoorsPerRoom: [
         [3, 0, 1],
-        [6, 1, 2],
+        [6, 2, 3],
+        [12, 2, 4],
         [100, 2, 5]
       ]
     },
@@ -6107,6 +6108,9 @@
       pathlights: {
         zIndex: 2,
         visible: false
+      },
+      prReview: {
+        days: 1
       }
     },
     totalDays: 14 * 3,
@@ -6556,6 +6560,20 @@
   }
   __name(bfs, "bfs");
 
+  // utils/format.ts
+  var format_exports = {};
+  __export(format_exports, {
+    currency: () => currency
+  });
+  function currency(sum2) {
+    return new Intl.NumberFormat("en-us", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0
+    }).format(sum2);
+  }
+  __name(currency, "currency");
+
   // game/renderer.ts
   var renderer_exports = {};
   __export(renderer_exports, {
@@ -6569,7 +6587,7 @@
     let buffer = [showMessage2(game)];
     buffer = buffer.concat(renderMap(map2, game.time.ticks));
     buffer.push(
-      showTime(game) + showLevel(game) + showFlags(game) + "|Money: " + new Intl.NumberFormat("en-us", { style: "currency", currency: "USD" }).format(game.score.money).padStart(6, " ") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + showItems(game.score.generatedItems) + "|" + showStockPrice(game)
+      showTime(game) + showLevel(game) + showFlags(game) + "|Money: " + format_exports.currency(game.score.money).padStart(6, " ") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + showItems(game.score.generatedItems) + "|" + showStockPrice(game)
     );
     return buffer.map((x) => x);
   }
@@ -7944,8 +7962,8 @@
     return {
       pickDirection(t, map2, pathway) {
         let target = targeting2.target(t);
-        if (target == null || target.position == null) {
-          const targets = targeting2.findTargets(t, map2);
+        const targets = targeting2.findTargets(t, map2);
+        if (target == null || target.position == null || !targets.includes(target)) {
           const targetPaths = findTargetPaths(
             targets,
             targeting2.position(t),
@@ -8062,7 +8080,7 @@
     findTargets: (developer, map2) => {
       const developerPosition = developer.position;
       assert(developerPosition != null);
-      return import_lodash7.default.chain(map2.objects).filter((x) => item_exports.isItem(x)).filter((x) => x.position != null).map(
+      return import_lodash7.default.chain(map2.objects).filter((x) => item_exports.isItem(x) && canPick(developer, x)).filter((x) => x.position != null).map(
         (x) => [
           x,
           bfs_exports.bfs(
@@ -8072,12 +8090,11 @@
           )
         ]
       ).tap((x) => {
-        debugger;
+        if (x.length == 0) {
+          debugger;
+        }
         return x;
-      }).sortBy((x) => x[1] ? x[1].length : Infinity).tap((x) => {
-        debugger;
-        return x;
-      }).map((x) => x[0]).value();
+      }).sortBy((x) => x[1] ? x[1].length : Infinity).map((x) => x[0]).value();
     }
   };
   var footprint3 = footprint_exports.make(footprint2);
@@ -8097,7 +8114,7 @@
       zIndex: 2,
       speedUp: 0,
       target: null,
-      reviewingPr: false
+      reviewingPr: 0
     };
   }
   __name(make19, "make");
@@ -8122,6 +8139,15 @@
   function tick9(developer, game) {
     const effects = [];
     developer.tact += 1;
+    if (developer.reviewingPr) {
+      developer.reviewingPr--;
+      if (developer.reviewingPr == 0) {
+        effects_exports.append(
+          effects,
+          effect_exports.showMessage("Developer: Addressed you comments and merged!", 5e3)
+        );
+      }
+    }
     const events = plan_exports.getEvents(game.plan, game.time.ticks);
     processEvents(developer, events, game, effects);
     speedUp_exports.tick(speedUp2, developer, 1);
@@ -8151,7 +8177,7 @@
     return map2.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type));
   }
   __name(canMoveOn, "canMoveOn");
-  function canPickup(obj, item, map2) {
+  function canPick(obj, item) {
     switch (item.type) {
       case "coffee":
       case "commit":
@@ -8164,7 +8190,7 @@
         assertUnreachable(item);
     }
   }
-  __name(canPickup, "canPickup");
+  __name(canPick, "canPick");
   function pickupItem(obj, item, map2) {
     if (item === obj.target) {
       obj.target = null;
@@ -8188,7 +8214,7 @@
     obj.direction = newDirection;
     const item = import_lodash7.default.first(map2.at(newPos).filter(item_exports.isItem));
     if (item != null) {
-      if (canPickup(obj, item, map2)) {
+      if (canPick(obj, item)) {
         pickupItem(obj, item, map2);
       }
     }
@@ -8198,7 +8224,7 @@
     map2.move(obj, newPos);
   }
   __name(move2, "move");
-  function defend(obj, item) {
+  function defend(obj, item, effects) {
     switch (item.type) {
       case "coffee":
       case "door":
@@ -8206,7 +8232,14 @@
       case "story":
         break;
       case "pr_review":
-        obj.reviewingPr = true;
+        obj.reviewingPr = config_default.developer.prReview.days * config_default.dayTicks;
+        effects_exports.append(
+          effects,
+          effect_exports.showMessage(
+            "Developer is stunned by you feedback and is working on addressing it !",
+            5e3
+          )
+        );
         break;
       default:
         assertUnreachable(item);
@@ -8698,8 +8731,8 @@
   }
   __name(publishTo, "publishTo");
   function tick11(prReview, map2) {
+    const effects = [];
     if (prReview.publishDirection !== null && prReview.position !== null) {
-      debugger;
       const tryPosition = moveTo(prReview.position, prReview.publishDirection);
       const objs = map2.at(prReview.position);
       const newObjs = map2.at(tryPosition);
@@ -8721,16 +8754,16 @@
           case "boss.footprint":
             break;
           case "developer":
-            developer_exports.defend(obj, prReview);
+            developer_exports.defend(obj, prReview, effects);
             map2.remove(prReview);
-            return [];
+            return effects;
           default:
             assertUnreachable(obj);
         }
       }
       map2.move(prReview, tryPosition);
     }
-    return [];
+    return effects;
   }
   __name(tick11, "tick");
 
@@ -9014,7 +9047,7 @@
         [
           `${title}`,
           "",
-          `You are out of your job :(. Hopefully $${money} will`,
+          `You are out of your job :(. Hopefully $${format_exports.currency(money)} will`,
           "last till you find the new one.",
           "",
           `This is not going to be easy for a ${description2}`
@@ -9360,11 +9393,6 @@
   }
   __name(doorSpacing, "doorSpacing");
   function desiredNumOfDoors(room) {
-    const a = [
-      [3, 0, 1],
-      [6, 1, 2],
-      [100, 2, 5]
-    ];
     const min_max = import_lodash11.default.find(config_default.maze.numberOfDoorsPerRoom, (x) => x[0] > room.length);
     return int(min_max[1], min_max[2]);
   }

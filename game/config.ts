@@ -32,6 +32,9 @@ export type Config = {
             zIndex: number
             visible: boolean
         }
+        prReview: {
+            days: number
+        }
     }
     totalDays: number
     dayTicks: number
@@ -77,7 +80,8 @@ const config: Config = {
     maze: {
         numberOfDoorsPerRoom: [
             [3, 0, 1],
-            [6, 1, 2],
+            [6, 2, 3],
+            [12, 2, 4],
             [100, 2, 5],
         ],
     },
@@ -107,6 +111,9 @@ const config: Config = {
         pathlights: {
             zIndex: 2,
             visible: false,
+        },
+        prReview: {
+            days: 1,
         },
     },
     totalDays: 14 * 3,

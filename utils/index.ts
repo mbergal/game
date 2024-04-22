@@ -1,5 +1,6 @@
 export * as Bfs from "./bfs"
 export * from "./assert"
+export * as Format from "./format"
 
 type Entries<T> = {
     [K in keyof T]: [K, T[K]]

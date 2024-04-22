@@ -1,18 +1,18 @@
-import { Coffee, Commit, GameObject, Item, Story } from "@/objects"
+import { GameObject, Item } from "@/objects"
 import * as Traits from "@/traits"
 
 import { Effect, Effects, Event, Game, GameMap, Plan } from "@/game"
 import { Direction, Vector, moveTo } from "@/geometry"
 import * as PickDirection from "@/objects/pickDirection"
 import * as Footprint from "./footprint"
-export * as Footprint from "./footprint"
 import * as Pathlight from "./pathlight"
+export * as Footprint from "./footprint"
 export * as Pathlight from "./pathlight"
 
 import config from "@/game/config"
-import * as Logging from "@/utils/logging"
 import * as Utils from "@/utils"
-import { assertUnreachable, assert } from "@/utils"
+import { assert, assertUnreachable } from "@/utils"
+import * as Logging from "@/utils/logging"
 import _ from "lodash"
 
 export const logger = Logging.make("fellow_developer")
@@ -27,7 +27,7 @@ export type Developer = {
     zIndex: number
     direction: Direction.t | null
     speedUp: number
-    reviewingPr: boolean
+    reviewingPr: number
 }
 
 export function isDeveloper(obj: GameObject.GameObject): obj is Developer {
@@ -44,31 +44,35 @@ export const targeting: Traits.Targeting.Targeting<Developer> = {
     findTargets: (developer: Developer, map: GameMap.GameMap) => {
         const developerPosition = developer.position
         assert(developerPosition != null)
-        return _.chain(map.objects)
-            .filter((x) => Item.isItem(x))
-            .filter((x) => x.position != null)
-            .map(
-                (x) =>
-                    [
-                        x,
-                        Utils.Bfs.bfs(
-                            (v) => map.possibleDirections(v, canMoveOn),
-                            developerPosition,
-                            x.position!,
-                        ),
-                    ] as const,
-            )
-            .tap((x) => {
-                debugger
-                return x
-            })
-            .sortBy((x) => (x[1] ? x[1].length : Infinity))
-            .tap((x) => {
-                debugger
-                return x
-            })
-            .map((x) => x[0])
-            .value()
+        return (
+            _.chain(map.objects)
+                .filter((x) => Item.isItem(x) && canPick(developer, x))
+                .filter((x) => x.position != null)
+                .map(
+                    (x) =>
+                        [
+                            x,
+                            Utils.Bfs.bfs(
+                                (v) => map.possibleDirections(v, canMoveOn),
+                                developerPosition,
+                                x.position!,
+                            ),
+                        ] as const,
+                )
+                .tap((x) => {
+                    if (x.length == 0) {
+                        debugger
+                    }
+                    return x
+                })
+                .sortBy((x) => (x[1] ? x[1].length : Infinity))
+                // .tap((x) => {
+                //     debugger
+                //     return x
+                // })
+                .map((x) => x[0])
+                .value()
+        )
     },
 }
 
@@ -91,7 +95,7 @@ export function make(): Developer {
         zIndex: 2,
         speedUp: 0,
         target: null,
-        reviewingPr: false,
+        reviewingPr: 0,
     }
 }
 
@@ -122,6 +126,16 @@ const pickDirectionDeveloper = PickDirection.make(targeting)
 export function tick(developer: Developer, game: Game.Game): Effects.Effects {
     const effects: Effects.Effects = []
     developer.tact += 1
+
+    if (developer.reviewingPr) {
+        developer.reviewingPr--
+        if (developer.reviewingPr == 0) {
+            Effects.append(
+                effects,
+                Effect.showMessage("Developer: Addressed you comments and merged!", 5_000),
+            )
+        }
+    }
 
     const events = Plan.getEvents(game.plan, game.time.ticks)
     processEvents(developer, events, game, effects)
@@ -155,7 +169,7 @@ export function canMoveOn(position: Vector.Vector, map: GameMap.GameMap): boolea
     return map.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type))
 }
 
-function canPickup(obj: Developer, item: Item.Item, map: GameMap.GameMap): boolean {
+function canPick(obj: Developer, item: Item.Item): boolean {
     switch (item.type) {
         case "coffee":
         case "commit":
@@ -193,7 +207,7 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
 
     const item = _.first(map.at(newPos).filter(Item.isItem))
     if (item != null)
-        if (canPickup(obj, item, map)) {
+        if (canPick(obj, item)) {
             pickupItem(obj, item, map)
         }
 
@@ -204,7 +218,7 @@ function move(obj: Developer, newPos: Vector.t, newDirection: Direction.t, map: 
     map.move(obj, newPos)
 }
 
-export function defend(obj: Developer, item: Item.Item) {
+export function defend(obj: Developer, item: Item.Item, effects: Effects.Effects) {
     switch (item.type) {
         case "coffee":
         case "door":
@@ -212,7 +226,14 @@ export function defend(obj: Developer, item: Item.Item) {
         case "story":
             break
         case "pr_review":
-            obj.reviewingPr = true
+            obj.reviewingPr = config.developer.prReview.days * config.dayTicks
+            Effects.append(
+                effects,
+                Effect.showMessage(
+                    "Developer is stunned by you feedback and is working on addressing it !",
+                    5_000,
+                ),
+            )
             break
         default:
             assertUnreachable(item)

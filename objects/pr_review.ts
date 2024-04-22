@@ -26,8 +26,9 @@ export function publishTo(prReview: PrReview, direction: Direction.t): void {
 }
 
 export function tick(prReview: PrReview, map: GameMap.GameMap): Effects.Effects {
+    const effects: Effects.Effects = []
     if (prReview.publishDirection !== null && prReview.position !== null) {
-        debugger
+        // debugger
         const tryPosition = moveTo(prReview.position, prReview.publishDirection)
         const objs = map.at(prReview.position)
         const newObjs = map.at(tryPosition)
@@ -49,14 +50,14 @@ export function tick(prReview: PrReview, map: GameMap.GameMap): Effects.Effects 
                 case "boss.footprint":
                     break
                 case "developer":
-                    Developer.defend(obj, prReview)
+                    Developer.defend(obj, prReview, effects)
                     map.remove(prReview)
-                    return []
+                    return effects
                 default:
                     assertUnreachable(obj)
             }
         }
         map.move(prReview, tryPosition)
     }
-    return []
+    return effects
 }

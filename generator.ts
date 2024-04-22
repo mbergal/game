@@ -222,11 +222,6 @@ function doorSpacing(roomLength: number): number {
  * Returns the desired number of doors based on the length of the room.
  */
 function desiredNumOfDoors(room: Room.Room) {
-    const a: [number, number, number][] = [
-        [3, 0, 1],
-        [6, 1, 2],
-        [100, 2, 5],
-    ]
     const min_max = _.find(config.maze.numberOfDoorsPerRoom, (x) => x[0] > room.length)!
 
     return random.int(min_max[1], min_max[2])

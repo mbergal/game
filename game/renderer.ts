@@ -1,7 +1,8 @@
 import { Game, GameMap, Message } from "."
 import { Vector } from "../geometry"
-import { GameObject, Item } from "../objects"
-import { assertUnreachable } from "../utils"
+import { GameObject, Item } from "@/objects"
+import { Format } from "@/utils"
+import { assertUnreachable } from "@/utils"
 import config from "./config"
 import { DayOfWeek } from "./day_of_week"
 
@@ -15,9 +16,7 @@ export function render(game: Game.Game) {
             showLevel(game) +
             showFlags(game) +
             "|Money: " +
-            new Intl.NumberFormat("en-us", { style: "currency", currency: "USD" })
-                .format(game.score.money)
-                .padStart(6, " ") +
+            Format.currency(game.score.money).padStart(6, " ") +
             "|Impact: " +
             game.score.impact.toString().padStart(3, " ") +
             showTask(game) +

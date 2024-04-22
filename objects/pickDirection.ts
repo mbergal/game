@@ -14,8 +14,8 @@ export function make<T>(targeting: Traits.Targeting.Targeting<T>) {
             pathway: Pathlight.Pathlight,
         ): Direction.t | null {
             let target = targeting.target(t)
-            if (target == null || target.position == null) {
-                const targets = targeting.findTargets(t, map)
+            const targets = targeting.findTargets(t, map)
+            if (target == null || target.position == null || !targets.includes(target)) {
                 const targetPaths = findTargetPaths(
                     targets,
                     targeting.position(t)!,
