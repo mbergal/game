@@ -48,6 +48,7 @@ export type Config = {
     }
     sprint: {
         startDay: number
+        days: number
     }
     itemGenerator: {
         start: number
@@ -126,6 +127,7 @@ const config: Config = {
     },
     sprint: {
         startDay: 0,
+        days: 10,
     },
     messages: { showNextMessageAfter: 500 },
     performanceReview: {

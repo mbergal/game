@@ -1,6 +1,10 @@
 import { Story } from "@/objects"
 import * as DayOfWeek from "./day_of_week"
 
+type NullEvent = {
+    type: "null"
+}
+
 type GameStarted = {
     type: "gameStarted"
 }
@@ -89,5 +93,6 @@ export type t =
     | DayStarted
     | CollapseStart
     | PerformanceReview
+    | NullEvent
 
 export type Event = t

@@ -20,7 +20,7 @@ export function render(game: Game.Game) {
             "|Impact: " +
             game.score.impact.toString().padStart(3, " ") +
             showTask(game) +
-            showItems(game.score.generatedItems) +
+            // showItems(game.score.generatedItems) +
             "|" +
             showStockPrice(game),
     )
@@ -280,6 +280,12 @@ function getWallRepresentation(map: GameMap.GameMap, pos: Vector.Vector) {
         return "║"
     } else if (pos.y == 0 || pos.y == map.height - 1) {
         return "═"
+    } else if (
+        map.someObjectsAt(Vector.n(pos), "wall") &&
+        map.someObjectsAt(Vector.s(pos), "wall") &&
+        map.someObjectsAt(Vector.w(pos), "wall")
+    ) {
+        return "┤"
     } else if (
         map.someObjectsAt(Vector.n(pos), "wall") &&
         map.someObjectsAt(Vector.s(pos), "wall")

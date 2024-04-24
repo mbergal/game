@@ -2,10 +2,12 @@ import { Game, GameMap, Renderer } from "@/game"
 import config from "@/game/config"
 import { GameObject } from "@/objects"
 import { check, ensure } from "@/utils/generators"
-import * as random from "@/utils/random"
+import { Random, Logging } from "@/utils"
 import _, { map } from "lodash"
 import { Direction, Vector, hline, moveTo, vline } from "./geometry"
 import * as Room from "./room"
+
+const logger = Logging.make("generator")
 
 type Nullable<T> = T | undefined | null
 
@@ -63,10 +65,10 @@ export function roomWalls(args: {
             _.flatMap(
                 ensure(
                     () =>
-                        random.ints(
+                        Random.ints(
                             0,
                             args.width,
-                            random.int(args.wallsPerRow.min, args.wallsPerRow.max),
+                            Random.int(args.wallsPerRow.min, args.wallsPerRow.max),
                         ),
                     (x) => properlyDistanced(3, x.concat([0, args.width])),
                     20,
@@ -123,6 +125,14 @@ export function renderRoom(room: Room.Room, map: GameMap.GameMap) {
     return console.log(renderedRoom.join("\n"))
 }
 
+/**
+ * Returns whether the doors are properly spaced and there are no walls above or below the room.
+ * @param map
+ * @param room
+ * @param wallPositions proposed wall positions
+ * @param direction direction of wall placement in the room
+ * @returns true if the doors are properly spaced and there are no walls above or below the room, false otherwise
+ */
 function areDoorsProperlySpaced(
     map: GameMap.GameMap,
     room: Room.Room,
@@ -132,7 +142,9 @@ function areDoorsProperlySpaced(
     return (
         properlyDistanced(
             doorSpacing(room.length),
-            room.doors.map((existingWallPosition) => existingWallPosition.x).concat(wallPositions),
+            Room.doors(room, direction)
+                .map((existingWallPosition) => existingWallPosition.x)
+                .concat(wallPositions),
         ) && noWalls(map, wallPositions, moveTo(room.position, direction).y, direction)
     )
 }
@@ -143,7 +155,7 @@ function areDoorsProperlySpaced(
 function makeRoomDoors(map: GameMap.GameMap, rooms: Room.Room[], direction: Direction.Vertical) {
     const placeDoorsInRoom = (room: Room.Room, numOfDoors: number) => {
         const wallPositions = check(
-            () => random.ints(room.position.x, room.position.x + room.length, numOfDoors),
+            () => Random.ints(room.position.x, room.position.x + room.length, numOfDoors),
             (wallPositions) => areDoorsProperlySpaced(map, room, wallPositions, direction),
         )
 
@@ -159,8 +171,11 @@ function makeRoomDoors(map: GameMap.GameMap, rooms: Room.Room[], direction: Dire
                 position: { x: room.position.x, y: room.position.y - 2 },
                 size: { x: room.length + 2, y: 5 },
             })
-            console.log(`Failed to add ${numOfDoors} lower door(s) in room ${JSON.stringify(room)}`)
+            console.log(
+                `Failed to add ${numOfDoors} ${direction} door(s) in room ${JSON.stringify(room)}`,
+            )
             console.log(renderedRoom.join("\n"))
+            debugger
         }
         return wallPositions
     }
@@ -224,7 +239,7 @@ function doorSpacing(roomLength: number): number {
 function desiredNumOfDoors(room: Room.Room) {
     const min_max = _.find(config.maze.numberOfDoorsPerRoom, (x) => x[0] > room.length)!
 
-    return random.int(min_max[1], min_max[2])
+    return Random.int(min_max[1], min_max[2])
 }
 
 /**
@@ -248,5 +263,9 @@ function properlyDistanced(minimalSpacing: number, walls: number[]): boolean {
         distances.map((x) => x[1] - x[0]),
         (x) => x >= minimalSpacing,
     )
+    if (result === false) {
+        logger("properlyDistanced " + JSON.stringify({ minimalSpacing, walls, distances, result }))
+    }
+
     return result
 }

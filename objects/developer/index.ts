@@ -166,7 +166,7 @@ export function possibleMoves(pos: Vector.t, map: GameMap.GameMap): Direction.t[
 }
 
 export function canMoveOn(position: Vector.Vector, map: GameMap.GameMap): boolean {
-    return map.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type))
+    return map.at(position).every((obj) => !obj || !["wall", "door"].includes(obj.type))
 }
 
 function canPick(obj: Developer, item: Item.Item): boolean {

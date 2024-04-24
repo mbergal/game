@@ -14,11 +14,15 @@ const logger = Logging.make("main")
 logger("Starting the game")
 
 Logging.setIsEnabled((name: string) =>
-    _.includes(["main", "player", "game", "fellow_developer", "game_window"], name),
+    _.includes(
+        ["main", "player", "game", "fellow_developer", "game_window", "plan", "generator"],
+        name,
+    ),
 )
 
 export function main() {
     const plan: Plan.Plan = Plan.generatePlan(0)
+    Plan.dump(plan)
     const game: Game.Game = Game.make(MAZE_SIZE, plan)
 
     MazeGenerator.maze(MAZE_SIZE, game)

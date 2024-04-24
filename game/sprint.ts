@@ -26,103 +26,140 @@ export function make(): t {
     }
 }
 
-export function generatePlan(startTick: number): readonly [Plan.Plan, number] {
+const storySizes: StorySize.Size[] = [
+    "small" as const,
+    "small" as const,
+    "small" as const,
+    "medium" as const,
+    "medium" as const,
+    "large" as const,
+]
+
+type SprintType = NormalSprint | LastSprint
+
+type NormalSprint = {
+    type: "normal"
+}
+
+type LastSprint = {
+    type: "last"
+}
+
+export function generatePlan(
+    sprintType: SprintType,
+    startTick_: number,
+): readonly [Plan.Plan, number] {
     const DAY = config.dayTicks
-    const SPRINT_DAYS = 10
     const plan = Plan.make()
 
+    let currentTick = startTick_
     const addEvent = (event: Event.t) => {
-        Plan.addEvent(plan, startTick, event)
+        Plan.addEvent(plan, currentTick, event)
+    }
+    const addSprintStart = () => addEvent({ type: "sprintStart" })
+    const addGroomBacklogStart = () => addEvent({ type: "groomBacklogStart" })
+    const addWorkWeekStarted = () =>
+        addEvent({ type: "workWeekStarted", ...GameTime.make(currentTick) })
+
+    const addWorkWeekEnded = () =>
+        addEvent({ type: "workWeekEnded", ...GameTime.make(currentTick) })
+
+    const addWeekendStart = () => addEvent({ type: "weekendStart" })
+    const addWeekendEnd = () => addEvent({ type: "weekendEnd" })
+    const addWeekendStarted = () =>
+        addEvent({ type: "workWeekStarted", ...GameTime.make(currentTick) })
+
+    const addSprintDayStart = (sprintDay: number) =>
+        addEvent({
+            type: "sprintDayStart",
+            sprintDay: sprintDay,
+            sprintDaysLeft: config.sprint.days - sprintDay,
+            ...GameTime.make(currentTick),
+        })
+
+    const addBacklogIssue = (size: StorySize.Size) =>
+        addEvent({ type: "createBacklogIssue", size: size })
+
+    const addFirstSprintDay = () => {
+        addSprintDayStart(sprintDay)
+
+        const groomingStart = currentTick
+        const times = storySizes.map(
+            (x, i) => [x, Math.round((DAY / storySizes.length) * i)] as const,
+        )
+
+        for (const t of times) {
+            currentTick = groomingStart + t[1]
+            addBacklogIssue(t[0])
+        }
+
+        currentTick = startTick_ + DAY - 1
+
+        addEvent({ type: "groomBacklogEnd" })
+        addEvent({
+            type: "sprintDayEnd",
+            sprintDay: sprintDay,
+            sprintDaysLeft: config.sprint.days - sprintDay,
+            ...GameTime.make(currentTick),
+        })
+        currentTick += 1
+    }
+    const addSprintDay = (sprintDay: number) => {
+        addEvent({
+            type: "sprintDayStart",
+            sprintDay: sprintDay,
+            sprintDaysLeft: config.sprint.days - sprintDay,
+            ...GameTime.make(currentTick),
+        })
+        currentTick += DAY - 1
+        addEvent({
+            type: "sprintDayEnd",
+            sprintDay: sprintDay,
+            sprintDaysLeft: config.sprint.days - sprintDay,
+            ...GameTime.make(currentTick),
+        })
+        currentTick += 1
     }
 
-    addEvent({ type: "sprintStart" })
-    addEvent({ type: "groomBacklogStart" })
-
-    const storySizes: StorySize.Size[] = [
-        "small" as const,
-        "small" as const,
-        "small" as const,
-        "medium" as const,
-        "medium" as const,
-        "large" as const,
-    ]
-
-    const times = storySizes.map((x, i) => [x, Math.round((DAY / storySizes.length) * i)] as const)
-
-    addEvent({ type: "workWeekStarted", ...GameTime.make(startTick) })
+    addSprintStart()
+    addWorkWeekStarted()
+    addGroomBacklogStart()
 
     let sprintDay = 1
-    addEvent({
-        type: "sprintDayStart",
-        sprintDay: sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...GameTime.make(startTick),
-    })
+    addFirstSprintDay()
 
-    const groomingStart = startTick
-    for (const t of times) {
-        startTick = groomingStart + t[1]
-        addEvent({ type: "createBacklogIssue", size: t[0] })
-    }
-
-    startTick += DAY - 1
-    addEvent({ type: "groomBacklogEnd" })
-    addEvent({
-        type: "sprintDayEnd",
-        sprintDay: sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...GameTime.make(startTick),
-    })
-    startTick += 1
-
-    for (const i of _.range(4)) {
-        const day = Math.floor(startTick / DAY)
+    for (const _day of _.range(4)) {
         sprintDay += 1
-        addEvent({
-            type: "sprintDayStart",
-            sprintDay: sprintDay,
-            sprintDaysLeft: SPRINT_DAYS - sprintDay,
-            ...GameTime.make(startTick),
-        })
-        startTick += DAY - 1
-        addEvent({
-            type: "sprintDayEnd",
-            sprintDay: sprintDay,
-            sprintDaysLeft: SPRINT_DAYS - sprintDay,
-            ...GameTime.make(startTick),
-        })
-        startTick += 1
+        addSprintDay(sprintDay)
     }
-    addEvent({ type: "workWeekEnded", ...GameTime.make(startTick) })
-    addEvent({ type: "weekendStart" })
-    startTick += 2 * DAY + 1
-    addEvent({ type: "weekendEnd" })
-    addEvent({ type: "workWeekStarted", ...GameTime.make(startTick) })
+    addWorkWeekEnded()
+    addWeekendStart()
 
-    for (const i of _.range(4)) {
+    currentTick += 2 * DAY + 1
+
+    addWeekendEnd()
+    addWeekendStarted()
+
+    for (const _i of _.range(4)) {
         sprintDay += 1
-        addEvent({
-            type: "sprintDayStart",
-            sprintDay: sprintDay,
-            sprintDaysLeft: SPRINT_DAYS - sprintDay,
-            ...GameTime.make(startTick),
-        })
-        startTick += DAY - 1
-        addEvent({
-            type: "sprintDayEnd",
-            sprintDay: sprintDay,
-            sprintDaysLeft: SPRINT_DAYS - sprintDay,
-            ...GameTime.make(startTick),
-        })
-        startTick += 1
+        addSprintDay(sprintDay)
     }
-    addEvent({ type: "sprintEnd" })
-    addEvent({ type: "workWeekEnded", ...GameTime.make(startTick) })
-    addEvent({ type: "weekendStart" })
-    startTick += 2 * DAY + 1
-    addEvent({ type: "weekendEnd" })
 
-    return [plan, startTick] as const
+    switch (sprintType.type) {
+        case "normal":
+            addEvent({ type: "sprintEnd" })
+            addEvent({ type: "workWeekEnded", ...GameTime.make(currentTick) })
+            addEvent({ type: "weekendStart" })
+            currentTick += 2 * DAY + 1
+            addEvent({ type: "weekendEnd" })
+            break
+        case "last":
+            currentTick += 2 * DAY + 1
+            addEvent({ type: "sprintEnd" })
+            break
+    }
+
+    return [plan, currentTick] as const
 }
 
 function distance(pos1: Vector.t, pos2: Vector.t): number {
@@ -219,6 +256,7 @@ export function tick(
                     break
                 case "dayStarted":
                     break
+                case "null":
                 case "performanceReview":
                     break
                 default:

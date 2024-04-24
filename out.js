@@ -391,8 +391,8 @@
         }
         __name(apply, "apply");
         function arrayAggregator(array, setter, iteratee, accumulator) {
-          var index = -1, length = array == null ? 0 : array.length;
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          while (++index < length2) {
             var value = array[index];
             setter(accumulator, value, iteratee(value), array);
           }
@@ -400,8 +400,8 @@
         }
         __name(arrayAggregator, "arrayAggregator");
         function arrayEach(array, iteratee) {
-          var index = -1, length = array == null ? 0 : array.length;
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          while (++index < length2) {
             if (iteratee(array[index], index, array) === false) {
               break;
             }
@@ -410,9 +410,9 @@
         }
         __name(arrayEach, "arrayEach");
         function arrayEachRight(array, iteratee) {
-          var length = array == null ? 0 : array.length;
-          while (length--) {
-            if (iteratee(array[length], length, array) === false) {
+          var length2 = array == null ? 0 : array.length;
+          while (length2--) {
+            if (iteratee(array[length2], length2, array) === false) {
               break;
             }
           }
@@ -420,8 +420,8 @@
         }
         __name(arrayEachRight, "arrayEachRight");
         function arrayEvery(array, predicate) {
-          var index = -1, length = array == null ? 0 : array.length;
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          while (++index < length2) {
             if (!predicate(array[index], index, array)) {
               return false;
             }
@@ -430,8 +430,8 @@
         }
         __name(arrayEvery, "arrayEvery");
         function arrayFilter(array, predicate) {
-          var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result = [];
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length, resIndex = 0, result = [];
+          while (++index < length2) {
             var value = array[index];
             if (predicate(value, index, array)) {
               result[resIndex++] = value;
@@ -441,13 +441,13 @@
         }
         __name(arrayFilter, "arrayFilter");
         function arrayIncludes(array, value) {
-          var length = array == null ? 0 : array.length;
-          return !!length && baseIndexOf(array, value, 0) > -1;
+          var length2 = array == null ? 0 : array.length;
+          return !!length2 && baseIndexOf(array, value, 0) > -1;
         }
         __name(arrayIncludes, "arrayIncludes");
         function arrayIncludesWith(array, value, comparator) {
-          var index = -1, length = array == null ? 0 : array.length;
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          while (++index < length2) {
             if (comparator(value, array[index])) {
               return true;
             }
@@ -456,46 +456,46 @@
         }
         __name(arrayIncludesWith, "arrayIncludesWith");
         function arrayMap(array, iteratee) {
-          var index = -1, length = array == null ? 0 : array.length, result = Array(length);
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length, result = Array(length2);
+          while (++index < length2) {
             result[index] = iteratee(array[index], index, array);
           }
           return result;
         }
         __name(arrayMap, "arrayMap");
         function arrayPush(array, values) {
-          var index = -1, length = values.length, offset = array.length;
-          while (++index < length) {
-            array[offset + index] = values[index];
+          var index = -1, length2 = values.length, offset2 = array.length;
+          while (++index < length2) {
+            array[offset2 + index] = values[index];
           }
           return array;
         }
         __name(arrayPush, "arrayPush");
         function arrayReduce(array, iteratee, accumulator, initAccum) {
-          var index = -1, length = array == null ? 0 : array.length;
-          if (initAccum && length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          if (initAccum && length2) {
             accumulator = array[++index];
           }
-          while (++index < length) {
+          while (++index < length2) {
             accumulator = iteratee(accumulator, array[index], index, array);
           }
           return accumulator;
         }
         __name(arrayReduce, "arrayReduce");
         function arrayReduceRight(array, iteratee, accumulator, initAccum) {
-          var length = array == null ? 0 : array.length;
-          if (initAccum && length) {
-            accumulator = array[--length];
+          var length2 = array == null ? 0 : array.length;
+          if (initAccum && length2) {
+            accumulator = array[--length2];
           }
-          while (length--) {
-            accumulator = iteratee(accumulator, array[length], length, array);
+          while (length2--) {
+            accumulator = iteratee(accumulator, array[length2], length2, array);
           }
           return accumulator;
         }
         __name(arrayReduceRight, "arrayReduceRight");
         function arraySome(array, predicate) {
-          var index = -1, length = array == null ? 0 : array.length;
-          while (++index < length) {
+          var index = -1, length2 = array == null ? 0 : array.length;
+          while (++index < length2) {
             if (predicate(array[index], index, array)) {
               return true;
             }
@@ -524,8 +524,8 @@
         }
         __name(baseFindKey, "baseFindKey");
         function baseFindIndex(array, predicate, fromIndex, fromRight) {
-          var length = array.length, index = fromIndex + (fromRight ? 1 : -1);
-          while (fromRight ? index-- : ++index < length) {
+          var length2 = array.length, index = fromIndex + (fromRight ? 1 : -1);
+          while (fromRight ? index-- : ++index < length2) {
             if (predicate(array[index], index, array)) {
               return index;
             }
@@ -538,8 +538,8 @@
         }
         __name(baseIndexOf, "baseIndexOf");
         function baseIndexOfWith(array, value, fromIndex, comparator) {
-          var index = fromIndex - 1, length = array.length;
-          while (++index < length) {
+          var index = fromIndex - 1, length2 = array.length;
+          while (++index < length2) {
             if (comparator(array[index], value)) {
               return index;
             }
@@ -552,8 +552,8 @@
         }
         __name(baseIsNaN, "baseIsNaN");
         function baseMean(array, iteratee) {
-          var length = array == null ? 0 : array.length;
-          return length ? baseSum(array, iteratee) / length : NAN;
+          var length2 = array == null ? 0 : array.length;
+          return length2 ? baseSum(array, iteratee) / length2 : NAN;
         }
         __name(baseMean, "baseMean");
         function baseProperty(key) {
@@ -576,17 +576,17 @@
         }
         __name(baseReduce, "baseReduce");
         function baseSortBy(array, comparer) {
-          var length = array.length;
+          var length2 = array.length;
           array.sort(comparer);
-          while (length--) {
-            array[length] = array[length].value;
+          while (length2--) {
+            array[length2] = array[length2].value;
           }
           return array;
         }
         __name(baseSortBy, "baseSortBy");
         function baseSum(array, iteratee) {
-          var result, index = -1, length = array.length;
-          while (++index < length) {
+          var result, index = -1, length2 = array.length;
+          while (++index < length2) {
             var current = iteratee(array[index]);
             if (current !== undefined) {
               result = result === undefined ? current : result + current;
@@ -630,8 +630,8 @@
         }
         __name(cacheHas, "cacheHas");
         function charsStartIndex(strSymbols, chrSymbols) {
-          var index = -1, length = strSymbols.length;
-          while (++index < length && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
+          var index = -1, length2 = strSymbols.length;
+          while (++index < length2 && baseIndexOf(chrSymbols, strSymbols[index], 0) > -1) {
           }
           return index;
         }
@@ -644,9 +644,9 @@
         }
         __name(charsEndIndex, "charsEndIndex");
         function countHolders(array, placeholder) {
-          var length = array.length, result = 0;
-          while (length--) {
-            if (array[length] === placeholder) {
+          var length2 = array.length, result = 0;
+          while (length2--) {
+            if (array[length2] === placeholder) {
               ++result;
             }
           }
@@ -694,8 +694,8 @@
         }
         __name(overArg, "overArg");
         function replaceHolders(array, placeholder) {
-          var index = -1, length = array.length, resIndex = 0, result = [];
-          while (++index < length) {
+          var index = -1, length2 = array.length, resIndex = 0, result = [];
+          while (++index < length2) {
             var value = array[index];
             if (value === placeholder || value === PLACEHOLDER) {
               array[index] = PLACEHOLDER;
@@ -722,8 +722,8 @@
         }
         __name(setToPairs, "setToPairs");
         function strictIndexOf(array, value, fromIndex) {
-          var index = fromIndex - 1, length = array.length;
-          while (++index < length) {
+          var index = fromIndex - 1, length2 = array.length;
+          while (++index < length2) {
             if (array[index] === value) {
               return index;
             }
@@ -930,13 +930,13 @@
           }
           __name(lazyReverse, "lazyReverse");
           function lazyValue() {
-            var array = this.__wrapped__.value(), dir = this.__dir__, isArr = isArray(array), isRight = dir < 0, arrLength = isArr ? array.length : 0, view = getView(0, arrLength, this.__views__), start = view.start, end = view.end, length = end - start, index = isRight ? end : start - 1, iteratees = this.__iteratees__, iterLength = iteratees.length, resIndex = 0, takeCount = nativeMin(length, this.__takeCount__);
-            if (!isArr || !isRight && arrLength == length && takeCount == length) {
+            var array = this.__wrapped__.value(), dir = this.__dir__, isArr = isArray(array), isRight = dir < 0, arrLength = isArr ? array.length : 0, view = getView(0, arrLength, this.__views__), start = view.start, end = view.end, length2 = end - start, index = isRight ? end : start - 1, iteratees = this.__iteratees__, iterLength = iteratees.length, resIndex = 0, takeCount = nativeMin(length2, this.__takeCount__);
+            if (!isArr || !isRight && arrLength == length2 && takeCount == length2) {
               return baseWrapperValue(array, this.__actions__);
             }
             var result2 = [];
             outer:
-              while (length-- && resIndex < takeCount) {
+              while (length2-- && resIndex < takeCount) {
                 index += dir;
                 var iterIndex = -1, value = array[index];
                 while (++iterIndex < iterLength) {
@@ -959,9 +959,9 @@
           LazyWrapper.prototype = baseCreate(baseLodash.prototype);
           LazyWrapper.prototype.constructor = LazyWrapper;
           function Hash(entries) {
-            var index = -1, length = entries == null ? 0 : entries.length;
+            var index = -1, length2 = entries == null ? 0 : entries.length;
             this.clear();
-            while (++index < length) {
+            while (++index < length2) {
               var entry = entries[index];
               this.set(entry[0], entry[1]);
             }
@@ -1005,9 +1005,9 @@
           Hash.prototype.has = hashHas;
           Hash.prototype.set = hashSet;
           function ListCache(entries) {
-            var index = -1, length = entries == null ? 0 : entries.length;
+            var index = -1, length2 = entries == null ? 0 : entries.length;
             this.clear();
-            while (++index < length) {
+            while (++index < length2) {
               var entry = entries[index];
               this.set(entry[0], entry[1]);
             }
@@ -1059,9 +1059,9 @@
           ListCache.prototype.has = listCacheHas;
           ListCache.prototype.set = listCacheSet;
           function MapCache(entries) {
-            var index = -1, length = entries == null ? 0 : entries.length;
+            var index = -1, length2 = entries == null ? 0 : entries.length;
             this.clear();
-            while (++index < length) {
+            while (++index < length2) {
               var entry = entries[index];
               this.set(entry[0], entry[1]);
             }
@@ -1103,9 +1103,9 @@
           MapCache.prototype.has = mapCacheHas;
           MapCache.prototype.set = mapCacheSet;
           function SetCache(values2) {
-            var index = -1, length = values2 == null ? 0 : values2.length;
+            var index = -1, length2 = values2 == null ? 0 : values2.length;
             this.__data__ = new MapCache();
-            while (++index < length) {
+            while (++index < length2) {
               this.add(values2[index]);
             }
           }
@@ -1167,13 +1167,13 @@
           Stack.prototype.has = stackHas;
           Stack.prototype.set = stackSet;
           function arrayLikeKeys(value, inherited) {
-            var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result2 = skipIndexes ? baseTimes(value.length, String) : [], length = result2.length;
+            var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result2 = skipIndexes ? baseTimes(value.length, String) : [], length2 = result2.length;
             for (var key in value) {
               if ((inherited || hasOwnProperty.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
               (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
               isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
               isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
-              isIndex(key, length)))) {
+              isIndex(key, length2)))) {
                 result2.push(key);
               }
             }
@@ -1181,8 +1181,8 @@
           }
           __name(arrayLikeKeys, "arrayLikeKeys");
           function arraySample(array) {
-            var length = array.length;
-            return length ? array[baseRandom(0, length - 1)] : undefined;
+            var length2 = array.length;
+            return length2 ? array[baseRandom(0, length2 - 1)] : undefined;
           }
           __name(arraySample, "arraySample");
           function arraySampleSize(array, n2) {
@@ -1207,10 +1207,10 @@
           }
           __name(assignValue, "assignValue");
           function assocIndexOf(array, key) {
-            var length = array.length;
-            while (length--) {
-              if (eq(array[length][0], key)) {
-                return length;
+            var length2 = array.length;
+            while (length2--) {
+              if (eq(array[length2][0], key)) {
+                return length2;
               }
             }
             return -1;
@@ -1245,8 +1245,8 @@
           }
           __name(baseAssignValue, "baseAssignValue");
           function baseAt(object, paths) {
-            var index = -1, length = paths.length, result2 = Array2(length), skip = object == null;
-            while (++index < length) {
+            var index = -1, length2 = paths.length, result2 = Array2(length2), skip = object == null;
+            while (++index < length2) {
               result2[index] = skip ? undefined : get(object, paths[index]);
             }
             return result2;
@@ -1333,13 +1333,13 @@
           }
           __name(baseConforms, "baseConforms");
           function baseConformsTo(object, source, props) {
-            var length = props.length;
+            var length2 = props.length;
             if (object == null) {
-              return !length;
+              return !length2;
             }
             object = Object2(object);
-            while (length--) {
-              var key = props[length], predicate = source[key], value = object[key];
+            while (length2--) {
+              var key = props[length2], predicate = source[key], value = object[key];
               if (value === undefined && !(key in object) || !predicate(value)) {
                 return false;
               }
@@ -1357,8 +1357,8 @@
           }
           __name(baseDelay, "baseDelay");
           function baseDifference(array, values2, iteratee2, comparator) {
-            var index = -1, includes2 = arrayIncludes, isCommon = true, length = array.length, result2 = [], valuesLength = values2.length;
-            if (!length) {
+            var index = -1, includes2 = arrayIncludes, isCommon = true, length2 = array.length, result2 = [], valuesLength = values2.length;
+            if (!length2) {
               return result2;
             }
             if (iteratee2) {
@@ -1373,7 +1373,7 @@
               values2 = new SetCache(values2);
             }
             outer:
-              while (++index < length) {
+              while (++index < length2) {
                 var value = array[index], computed = iteratee2 == null ? value : iteratee2(value);
                 value = comparator || value !== 0 ? value : 0;
                 if (isCommon && computed === computed) {
@@ -1403,8 +1403,8 @@
           }
           __name(baseEvery, "baseEvery");
           function baseExtremum(array, iteratee2, comparator) {
-            var index = -1, length = array.length;
-            while (++index < length) {
+            var index = -1, length2 = array.length;
+            while (++index < length2) {
               var value = array[index], current = iteratee2(value);
               if (current != null && (computed === undefined ? current === current && !isSymbol(current) : comparator(current, computed))) {
                 var computed = current, result2 = value;
@@ -1414,14 +1414,14 @@
           }
           __name(baseExtremum, "baseExtremum");
           function baseFill(array, value, start, end) {
-            var length = array.length;
+            var length2 = array.length;
             start = toInteger(start);
             if (start < 0) {
-              start = -start > length ? 0 : length + start;
+              start = -start > length2 ? 0 : length2 + start;
             }
-            end = end === undefined || end > length ? length : toInteger(end);
+            end = end === undefined || end > length2 ? length2 : toInteger(end);
             if (end < 0) {
-              end += length;
+              end += length2;
             }
             end = start > end ? 0 : toLength(end);
             while (start < end) {
@@ -1441,10 +1441,10 @@
           }
           __name(baseFilter, "baseFilter");
           function baseFlatten(array, depth, predicate, isStrict, result2) {
-            var index = -1, length = array.length;
+            var index = -1, length2 = array.length;
             predicate || (predicate = isFlattenable);
             result2 || (result2 = []);
-            while (++index < length) {
+            while (++index < length2) {
               var value = array[index];
               if (depth > 0 && predicate(value)) {
                 if (depth > 1) {
@@ -1477,11 +1477,11 @@
           __name(baseFunctions, "baseFunctions");
           function baseGet(object, path) {
             path = castPath(path, object);
-            var index = 0, length = path.length;
-            while (object != null && index < length) {
+            var index = 0, length2 = path.length;
+            while (object != null && index < length2) {
               object = object[toKey(path[index++])];
             }
-            return index && index == length ? object : undefined;
+            return index && index == length2 ? object : undefined;
           }
           __name(baseGet, "baseGet");
           function baseGetAllKeys(object, keysFunc, symbolsFunc) {
@@ -1513,19 +1513,19 @@
           }
           __name(baseInRange, "baseInRange");
           function baseIntersection(arrays, iteratee2, comparator) {
-            var includes2 = comparator ? arrayIncludesWith : arrayIncludes, length = arrays[0].length, othLength = arrays.length, othIndex = othLength, caches = Array2(othLength), maxLength = Infinity, result2 = [];
+            var includes2 = comparator ? arrayIncludesWith : arrayIncludes, length2 = arrays[0].length, othLength = arrays.length, othIndex = othLength, caches = Array2(othLength), maxLength = Infinity, result2 = [];
             while (othIndex--) {
               var array = arrays[othIndex];
               if (othIndex && iteratee2) {
                 array = arrayMap(array, baseUnary(iteratee2));
               }
               maxLength = nativeMin(array.length, maxLength);
-              caches[othIndex] = !comparator && (iteratee2 || length >= 120 && array.length >= 120) ? new SetCache(othIndex && array) : undefined;
+              caches[othIndex] = !comparator && (iteratee2 || length2 >= 120 && array.length >= 120) ? new SetCache(othIndex && array) : undefined;
             }
             array = arrays[0];
             var index = -1, seen = caches[0];
             outer:
-              while (++index < length && result2.length < maxLength) {
+              while (++index < length2 && result2.length < maxLength) {
                 var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
                 value = comparator || value !== 0 ? value : 0;
                 if (!(seen ? cacheHas(seen, computed) : includes2(result2, computed, comparator))) {
@@ -1617,9 +1617,9 @@
           }
           __name(baseIsMap, "baseIsMap");
           function baseIsMatch(object, source, matchData, customizer) {
-            var index = matchData.length, length = index, noCustomizer = !customizer;
+            var index = matchData.length, length2 = index, noCustomizer = !customizer;
             if (object == null) {
-              return !length;
+              return !length2;
             }
             object = Object2(object);
             while (index--) {
@@ -1628,7 +1628,7 @@
                 return false;
               }
             }
-            while (++index < length) {
+            while (++index < length2) {
               data = matchData[index];
               var key = data[0], objValue = object[key], srcValue = data[1];
               if (noCustomizer && data[2]) {
@@ -1802,12 +1802,12 @@
           }
           __name(baseMergeDeep, "baseMergeDeep");
           function baseNth(array, n2) {
-            var length = array.length;
-            if (!length) {
+            var length2 = array.length;
+            if (!length2) {
               return;
             }
-            n2 += n2 < 0 ? length : 0;
-            return isIndex(n2, length) ? array[n2] : undefined;
+            n2 += n2 < 0 ? length2 : 0;
+            return isIndex(n2, length2) ? array[n2] : undefined;
           }
           __name(baseNth, "baseNth");
           function baseOrderBy(collection, iteratees, orders) {
@@ -1843,8 +1843,8 @@
           }
           __name(basePick, "basePick");
           function basePickBy(object, paths, predicate) {
-            var index = -1, length = paths.length, result2 = {};
-            while (++index < length) {
+            var index = -1, length2 = paths.length, result2 = {};
+            while (++index < length2) {
               var path = paths[index], value = baseGet(object, path);
               if (predicate(value, path)) {
                 baseSet(result2, castPath(path, object), value);
@@ -1860,14 +1860,14 @@
           }
           __name(basePropertyDeep, "basePropertyDeep");
           function basePullAll(array, values2, iteratee2, comparator) {
-            var indexOf3 = comparator ? baseIndexOfWith : baseIndexOf, index = -1, length = values2.length, seen = array;
+            var indexOf3 = comparator ? baseIndexOfWith : baseIndexOf, index = -1, length2 = values2.length, seen = array;
             if (array === values2) {
               values2 = copyArray(values2);
             }
             if (iteratee2) {
               seen = arrayMap(array, baseUnary(iteratee2));
             }
-            while (++index < length) {
+            while (++index < length2) {
               var fromIndex = 0, value = values2[index], computed = iteratee2 ? iteratee2(value) : value;
               while ((fromIndex = indexOf3(seen, computed, fromIndex, comparator)) > -1) {
                 if (seen !== array) {
@@ -1880,10 +1880,10 @@
           }
           __name(basePullAll, "basePullAll");
           function basePullAt(array, indexes) {
-            var length = array ? indexes.length : 0, lastIndex = length - 1;
-            while (length--) {
-              var index = indexes[length];
-              if (length == lastIndex || index !== previous) {
+            var length2 = array ? indexes.length : 0, lastIndex = length2 - 1;
+            while (length2--) {
+              var index = indexes[length2];
+              if (length2 == lastIndex || index !== previous) {
                 var previous = index;
                 if (isIndex(index)) {
                   splice.call(array, index, 1);
@@ -1900,9 +1900,9 @@
           }
           __name(baseRandom, "baseRandom");
           function baseRange(start, end, step, fromRight) {
-            var index = -1, length = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result2 = Array2(length);
-            while (length--) {
-              result2[fromRight ? length : ++index] = start;
+            var index = -1, length2 = nativeMax(nativeCeil((end - start) / (step || 1)), 0), result2 = Array2(length2);
+            while (length2--) {
+              result2[fromRight ? length2 : ++index] = start;
               start += step;
             }
             return result2;
@@ -1943,8 +1943,8 @@
               return object;
             }
             path = castPath(path, object);
-            var index = -1, length = path.length, lastIndex = length - 1, nested = object;
-            while (nested != null && ++index < length) {
+            var index = -1, length2 = path.length, lastIndex = length2 - 1, nested = object;
+            while (nested != null && ++index < length2) {
               var key = toKey(path[index]), newValue = value;
               if (key === "__proto__" || key === "constructor" || key === "prototype") {
                 return object;
@@ -1979,18 +1979,18 @@
           }
           __name(baseShuffle, "baseShuffle");
           function baseSlice(array, start, end) {
-            var index = -1, length = array.length;
+            var index = -1, length2 = array.length;
             if (start < 0) {
-              start = -start > length ? 0 : length + start;
+              start = -start > length2 ? 0 : length2 + start;
             }
-            end = end > length ? length : end;
+            end = end > length2 ? length2 : end;
             if (end < 0) {
-              end += length;
+              end += length2;
             }
-            length = start > end ? 0 : end - start >>> 0;
+            length2 = start > end ? 0 : end - start >>> 0;
             start >>>= 0;
-            var result2 = Array2(length);
-            while (++index < length) {
+            var result2 = Array2(length2);
+            while (++index < length2) {
               result2[index] = array[index + start];
             }
             return result2;
@@ -2053,8 +2053,8 @@
           }
           __name(baseSortedIndexBy, "baseSortedIndexBy");
           function baseSortedUniq(array, iteratee2) {
-            var index = -1, length = array.length, resIndex = 0, result2 = [];
-            while (++index < length) {
+            var index = -1, length2 = array.length, resIndex = 0, result2 = [];
+            while (++index < length2) {
               var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
               if (!index || !eq(computed, seen)) {
                 var seen = computed;
@@ -2089,11 +2089,11 @@
           }
           __name(baseToString, "baseToString");
           function baseUniq(array, iteratee2, comparator) {
-            var index = -1, includes2 = arrayIncludes, length = array.length, isCommon = true, result2 = [], seen = result2;
+            var index = -1, includes2 = arrayIncludes, length2 = array.length, isCommon = true, result2 = [], seen = result2;
             if (comparator) {
               isCommon = false;
               includes2 = arrayIncludesWith;
-            } else if (length >= LARGE_ARRAY_SIZE) {
+            } else if (length2 >= LARGE_ARRAY_SIZE) {
               var set2 = iteratee2 ? null : createSet(array);
               if (set2) {
                 return setToArray(set2);
@@ -2105,7 +2105,7 @@
               seen = iteratee2 ? [] : result2;
             }
             outer:
-              while (++index < length) {
+              while (++index < length2) {
                 var value = array[index], computed = iteratee2 ? iteratee2(value) : value;
                 value = comparator || value !== 0 ? value : 0;
                 if (isCommon && computed === computed) {
@@ -2140,10 +2140,10 @@
           }
           __name(baseUpdate, "baseUpdate");
           function baseWhile(array, predicate, isDrop, fromRight) {
-            var length = array.length, index = fromRight ? length : -1;
-            while ((fromRight ? index-- : ++index < length) && predicate(array[index], index, array)) {
+            var length2 = array.length, index = fromRight ? length2 : -1;
+            while ((fromRight ? index-- : ++index < length2) && predicate(array[index], index, array)) {
             }
-            return isDrop ? baseSlice(array, fromRight ? 0 : index, fromRight ? index + 1 : length) : baseSlice(array, fromRight ? index + 1 : 0, fromRight ? length : index);
+            return isDrop ? baseSlice(array, fromRight ? 0 : index, fromRight ? index + 1 : length2) : baseSlice(array, fromRight ? index + 1 : 0, fromRight ? length2 : index);
           }
           __name(baseWhile, "baseWhile");
           function baseWrapperValue(value, actions) {
@@ -2157,14 +2157,14 @@
           }
           __name(baseWrapperValue, "baseWrapperValue");
           function baseXor(arrays, iteratee2, comparator) {
-            var length = arrays.length;
-            if (length < 2) {
-              return length ? baseUniq(arrays[0]) : [];
+            var length2 = arrays.length;
+            if (length2 < 2) {
+              return length2 ? baseUniq(arrays[0]) : [];
             }
-            var index = -1, result2 = Array2(length);
-            while (++index < length) {
+            var index = -1, result2 = Array2(length2);
+            while (++index < length2) {
               var array = arrays[index], othIndex = -1;
-              while (++othIndex < length) {
+              while (++othIndex < length2) {
                 if (othIndex != index) {
                   result2[index] = baseDifference(result2[index] || array, arrays[othIndex], iteratee2, comparator);
                 }
@@ -2174,8 +2174,8 @@
           }
           __name(baseXor, "baseXor");
           function baseZipObject(props, values2, assignFunc) {
-            var index = -1, length = props.length, valsLength = values2.length, result2 = {};
-            while (++index < length) {
+            var index = -1, length2 = props.length, valsLength = values2.length, result2 = {};
+            while (++index < length2) {
               var value = index < valsLength ? values2[index] : undefined;
               assignFunc(result2, props[index], value);
             }
@@ -2199,9 +2199,9 @@
           __name(castPath, "castPath");
           var castRest = baseRest;
           function castSlice(array, start, end) {
-            var length = array.length;
-            end = end === undefined ? length : end;
-            return !start && end >= length ? array : baseSlice(array, start, end);
+            var length2 = array.length;
+            end = end === undefined ? length2 : end;
+            return !start && end >= length2 ? array : baseSlice(array, start, end);
           }
           __name(castSlice, "castSlice");
           var clearTimeout = ctxClearTimeout || function(id) {
@@ -2211,7 +2211,7 @@
             if (isDeep) {
               return buffer.slice();
             }
-            var length = buffer.length, result2 = allocUnsafe ? allocUnsafe(length) : new buffer.constructor(length);
+            var length2 = buffer.length, result2 = allocUnsafe ? allocUnsafe(length2) : new buffer.constructor(length2);
             buffer.copy(result2);
             return result2;
           }
@@ -2257,8 +2257,8 @@
           }
           __name(compareAscending, "compareAscending");
           function compareMultiple(object, other, orders) {
-            var index = -1, objCriteria = object.criteria, othCriteria = other.criteria, length = objCriteria.length, ordersLength = orders.length;
-            while (++index < length) {
+            var index = -1, objCriteria = object.criteria, othCriteria = other.criteria, length2 = objCriteria.length, ordersLength = orders.length;
+            while (++index < length2) {
               var result2 = compareAscending(objCriteria[index], othCriteria[index]);
               if (result2) {
                 if (index >= ordersLength) {
@@ -2292,22 +2292,22 @@
             while (++argsIndex < rangeLength) {
               result2[argsIndex] = args[argsIndex];
             }
-            var offset = argsIndex;
+            var offset2 = argsIndex;
             while (++rightIndex < rightLength) {
-              result2[offset + rightIndex] = partials[rightIndex];
+              result2[offset2 + rightIndex] = partials[rightIndex];
             }
             while (++holdersIndex < holdersLength) {
               if (isUncurried || argsIndex < argsLength) {
-                result2[offset + holders[holdersIndex]] = args[argsIndex++];
+                result2[offset2 + holders[holdersIndex]] = args[argsIndex++];
               }
             }
             return result2;
           }
           __name(composeArgsRight, "composeArgsRight");
           function copyArray(source, array) {
-            var index = -1, length = source.length;
-            array || (array = Array2(length));
-            while (++index < length) {
+            var index = -1, length2 = source.length;
+            array || (array = Array2(length2));
+            while (++index < length2) {
               array[index] = source[index];
             }
             return array;
@@ -2316,8 +2316,8 @@
           function copyObject(source, props, object, customizer) {
             var isNew = !object;
             object || (object = {});
-            var index = -1, length = props.length;
-            while (++index < length) {
+            var index = -1, length2 = props.length;
+            while (++index < length2) {
               var key = props[index];
               var newValue = customizer ? customizer(object[key], source[key], key, object, source) : undefined;
               if (newValue === undefined) {
@@ -2349,14 +2349,14 @@
           __name(createAggregator, "createAggregator");
           function createAssigner(assigner) {
             return baseRest(function(object, sources) {
-              var index = -1, length = sources.length, customizer = length > 1 ? sources[length - 1] : undefined, guard = length > 2 ? sources[2] : undefined;
-              customizer = assigner.length > 3 && typeof customizer == "function" ? (length--, customizer) : undefined;
+              var index = -1, length2 = sources.length, customizer = length2 > 1 ? sources[length2 - 1] : undefined, guard = length2 > 2 ? sources[2] : undefined;
+              customizer = assigner.length > 3 && typeof customizer == "function" ? (length2--, customizer) : undefined;
               if (guard && isIterateeCall(sources[0], sources[1], guard)) {
-                customizer = length < 3 ? undefined : customizer;
-                length = 1;
+                customizer = length2 < 3 ? undefined : customizer;
+                length2 = 1;
               }
               object = Object2(object);
-              while (++index < length) {
+              while (++index < length2) {
                 var source = sources[index];
                 if (source) {
                   assigner(object, source, index, customizer);
@@ -2374,8 +2374,8 @@
               if (!isArrayLike(collection)) {
                 return eachFunc(collection, iteratee2);
               }
-              var length = collection.length, index = fromRight ? length : -1, iterable = Object2(collection);
-              while (fromRight ? index-- : ++index < length) {
+              var length2 = collection.length, index = fromRight ? length2 : -1, iterable = Object2(collection);
+              while (fromRight ? index-- : ++index < length2) {
                 if (iteratee2(iterable[index], index, iterable) === false) {
                   break;
                 }
@@ -2386,9 +2386,9 @@
           __name(createBaseEach, "createBaseEach");
           function createBaseFor(fromRight) {
             return function(object, iteratee2, keysFunc) {
-              var index = -1, iterable = Object2(object), props = keysFunc(object), length = props.length;
-              while (length--) {
-                var key = props[fromRight ? length : ++index];
+              var index = -1, iterable = Object2(object), props = keysFunc(object), length2 = props.length;
+              while (length2--) {
+                var key = props[fromRight ? length2 : ++index];
                 if (iteratee2(iterable[key], key, iterable) === false) {
                   break;
                 }
@@ -2452,13 +2452,13 @@
           function createCurry(func, bitmask, arity) {
             var Ctor = createCtor(func);
             function wrapper() {
-              var length = arguments.length, args = Array2(length), index = length, placeholder = getHolder(wrapper);
+              var length2 = arguments.length, args = Array2(length2), index = length2, placeholder = getHolder(wrapper);
               while (index--) {
                 args[index] = arguments[index];
               }
-              var holders = length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder ? [] : replaceHolders(args, placeholder);
-              length -= holders.length;
-              if (length < arity) {
+              var holders = length2 < 3 && args[0] !== placeholder && args[length2 - 1] !== placeholder ? [] : replaceHolders(args, placeholder);
+              length2 -= holders.length;
+              if (length2 < arity) {
                 return createRecurry(
                   func,
                   bitmask,
@@ -2469,7 +2469,7 @@
                   holders,
                   undefined,
                   undefined,
-                  arity - length
+                  arity - length2
                 );
               }
               var fn = this && this !== root && this instanceof wrapper ? Ctor : func;
@@ -2496,7 +2496,7 @@
           __name(createFind, "createFind");
           function createFlow(fromRight) {
             return flatRest(function(funcs) {
-              var length = funcs.length, index = length, prereq = LodashWrapper.prototype.thru;
+              var length2 = funcs.length, index = length2, prereq = LodashWrapper.prototype.thru;
               if (fromRight) {
                 funcs.reverse();
               }
@@ -2509,8 +2509,8 @@
                   var wrapper = new LodashWrapper([], true);
                 }
               }
-              index = wrapper ? index : length;
-              while (++index < length) {
+              index = wrapper ? index : length2;
+              while (++index < length2) {
                 func = funcs[index];
                 var funcName = getFuncName(func), data = funcName == "wrapper" ? getData(func) : undefined;
                 if (data && isLaziable(data[0]) && data[1] == (WRAP_ARY_FLAG | WRAP_CURRY_FLAG | WRAP_PARTIAL_FLAG | WRAP_REARG_FLAG) && !data[4].length && data[9] == 1) {
@@ -2524,8 +2524,8 @@
                 if (wrapper && args.length == 1 && isArray(value)) {
                   return wrapper.plant(value).value();
                 }
-                var index2 = 0, result2 = length ? funcs[index2].apply(this, args) : value;
-                while (++index2 < length) {
+                var index2 = 0, result2 = length2 ? funcs[index2].apply(this, args) : value;
+                while (++index2 < length2) {
                   result2 = funcs[index2].call(this, result2);
                 }
                 return result2;
@@ -2536,7 +2536,7 @@
           function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary2, arity) {
             var isAry = bitmask & WRAP_ARY_FLAG, isBind = bitmask & WRAP_BIND_FLAG, isBindKey = bitmask & WRAP_BIND_KEY_FLAG, isCurried = bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG), isFlip = bitmask & WRAP_FLIP_FLAG, Ctor = isBindKey ? undefined : createCtor(func);
             function wrapper() {
-              var length = arguments.length, args = Array2(length), index = length;
+              var length2 = arguments.length, args = Array2(length2), index = length2;
               while (index--) {
                 args[index] = arguments[index];
               }
@@ -2549,8 +2549,8 @@
               if (partialsRight) {
                 args = composeArgsRight(args, partialsRight, holdersRight, isCurried);
               }
-              length -= holdersCount;
-              if (isCurried && length < arity) {
+              length2 -= holdersCount;
+              if (isCurried && length2 < arity) {
                 var newHolders = replaceHolders(args, placeholder);
                 return createRecurry(
                   func,
@@ -2562,17 +2562,17 @@
                   newHolders,
                   argPos,
                   ary2,
-                  arity - length
+                  arity - length2
                 );
               }
               var thisBinding = isBind ? thisArg : this, fn = isBindKey ? thisBinding[func] : func;
-              length = args.length;
+              length2 = args.length;
               if (argPos) {
                 args = reorder(args, argPos);
-              } else if (isFlip && length > 1) {
+              } else if (isFlip && length2 > 1) {
                 args.reverse();
               }
-              if (isAry && ary2 < length) {
+              if (isAry && ary2 < length2) {
                 args.length = ary2;
               }
               if (this && this !== root && this instanceof wrapper) {
@@ -2628,14 +2628,14 @@
             });
           }
           __name(createOver, "createOver");
-          function createPadding(length, chars) {
+          function createPadding(length2, chars) {
             chars = chars === undefined ? " " : baseToString(chars);
             var charsLength = chars.length;
             if (charsLength < 2) {
-              return charsLength ? baseRepeat(chars, length) : chars;
+              return charsLength ? baseRepeat(chars, length2) : chars;
             }
-            var result2 = baseRepeat(chars, nativeCeil(length / stringSize(chars)));
-            return hasUnicode(chars) ? castSlice(stringToArray(result2), 0, length).join("") : result2.slice(0, length);
+            var result2 = baseRepeat(chars, nativeCeil(length2 / stringSize(chars)));
+            return hasUnicode(chars) ? castSlice(stringToArray(result2), 0, length2).join("") : result2.slice(0, length2);
           }
           __name(createPadding, "createPadding");
           function createPartial(func, bitmask, thisArg, partials) {
@@ -2743,14 +2743,14 @@
             if (!isBindKey && typeof func != "function") {
               throw new TypeError2(FUNC_ERROR_TEXT);
             }
-            var length = partials ? partials.length : 0;
-            if (!length) {
+            var length2 = partials ? partials.length : 0;
+            if (!length2) {
               bitmask &= ~(WRAP_PARTIAL_FLAG | WRAP_PARTIAL_RIGHT_FLAG);
               partials = holders = undefined;
             }
             ary2 = ary2 === undefined ? ary2 : nativeMax(toInteger(ary2), 0);
             arity = arity === undefined ? arity : toInteger(arity);
-            length -= holders ? holders.length : 0;
+            length2 -= holders ? holders.length : 0;
             if (bitmask & WRAP_PARTIAL_RIGHT_FLAG) {
               var partialsRight = partials, holdersRight = holders;
               partials = holders = undefined;
@@ -2776,7 +2776,7 @@
             thisArg = newData[2];
             partials = newData[3];
             holders = newData[4];
-            arity = newData[9] = newData[9] === undefined ? isBindKey ? 0 : func.length : nativeMax(newData[9] - length, 0);
+            arity = newData[9] = newData[9] === undefined ? isBindKey ? 0 : func.length : nativeMax(newData[9] - length2, 0);
             if (!arity && bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG)) {
               bitmask &= ~(WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG);
             }
@@ -2964,9 +2964,9 @@
             return metaMap.get(func);
           };
           function getFuncName(func) {
-            var result2 = func.name + "", array = realNames[result2], length = hasOwnProperty.call(realNames, result2) ? array.length : 0;
-            while (length--) {
-              var data = array[length], otherFunc = data.func;
+            var result2 = func.name + "", array = realNames[result2], length2 = hasOwnProperty.call(realNames, result2) ? array.length : 0;
+            while (length2--) {
+              var data = array[length2], otherFunc = data.func;
               if (otherFunc == null || otherFunc == func) {
                 return data.name;
               }
@@ -2991,10 +2991,10 @@
           }
           __name(getMapData, "getMapData");
           function getMatchData(object) {
-            var result2 = keys(object), length = result2.length;
-            while (length--) {
-              var key = result2[length], value = object[key];
-              result2[length] = [key, value, isStrictComparable(value)];
+            var result2 = keys(object), length2 = result2.length;
+            while (length2--) {
+              var key = result2[length2], value = object[key];
+              result2[length2] = [key, value, isStrictComparable(value)];
             }
             return result2;
           }
@@ -3061,8 +3061,8 @@
             }, "getTag");
           }
           function getView(start, end, transforms) {
-            var index = -1, length = transforms.length;
-            while (++index < length) {
+            var index = -1, length2 = transforms.length;
+            while (++index < length2) {
               var data = transforms[index], size3 = data.size;
               switch (data.type) {
                 case "drop":
@@ -3089,24 +3089,24 @@
           __name(getWrapDetails, "getWrapDetails");
           function hasPath(object, path, hasFunc) {
             path = castPath(path, object);
-            var index = -1, length = path.length, result2 = false;
-            while (++index < length) {
+            var index = -1, length2 = path.length, result2 = false;
+            while (++index < length2) {
               var key = toKey(path[index]);
               if (!(result2 = object != null && hasFunc(object, key))) {
                 break;
               }
               object = object[key];
             }
-            if (result2 || ++index != length) {
+            if (result2 || ++index != length2) {
               return result2;
             }
-            length = object == null ? 0 : object.length;
-            return !!length && isLength(length) && isIndex(key, length) && (isArray(object) || isArguments(object));
+            length2 = object == null ? 0 : object.length;
+            return !!length2 && isLength(length2) && isIndex(key, length2) && (isArray(object) || isArguments(object));
           }
           __name(hasPath, "hasPath");
           function initCloneArray(array) {
-            var length = array.length, result2 = new array.constructor(length);
-            if (length && typeof array[0] == "string" && hasOwnProperty.call(array, "index")) {
+            var length2 = array.length, result2 = new array.constructor(length2);
+            if (length2 && typeof array[0] == "string" && hasOwnProperty.call(array, "index")) {
               result2.index = array.index;
               result2.input = array.input;
             }
@@ -3152,13 +3152,13 @@
           }
           __name(initCloneByTag, "initCloneByTag");
           function insertWrapDetails(source, details) {
-            var length = details.length;
-            if (!length) {
+            var length2 = details.length;
+            if (!length2) {
               return source;
             }
-            var lastIndex = length - 1;
-            details[lastIndex] = (length > 1 ? "& " : "") + details[lastIndex];
-            details = details.join(length > 2 ? ", " : " ");
+            var lastIndex = length2 - 1;
+            details[lastIndex] = (length2 > 1 ? "& " : "") + details[lastIndex];
+            details = details.join(length2 > 2 ? ", " : " ");
             return source.replace(reWrapComment, "{\n/* [wrapped with " + details + "] */\n");
           }
           __name(insertWrapDetails, "insertWrapDetails");
@@ -3166,10 +3166,10 @@
             return isArray(value) || isArguments(value) || !!(spreadableSymbol && value && value[spreadableSymbol]);
           }
           __name(isFlattenable, "isFlattenable");
-          function isIndex(value, length) {
+          function isIndex(value, length2) {
             var type8 = typeof value;
-            length = length == null ? MAX_SAFE_INTEGER : length;
-            return !!length && (type8 == "number" || type8 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length);
+            length2 = length2 == null ? MAX_SAFE_INTEGER : length2;
+            return !!length2 && (type8 == "number" || type8 != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length2);
           }
           __name(isIndex, "isIndex");
           function isIterateeCall(value, index, object) {
@@ -3299,8 +3299,8 @@
           function overRest(func, start, transform2) {
             start = nativeMax(start === undefined ? func.length - 1 : start, 0);
             return function() {
-              var args = arguments, index = -1, length = nativeMax(args.length - start, 0), array = Array2(length);
-              while (++index < length) {
+              var args = arguments, index = -1, length2 = nativeMax(args.length - start, 0), array = Array2(length2);
+              while (++index < length2) {
                 array[index] = args[start + index];
               }
               index = -1;
@@ -3318,10 +3318,10 @@
           }
           __name(parent, "parent");
           function reorder(array, indexes) {
-            var arrLength = array.length, length = nativeMin(indexes.length, arrLength), oldArray = copyArray(array);
-            while (length--) {
-              var index = indexes[length];
-              array[length] = isIndex(index, arrLength) ? oldArray[index] : undefined;
+            var arrLength = array.length, length2 = nativeMin(indexes.length, arrLength), oldArray = copyArray(array);
+            while (length2--) {
+              var index = indexes[length2];
+              array[length2] = isIndex(index, arrLength) ? oldArray[index] : undefined;
             }
             return array;
           }
@@ -3363,8 +3363,8 @@
           }
           __name(shortOut, "shortOut");
           function shuffleSelf(array, size3) {
-            var index = -1, length = array.length, lastIndex = length - 1;
-            size3 = size3 === undefined ? length : size3;
+            var index = -1, length2 = array.length, lastIndex = length2 - 1;
+            size3 = size3 === undefined ? length2 : size3;
             while (++index < size3) {
               var rand = baseRandom(index, lastIndex), value = array[rand];
               array[rand] = array[index];
@@ -3433,20 +3433,20 @@
             } else {
               size3 = nativeMax(toInteger(size3), 0);
             }
-            var length = array == null ? 0 : array.length;
-            if (!length || size3 < 1) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2 || size3 < 1) {
               return [];
             }
-            var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length / size3));
-            while (index < length) {
+            var index = 0, resIndex = 0, result2 = Array2(nativeCeil(length2 / size3));
+            while (index < length2) {
               result2[resIndex++] = baseSlice(array, index, index += size3);
             }
             return result2;
           }
           __name(chunk2, "chunk");
           function compact2(array) {
-            var index = -1, length = array == null ? 0 : array.length, resIndex = 0, result2 = [];
-            while (++index < length) {
+            var index = -1, length2 = array == null ? 0 : array.length, resIndex = 0, result2 = [];
+            while (++index < length2) {
               var value = array[index];
               if (value) {
                 result2[resIndex++] = value;
@@ -3456,11 +3456,11 @@
           }
           __name(compact2, "compact");
           function concat() {
-            var length = arguments.length;
-            if (!length) {
+            var length2 = arguments.length;
+            if (!length2) {
               return [];
             }
-            var args = Array2(length - 1), array = arguments[0], index = length;
+            var args = Array2(length2 - 1), array = arguments[0], index = length2;
             while (index--) {
               args[index - 1] = arguments[index];
             }
@@ -3485,21 +3485,21 @@
             return isArrayLikeObject(array) ? baseDifference(array, baseFlatten(values2, 1, isArrayLikeObject, true), undefined, comparator) : [];
           });
           function drop(array, n2, guard) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            return baseSlice(array, n2 < 0 ? 0 : n2, length);
+            return baseSlice(array, n2 < 0 ? 0 : n2, length2);
           }
           __name(drop, "drop");
           function dropRight(array, n2, guard) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            n2 = length - n2;
+            n2 = length2 - n2;
             return baseSlice(array, 0, n2 < 0 ? 0 : n2);
           }
           __name(dropRight, "dropRight");
@@ -3512,55 +3512,55 @@
           }
           __name(dropWhile, "dropWhile");
           function fill(array, value, start, end) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             if (start && typeof start != "number" && isIterateeCall(array, value, start)) {
               start = 0;
-              end = length;
+              end = length2;
             }
             return baseFill(array, value, start, end);
           }
           __name(fill, "fill");
           function findIndex(array, predicate, fromIndex) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return -1;
             }
             var index = fromIndex == null ? 0 : toInteger(fromIndex);
             if (index < 0) {
-              index = nativeMax(length + index, 0);
+              index = nativeMax(length2 + index, 0);
             }
             return baseFindIndex(array, getIteratee(predicate, 3), index);
           }
           __name(findIndex, "findIndex");
           function findLastIndex(array, predicate, fromIndex) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return -1;
             }
-            var index = length - 1;
+            var index = length2 - 1;
             if (fromIndex !== undefined) {
               index = toInteger(fromIndex);
-              index = fromIndex < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+              index = fromIndex < 0 ? nativeMax(length2 + index, 0) : nativeMin(index, length2 - 1);
             }
             return baseFindIndex(array, getIteratee(predicate, 3), index, true);
           }
           __name(findLastIndex, "findLastIndex");
           function flatten(array) {
-            var length = array == null ? 0 : array.length;
-            return length ? baseFlatten(array, 1) : [];
+            var length2 = array == null ? 0 : array.length;
+            return length2 ? baseFlatten(array, 1) : [];
           }
           __name(flatten, "flatten");
           function flattenDeep(array) {
-            var length = array == null ? 0 : array.length;
-            return length ? baseFlatten(array, INFINITY) : [];
+            var length2 = array == null ? 0 : array.length;
+            return length2 ? baseFlatten(array, INFINITY) : [];
           }
           __name(flattenDeep, "flattenDeep");
           function flattenDepth(array, depth) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             depth = depth === undefined ? 1 : toInteger(depth);
@@ -3568,8 +3568,8 @@
           }
           __name(flattenDepth, "flattenDepth");
           function fromPairs(pairs) {
-            var index = -1, length = pairs == null ? 0 : pairs.length, result2 = {};
-            while (++index < length) {
+            var index = -1, length2 = pairs == null ? 0 : pairs.length, result2 = {};
+            while (++index < length2) {
               var pair = pairs[index];
               result2[pair[0]] = pair[1];
             }
@@ -3581,20 +3581,20 @@
           }
           __name(head, "head");
           function indexOf2(array, value, fromIndex) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return -1;
             }
             var index = fromIndex == null ? 0 : toInteger(fromIndex);
             if (index < 0) {
-              index = nativeMax(length + index, 0);
+              index = nativeMax(length2 + index, 0);
             }
             return baseIndexOf(array, value, index);
           }
           __name(indexOf2, "indexOf");
           function initial(array) {
-            var length = array == null ? 0 : array.length;
-            return length ? baseSlice(array, 0, -1) : [];
+            var length2 = array == null ? 0 : array.length;
+            return length2 ? baseSlice(array, 0, -1) : [];
           }
           __name(initial, "initial");
           var intersection = baseRest(function(arrays) {
@@ -3623,19 +3623,19 @@
           }
           __name(join, "join");
           function last(array) {
-            var length = array == null ? 0 : array.length;
-            return length ? array[length - 1] : undefined;
+            var length2 = array == null ? 0 : array.length;
+            return length2 ? array[length2 - 1] : undefined;
           }
           __name(last, "last");
           function lastIndexOf(array, value, fromIndex) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return -1;
             }
-            var index = length;
+            var index = length2;
             if (fromIndex !== undefined) {
               index = toInteger(fromIndex);
-              index = index < 0 ? nativeMax(length + index, 0) : nativeMin(index, length - 1);
+              index = index < 0 ? nativeMax(length2 + index, 0) : nativeMin(index, length2 - 1);
             }
             return value === value ? strictLastIndexOf(array, value, index) : baseFindIndex(array, baseIsNaN, index, true);
           }
@@ -3658,9 +3658,9 @@
           }
           __name(pullAllWith, "pullAllWith");
           var pullAt = flatRest(function(array, indexes) {
-            var length = array == null ? 0 : array.length, result2 = baseAt(array, indexes);
+            var length2 = array == null ? 0 : array.length, result2 = baseAt(array, indexes);
             basePullAt(array, arrayMap(indexes, function(index) {
-              return isIndex(index, length) ? +index : index;
+              return isIndex(index, length2) ? +index : index;
             }).sort(compareAscending));
             return result2;
           });
@@ -3669,9 +3669,9 @@
             if (!(array && array.length)) {
               return result2;
             }
-            var index = -1, indexes = [], length = array.length;
+            var index = -1, indexes = [], length2 = array.length;
             predicate = getIteratee(predicate, 3);
-            while (++index < length) {
+            while (++index < length2) {
               var value = array[index];
               if (predicate(value, index, array)) {
                 result2.push(value);
@@ -3687,16 +3687,16 @@
           }
           __name(reverse2, "reverse");
           function slice(array, start, end) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             if (end && typeof end != "number" && isIterateeCall(array, start, end)) {
               start = 0;
-              end = length;
+              end = length2;
             } else {
               start = start == null ? 0 : toInteger(start);
-              end = end === undefined ? length : toInteger(end);
+              end = end === undefined ? length2 : toInteger(end);
             }
             return baseSlice(array, start, end);
           }
@@ -3710,10 +3710,10 @@
           }
           __name(sortedIndexBy, "sortedIndexBy");
           function sortedIndexOf(array, value) {
-            var length = array == null ? 0 : array.length;
-            if (length) {
+            var length2 = array == null ? 0 : array.length;
+            if (length2) {
               var index = baseSortedIndex(array, value);
-              if (index < length && eq(array[index], value)) {
+              if (index < length2 && eq(array[index], value)) {
                 return index;
               }
             }
@@ -3729,8 +3729,8 @@
           }
           __name(sortedLastIndexBy, "sortedLastIndexBy");
           function sortedLastIndexOf(array, value) {
-            var length = array == null ? 0 : array.length;
-            if (length) {
+            var length2 = array == null ? 0 : array.length;
+            if (length2) {
               var index = baseSortedIndex(array, value, true) - 1;
               if (eq(array[index], value)) {
                 return index;
@@ -3748,8 +3748,8 @@
           }
           __name(sortedUniqBy, "sortedUniqBy");
           function tail(array) {
-            var length = array == null ? 0 : array.length;
-            return length ? baseSlice(array, 1, length) : [];
+            var length2 = array == null ? 0 : array.length;
+            return length2 ? baseSlice(array, 1, length2) : [];
           }
           __name(tail, "tail");
           function take(array, n2, guard) {
@@ -3761,13 +3761,13 @@
           }
           __name(take, "take");
           function takeRight(array, n2, guard) {
-            var length = array == null ? 0 : array.length;
-            if (!length) {
+            var length2 = array == null ? 0 : array.length;
+            if (!length2) {
               return [];
             }
             n2 = guard || n2 === undefined ? 1 : toInteger(n2);
-            n2 = length - n2;
-            return baseSlice(array, n2 < 0 ? 0 : n2, length);
+            n2 = length2 - n2;
+            return baseSlice(array, n2 < 0 ? 0 : n2, length2);
           }
           __name(takeRight, "takeRight");
           function takeRightWhile(array, predicate) {
@@ -3810,14 +3810,14 @@
             if (!(array && array.length)) {
               return [];
             }
-            var length = 0;
+            var length2 = 0;
             array = arrayFilter(array, function(group) {
               if (isArrayLikeObject(group)) {
-                length = nativeMax(group.length, length);
+                length2 = nativeMax(group.length, length2);
                 return true;
               }
             });
-            return baseTimes(length, function(index) {
+            return baseTimes(length2, function(index) {
               return arrayMap(array, baseProperty(index));
             });
           }
@@ -3863,7 +3863,7 @@
           }
           __name(zipObjectDeep, "zipObjectDeep");
           var zipWith = baseRest(function(arrays) {
-            var length = arrays.length, iteratee2 = length > 1 ? arrays[length - 1] : undefined;
+            var length2 = arrays.length, iteratee2 = length2 > 1 ? arrays[length2 - 1] : undefined;
             iteratee2 = typeof iteratee2 == "function" ? (arrays.pop(), iteratee2) : undefined;
             return unzipWith(arrays, iteratee2);
           });
@@ -3883,20 +3883,20 @@
           }
           __name(thru, "thru");
           var wrapperAt = flatRest(function(paths) {
-            var length = paths.length, start = length ? paths[0] : 0, value = this.__wrapped__, interceptor = /* @__PURE__ */ __name(function(object) {
+            var length2 = paths.length, start = length2 ? paths[0] : 0, value = this.__wrapped__, interceptor = /* @__PURE__ */ __name(function(object) {
               return baseAt(object, paths);
             }, "interceptor");
-            if (length > 1 || this.__actions__.length || !(value instanceof LazyWrapper) || !isIndex(start)) {
+            if (length2 > 1 || this.__actions__.length || !(value instanceof LazyWrapper) || !isIndex(start)) {
               return this.thru(interceptor);
             }
-            value = value.slice(start, +start + (length ? 1 : 0));
+            value = value.slice(start, +start + (length2 ? 1 : 0));
             value.__actions__.push({
               "func": thru,
               "args": [interceptor],
               "thisArg": undefined
             });
             return new LodashWrapper(value, this.__chain__).thru(function(array) {
-              if (length && !array.length) {
+              if (length2 && !array.length) {
                 array.push(undefined);
               }
               return array;
@@ -4017,11 +4017,11 @@
           function includes(collection, value, fromIndex, guard) {
             collection = isArrayLike(collection) ? collection : values(collection);
             fromIndex = fromIndex && !guard ? toInteger(fromIndex) : 0;
-            var length = collection.length;
+            var length2 = collection.length;
             if (fromIndex < 0) {
-              fromIndex = nativeMax(length + fromIndex, 0);
+              fromIndex = nativeMax(length2 + fromIndex, 0);
             }
-            return isString(collection) ? fromIndex <= length && collection.indexOf(value, fromIndex) > -1 : !!length && baseIndexOf(collection, value, fromIndex) > -1;
+            return isString(collection) ? fromIndex <= length2 && collection.indexOf(value, fromIndex) > -1 : !!length2 && baseIndexOf(collection, value, fromIndex) > -1;
           }
           __name(includes, "includes");
           var invokeMap = baseRest(function(collection, path, args) {
@@ -4119,10 +4119,10 @@
             if (collection == null) {
               return [];
             }
-            var length = iteratees.length;
-            if (length > 1 && isIterateeCall(collection, iteratees[0], iteratees[1])) {
+            var length2 = iteratees.length;
+            if (length2 > 1 && isIterateeCall(collection, iteratees[0], iteratees[1])) {
               iteratees = [];
-            } else if (length > 2 && isIterateeCall(iteratees[0], iteratees[1], iteratees[2])) {
+            } else if (length2 > 2 && isIterateeCall(iteratees[0], iteratees[1], iteratees[2])) {
               iteratees = [iteratees[0]];
             }
             return baseOrderBy(collection, baseFlatten(iteratees, 1), []);
@@ -4342,8 +4342,8 @@
             transforms = transforms.length == 1 && isArray(transforms[0]) ? arrayMap(transforms[0], baseUnary(getIteratee())) : arrayMap(baseFlatten(transforms, 1), baseUnary(getIteratee()));
             var funcsLength = transforms.length;
             return baseRest(function(args) {
-              var index = -1, length = nativeMin(args.length, funcsLength);
-              while (++index < length) {
+              var index = -1, length2 = nativeMin(args.length, funcsLength);
+              while (++index < length2) {
                 args[index] = transforms[index].call(this, args[index]);
               }
               return apply(func, this, args);
@@ -4709,12 +4709,12 @@
           var defaults = baseRest(function(object, sources) {
             object = Object2(object);
             var index = -1;
-            var length = sources.length;
-            var guard = length > 2 ? sources[2] : undefined;
+            var length2 = sources.length;
+            var guard = length2 > 2 ? sources[2] : undefined;
             if (guard && isIterateeCall(sources[0], sources[1], guard)) {
-              length = 1;
+              length2 = 1;
             }
-            while (++index < length) {
+            while (++index < length2) {
               var source = sources[index];
               var props = keysIn(source);
               var propsIndex = -1;
@@ -4842,9 +4842,9 @@
             if (isDeep) {
               result2 = baseClone(result2, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG, customOmitClone);
             }
-            var length = paths.length;
-            while (length--) {
-              baseUnset(result2, paths[length]);
+            var length2 = paths.length;
+            while (length2--) {
+              baseUnset(result2, paths[length2]);
             }
             return result2;
           });
@@ -4870,15 +4870,15 @@
           __name(pickBy, "pickBy");
           function result(object, path, defaultValue) {
             path = castPath(path, object);
-            var index = -1, length = path.length;
-            if (!length) {
-              length = 1;
+            var index = -1, length2 = path.length;
+            if (!length2) {
+              length2 = 1;
               object = undefined;
             }
-            while (++index < length) {
+            while (++index < length2) {
               var value = object == null ? undefined : object[toKey(path[index])];
               if (value === undefined) {
-                index = length;
+                index = length2;
                 value = defaultValue;
               }
               object = isFunction(value) ? value.call(object) : value;
@@ -5018,8 +5018,8 @@
           function endsWith(string, target, position) {
             string = toString2(string);
             target = baseToString(target);
-            var length = string.length;
-            position = position === undefined ? length : baseClamp(toInteger(position), 0, length);
+            var length2 = string.length;
+            position = position === undefined ? length2 : baseClamp(toInteger(position), 0, length2);
             var end = position;
             position -= target.length;
             return position >= 0 && string.slice(position, end) == target;
@@ -5042,29 +5042,29 @@
             return result2 + (index ? " " : "") + word.toLowerCase();
           });
           var lowerFirst = createCaseFirst("toLowerCase");
-          function pad(string, length, chars) {
+          function pad(string, length2, chars) {
             string = toString2(string);
-            length = toInteger(length);
-            var strLength = length ? stringSize(string) : 0;
-            if (!length || strLength >= length) {
+            length2 = toInteger(length2);
+            var strLength = length2 ? stringSize(string) : 0;
+            if (!length2 || strLength >= length2) {
               return string;
             }
-            var mid = (length - strLength) / 2;
+            var mid = (length2 - strLength) / 2;
             return createPadding(nativeFloor(mid), chars) + string + createPadding(nativeCeil(mid), chars);
           }
           __name(pad, "pad");
-          function padEnd(string, length, chars) {
+          function padEnd(string, length2, chars) {
             string = toString2(string);
-            length = toInteger(length);
-            var strLength = length ? stringSize(string) : 0;
-            return length && strLength < length ? string + createPadding(length - strLength, chars) : string;
+            length2 = toInteger(length2);
+            var strLength = length2 ? stringSize(string) : 0;
+            return length2 && strLength < length2 ? string + createPadding(length2 - strLength, chars) : string;
           }
           __name(padEnd, "padEnd");
-          function padStart(string, length, chars) {
+          function padStart(string, length2, chars) {
             string = toString2(string);
-            length = toInteger(length);
-            var strLength = length ? stringSize(string) : 0;
-            return length && strLength < length ? createPadding(length - strLength, chars) + string : string;
+            length2 = toInteger(length2);
+            var strLength = length2 ? stringSize(string) : 0;
+            return length2 && strLength < length2 ? createPadding(length2 - strLength, chars) + string : string;
           }
           __name(padStart, "padStart");
           function parseInt2(string, radix, guard) {
@@ -5135,9 +5135,9 @@
               "g"
             );
             var sourceURL = "//# sourceURL=" + (hasOwnProperty.call(options, "sourceURL") ? (options.sourceURL + "").replace(/\s/g, " ") : "lodash.templateSources[" + ++templateCounter + "]") + "\n";
-            string.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset) {
+            string.replace(reDelimiters, function(match, escapeValue, interpolateValue, esTemplateValue, evaluateValue, offset2) {
               interpolateValue || (interpolateValue = esTemplateValue);
-              source += string.slice(index, offset).replace(reUnescapedString, escapeStringChar);
+              source += string.slice(index, offset2).replace(reUnescapedString, escapeStringChar);
               if (escapeValue) {
                 isEscaping = true;
                 source += "' +\n__e(" + escapeValue + ") +\n'";
@@ -5149,7 +5149,7 @@
               if (interpolateValue) {
                 source += "' +\n((__t = (" + interpolateValue + ")) == null ? '' : __t) +\n'";
               }
-              index = offset + match.length;
+              index = offset2 + match.length;
               return match;
             });
             source += "';\n";
@@ -5216,10 +5216,10 @@
           }
           __name(trimStart, "trimStart");
           function truncate(string, options) {
-            var length = DEFAULT_TRUNC_LENGTH, omission = DEFAULT_TRUNC_OMISSION;
+            var length2 = DEFAULT_TRUNC_LENGTH, omission = DEFAULT_TRUNC_OMISSION;
             if (isObject(options)) {
               var separator = "separator" in options ? options.separator : separator;
-              length = "length" in options ? toInteger(options.length) : length;
+              length2 = "length" in options ? toInteger(options.length) : length2;
               omission = "omission" in options ? baseToString(options.omission) : omission;
             }
             string = toString2(string);
@@ -5228,10 +5228,10 @@
               var strSymbols = stringToArray(string);
               strLength = strSymbols.length;
             }
-            if (length >= strLength) {
+            if (length2 >= strLength) {
               return string;
             }
-            var end = length - stringSize(omission);
+            var end = length2 - stringSize(omission);
             if (end < 1) {
               return omission;
             }
@@ -5296,8 +5296,8 @@
             return object;
           });
           function cond(pairs) {
-            var length = pairs == null ? 0 : pairs.length, toIteratee = getIteratee();
-            pairs = !length ? [] : arrayMap(pairs, function(pair) {
+            var length2 = pairs == null ? 0 : pairs.length, toIteratee = getIteratee();
+            pairs = !length2 ? [] : arrayMap(pairs, function(pair) {
               if (typeof pair[1] != "function") {
                 throw new TypeError2(FUNC_ERROR_TEXT);
               }
@@ -5305,7 +5305,7 @@
             });
             return baseRest(function(args) {
               var index = -1;
-              while (++index < length) {
+              while (++index < length2) {
                 var pair = pairs[index];
                 if (apply(pair[0], this, args)) {
                   return apply(pair[1], this, args);
@@ -5441,10 +5441,10 @@
             if (n2 < 1 || n2 > MAX_SAFE_INTEGER) {
               return [];
             }
-            var index = MAX_ARRAY_LENGTH, length = nativeMin(n2, MAX_ARRAY_LENGTH);
+            var index = MAX_ARRAY_LENGTH, length2 = nativeMin(n2, MAX_ARRAY_LENGTH);
             iteratee2 = getIteratee(iteratee2);
             n2 -= MAX_ARRAY_LENGTH;
-            var result2 = baseTimes(length, iteratee2);
+            var result2 = baseTimes(length2, iteratee2);
             while (++index < n2) {
               iteratee2(index);
             }
@@ -6013,12 +6013,20 @@
   // game/collapse.ts
   var collapse_exports = {};
   __export(collapse_exports, {
-    make: () => make2,
+    make: () => make3,
     plan: () => plan,
-    tick: () => tick
+    tick: () => tick2
   });
 
   // utils/random.ts
+  var random_exports = {};
+  __export(random_exports, {
+    choice: () => choice,
+    int: () => int,
+    ints: () => ints,
+    select: () => select,
+    setRng: () => setRng
+  });
   var _ = __toESM(require_lodash());
 
   // utils/assert.ts
@@ -6042,6 +6050,10 @@
 
   // utils/random.ts
   var rng = Math.random;
+  function setRng(g) {
+    rng = g;
+  }
+  __name(setRng, "setRng");
   function int(min, max) {
     return Math.floor(rng() * (max - min)) + min;
   }
@@ -6122,7 +6134,8 @@
       large: { neededCommits: 8, impact: 4 }
     },
     sprint: {
-      startDay: 0
+      startDay: 0,
+      days: 10
     },
     messages: { showNextMessageAfter: 500 },
     performanceReview: {
@@ -6162,233 +6175,13 @@
     addEvent: () => addEvent,
     append: () => append,
     daily: () => daily,
+    dump: () => dump,
     generatePlan: () => generatePlan,
     getEvents: () => getEvents,
-    make: () => make
+    length: () => length,
+    make: () => make2,
+    offset: () => offset
   });
-  var import_lodash = __toESM(require_lodash());
-  function make() {
-    return /* @__PURE__ */ new Map();
-  }
-  __name(make, "make");
-  function addEvent(plan2, time, event) {
-    if (!plan2.has(time)) {
-      plan2.set(time, []);
-    }
-    plan2.get(time).push(event);
-  }
-  __name(addEvent, "addEvent");
-  function getEvents(plan2, time) {
-    return plan2.get(time) ?? [];
-  }
-  __name(getEvents, "getEvents");
-  function append(plan2, other) {
-    for (const time of other.keys()) {
-      for (const event of other.get(time)) {
-        addEvent(plan2, time, event);
-      }
-    }
-    return plan2;
-  }
-  __name(append, "append");
-  function generatePlan(startDay) {
-    let plan2 = make();
-    let startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const r = sprint_exports.generatePlan(startTick);
-      append(plan2, r[0]);
-      startTick = r[1];
-    }
-    startTick = startDay * config_default.dayTicks;
-    for (const i in import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
-      const pplan = performance_review_exports.generatePlan(startTick);
-      append(plan2, pplan);
-      startTick += config_default.dayTicks * 14;
-    }
-    append(plan2, collapse_exports.plan());
-    return plan2;
-  }
-  __name(generatePlan, "generatePlan");
-  function daily(plan2) {
-    const result = [...plan2.entries()].map(
-      ([time, events]) => [Math.floor(time / config_default.dayTicks), events]
-    );
-    return result.reduce((acc, [day, events]) => {
-      acc.set(day, [...acc.get(day) ?? [], ...events]);
-      return acc;
-    }, /* @__PURE__ */ new Map());
-  }
-  __name(daily, "daily");
-
-  // game/collapse.ts
-  function make2() {
-    return {};
-  }
-  __name(make2, "make");
-  function plan() {
-    const plan2 = make();
-    addEvent(plan2, (config_default.totalDays - 5) * config_default.dayTicks, { type: "collapseStart" });
-    return plan2;
-  }
-  __name(plan, "plan");
-  function tick(game) {
-    const events = game.plan.get(game.time.ticks);
-    if (events && events.some((event) => event.type === "collapseStart")) {
-      game.collapse = make2();
-    }
-    if (game.collapse) {
-      const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
-        (obj) => obj.position != null && obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
-      );
-      const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
-      const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
-      const removeWalls = select(walls, removeTicks);
-      game.map.remove(removeWalls);
-    }
-    return [];
-  }
-  __name(tick, "tick");
-
-  // game/effect.ts
-  var effect_exports = {};
-  __export(effect_exports, {
-    addImpact: () => addImpact,
-    itemGenerated: () => itemGenerated,
-    showMessage: () => showMessage
-  });
-  function addImpact(impact) {
-    return {
-      type: "addImpact",
-      impact
-    };
-  }
-  __name(addImpact, "addImpact");
-  function itemGenerated(item) {
-    return {
-      type: "itemGenerated",
-      item
-    };
-  }
-  __name(itemGenerated, "itemGenerated");
-  function showMessage(text, ttl) {
-    return { type: "showMessage", message: { text, ttl } };
-  }
-  __name(showMessage, "showMessage");
-
-  // game/effects.ts
-  var effects_exports = {};
-  __export(effects_exports, {
-    append: () => append2
-  });
-  var import_lodash2 = __toESM(require_lodash());
-  function append2(effects, other) {
-    if (!import_lodash2.default.isArray(other)) {
-      other = [other];
-    }
-    for (const effect of other) {
-      effects.push(effect);
-    }
-  }
-  __name(append2, "append");
-
-  // game/game.ts
-  var game_exports = {};
-  __export(game_exports, {
-    load: () => load,
-    make: () => make6,
-    message: () => message,
-    save: () => save,
-    tick: () => tick4,
-    toJson: () => toJson
-  });
-
-  // traits/footprint.ts
-  var footprint_exports = {};
-  __export(footprint_exports, {
-    make: () => make3
-  });
-  function make3(footprint4) {
-    return {
-      tick(obj, map2) {
-        if (footprint4.tick(obj) > footprint4.lifetime(obj)) {
-          map2.remove([obj]);
-        } else {
-          footprint4.setTick(obj, footprint4.tick(obj) + 1);
-        }
-        return [];
-      },
-      leaveFootprint(position, map2, make26) {
-        const existingFootprint = map2.objAt(position, "developer.footprint");
-        if (existingFootprint) {
-          map2.remove(existingFootprint);
-        }
-        const footprint5 = make26(position);
-        map2.add([footprint5]);
-        return footprint5;
-      }
-    };
-  }
-  __name(make3, "make");
-
-  // traits/speedUp.ts
-  var speedUp_exports = {};
-  __export(speedUp_exports, {
-    speedUp: () => speedUp,
-    tick: () => tick2
-  });
-  function speedUp(speedUp4, t) {
-    const days = speedUp4.speedUpDays(t);
-    speedUp4.setSpeedUp(t, speedUp4.speedUp(t) + days * config_default.dayTicks);
-  }
-  __name(speedUp, "speedUp");
-  function tick2(speedUp4, t, ticksPassed) {
-    speedUp4.setSpeedUp(t, Math.max(speedUp4.speedUp(t) - ticksPassed, 0));
-  }
-  __name(tick2, "tick");
-
-  // traits/picking.ts
-  var picking_exports = {};
-  __export(picking_exports, {
-    make: () => make5
-  });
-
-  // utils/logging.ts
-  function setIsEnabled(f) {
-    isEnabled = f;
-  }
-  __name(setIsEnabled, "setIsEnabled");
-  function setTime(time) {
-    tick3 = time;
-  }
-  __name(setTime, "setTime");
-  function make4(name) {
-    return (message2) => {
-      if (isEnabled(name)) {
-        console.log(tick3.toString().padStart(4, "0") + " " + message2);
-      }
-    };
-  }
-  __name(make4, "make");
-  var isEnabled = /* @__PURE__ */ __name((_15) => true, "isEnabled");
-  var tick3 = 0;
-
-  // traits/picking.ts
-  var logger = make4("picking");
-  function make5(trait) {
-    return {
-      pick(t, item, map2, effects) {
-        if (trait.canPickItem(t, item)) {
-          logger(`Can pick item  ${JSON.stringify(t)}`);
-          trait.pickItem(t, item, map2, effects);
-          effects_exports.append(
-            effects,
-            effect_exports.showMessage(`Picked ${item_exports.description(item)}`, 3e3)
-          );
-        }
-      }
-    };
-  }
-  __name(make5, "make");
 
   // utils/bfs.ts
   var bfs_exports = {};
@@ -6574,6 +6367,268 @@
   }
   __name(currency, "currency");
 
+  // utils/logging.ts
+  var logging_exports = {};
+  __export(logging_exports, {
+    make: () => make,
+    setIsEnabled: () => setIsEnabled,
+    setTime: () => setTime
+  });
+  function setIsEnabled(f) {
+    isEnabled = f;
+  }
+  __name(setIsEnabled, "setIsEnabled");
+  function setTime(time) {
+    tick = time;
+  }
+  __name(setTime, "setTime");
+  function make(name) {
+    return (message2) => {
+      if (isEnabled(name)) {
+        console.log(tick.toString().padStart(4, "0") + " " + message2);
+      }
+    };
+  }
+  __name(make, "make");
+  var isEnabled = /* @__PURE__ */ __name((_15) => true, "isEnabled");
+  var tick = 0;
+
+  // game/plan.ts
+  var import_lodash = __toESM(require_lodash());
+  var logger = logging_exports.make("plan");
+  function make2() {
+    return /* @__PURE__ */ new Map();
+  }
+  __name(make2, "make");
+  function addEvent(plan2, time, event) {
+    if (!plan2.has(time)) {
+      plan2.set(time, []);
+    }
+    plan2.get(time).push(event);
+  }
+  __name(addEvent, "addEvent");
+  function getEvents(plan2, time) {
+    return plan2.get(time) ?? [];
+  }
+  __name(getEvents, "getEvents");
+  function length(plan2) {
+    return import_lodash.default.max([...plan2.keys()]) ?? 0;
+  }
+  __name(length, "length");
+  function offset(plan2, offset2) {
+    const newPlan = make2();
+    for (const [time, events] of plan2.entries()) {
+      for (const event of events)
+        addEvent(newPlan, time + offset2, event);
+    }
+    return newPlan;
+  }
+  __name(offset, "offset");
+  function append(plan2, other) {
+    for (const time of other.keys()) {
+      for (const event of other.get(time)) {
+        addEvent(plan2, time, event);
+      }
+    }
+    return plan2;
+  }
+  __name(append, "append");
+  function generatePlan(startDay) {
+    let plan2 = make2();
+    let startTick = startDay * config_default.dayTicks;
+    let sprints = import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14));
+    for (const sprint of sprints) {
+      const r = sprint_exports.generatePlan(
+        sprint === import_lodash.default.last(sprints) ? { type: "last" } : { type: "normal" },
+        startTick
+      );
+      append(plan2, r[0]);
+      startTick = r[1];
+    }
+    startTick = startDay * config_default.dayTicks;
+    for (const i in import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
+      const pplan = performance_review_exports.generatePlan(startTick);
+      append(plan2, pplan);
+      startTick += config_default.dayTicks * 14;
+    }
+    const collapsePlan = collapse_exports.plan();
+    append(plan2, plan_exports.offset(collapsePlan, startTick - plan_exports.length(collapsePlan)));
+    return plan2;
+  }
+  __name(generatePlan, "generatePlan");
+  function daily(plan2) {
+    const result = [...plan2.entries()].map(
+      ([time, events]) => [Math.floor(time / config_default.dayTicks), events]
+    );
+    return result.reduce((acc, [day, events]) => {
+      acc.set(day, [...acc.get(day) ?? [], ...events]);
+      return acc;
+    }, /* @__PURE__ */ new Map());
+  }
+  __name(daily, "daily");
+  function dump(plan2) {
+    const lines = [];
+    lines.push("Plan:");
+    for (const [time, events] of import_lodash.default.sortBy([...plan2.entries()], (x) => x[0])) {
+      lines.push(`time: ${time}, day: ${time / config_default.dayTicks}`);
+      for (const event of events) {
+        lines.push(`  ${event.type}`);
+      }
+    }
+    logger(lines.join("\n"));
+    return lines.join("\n");
+  }
+  __name(dump, "dump");
+
+  // game/collapse.ts
+  function make3() {
+    return {};
+  }
+  __name(make3, "make");
+  function plan() {
+    const plan2 = make2();
+    addEvent(plan2, 0, { type: "collapseStart" });
+    addEvent(plan2, config_default.dayTicks * 2, { type: "null" });
+    return plan2;
+  }
+  __name(plan, "plan");
+  function tick2(game) {
+    const events = game.plan.get(game.time.ticks);
+    if (events && events.some((event) => event.type === "collapseStart")) {
+      game.collapse = make3();
+    }
+    if (game.collapse) {
+      const walls = game.map.objects.filter((obj) => obj.type === "wall").filter(
+        (obj) => obj.position != null && obj.position.y !== 0 && obj.position.y !== game.map.height - 1 && obj.position.x !== 0 && obj.position.x !== game.map.width - 1
+      );
+      const ticksLeft = config_default.totalDays * config_default.dayTicks - game.time.ticks;
+      const removeTicks = Math.floor(walls.length / ticksLeft) / 2;
+      const removeWalls = select(walls, removeTicks);
+      game.map.remove(removeWalls);
+    }
+    return [];
+  }
+  __name(tick2, "tick");
+
+  // game/effect.ts
+  var effect_exports = {};
+  __export(effect_exports, {
+    addImpact: () => addImpact,
+    itemGenerated: () => itemGenerated,
+    showMessage: () => showMessage
+  });
+  function addImpact(impact) {
+    return {
+      type: "addImpact",
+      impact
+    };
+  }
+  __name(addImpact, "addImpact");
+  function itemGenerated(item) {
+    return {
+      type: "itemGenerated",
+      item
+    };
+  }
+  __name(itemGenerated, "itemGenerated");
+  function showMessage(text, ttl) {
+    return { type: "showMessage", message: { text, ttl } };
+  }
+  __name(showMessage, "showMessage");
+
+  // game/effects.ts
+  var effects_exports = {};
+  __export(effects_exports, {
+    append: () => append2
+  });
+  var import_lodash2 = __toESM(require_lodash());
+  function append2(effects, other) {
+    if (!import_lodash2.default.isArray(other)) {
+      other = [other];
+    }
+    for (const effect of other) {
+      effects.push(effect);
+    }
+  }
+  __name(append2, "append");
+
+  // game/game.ts
+  var game_exports = {};
+  __export(game_exports, {
+    load: () => load,
+    make: () => make6,
+    message: () => message,
+    save: () => save,
+    tick: () => tick4,
+    toJson: () => toJson
+  });
+
+  // traits/footprint.ts
+  var footprint_exports = {};
+  __export(footprint_exports, {
+    make: () => make4
+  });
+  function make4(footprint4) {
+    return {
+      tick(obj, map2) {
+        if (footprint4.tick(obj) > footprint4.lifetime(obj)) {
+          map2.remove([obj]);
+        } else {
+          footprint4.setTick(obj, footprint4.tick(obj) + 1);
+        }
+        return [];
+      },
+      leaveFootprint(position, map2, make26) {
+        const existingFootprint = map2.objAt(position, "developer.footprint");
+        if (existingFootprint) {
+          map2.remove(existingFootprint);
+        }
+        const footprint5 = make26(position);
+        map2.add([footprint5]);
+        return footprint5;
+      }
+    };
+  }
+  __name(make4, "make");
+
+  // traits/speedUp.ts
+  var speedUp_exports = {};
+  __export(speedUp_exports, {
+    speedUp: () => speedUp,
+    tick: () => tick3
+  });
+  function speedUp(speedUp4, t) {
+    const days = speedUp4.speedUpDays(t);
+    speedUp4.setSpeedUp(t, speedUp4.speedUp(t) + days * config_default.dayTicks);
+  }
+  __name(speedUp, "speedUp");
+  function tick3(speedUp4, t, ticksPassed) {
+    speedUp4.setSpeedUp(t, Math.max(speedUp4.speedUp(t) - ticksPassed, 0));
+  }
+  __name(tick3, "tick");
+
+  // traits/picking.ts
+  var picking_exports = {};
+  __export(picking_exports, {
+    make: () => make5
+  });
+  var logger2 = make("picking");
+  function make5(trait) {
+    return {
+      pick(t, item, map2, effects) {
+        if (trait.canPickItem(t, item)) {
+          logger2(`Can pick item  ${JSON.stringify(t)}`);
+          trait.pickItem(t, item, map2, effects);
+          effects_exports.append(
+            effects,
+            effect_exports.showMessage(`Picked ${item_exports.description(item)}`, 3e3)
+          );
+        }
+      }
+    };
+  }
+  __name(make5, "make");
+
   // game/renderer.ts
   var renderer_exports = {};
   __export(renderer_exports, {
@@ -6587,32 +6642,12 @@
     let buffer = [showMessage2(game)];
     buffer = buffer.concat(renderMap(map2, game.time.ticks));
     buffer.push(
-      showTime(game) + showLevel(game) + showFlags(game) + "|Money: " + format_exports.currency(game.score.money).padStart(6, " ") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + showItems(game.score.generatedItems) + "|" + showStockPrice(game)
+      showTime(game) + showLevel(game) + showFlags(game) + "|Money: " + format_exports.currency(game.score.money).padStart(6, " ") + "|Impact: " + game.score.impact.toString().padStart(3, " ") + showTask(game) + // showItems(game.score.generatedItems) +
+      "|" + showStockPrice(game)
     );
     return buffer.map((x) => x);
   }
   __name(render, "render");
-  function itemIcon(item) {
-    switch (item.type) {
-      case "door":
-        return "[";
-      case "commit":
-        return ";";
-      case "coffee":
-        return "\u2615";
-      case "pr_review":
-        return "r";
-      case "story":
-        return "";
-      default:
-        return assertUnreachable(item);
-    }
-  }
-  __name(itemIcon, "itemIcon");
-  function showItems(items) {
-    return "| " + items.filter(item_exports.isItem).map(itemIcon).join("");
-  }
-  __name(showItems, "showItems");
   function renderMapRect(map2, tick12, rect) {
     const rendered = renderMap(map2, tick12);
     const subRect = [];
@@ -6811,6 +6846,8 @@
       return "\u2551";
     } else if (pos.y == 0 || pos.y == map2.height - 1) {
       return "\u2550";
+    } else if (map2.someObjectsAt(vector_exports.n(pos), "wall") && map2.someObjectsAt(vector_exports.s(pos), "wall") && map2.someObjectsAt(vector_exports.w(pos), "wall")) {
+      return "\u2524";
     } else if (map2.someObjectsAt(vector_exports.n(pos), "wall") && map2.someObjectsAt(vector_exports.s(pos), "wall")) {
       return "\u2502";
     } else if (map2.someObjectsAt(vector_exports.s(pos), "wall")) {
@@ -6824,7 +6861,7 @@
   __name(getWallRepresentation, "getWallRepresentation");
 
   // game/game.ts
-  var logger2 = make4("game");
+  var logger3 = make("game");
   function make6(size2, plan2) {
     return {
       map: new map_exports.GameMap(size2.x, size2.y, []),
@@ -6884,7 +6921,7 @@
   function message(game, m) {
     if (m.text instanceof Array) {
       for (const text of m.text) {
-        logger2("message: " + text);
+        logger3("message: " + text);
         game.messages.push({ text, ttl: m.ttl });
       }
     } else {
@@ -6975,7 +7012,7 @@
   __name(objTick, "objTick");
   function save(game, storage) {
     storage.save(JSON.stringify(toJson(game), replacer));
-    logger2("Game saved!");
+    logger3("Game saved!");
   }
   __name(save, "save");
   function replacer(key, value) {
@@ -7036,7 +7073,7 @@
         collapse
       };
     } else {
-      logger2("There is no saved game.");
+      logger3("There is no saved game.");
       return null;
     }
   }
@@ -7451,13 +7488,13 @@
     make: () => make9,
     tick: () => tick6
   });
-  var logger3 = make4("performance_review");
+  var logger4 = make("performance_review");
   function make9() {
     return {};
   }
   __name(make9, "make");
   function generatePlan2(startTick) {
-    const plan2 = make();
+    const plan2 = make2();
     return plan2;
   }
   __name(generatePlan2, "generatePlan");
@@ -7508,92 +7545,103 @@
     };
   }
   __name(make11, "make");
-  function generatePlan3(startTick) {
+  var storySizes = [
+    "small",
+    "small",
+    "small",
+    "medium",
+    "medium",
+    "large"
+  ];
+  function generatePlan3(sprintType, startTick_) {
     const DAY = config_default.dayTicks;
-    const SPRINT_DAYS = 10;
-    const plan2 = make();
+    const plan2 = make2();
+    let currentTick = startTick_;
     const addEvent2 = /* @__PURE__ */ __name((event) => {
-      addEvent(plan2, startTick, event);
+      addEvent(plan2, currentTick, event);
     }, "addEvent");
-    addEvent2({ type: "sprintStart" });
-    addEvent2({ type: "groomBacklogStart" });
-    const storySizes = [
-      "small",
-      "small",
-      "small",
-      "medium",
-      "medium",
-      "large"
-    ];
-    const times = storySizes.map((x, i) => [x, Math.round(DAY / storySizes.length * i)]);
-    addEvent2({ type: "workWeekStarted", ...make7(startTick) });
-    let sprintDay = 1;
-    addEvent2({
+    const addSprintStart = /* @__PURE__ */ __name(() => addEvent2({ type: "sprintStart" }), "addSprintStart");
+    const addGroomBacklogStart = /* @__PURE__ */ __name(() => addEvent2({ type: "groomBacklogStart" }), "addGroomBacklogStart");
+    const addWorkWeekStarted = /* @__PURE__ */ __name(() => addEvent2({ type: "workWeekStarted", ...make7(currentTick) }), "addWorkWeekStarted");
+    const addWorkWeekEnded = /* @__PURE__ */ __name(() => addEvent2({ type: "workWeekEnded", ...make7(currentTick) }), "addWorkWeekEnded");
+    const addWeekendStart = /* @__PURE__ */ __name(() => addEvent2({ type: "weekendStart" }), "addWeekendStart");
+    const addWeekendEnd = /* @__PURE__ */ __name(() => addEvent2({ type: "weekendEnd" }), "addWeekendEnd");
+    const addWeekendStarted = /* @__PURE__ */ __name(() => addEvent2({ type: "workWeekStarted", ...make7(currentTick) }), "addWeekendStarted");
+    const addSprintDayStart = /* @__PURE__ */ __name((sprintDay2) => addEvent2({
       type: "sprintDayStart",
-      sprintDay,
-      sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make7(startTick)
-    });
-    const groomingStart = startTick;
-    for (const t of times) {
-      startTick = groomingStart + t[1];
-      addEvent2({ type: "createBacklogIssue", size: t[0] });
-    }
-    startTick += DAY - 1;
-    addEvent2({ type: "groomBacklogEnd" });
-    addEvent2({
-      type: "sprintDayEnd",
-      sprintDay,
-      sprintDaysLeft: SPRINT_DAYS - sprintDay,
-      ...make7(startTick)
-    });
-    startTick += 1;
-    for (const i of import_lodash4.default.range(4)) {
-      const day = Math.floor(startTick / DAY);
-      sprintDay += 1;
-      addEvent2({
-        type: "sprintDayStart",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make7(startTick)
-      });
-      startTick += DAY - 1;
+      sprintDay: sprintDay2,
+      sprintDaysLeft: config_default.sprint.days - sprintDay2,
+      ...make7(currentTick)
+    }), "addSprintDayStart");
+    const addBacklogIssue = /* @__PURE__ */ __name((size2) => addEvent2({ type: "createBacklogIssue", size: size2 }), "addBacklogIssue");
+    const addFirstSprintDay = /* @__PURE__ */ __name(() => {
+      addSprintDayStart(sprintDay);
+      const groomingStart = currentTick;
+      const times = storySizes.map(
+        (x, i) => [x, Math.round(DAY / storySizes.length * i)]
+      );
+      for (const t of times) {
+        currentTick = groomingStart + t[1];
+        addBacklogIssue(t[0]);
+      }
+      currentTick = startTick_ + DAY - 1;
+      addEvent2({ type: "groomBacklogEnd" });
       addEvent2({
         type: "sprintDayEnd",
         sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make7(startTick)
+        sprintDaysLeft: config_default.sprint.days - sprintDay,
+        ...make7(currentTick)
       });
-      startTick += 1;
-    }
-    addEvent2({ type: "workWeekEnded", ...make7(startTick) });
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    addEvent2({ type: "workWeekStarted", ...make7(startTick) });
-    for (const i of import_lodash4.default.range(4)) {
-      sprintDay += 1;
+      currentTick += 1;
+    }, "addFirstSprintDay");
+    const addSprintDay = /* @__PURE__ */ __name((sprintDay2) => {
       addEvent2({
         type: "sprintDayStart",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make7(startTick)
+        sprintDay: sprintDay2,
+        sprintDaysLeft: config_default.sprint.days - sprintDay2,
+        ...make7(currentTick)
       });
-      startTick += DAY - 1;
+      currentTick += DAY - 1;
       addEvent2({
         type: "sprintDayEnd",
-        sprintDay,
-        sprintDaysLeft: SPRINT_DAYS - sprintDay,
-        ...make7(startTick)
+        sprintDay: sprintDay2,
+        sprintDaysLeft: config_default.sprint.days - sprintDay2,
+        ...make7(currentTick)
       });
-      startTick += 1;
+      currentTick += 1;
+    }, "addSprintDay");
+    addSprintStart();
+    addWorkWeekStarted();
+    addGroomBacklogStart();
+    let sprintDay = 1;
+    addFirstSprintDay();
+    for (const _day of import_lodash4.default.range(4)) {
+      sprintDay += 1;
+      addSprintDay(sprintDay);
     }
-    addEvent2({ type: "sprintEnd" });
-    addEvent2({ type: "workWeekEnded", ...make7(startTick) });
-    addEvent2({ type: "weekendStart" });
-    startTick += 2 * DAY + 1;
-    addEvent2({ type: "weekendEnd" });
-    return [plan2, startTick];
+    addWorkWeekEnded();
+    addWeekendStart();
+    currentTick += 2 * DAY + 1;
+    addWeekendEnd();
+    addWeekendStarted();
+    for (const _i of import_lodash4.default.range(4)) {
+      sprintDay += 1;
+      addSprintDay(sprintDay);
+    }
+    switch (sprintType.type) {
+      case "normal":
+        addEvent2({ type: "sprintEnd" });
+        addEvent2({ type: "workWeekEnded", ...make7(currentTick) });
+        addEvent2({ type: "weekendStart" });
+        currentTick += 2 * DAY + 1;
+        addEvent2({ type: "weekendEnd" });
+        break;
+      case "last":
+        currentTick += 2 * DAY + 1;
+        addEvent2({ type: "sprintEnd" });
+        break;
+    }
+    return [plan2, currentTick];
   }
   __name(generatePlan3, "generatePlan");
   function distance(pos1, pos2) {
@@ -7680,6 +7728,7 @@
             break;
           case "dayStarted":
             break;
+          case "null":
           case "performanceReview":
             break;
           default:
@@ -7947,7 +7996,7 @@
     canMoveOn: () => canMoveOn,
     defend: () => defend,
     isDeveloper: () => isDeveloper,
-    logger: () => logger4,
+    logger: () => logger5,
     make: () => make19,
     possibleMoves: () => possibleMoves2,
     speedUp: () => speedUp2,
@@ -8064,7 +8113,7 @@
 
   // objects/developer/index.ts
   var import_lodash7 = __toESM(require_lodash());
-  var logger4 = make4("fellow_developer");
+  var logger5 = make("fellow_developer");
   var type4 = "developer";
   function isDeveloper(obj) {
     return obj.type === type4;
@@ -8174,7 +8223,7 @@
   }
   __name(possibleMoves2, "possibleMoves");
   function canMoveOn(position, map2) {
-    return map2.at(position).every((obj) => !obj || !["wall", "door", "player"].includes(obj.type));
+    return map2.at(position).every((obj) => !obj || !["wall", "door"].includes(obj.type));
   }
   __name(canMoveOn, "canMoveOn");
   function canPick(obj, item) {
@@ -8362,7 +8411,7 @@
   __name(addCommit, "addCommit");
 
   // objects/player.ts
-  var logger5 = make4("player");
+  var logger6 = make("player");
   var type6 = "player";
   var speedUp3 = {
     speedUpDays: (_15) => config_default.items.coffee.speedUpDays,
@@ -8457,7 +8506,7 @@
   }
   __name(canPickItem, "canPickItem");
   function useItem(player, item, map2, effects) {
-    logger5(`Using item ${item.type}`);
+    logger6(`Using item ${item.type}`);
     switch (item.type) {
       case "commit":
         return useCommit(player, item, effects);
@@ -8592,16 +8641,16 @@
     }, "removeAllMoves");
     player.commands = [...player.commands, ...commands.map((x) => ({ command: x, tact: 0 }))];
     if (player.commands.length > 0) {
-      logger5(`processCommands: ${JSON.stringify(player.commands)}`);
+      logger6(`processCommands: ${JSON.stringify(player.commands)}`);
     }
     if (player.commands.length > 0 && player.commands.some((x) => x.command.type != "move")) {
-      logger5(JSON.stringify(player.commands));
+      logger6(JSON.stringify(player.commands));
     }
     let delayedCommands = [];
     while (player.commands.length > 0) {
-      logger5(JSON.stringify(player.commands));
+      logger6(JSON.stringify(player.commands));
       const command = player.commands[0].command;
-      logger5(`processing: ${JSON.stringify(command)}`);
+      logger6(`processing: ${JSON.stringify(command)}`);
       switch (command.type) {
         case "move":
           const newPosition = moveTo(player.position, command.direction);
@@ -8612,7 +8661,7 @@
             delayedCommands = [];
           } else {
             const delayedCommand = player.commands.shift();
-            logger5(`delaying ${JSON.stringify(delayedCommand)}`);
+            logger6(`delaying ${JSON.stringify(delayedCommand)}`);
             delayedCommands.push(delayedCommand);
           }
           break;
@@ -8660,14 +8709,14 @@
             case "door":
             case "coffee":
               if (canPickItem(player, obj)) {
-                logger5(`Can pick item  ${JSON.stringify(player)}`);
+                logger6(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(effects, effect_exports.showMessage(`Picked a ${obj.type}`, 40));
                 pickedSomething = pickedSomething || pickItem(player, obj, game.map, effects);
               }
               break;
             case "commit":
               if (canPickItem(player, obj)) {
-                logger5(`Can pick item  ${JSON.stringify(player)}`);
+                logger6(`Can pick item  ${JSON.stringify(player)}`);
                 effects_exports.append(
                   effects,
                   effect_exports.showMessage(`Picked a commit ${obj.hash}`, 40)
@@ -9044,14 +9093,16 @@
   var _Window3 = class _Window3 extends text_window_exports.TextWindow {
     constructor(title, money, description2) {
       super(
-        [
-          `${title}`,
-          "",
-          `You are out of your job :(. Hopefully $${format_exports.currency(money)} will`,
-          "last till you find the new one.",
-          "",
-          `This is not going to be easy for a ${description2}`
-        ].join("\n")
+        text_window_exports.centerText(
+          [
+            `${title}`,
+            "",
+            `You are out of your job :(. Hopefully ${format_exports.currency(money)} will`,
+            "last till you find the new one.",
+            "",
+            `This is not going to be easy for a ${description2}`
+          ].join("\n")
+        )
       );
     }
   };
@@ -9059,7 +9110,7 @@
   var Window3 = _Window3;
 
   // ui/game_window.ts
-  var logger6 = make4("game_window");
+  var logger7 = make("game_window");
   var _GameWindow = class _GameWindow extends windows_exports.Window {
     constructor(game, storage) {
       super();
@@ -9085,7 +9136,7 @@
       return renderer_exports.render(this.game);
     }
     processKey(event) {
-      logger6(`keydown: ${event.key}`);
+      logger7(`keydown: ${event.key}`);
       switch (event.key) {
         case "+":
           config_default.tickInterval -= 5;
@@ -9122,7 +9173,7 @@
         default: {
           const command = getCommand(event.key);
           if (command != null) {
-            logger6(`command: ${command.type}`);
+            logger7(`command: ${command.type}`);
             this.game.commands.push(command);
           }
           break;
@@ -9217,6 +9268,15 @@
   var import_lodash11 = __toESM(require_lodash());
 
   // room.ts
+  function doors(room, direction) {
+    switch (direction) {
+      case "up":
+        return room.doors.filter((x) => x.y < room.position.y);
+      case "down":
+        return room.doors.filter((x) => x.y > room.position.y);
+    }
+  }
+  __name(doors, "doors");
   function upperDoors(room) {
     return room.doors.filter((x) => x.y < room.position.y).length;
   }
@@ -9227,6 +9287,7 @@
   __name(lowerDoors, "lowerDoors");
 
   // generator.ts
+  var logger8 = logging_exports.make("generator");
   function maze(size2, game) {
     const outer_walls = hline({ x: 0, y: 0 }, size2.x).concat(vline({ x: 0, y: 0 }, size2.y)).concat(vline({ x: size2.x - 1, y: 0 }, size2.y)).map(
       (point) => ({
@@ -9264,10 +9325,10 @@
       import_lodash11.default.range(3, args.height - 2, 2).map(
         (y) => import_lodash11.default.flatMap(
           ensure(
-            () => ints(
+            () => random_exports.ints(
               0,
               args.width,
-              int(args.wallsPerRow.min, args.wallsPerRow.max)
+              random_exports.int(args.wallsPerRow.min, args.wallsPerRow.max)
             ),
             (x) => properlyDistanced(3, x.concat([0, args.width])),
             20
@@ -9283,14 +9344,14 @@
     for (let row of roomRows) {
       const rooms = getRowRooms(map2, row);
       makeRoomDoors(map2, rooms, "up");
-      let doors = rooms.map((x) => x.doors).flatMap((x) => x);
-      for (const door of doors) {
+      let doors2 = rooms.map((x) => x.doors).flatMap((x) => x);
+      for (const door of doors2) {
         const objs = map2.at(door);
         map2.remove(objs);
       }
       makeRoomDoors(map2, rooms, "down");
-      doors = rooms.map((x) => x.doors).flatMap((x) => x);
-      for (const door of doors) {
+      doors2 = rooms.map((x) => x.doors).flatMap((x) => x);
+      for (const door of doors2) {
         const objs = map2.at(door);
         map2.remove(objs);
       }
@@ -9318,14 +9379,14 @@
   function areDoorsProperlySpaced(map2, room, wallPositions, direction) {
     return properlyDistanced(
       doorSpacing(room.length),
-      room.doors.map((existingWallPosition) => existingWallPosition.x).concat(wallPositions)
+      doors(room, direction).map((existingWallPosition) => existingWallPosition.x).concat(wallPositions)
     ) && noWalls(map2, wallPositions, moveTo(room.position, direction).y, direction);
   }
   __name(areDoorsProperlySpaced, "areDoorsProperlySpaced");
   function makeRoomDoors(map2, rooms, direction) {
     const placeDoorsInRoom = /* @__PURE__ */ __name((room, numOfDoors) => {
       const wallPositions = check(
-        () => ints(room.position.x, room.position.x + room.length, numOfDoors),
+        () => random_exports.ints(room.position.x, room.position.x + room.length, numOfDoors),
         (wallPositions2) => areDoorsProperlySpaced(map2, room, wallPositions2, direction)
       );
       if (wallPositions != null) {
@@ -9340,8 +9401,11 @@
           position: { x: room.position.x, y: room.position.y - 2 },
           size: { x: room.length + 2, y: 5 }
         });
-        console.log(`Failed to add ${numOfDoors} lower door(s) in room ${JSON.stringify(room)}`);
+        console.log(
+          `Failed to add ${numOfDoors} ${direction} door(s) in room ${JSON.stringify(room)}`
+        );
         console.log(renderedRoom.join("\n"));
+        debugger;
       }
       return wallPositions;
     }, "placeDoorsInRoom");
@@ -9394,7 +9458,7 @@
   __name(doorSpacing, "doorSpacing");
   function desiredNumOfDoors(room) {
     const min_max = import_lodash11.default.find(config_default.maze.numberOfDoorsPerRoom, (x) => x[0] > room.length);
-    return int(min_max[1], min_max[2]);
+    return random_exports.int(min_max[1], min_max[2]);
   }
   __name(desiredNumOfDoors, "desiredNumOfDoors");
   function properlyDistanced(minimalSpacing, walls) {
@@ -9405,19 +9469,26 @@
       distances.map((x) => x[1] - x[0]),
       (x) => x >= minimalSpacing
     );
+    if (result === false) {
+      logger8("properlyDistanced " + JSON.stringify({ minimalSpacing, walls, distances, result }));
+    }
     return result;
   }
   __name(properlyDistanced, "properlyDistanced");
 
   // main.ts
   var MAZE_SIZE = { y: 25, x: 80 };
-  var logger7 = make4("main");
-  logger7("Starting the game");
+  var logger9 = make("main");
+  logger9("Starting the game");
   setIsEnabled(
-    (name) => import_lodash12.default.includes(["main", "player", "game", "fellow_developer", "game_window"], name)
+    (name) => import_lodash12.default.includes(
+      ["main", "player", "game", "fellow_developer", "game_window", "plan", "generator"],
+      name
+    )
   );
   function main() {
     const plan2 = plan_exports.generatePlan(0);
+    plan_exports.dump(plan2);
     const game = game_exports.make(MAZE_SIZE, plan2);
     maze(MAZE_SIZE, game);
     const boss = boss_exports.make(
@@ -9434,7 +9505,7 @@
     game.developer = developer_exports.make();
     game.map.add([game.developer]);
     window.addEventListener("keydown", (event) => {
-      logger7(`keydown ${event.key}`);
+      logger9(`keydown ${event.key}`);
       const focused2 = windows_exports.focused();
       if (focused2 && focused2.keydown) {
         focused2.keydown(focused2, event);
