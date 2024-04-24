@@ -1,4 +1,5 @@
 import { Collapse, Event, PerformanceReview, Sprint, Plan } from "@/game"
+import { Developer } from "@/objects"
 import { Logging } from "@/utils"
 import _ from "lodash"
 import config from "./config"
@@ -64,6 +65,8 @@ export function generatePlan(startDay: number): Plan {
 
     const collapsePlan = Collapse.plan()
     append(plan, Plan.offset(collapsePlan, startTick - Plan.length(collapsePlan)))
+    append(plan, Plan.offset(Developer.plan(), 1 * config.dayTicks))
+
     return plan
 }
 

@@ -6111,7 +6111,7 @@
           footprints: [1e3, 400, 20],
           freeSpace: 1e4
         },
-        ticksPerMove: 3
+        ticksPerMove: 2
       },
       footprint: {
         zIndex: 2,
@@ -6119,7 +6119,7 @@
       },
       pathlights: {
         zIndex: 2,
-        visible: false
+        visible: true
       },
       prReview: {
         days: 1
@@ -6136,6 +6136,9 @@
     sprint: {
       startDay: 0,
       days: 10
+    },
+    collapse: {
+      days: 5
     },
     messages: { showNextMessageAfter: 500 },
     performanceReview: {
@@ -6400,41 +6403,41 @@
     return /* @__PURE__ */ new Map();
   }
   __name(make2, "make");
-  function addEvent(plan2, time, event) {
-    if (!plan2.has(time)) {
-      plan2.set(time, []);
+  function addEvent(plan3, time, event) {
+    if (!plan3.has(time)) {
+      plan3.set(time, []);
     }
-    plan2.get(time).push(event);
+    plan3.get(time).push(event);
   }
   __name(addEvent, "addEvent");
-  function getEvents(plan2, time) {
-    return plan2.get(time) ?? [];
+  function getEvents(plan3, time) {
+    return plan3.get(time) ?? [];
   }
   __name(getEvents, "getEvents");
-  function length(plan2) {
-    return import_lodash.default.max([...plan2.keys()]) ?? 0;
+  function length(plan3) {
+    return import_lodash.default.max([...plan3.keys()]) ?? 0;
   }
   __name(length, "length");
-  function offset(plan2, offset2) {
+  function offset(plan3, offset2) {
     const newPlan = make2();
-    for (const [time, events] of plan2.entries()) {
+    for (const [time, events] of plan3.entries()) {
       for (const event of events)
         addEvent(newPlan, time + offset2, event);
     }
     return newPlan;
   }
   __name(offset, "offset");
-  function append(plan2, other) {
+  function append(plan3, other) {
     for (const time of other.keys()) {
       for (const event of other.get(time)) {
-        addEvent(plan2, time, event);
+        addEvent(plan3, time, event);
       }
     }
-    return plan2;
+    return plan3;
   }
   __name(append, "append");
   function generatePlan(startDay) {
-    let plan2 = make2();
+    let plan3 = make2();
     let startTick = startDay * config_default.dayTicks;
     let sprints = import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14));
     for (const sprint of sprints) {
@@ -6442,22 +6445,23 @@
         sprint === import_lodash.default.last(sprints) ? { type: "last" } : { type: "normal" },
         startTick
       );
-      append(plan2, r[0]);
+      append(plan3, r[0]);
       startTick = r[1];
     }
     startTick = startDay * config_default.dayTicks;
     for (const i in import_lodash.default.range(Math.floor((config_default.totalDays - startDay) / 14))) {
       const pplan = performance_review_exports.generatePlan(startTick);
-      append(plan2, pplan);
+      append(plan3, pplan);
       startTick += config_default.dayTicks * 14;
     }
     const collapsePlan = collapse_exports.plan();
-    append(plan2, plan_exports.offset(collapsePlan, startTick - plan_exports.length(collapsePlan)));
-    return plan2;
+    append(plan3, plan_exports.offset(collapsePlan, startTick - plan_exports.length(collapsePlan)));
+    append(plan3, plan_exports.offset(developer_exports.plan(), 1 * config_default.dayTicks));
+    return plan3;
   }
   __name(generatePlan, "generatePlan");
-  function daily(plan2) {
-    const result = [...plan2.entries()].map(
+  function daily(plan3) {
+    const result = [...plan3.entries()].map(
       ([time, events]) => [Math.floor(time / config_default.dayTicks), events]
     );
     return result.reduce((acc, [day, events]) => {
@@ -6466,10 +6470,10 @@
     }, /* @__PURE__ */ new Map());
   }
   __name(daily, "daily");
-  function dump(plan2) {
+  function dump(plan3) {
     const lines = [];
     lines.push("Plan:");
-    for (const [time, events] of import_lodash.default.sortBy([...plan2.entries()], (x) => x[0])) {
+    for (const [time, events] of import_lodash.default.sortBy([...plan3.entries()], (x) => x[0])) {
       lines.push(`time: ${time}, day: ${time / config_default.dayTicks}`);
       for (const event of events) {
         lines.push(`  ${event.type}`);
@@ -6486,10 +6490,10 @@
   }
   __name(make3, "make");
   function plan() {
-    const plan2 = make2();
-    addEvent(plan2, 0, { type: "collapseStart" });
-    addEvent(plan2, config_default.dayTicks * 2, { type: "null" });
-    return plan2;
+    const plan3 = make2();
+    addEvent(plan3, 0, { type: "collapseStart" });
+    addEvent(plan3, config_default.dayTicks * config_default.collapse.days, { type: "null" });
+    return plan3;
   }
   __name(plan, "plan");
   function tick2(game) {
@@ -6862,7 +6866,7 @@
 
   // game/game.ts
   var logger3 = make("game");
-  function make6(size2, plan2) {
+  function make6(size2, plan3) {
     return {
       map: new map_exports.GameMap(size2.x, size2.y, []),
       commands: [],
@@ -6876,7 +6880,7 @@
         day: 0,
         dayOfWeek: "Sunday"
       },
-      plan: plan2,
+      plan: plan3,
       messageStartTime: null,
       collapse: null
     };
@@ -7048,7 +7052,7 @@
         messageTact,
         map: map2,
         time,
-        plan: plan2,
+        plan: plan3,
         messageStartTime,
         collapse
       } = JSON.parse(objectsStorage, reviver);
@@ -7068,7 +7072,7 @@
         map: map_,
         player,
         developer,
-        plan: plan2,
+        plan: plan3,
         messageStartTime,
         collapse
       };
@@ -7494,8 +7498,8 @@
   }
   __name(make9, "make");
   function generatePlan2(startTick) {
-    const plan2 = make2();
-    return plan2;
+    const plan3 = make2();
+    return plan3;
   }
   __name(generatePlan2, "generatePlan");
   function tick6(game) {
@@ -7555,10 +7559,10 @@
   ];
   function generatePlan3(sprintType, startTick_) {
     const DAY = config_default.dayTicks;
-    const plan2 = make2();
+    const plan3 = make2();
     let currentTick = startTick_;
     const addEvent2 = /* @__PURE__ */ __name((event) => {
-      addEvent(plan2, currentTick, event);
+      addEvent(plan3, currentTick, event);
     }, "addEvent");
     const addSprintStart = /* @__PURE__ */ __name(() => addEvent2({ type: "sprintStart" }), "addSprintStart");
     const addGroomBacklogStart = /* @__PURE__ */ __name(() => addEvent2({ type: "groomBacklogStart" }), "addGroomBacklogStart");
@@ -7641,7 +7645,7 @@
         addEvent2({ type: "sprintEnd" });
         break;
     }
-    return [plan2, currentTick];
+    return [plan3, currentTick];
   }
   __name(generatePlan3, "generatePlan");
   function distance(pos1, pos2) {
@@ -7729,6 +7733,7 @@
           case "dayStarted":
             break;
           case "null":
+          case "developerStarted":
           case "performanceReview":
             break;
           default:
@@ -7998,6 +8003,7 @@
     isDeveloper: () => isDeveloper,
     logger: () => logger5,
     make: () => make19,
+    plan: () => plan2,
     possibleMoves: () => possibleMoves2,
     speedUp: () => speedUp2,
     targeting: () => targeting,
@@ -8119,6 +8125,12 @@
     return obj.type === type4;
   }
   __name(isDeveloper, "isDeveloper");
+  function plan2() {
+    const plan3 = plan_exports.make();
+    plan_exports.addEvent(plan3, 0, { type: "developerStarted" });
+    return plan3;
+  }
+  __name(plan2, "plan");
   var targeting = {
     position: (developer) => developer.position,
     target: (developer) => developer.target,
@@ -8163,22 +8175,35 @@
       zIndex: 2,
       speedUp: 0,
       target: null,
-      reviewingPr: 0
+      reviewingPr: 0,
+      started: false
     };
   }
   __name(make19, "make");
   function processEvents(developer, events, game, effects) {
     for (const event of events) {
       switch (event.type) {
-        case "workWeekStarted":
+        case "developerStarted":
+          developer.started = true;
           game.map.move(developer, game.map.getRandomEmptyLocation());
-          break;
-        case "workWeekEnded":
-          game.map.move(developer, null);
           effects_exports.append(
             effects,
-            effect_exports.showMessage("Developer: have a nice weekend!", 5e3)
+            effect_exports.showMessage('Developer ("D"): So excited to work!', 5e3)
           );
+          break;
+        case "workWeekStarted":
+          if (developer.started) {
+            game.map.move(developer, game.map.getRandomEmptyLocation());
+          }
+          break;
+        case "workWeekEnded":
+          if (developer.started) {
+            game.map.move(developer, null);
+            effects_exports.append(
+              effects,
+              effect_exports.showMessage("Developer: have a nice weekend!", 5e3)
+            );
+          }
           break;
       }
     }
@@ -9487,9 +9512,9 @@
     )
   );
   function main() {
-    const plan2 = plan_exports.generatePlan(0);
-    plan_exports.dump(plan2);
-    const game = game_exports.make(MAZE_SIZE, plan2);
+    const plan3 = plan_exports.generatePlan(0);
+    plan_exports.dump(plan3);
+    const game = game_exports.make(MAZE_SIZE, plan3);
     maze(MAZE_SIZE, game);
     const boss = boss_exports.make(
       game.map.getRandomLocation((map2, position) => {

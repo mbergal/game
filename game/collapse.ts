@@ -13,7 +13,7 @@ export function make(): Collapse {
 export function plan(): Plan.Plan {
     const plan = Plan.make()
     Plan.addEvent(plan, 0, { type: "collapseStart" })
-    Plan.addEvent(plan, config.dayTicks * 2, { type: "null" })
+    Plan.addEvent(plan, config.dayTicks * config.collapse.days, { type: "null" })
     return plan
 }
 export function tick(game: Game.Game): Effect.Effect[] {

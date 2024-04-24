@@ -28,12 +28,19 @@ export type Developer = {
     direction: Direction.t | null
     speedUp: number
     reviewingPr: number
+    started: boolean
 }
 
 export function isDeveloper(obj: GameObject.GameObject): obj is Developer {
     return obj.type === type
 }
 
+export function plan(): Plan.Plan {
+    const plan: Plan.Plan = Plan.make()
+    Plan.addEvent(plan, 0, { type: "developerStarted" })
+
+    return plan
+}
 export const targeting: Traits.Targeting.Targeting<Developer> = {
     position: (developer) => developer.position,
     target: (developer) => developer.target,
@@ -96,6 +103,7 @@ export function make(): Developer {
         speedUp: 0,
         target: null,
         reviewingPr: 0,
+        started: false,
     }
 }
 
@@ -107,15 +115,27 @@ function processEvents(
 ) {
     for (const event of events) {
         switch (event.type) {
-            case "workWeekStarted":
+            case "developerStarted":
+                developer.started = true
                 game.map.move(developer, game.map.getRandomEmptyLocation())
-                break
-            case "workWeekEnded":
-                game.map.move(developer, null)
                 Effects.append(
                     effects,
-                    Effect.showMessage("Developer: have a nice weekend!", 5_000),
+                    Effect.showMessage('Developer ("D"): So excited to work!', 5_000),
                 )
+                break
+            case "workWeekStarted":
+                if (developer.started) {
+                    game.map.move(developer, game.map.getRandomEmptyLocation())
+                }
+                break
+            case "workWeekEnded":
+                if (developer.started) {
+                    game.map.move(developer, null)
+                    Effects.append(
+                        effects,
+                        Effect.showMessage("Developer: have a nice weekend!", 5_000),
+                    )
+                }
                 break
         }
     }

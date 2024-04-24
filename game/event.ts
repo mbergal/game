@@ -5,6 +5,10 @@ type NullEvent = {
     type: "null"
 }
 
+type DeveloperStarted = {
+    type: "developerStarted"
+}
+
 type GameStarted = {
     type: "gameStarted"
 }
@@ -94,5 +98,6 @@ export type t =
     | CollapseStart
     | PerformanceReview
     | NullEvent
+    | DeveloperStarted
 
 export type Event = t

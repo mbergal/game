@@ -50,6 +50,9 @@ export type Config = {
         startDay: number
         days: number
     }
+    collapse: {
+        days: number
+    }
     itemGenerator: {
         start: number
         interval: number
@@ -103,7 +106,7 @@ const config: Config = {
                 footprints: [1000, 400, 20],
                 freeSpace: 10000,
             },
-            ticksPerMove: 3,
+            ticksPerMove: 2,
         },
         footprint: {
             zIndex: 2,
@@ -111,7 +114,7 @@ const config: Config = {
         },
         pathlights: {
             zIndex: 2,
-            visible: false,
+            visible: true,
         },
         prReview: {
             days: 1,
@@ -128,6 +131,9 @@ const config: Config = {
     sprint: {
         startDay: 0,
         days: 10,
+    },
+    collapse: {
+        days: 5,
     },
     messages: { showNextMessageAfter: 500 },
     performanceReview: {

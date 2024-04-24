@@ -257,6 +257,7 @@ export function tick(
                 case "dayStarted":
                     break
                 case "null":
+                case "developerStarted":
                 case "performanceReview":
                     break
                 default:
